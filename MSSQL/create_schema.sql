@@ -82,7 +82,7 @@ CREATE TABLE EigeneSchule_Fachklassen (
   FKS nvarchar(3), 
   AP nvarchar(2), 
   Bezeichnung nvarchar(100), 
-  Sortierung smallint DEFAULT '32000', 
+  Sortierung int DEFAULT '32000', 
   Sichtbar nvarchar(1) DEFAULT '+', 
   Aenderbar nvarchar(1) DEFAULT '+', 
   Kennung nvarchar(10), 
@@ -110,8 +110,8 @@ CREATE TABLE EigeneSchule_Faecher (
   StatistikKrz nvarchar(2), 
   BasisFach nvarchar(2), 
   IstSprache nvarchar(1) DEFAULT '-', 
-  Sortierung smallint DEFAULT '32000', 
-  SortierungS2 smallint DEFAULT '32000', 
+  Sortierung int DEFAULT '32000', 
+  SortierungS2 int DEFAULT '32000', 
   NachprErlaubt nvarchar(1) DEFAULT '+', 
   Sichtbar nvarchar(1) DEFAULT '+', 
   Aenderbar nvarchar(1) DEFAULT '+', 
@@ -165,7 +165,7 @@ CREATE TABLE EigeneSchule_Jahrgaenge (
   ASDJahrgang nvarchar(2), 
   ASDBezeichnung nvarchar(100), 
   Sichtbar nvarchar(1) DEFAULT '+', 
-  Sortierung smallint DEFAULT '32000', 
+  Sortierung int DEFAULT '32000', 
   IstChronologisch nvarchar(1) DEFAULT '+', 
   Spaltentitel nvarchar(2), 
   SekStufe nvarchar(6), 
@@ -198,7 +198,7 @@ CREATE TABLE EigeneSchule_Kursart (
   InternBez nvarchar(20), 
   Kursart nvarchar(5), 
   KursartAllg nvarchar(5), 
-  Sortierung smallint DEFAULT '32000', 
+  Sortierung int DEFAULT '32000', 
   Sichtbar nvarchar(1) DEFAULT '+', 
   Aenderbar nvarchar(1) DEFAULT '+', 
   SchulnrEigner int,
@@ -213,7 +213,7 @@ CREATE TABLE EigeneSchule_KursartAllg (
   InternBez nvarchar(20), 
   KursartASD nvarchar(2), 
   Bezeichnung nvarchar(120), 
-  Sortierung smallint DEFAULT '32000', 
+  Sortierung int DEFAULT '32000', 
   Sichtbar nvarchar(1) DEFAULT '+', 
   SchulnrEigner int,
   CONSTRAINT PK_EigeneSchule_KursartAllg PRIMARY KEY (ID),
@@ -238,7 +238,7 @@ CREATE TABLE EigeneSchule_Schulformen (
   SF_SGL nvarchar(5), 
   Schulform nvarchar(100), 
   DoppelQualifikation nvarchar(1), 
-  Sortierung smallint DEFAULT '32000', 
+  Sortierung int DEFAULT '32000', 
   Sichtbar nvarchar(1) DEFAULT '+', 
   BKIndex int, 
   SchulnrEigner int, 
@@ -592,7 +592,7 @@ CREATE TABLE K42_ZulKursarten (
 CREATE TABLE K_Adressart (
   ID int NOT NULL, 
   Bezeichnung nvarchar(30) NOT NULL, 
-  Sortierung smallint DEFAULT '32000', 
+  Sortierung int DEFAULT '32000', 
   Sichtbar nvarchar(1) DEFAULT '+', 
   Aenderbar nvarchar(1) DEFAULT '+', 
   SchulnrEigner int,
@@ -613,7 +613,7 @@ CREATE TABLE K_AllgAdresse (
   AllgAdrFax nvarchar(20), 
   AllgAdrEmail nvarchar(100), 
   AllgAdrBemerkungen nvarchar(255), 
-  Sortierung smallint DEFAULT '32000', 
+  Sortierung int DEFAULT '32000', 
   AllgAdrAusbildungsBetrieb nvarchar(1) DEFAULT '-', 
   AllgAdrBietetPraktika nvarchar(1) DEFAULT '-', 
   AllgAdrBranche nvarchar(50), 
@@ -680,7 +680,7 @@ CREATE TABLE K_Ankreuzfloskeln (
 CREATE TABLE K_BeschaeftigungsArt (
   ID int NOT NULL, 
   Bezeichnung nvarchar(100), 
-  Sortierung smallint DEFAULT '32000', 
+  Sortierung int DEFAULT '32000', 
   Sichtbar nvarchar(1) DEFAULT '+', 
   Aenderbar nvarchar(1) DEFAULT '+', 
   SchulnrEigner int,
@@ -689,10 +689,21 @@ CREATE TABLE K_BeschaeftigungsArt (
 );
 
 
+CREATE TABLE K_Datenschutz (
+  ID int NOT NULL, 
+  Bezeichnung nvarchar(250), 
+  Sichtbar nvarchar(1) DEFAULT '+' NOT NULL, 
+  Schluessel nvarchar(20), 
+  SchulnrEigner int NOT NULL, 
+  Sortierung int DEFAULT '32000' NOT NULL,
+  CONSTRAINT PK_K_Datenschutz PRIMARY KEY (ID)
+);
+
+
 CREATE TABLE K_EinschulungsArt (
   ID int NOT NULL, 
   Bezeichnung nvarchar(40) NOT NULL, 
-  Sortierung smallint DEFAULT '32000', 
+  Sortierung int DEFAULT '32000', 
   Sichtbar nvarchar(1) DEFAULT '+', 
   Aenderbar nvarchar(1) DEFAULT '+', 
   SchulnrEigner int,
@@ -715,7 +726,7 @@ CREATE TABLE K_Einzelleistungen (
 CREATE TABLE K_EntlassGrund (
   ID int NOT NULL, 
   Bezeichnung nvarchar(30) NOT NULL, 
-  Sortierung smallint DEFAULT '32000', 
+  Sortierung int DEFAULT '32000', 
   Sichtbar nvarchar(1) DEFAULT '+', 
   Aenderbar nvarchar(1) DEFAULT '+', 
   SchulnrEigner int,
@@ -727,7 +738,7 @@ CREATE TABLE K_EntlassGrund (
 CREATE TABLE K_ErzieherArt (
   ID int NOT NULL, 
   Bezeichnung nvarchar(30) NOT NULL, 
-  Sortierung smallint DEFAULT '32000', 
+  Sortierung int DEFAULT '32000', 
   Sichtbar nvarchar(1) DEFAULT '+', 
   Aenderbar nvarchar(1) DEFAULT '+', 
   ExportBez nvarchar(20), 
@@ -740,7 +751,7 @@ CREATE TABLE K_ErzieherArt (
 CREATE TABLE K_ErzieherFunktion (
   ID int NOT NULL, 
   Bezeichnung nvarchar(50) NOT NULL, 
-  Sortierung smallint DEFAULT '32000', 
+  Sortierung int DEFAULT '32000', 
   Sichtbar nvarchar(1) DEFAULT '+', 
   Aenderbar nvarchar(1) DEFAULT '+', 
   SchulnrEigner int,
@@ -752,7 +763,7 @@ CREATE TABLE K_ErzieherFunktion (
 CREATE TABLE K_FahrschuelerArt (
   ID int NOT NULL, 
   Bezeichnung nvarchar(30) NOT NULL, 
-  Sortierung smallint DEFAULT '32000', 
+  Sortierung int DEFAULT '32000', 
   Sichtbar nvarchar(1) DEFAULT '+', 
   Aenderbar nvarchar(1) DEFAULT '+', 
   SchulnrEigner int,
@@ -765,7 +776,7 @@ CREATE TABLE K_Foerderschwerpunkt (
   ID int NOT NULL, 
   Bezeichnung nvarchar(50) NOT NULL, 
   StatistikKrz nvarchar(2), 
-  Sortierung smallint DEFAULT '32000', 
+  Sortierung int DEFAULT '32000', 
   Sichtbar nvarchar(1) DEFAULT '+', 
   Aenderbar nvarchar(1) DEFAULT '+', 
   SchulnrEigner int,
@@ -777,7 +788,7 @@ CREATE TABLE K_Foerderschwerpunkt (
 CREATE TABLE K_Haltestelle (
   ID int NOT NULL, 
   Bezeichnung nvarchar(30) NOT NULL, 
-  Sortierung smallint DEFAULT '32000', 
+  Sortierung int DEFAULT '32000', 
   Sichtbar nvarchar(1) DEFAULT '+', 
   Aenderbar nvarchar(1) DEFAULT '+', 
   EntfernungSchule float, 
@@ -807,7 +818,7 @@ CREATE TABLE K_KlassenOrgForm (
   ID int NOT NULL, 
   Bezeichnung nvarchar(100) NOT NULL, 
   StatistikKrz nvarchar(2), 
-  Sortierung smallint DEFAULT '32000', 
+  Sortierung int DEFAULT '32000', 
   Sichtbar nvarchar(1) DEFAULT '+', 
   Aenderbar nvarchar(1) DEFAULT '+',
   CONSTRAINT PK_K_KlassenOrgForm PRIMARY KEY (ID),
@@ -824,7 +835,7 @@ CREATE TABLE K_Lehrer (
   Vorname nvarchar(20), 
   PersonTyp nvarchar(20) DEFAULT 'LEHRKRAFT', 
   SchulnrEigner int, 
-  Sortierung smallint DEFAULT '32000', 
+  Sortierung int DEFAULT '32000', 
   Sichtbar nvarchar(1) DEFAULT '+', 
   Aenderbar nvarchar(1) DEFAULT '+', 
   FuerExport nvarchar(1) DEFAULT '+', 
@@ -896,7 +907,7 @@ CREATE TABLE K_Ort (
   PLZ nvarchar(10) NOT NULL, 
   Bezeichnung nvarchar(50), 
   Kreis nvarchar(3), 
-  Sortierung smallint DEFAULT '3200', 
+  Sortierung int DEFAULT '32000', 
   Sichtbar nvarchar(1) DEFAULT '+', 
   Aenderbar nvarchar(1) DEFAULT '+', 
   Land nvarchar(2), 
@@ -912,7 +923,7 @@ CREATE TABLE K_Ortsteil (
   ID int NOT NULL, 
   Bezeichnung nvarchar(30) NOT NULL, 
   PLZ nvarchar(10), 
-  Sortierung smallint DEFAULT '32000', 
+  Sortierung int DEFAULT '32000', 
   Sichtbar nvarchar(1) DEFAULT '+', 
   Aenderbar nvarchar(1) DEFAULT '+', 
   SchulnrEigner int, 
@@ -926,7 +937,7 @@ CREATE TABLE K_Religion (
   ID int NOT NULL, 
   Bezeichnung nvarchar(30) NOT NULL, 
   StatistikKrz nvarchar(10), 
-  Sortierung smallint DEFAULT '32000', 
+  Sortierung int DEFAULT '32000', 
   Sichtbar nvarchar(1) DEFAULT '+', 
   Aenderbar nvarchar(1) DEFAULT '+', 
   ExportBez nvarchar(20), 
@@ -951,7 +962,7 @@ CREATE TABLE K_Schule (
   Fax nvarchar(20), 
   Email nvarchar(40), 
   Schulleiter nvarchar(40), 
-  Sortierung smallint DEFAULT '32000', 
+  Sortierung int DEFAULT '32000', 
   Sichtbar nvarchar(1) DEFAULT '+', 
   Aenderbar nvarchar(1) DEFAULT '+', 
   SchulNr_SIM nvarchar(6), 
@@ -976,7 +987,7 @@ CREATE TABLE K_Schulfunktionen (
 CREATE TABLE K_Schwerpunkt (
   ID int NOT NULL, 
   Bezeichnung nvarchar(50) NOT NULL, 
-  Sortierung smallint DEFAULT '32000', 
+  Sortierung int DEFAULT '32000', 
   Sichtbar nvarchar(1) DEFAULT '+', 
   Aenderbar nvarchar(1) DEFAULT '+', 
   SchulnrEigner int,
@@ -998,7 +1009,7 @@ CREATE TABLE Fachklassen_Schwerpunkte (
 CREATE TABLE K_Sportbefreiung (
   ID int NOT NULL, 
   Bezeichnung nvarchar(50) NOT NULL, 
-  Sortierung smallint DEFAULT '32000', 
+  Sortierung int DEFAULT '32000', 
   Sichtbar nvarchar(1) DEFAULT '+', 
   Aenderbar nvarchar(1) DEFAULT '+', 
   SchulnrEigner int,
@@ -1011,7 +1022,7 @@ CREATE TABLE K_Staat (
   ID int NOT NULL, 
   Bezeichnung nvarchar(80) NOT NULL, 
   StatistikKrz nvarchar(3), 
-  Sortierung smallint DEFAULT '32000', 
+  Sortierung int DEFAULT '32000', 
   Sichtbar nvarchar(1) DEFAULT '+', 
   Aenderbar nvarchar(1) DEFAULT '+', 
   ExportBez nvarchar(20), 
@@ -1037,7 +1048,7 @@ CREATE TABLE K_TXTDATEIEN (
 CREATE TABLE K_TelefonArt (
   ID int NOT NULL, 
   Bezeichnung nvarchar(30) NOT NULL, 
-  Sortierung smallint DEFAULT '32000', 
+  Sortierung int DEFAULT '32000', 
   Sichtbar nvarchar(1) DEFAULT '+', 
   Aenderbar nvarchar(1) DEFAULT '+', 
   SchulnrEigner int,
@@ -1060,7 +1071,7 @@ CREATE TABLE K_Verkehrssprachen (
 CREATE TABLE K_Vermerkart (
   ID int NOT NULL, 
   Bezeichnung nvarchar(30) NOT NULL, 
-  Sortierung smallint DEFAULT '32000', 
+  Sortierung int DEFAULT '32000', 
   Sichtbar nvarchar(1) DEFAULT '+', 
   Aenderbar nvarchar(1) DEFAULT '+', 
   SchulnrEigner int,
@@ -1112,7 +1123,7 @@ CREATE TABLE Kurse (
   KursartAllg nvarchar(5), 
   Wochenstd smallint, 
   LehrerKrz nvarchar(10), 
-  Sortierung smallint DEFAULT '32000', 
+  Sortierung int DEFAULT '32000', 
   Sichtbar nvarchar(1) DEFAULT '+', 
   Schienen nvarchar(20), 
   Fortschreibungsart nvarchar(1), 
@@ -1508,7 +1519,7 @@ CREATE TABLE PrfSemAbschl (
   Nr nvarchar(2) NOT NULL, 
   Klartext nvarchar(30), 
   StatistikKrz nvarchar(1), 
-  Sortierung smallint DEFAULT '32000',
+  Sortierung int DEFAULT '32000',
   CONSTRAINT PK_PrfSemAbschl PRIMARY KEY (Nr)
 );
 
@@ -2473,7 +2484,7 @@ CREATE TABLE Stundentafel_Faecher (
   WochenStd smallint, 
   LehrerKrz nvarchar(10), 
   EpochenUnterricht nvarchar(1) DEFAULT '-', 
-  Sortierung smallint DEFAULT '32000', 
+  Sortierung int DEFAULT '32000', 
   Sichtbar nvarchar(1) DEFAULT '+', 
   Gewichtung int DEFAULT '1', 
   SchulnrEigner int,
@@ -2540,7 +2551,7 @@ CREATE TABLE Versetzung (
   Fachklasse_ID int, 
   PruefOrdnung nvarchar(20), 
   Sichtbar nvarchar(1) DEFAULT '+', 
-  Sortierung smallint DEFAULT '32000', 
+  Sortierung int DEFAULT '32000', 
   Klassenart nvarchar(2), 
   SommerSem nvarchar(1), 
   NotenGesperrt nvarchar(1), 
@@ -3324,6 +3335,17 @@ CREATE TABLE SchuelerKAoADaten (
 );
 
 
+CREATE TABLE SchuelerDatenschutz (
+  Schueler_ID int NOT NULL, 
+  Datenschutz_ID int NOT NULL, 
+  Status nvarchar(1) DEFAULT '-' NOT NULL, 
+  SchulnrEigner int NOT NULL,
+  CONSTRAINT PK_SchuelerDatenschutz PRIMARY KEY (Datenschutz_ID, Schueler_ID),
+  CONSTRAINT SchuelerDatenschutz_K_Datenschutz_FK FOREIGN KEY (Datenschutz_ID) REFERENCES K_Datenschutz(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerDatenschutz_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
 CREATE TABLE SchuelerErzFunktion (
   ID int NOT NULL, 
   Erzieher_ID int NOT NULL, 
@@ -3386,7 +3408,7 @@ CREATE TABLE SchuelerLeistungsdaten (
   Prognose nvarchar(1), 
   Fehlstd smallint, 
   uFehlstd smallint, 
-  Sortierung smallint DEFAULT '32000', 
+  Sortierung int DEFAULT '32000', 
   Lernentw nvarchar(max), 
   Gekoppelt nvarchar(1) DEFAULT '-', 
   VorherAbgeschl nvarchar(1) DEFAULT '-', 
@@ -3405,7 +3427,7 @@ CREATE TABLE SchuelerLeistungsdaten (
   CONSTRAINT SchuelerLeistungsdaten_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT SchuelerLeistungsdaten_Kurs_FK FOREIGN KEY (Kurs_ID) REFERENCES Kurse(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT SchuelerLeistungsdaten_Lehrer_FK FOREIGN KEY (FachLehrer) REFERENCES K_Lehrer(Kuerzel) ON UPDATE CASCADE ON DELETE SET NULL,
-  CONSTRAINT SchuelerLeistungsdaten_UC2 UNIQUE (Abschnitt_ID, Fach_ID, Kurs_ID, Kursart)
+  CONSTRAINT SchuelerLeistungsdaten_UC2 UNIQUE (Abschnitt_ID, FachLehrer, Fach_ID, Kurs_ID, Kursart)
 );
 
 
