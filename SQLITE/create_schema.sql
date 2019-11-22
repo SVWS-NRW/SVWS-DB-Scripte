@@ -601,54 +601,6 @@ CREATE TABLE K_Adressart (
 );
 
 
-CREATE TABLE K_AllgAdresse (
-  ID int NOT NULL, 
-  AllgAdrAdressArt varchar(30) NOT NULL, 
-  AllgAdrName1 varchar(50), 
-  AllgAdrName2 varchar(50), 
-  AllgAdrStrasse varchar(50), 
-  AllgAdrPLZ varchar(10), 
-  AllgAdrTelefon1 varchar(20), 
-  AllgAdrTelefon2 varchar(20), 
-  AllgAdrFax varchar(20), 
-  AllgAdrEmail varchar(100), 
-  AllgAdrBemerkungen varchar(255), 
-  Sortierung int DEFAULT '32000', 
-  AllgAdrAusbildungsBetrieb varchar(1) DEFAULT '-', 
-  AllgAdrBietetPraktika varchar(1) DEFAULT '-', 
-  AllgAdrBranche varchar(50), 
-  AllgAdrZusatz1 varchar(10), 
-  AllgAdrZusatz2 varchar(10), 
-  Sichtbar varchar(1) DEFAULT '+', 
-  Aenderbar varchar(1) DEFAULT '+', 
-  SchulnrEigner int, 
-  Massnahmentraeger varchar(1) DEFAULT '-', 
-  BelehrungISG varchar(1) DEFAULT '-', 
-  GU_ID varchar(40), 
-  ErwFuehrungszeugnis varchar(1) DEFAULT '-', 
-  ExtID varchar(50),
-  CONSTRAINT PK_K_AllgAdresse PRIMARY KEY (ID),
-  CONSTRAINT K_AllgAdresse_AdressArt_FK FOREIGN KEY (AllgAdrAdressArt) REFERENCES K_Adressart(Bezeichnung) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE AllgAdrAnsprechpartner (
-  ID int NOT NULL, 
-  Adresse_ID int, 
-  Name varchar(60), 
-  Vorname varchar(60), 
-  Anrede varchar(10), 
-  Telefon varchar(20), 
-  EMail varchar(100), 
-  Abteilung varchar(50), 
-  SchulnrEigner int, 
-  Titel varchar(15), 
-  GU_ID varchar(40),
-  CONSTRAINT PK_AllgAdrAnsprechpartner PRIMARY KEY (ID),
-  CONSTRAINT Ansprechpartner_Adr_FK FOREIGN KEY (Adresse_ID) REFERENCES K_AllgAdresse(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
 CREATE TABLE K_Ankreuzdaten (
   ID int NOT NULL, 
   SchulnrEigner int NOT NULL, 
@@ -826,6 +778,56 @@ CREATE TABLE K_KlassenOrgForm (
 );
 
 
+CREATE TABLE K_Ort (
+  ID int NOT NULL, 
+  PLZ varchar(10) NOT NULL, 
+  Bezeichnung varchar(50), 
+  Kreis varchar(3), 
+  Sortierung int DEFAULT '32000', 
+  Sichtbar varchar(1) DEFAULT '+', 
+  Aenderbar varchar(1) DEFAULT '+', 
+  Land varchar(2), 
+  SchulnrEigner int,
+  CONSTRAINT PK_K_Ort PRIMARY KEY (ID),
+  CONSTRAINT K_Ort_UC1 UNIQUE (Bezeichnung, PLZ)
+);
+
+CREATE INDEX K_Ort_IDX1 ON K_Ort(PLZ);
+
+
+CREATE TABLE K_AllgAdresse (
+  ID int NOT NULL, 
+  AllgAdrAdressArt varchar(30) NOT NULL, 
+  AllgAdrName1 varchar(50), 
+  AllgAdrName2 varchar(50), 
+  AllgAdrStrasse varchar(50), 
+  AllgAdrOrt_ID int, 
+  AllgAdrPLZ varchar(10), 
+  AllgAdrTelefon1 varchar(20), 
+  AllgAdrTelefon2 varchar(20), 
+  AllgAdrFax varchar(20), 
+  AllgAdrEmail varchar(100), 
+  AllgAdrBemerkungen varchar(255), 
+  Sortierung int DEFAULT '32000', 
+  AllgAdrAusbildungsBetrieb varchar(1) DEFAULT '-', 
+  AllgAdrBietetPraktika varchar(1) DEFAULT '-', 
+  AllgAdrBranche varchar(50), 
+  AllgAdrZusatz1 varchar(10), 
+  AllgAdrZusatz2 varchar(10), 
+  Sichtbar varchar(1) DEFAULT '+', 
+  Aenderbar varchar(1) DEFAULT '+', 
+  SchulnrEigner int, 
+  Massnahmentraeger varchar(1) DEFAULT '-', 
+  BelehrungISG varchar(1) DEFAULT '-', 
+  GU_ID varchar(40), 
+  ErwFuehrungszeugnis varchar(1) DEFAULT '-', 
+  ExtID varchar(50),
+  CONSTRAINT PK_K_AllgAdresse PRIMARY KEY (ID),
+  CONSTRAINT K_AllgAdresse_AdressArt_FK FOREIGN KEY (AllgAdrAdressArt) REFERENCES K_Adressart(Bezeichnung) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT K_AllgAdresse_Ort_FK FOREIGN KEY (AllgAdrOrt_ID) REFERENCES K_Ort(ID) ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+
+
 CREATE TABLE K_Lehrer (
   ID int NOT NULL, 
   GU_ID varchar(40), 
@@ -841,6 +843,7 @@ CREATE TABLE K_Lehrer (
   FuerExport varchar(1) DEFAULT '+', 
   Statistik varchar(1), 
   Strasse varchar(50), 
+  Ort_ID int, 
   PLZ varchar(10), 
   Tel varchar(20), 
   Handy varchar(20), 
@@ -883,7 +886,25 @@ CREATE TABLE K_Lehrer (
   Antwort2 varchar(255), 
   KennwortToolsAktuell varchar(3) DEFAULT '-;5',
   CONSTRAINT PK_K_Lehrer PRIMARY KEY (ID),
+  CONSTRAINT K_Lehrer_Ort_FK FOREIGN KEY (Ort_ID) REFERENCES K_Ort(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT K_Lehrer_UC1 UNIQUE (Kuerzel)
+);
+
+
+CREATE TABLE AllgAdrAnsprechpartner (
+  ID int NOT NULL, 
+  Adresse_ID int, 
+  Name varchar(60), 
+  Vorname varchar(60), 
+  Anrede varchar(10), 
+  Telefon varchar(20), 
+  EMail varchar(100), 
+  Abteilung varchar(50), 
+  SchulnrEigner int, 
+  Titel varchar(15), 
+  GU_ID varchar(40),
+  CONSTRAINT PK_AllgAdrAnsprechpartner PRIMARY KEY (ID),
+  CONSTRAINT Ansprechpartner_Adr_FK FOREIGN KEY (Adresse_ID) REFERENCES K_AllgAdresse(ID) ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
 
@@ -900,23 +921,6 @@ CREATE TABLE EigeneSchule_Abteilungen (
   CONSTRAINT PK_EigeneSchule_Abteilungen PRIMARY KEY (ID),
   CONSTRAINT EigeneSchule_Abteilungen_Leiter_FK FOREIGN KEY (AbteilungsLeiter) REFERENCES K_Lehrer(Kuerzel) ON UPDATE CASCADE ON DELETE SET NULL
 );
-
-
-CREATE TABLE K_Ort (
-  ID int NOT NULL, 
-  PLZ varchar(10) NOT NULL, 
-  Bezeichnung varchar(50), 
-  Kreis varchar(3), 
-  Sortierung int DEFAULT '32000', 
-  Sichtbar varchar(1) DEFAULT '+', 
-  Aenderbar varchar(1) DEFAULT '+', 
-  Land varchar(2), 
-  SchulnrEigner int,
-  CONSTRAINT PK_K_Ort PRIMARY KEY (ID),
-  CONSTRAINT K_Ort_UC1 UNIQUE (Bezeichnung, PLZ)
-);
-
-CREATE INDEX K_Ort_IDX1 ON K_Ort(PLZ);
 
 
 CREATE TABLE K_Ortsteil (
@@ -1572,13 +1576,14 @@ CREATE TABLE Schild_Verwaltung (
   Version varchar(10), 
   GU_ID varchar(40) NOT NULL, 
   StatistikJahr int, 
-  SchulnrEigner int, 
+  SchulnrEigner int NOT NULL, 
   LD_Datentyp varchar(1), 
   Version3 varchar(16), 
   DatumLoeschfristHinweisDeaktiviert datetime, 
   DatumLoeschfristHinweisDeaktiviertUserID int, 
   DatumDatenGeloescht datetime,
-  CONSTRAINT PK_Schild_Verwaltung PRIMARY KEY (GU_ID)
+  CONSTRAINT PK_Schild_Verwaltung PRIMARY KEY (GU_ID),
+  CONSTRAINT Schild_Verwaltung_UC1 UNIQUE (SchulnrEigner)
 );
 
 
@@ -1986,6 +1991,8 @@ CREATE TABLE Schulver_DBS (
 CREATE TABLE Schulver_Schultraeger (
   Schulnr varchar(255) NOT NULL, 
   Regschl varchar(255), 
+  KoRe varchar(255), 
+  KoHo varchar(255), 
   ABez1 varchar(255), 
   ABez2 varchar(255), 
   ABez3 varchar(255), 
@@ -1998,10 +2005,14 @@ CREATE TABLE Schulver_Schultraeger (
   OeffPri varchar(255), 
   KurzBez varchar(255), 
   SchBetrSchl int, 
+  SchBetrSchlDatum varchar(255), 
+  SchuelerZahlASD int DEFAULT '0', 
+  SchuelerZahlVS int DEFAULT '0', 
   ArtderTraegerschaft varchar(255), 
   SchultraegerNr varchar(255), 
   Schulgliederung varchar(255), 
-  Ganztagsbetrieb varchar(255),
+  Ganztagsbetrieb varchar(255), 
+  aktiv int DEFAULT '1' NOT NULL,
   CONSTRAINT PK_Schulver_Schultraeger PRIMARY KEY (Schulnr)
 );
 
@@ -2024,13 +2035,13 @@ CREATE TABLE Statkue_AllgMerkmale (
   ID int NOT NULL, 
   SF varchar(2) NOT NULL, 
   Kurztext varchar(10) NOT NULL, 
+  StatistikKrz varchar(5), 
   Langtext varchar(255) NOT NULL, 
   Schule int, 
   Schueler int, 
   Beginn datetime, 
   Ende datetime, 
-  Sort int, 
-  StatistikKrz varchar(5),
+  Sort int,
   CONSTRAINT PK_Statkue_AllgMerkmale PRIMARY KEY (ID, Kurztext)
 );
 
@@ -2085,7 +2096,8 @@ CREATE TABLE Statkue_Fachklasse (
   BAGR varchar(8), 
   Ebene1 varchar(2), 
   Ebene2 varchar(2), 
-  Ebene3 varchar(2),
+  Ebene3 varchar(2), 
+  Flag_APOBK varchar(1),
   CONSTRAINT PK_Statkue_Fachklasse PRIMARY KEY (AP, BKIndex, FKS)
 );
 
@@ -2105,7 +2117,7 @@ CREATE TABLE Statkue_Gliederung (
   Flag varchar(1) NOT NULL, 
   BKAnlage varchar(1) NOT NULL, 
   BKTyp varchar(2) NOT NULL, 
-  BKindex int DEFAULT '0', 
+  BKIndex int DEFAULT '0', 
   Beschreibung varchar(100), 
   geaendert datetime,
   CONSTRAINT PK_Statkue_Gliederung PRIMARY KEY (BKAnlage, BKTyp, Flag, SF)
@@ -2589,6 +2601,7 @@ CREATE TABLE Schueler (
   Zusatz varchar(255), 
   Geburtsname varchar(60), 
   Strasse varchar(50), 
+  Ort_ID int, 
   PLZ varchar(10), 
   OrtAbk varchar(50), 
   Ortsteil_ID int, 
@@ -2738,7 +2751,7 @@ CREATE TABLE Schueler (
   CONSTRAINT Schueler_Fahrschueler_FK FOREIGN KEY (Fahrschueler_ID) REFERENCES K_FahrschuelerArt(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT Schueler_Foerderschwerpunkt_FK FOREIGN KEY (Foerderschwerpunkt_ID) REFERENCES K_Foerderschwerpunkt(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT Schueler_Haltestelle_FK FOREIGN KEY (Haltestelle_ID) REFERENCES K_Haltestelle(ID) ON UPDATE CASCADE ON DELETE SET NULL,
-  CONSTRAINT Schueler_Ort_FK FOREIGN KEY (OrtAbk, PLZ) REFERENCES K_Ort(Bezeichnung, PLZ) ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT Schueler_Ort_PLZ_FK FOREIGN KEY (Ort_ID) REFERENCES K_Ort(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT Schueler_Ortsteil_FK FOREIGN KEY (Ortsteil_ID) REFERENCES K_Ortsteil(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT Schueler_Religion_FK FOREIGN KEY (Religion_ID) REFERENCES K_Religion(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT Schueler_Sportbefreiung_FK FOREIGN KEY (Sportbefreiung_ID) REFERENCES K_Sportbefreiung(ID) ON UPDATE CASCADE ON DELETE SET NULL,
@@ -2764,7 +2777,7 @@ CREATE TABLE Schueler_AllgAdr (
   SchulnrEigner int,
   CONSTRAINT PK_Schueler_AllgAdr PRIMARY KEY (ID),
   CONSTRAINT SchuelerAllgAdr_Adresse_FK FOREIGN KEY (Adresse_ID) REFERENCES K_AllgAdresse(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerAllgAdr_Ansprech_FK FOREIGN KEY (Ansprechpartner_ID) REFERENCES AllgAdrAnsprechpartner(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT SchuelerAllgAdr_Ansprech_FK FOREIGN KEY (Ansprechpartner_ID) REFERENCES AllgAdrAnsprechpartner(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT SchuelerAllgAdr_Beschaeftigungsart_FK FOREIGN KEY (Vertragsart_ID) REFERENCES K_BeschaeftigungsArt(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT SchuelerAllgAdr_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
@@ -2986,6 +2999,7 @@ CREATE TABLE SchuelerErzAdr (
   Name2 varchar(50), 
   Vorname2 varchar(50), 
   ErzStrasse varchar(50), 
+  ErzOrt_ID int, 
   ErzPLZ varchar(10), 
   ErzOrtsteil_ID int, 
   ErzAnschreiben varchar(1) DEFAULT '+', 
@@ -3002,6 +3016,7 @@ CREATE TABLE SchuelerErzAdr (
   Bemerkungen text,
   CONSTRAINT PK_SchuelerErzAdr PRIMARY KEY (ID),
   CONSTRAINT SchuelerErzAdr_ErzieherArt_FK FOREIGN KEY (ErzieherArt_ID) REFERENCES K_ErzieherArt(ID) ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT SchuelerErzAdr_Ort_FK FOREIGN KEY (ErzOrt_ID) REFERENCES K_Ort(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT SchuelerErzAdr_Ortsteil_FK FOREIGN KEY (ErzOrtsteil_ID) REFERENCES K_Ortsteil(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT SchuelerErzAdr_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
