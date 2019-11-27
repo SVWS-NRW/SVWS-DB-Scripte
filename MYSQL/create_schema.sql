@@ -615,7 +615,7 @@ CREATE TABLE K_Ankreuzdaten (
 
 
 CREATE TABLE K_Ankreuzfloskeln (
-  ID bigint AUTO_INCREMENT NOT NULL, 
+  ID bigint DEFAULT -1 NOT NULL, 
   SchulnrEigner int NOT NULL, 
   Fach_ID int NOT NULL, 
   Jahrgang varchar(2) NOT NULL, 
@@ -642,12 +642,13 @@ CREATE TABLE K_BeschaeftigungsArt (
 
 
 CREATE TABLE K_Datenschutz (
-  ID int AUTO_INCREMENT NOT NULL, 
+  ID int DEFAULT -1 NOT NULL, 
   Bezeichnung varchar(250), 
   Sichtbar varchar(1) DEFAULT '+' NOT NULL, 
   Schluessel varchar(20), 
   SchulnrEigner int NOT NULL, 
-  Sortierung int DEFAULT '32000' NOT NULL,
+  Sortierung int DEFAULT '32000' NOT NULL, 
+  Beschreibung text,
   CONSTRAINT PK_K_Datenschutz PRIMARY KEY (ID)
 );
 
@@ -1117,7 +1118,7 @@ CREATE TABLE KursKombinationen (
 
 
 CREATE TABLE Kurse (
-  ID int NOT NULL, 
+  ID int DEFAULT -1 NOT NULL, 
   Jahr smallint NOT NULL, 
   Abschnitt smallint NOT NULL, 
   KurzBez varchar(20) NOT NULL, 
@@ -1543,6 +1544,13 @@ CREATE INDEX SETTINGS_IDX2 ON SETTINGS(NAME);
 CREATE INDEX SETTINGS_IDX3 ON SETTINGS(SchulNrEigner);
 
 
+CREATE TABLE SVWS_DB_AutoInkremente (
+  NameTabelle varchar(200) NOT NULL, 
+  MaxID bigint DEFAULT '1' NOT NULL,
+  CONSTRAINT PK_SVWS_DB_AutoInkremente PRIMARY KEY (NameTabelle)
+);
+
+
 CREATE TABLE SVWS_DB_Version (
   Revision int DEFAULT '0' NOT NULL,
   CONSTRAINT PK_SVWS_DB_Version PRIMARY KEY (Revision)
@@ -1890,7 +1898,7 @@ CREATE TABLE Schildintern_Zusatzinfos (
 
 CREATE TABLE SchuelerEinzelleistungen (
   SchulnrEigner int NOT NULL, 
-  ID bigint AUTO_INCREMENT NOT NULL, 
+  ID bigint DEFAULT -1 NOT NULL, 
   Datum date, 
   Lehrer_ID int, 
   Art_ID int, 
@@ -2591,7 +2599,7 @@ CREATE TABLE EigeneSchule_Abt_Kl (
 
 
 CREATE TABLE Schueler (
-  ID int NOT NULL, 
+  ID int DEFAULT -1 NOT NULL, 
   GU_ID varchar(40), 
   SrcID int, 
   IDext varchar(30), 
@@ -2919,7 +2927,7 @@ CREATE TABLE SchuelerAbitur (
 
 
 CREATE TABLE SchuelerAnkreuzfloskeln (
-  ID bigint AUTO_INCREMENT NOT NULL, 
+  ID bigint DEFAULT -1 NOT NULL, 
   Schueler_ID int NOT NULL, 
   SchulnrEigner int NOT NULL, 
   Jahr int NOT NULL, 
@@ -3025,7 +3033,7 @@ CREATE INDEX SchuelerErzAdr_IDX1 ON SchuelerErzAdr(Schueler_ID);
 
 
 CREATE TABLE SchuelerLernabschnittsdaten (
-  ID int NOT NULL, 
+  ID int DEFAULT -1 NOT NULL, 
   Schueler_ID int NOT NULL, 
   Jahr smallint NOT NULL, 
   Abschnitt smallint NOT NULL, 
@@ -3332,6 +3340,15 @@ CREATE TABLE SchildKursSchueler (
 );
 
 
+CREATE TABLE SchildKursSchueler (
+  Kurs_ID int NOT NULL, 
+  Schueler_ID int NOT NULL,
+  CONSTRAINT PK_SchildKursSchueler PRIMARY KEY (Kurs_ID, Schueler_ID),
+  CONSTRAINT SchildKursSchueler_Kurse_FK FOREIGN KEY (Kurs_ID) REFERENCES Kurse(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchildKursSchueler_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
 CREATE TABLE SchuelerKAoADaten (
   ID int NOT NULL, 
   Schueler_ID int NOT NULL, 
@@ -3375,7 +3392,7 @@ CREATE TABLE SchuelerErzFunktion (
 
 
 CREATE TABLE SchuelerFehlstunden (
-  ID bigint AUTO_INCREMENT NOT NULL, 
+  ID bigint DEFAULT -1 NOT NULL, 
   SchulnrEigner int NOT NULL, 
   Abschnitt_ID int NOT NULL, 
   Datum date DEFAULT CURRENT_DATE() NOT NULL, 
@@ -3406,7 +3423,7 @@ CREATE TABLE SchuelerLD_PSFachBem (
 
 
 CREATE TABLE SchuelerLeistungsdaten (
-  ID int AUTO_INCREMENT NOT NULL, 
+  ID bigint DEFAULT -1 NOT NULL, 
   Abschnitt_ID int NOT NULL, 
   Fach_ID int NOT NULL, 
   Hochrechnung int, 
@@ -3444,6 +3461,10 @@ CREATE TABLE SchuelerLeistungsdaten (
   CONSTRAINT SchuelerLeistungsdaten_Lehrer_FK FOREIGN KEY (FachLehrer) REFERENCES K_Lehrer(Kuerzel) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT SchuelerLeistungsdaten_UC2 UNIQUE (Abschnitt_ID, FachLehrer, Fach_ID, Kurs_ID, Kursart)
 );
+
+CREATE INDEX SchuelerLeistungsdaten_IDX1 ON SchuelerLeistungsdaten(Kurs_ID);
+CREATE INDEX SchuelerLeistungsdaten_IDX2 ON SchuelerLeistungsdaten(Fach_ID);
+CREATE INDEX SchuelerLeistungsdaten_IDX3 ON SchuelerLeistungsdaten(FachLehrer);
 
 
 CREATE TABLE SchuelerZuweisungen (
@@ -3539,7 +3560,18 @@ FROM
         JOIN SchuelerLernabschnittsdaten ON SchuelerLeistungsdaten.Abschnitt_ID = SchuelerLernabschnittsdaten.ID
         JOIN Schueler ON SchuelerLernabschnittsdaten.Schueler_ID = Schueler.ID;
 
-INSERT INTO SVWS_DB_Version(Revision) VALUES (2);
+DELETE FROM SchildKursSchueler;
+
+INSERT INTO SchildKursSchueler
+SELECT 
+  Kurse.ID AS Kurs_ID,
+  Schueler.ID AS Schueler_ID
+FROM 
+  Kurse JOIN SchuelerLeistungsdaten ON Kurse.ID = SchuelerLeistungsdaten.Kurs_ID
+        JOIN SchuelerLernabschnittsdaten ON SchuelerLeistungsdaten.Abschnitt_ID = SchuelerLernabschnittsdaten.ID
+        JOIN Schueler ON SchuelerLernabschnittsdaten.Schueler_ID = Schueler.ID;
+
+INSERT INTO SVWS_DB_Version(Revision) VALUES (3);
 
 
 INSERT INTO Users (ID,US_Name,US_LoginName,US_UserGroups,US_Privileges) VALUES (1,'Administrator','Admin','1;2;3;4;5','$');

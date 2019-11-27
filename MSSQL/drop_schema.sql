@@ -109,6 +109,7 @@ DROP TABLE Schildintern_AbiturInfos;
 DROP TABLE Schild_Verwaltung;
 DROP TABLE SchildFilter;
 DROP TABLE SVWS_DB_Version;
+DROP TABLE SVWS_DB_AutoInkremente;
 DROP TABLE SETTINGS;
 DROP TABLE PrfSemAbschl;
 DROP TABLE Personengruppen_Personen;
