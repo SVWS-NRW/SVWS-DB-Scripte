@@ -3340,15 +3340,6 @@ CREATE TABLE SchildKursSchueler (
 );
 
 
-CREATE TABLE SchildKursSchueler (
-  Kurs_ID int NOT NULL, 
-  Schueler_ID int NOT NULL,
-  CONSTRAINT PK_SchildKursSchueler PRIMARY KEY (Kurs_ID, Schueler_ID),
-  CONSTRAINT SchildKursSchueler_Kurse_FK FOREIGN KEY (Kurs_ID) REFERENCES Kurse(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchildKursSchueler_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
 CREATE TABLE SchuelerKAoADaten (
   ID int NOT NULL, 
   Schueler_ID int NOT NULL, 
@@ -3494,17 +3485,6 @@ CREATE TABLE ZuordnungReportvorlagen (
 );
 
 
-
-DELETE FROM SchildKursSchueler;
-
-INSERT INTO SchildKursSchueler
-SELECT 
-  Kurse.ID AS Kurs_ID,
-  Schueler.ID AS Schueler_ID
-FROM 
-  Kurse JOIN SchuelerLeistungsdaten ON Kurse.ID = SchuelerLeistungsdaten.Kurs_ID
-        JOIN SchuelerLernabschnittsdaten ON SchuelerLeistungsdaten.Abschnitt_ID = SchuelerLernabschnittsdaten.ID
-        JOIN Schueler ON SchuelerLernabschnittsdaten.Schueler_ID = Schueler.ID;
 
 DELETE FROM SchildKursSchueler;
 
