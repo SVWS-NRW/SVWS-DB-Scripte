@@ -1,5 +1,5 @@
 CREATE TABLE EigeneSchule (
-  ID int NOT NULL, 
+  ID bigint NOT NULL, 
   SchulformNr varchar(3), 
   SchulformKrz varchar(3), 
   SchulformBez varchar(50), 
@@ -19,12 +19,12 @@ CREATE TABLE EigeneSchule (
   Ganztags varchar(1) DEFAULT '+', 
   Schuljahr smallint, 
   SchuljahrAbschnitt smallint, 
-  AnzahlAbschnitte smallint DEFAULT '2', 
+  AnzahlAbschnitte smallint DEFAULT 2, 
   Fremdsprachen varchar(1) DEFAULT '+', 
   UpdateSprachenfolge varchar(1) DEFAULT '+', 
   JVAZeigen varchar(1) DEFAULT '-', 
   RefPaedagogikZeigen varchar(1) DEFAULT '-', 
-  AnzJGS_Jahr smallint DEFAULT '1', 
+  AnzJGS_Jahr smallint DEFAULT 1, 
   AbschnittBez varchar(20) DEFAULT 'Halbjahr', 
   BezAbschnitt1 varchar(10) DEFAULT '1. Hj', 
   BezAbschnitt2 varchar(10) DEFAULT '2. Hj', 
@@ -77,12 +77,12 @@ CREATE TABLE EigeneSchule (
 
 
 CREATE TABLE EigeneSchule_Fachklassen (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   BKIndex smallint, 
   FKS varchar(3), 
   AP varchar(2), 
   Bezeichnung varchar(100), 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   Sichtbar varchar(1) DEFAULT '+', 
   Aenderbar varchar(1) DEFAULT '+', 
   Kennung varchar(10), 
@@ -102,7 +102,7 @@ CREATE TABLE EigeneSchule_Fachklassen (
 
 
 CREATE TABLE EigeneSchule_Faecher (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   FachKrz varchar(20), 
   Bezeichnung varchar(255), 
   ZeugnisBez varchar(255), 
@@ -110,13 +110,13 @@ CREATE TABLE EigeneSchule_Faecher (
   StatistikKrz varchar(2), 
   BasisFach varchar(2), 
   IstSprache varchar(1) DEFAULT '-', 
-  Sortierung int DEFAULT '32000', 
-  SortierungS2 int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
+  SortierungS2 int DEFAULT 32000, 
   NachprErlaubt varchar(1) DEFAULT '+', 
   Sichtbar varchar(1) DEFAULT '+', 
   Aenderbar varchar(1) DEFAULT '+', 
-  Gewichtung smallint DEFAULT '1', 
-  Fachgruppe_ID int, 
+  Gewichtung smallint DEFAULT 1, 
+  Fachgruppe_ID bigint, 
   Unterichtssprache varchar(1), 
   IstSchriftlich varchar(1), 
   IstSchriftlichBA varchar(1), 
@@ -132,8 +132,8 @@ CREATE TABLE EigeneSchule_Faecher (
   Q3 varchar(1), 
   Q4 varchar(1), 
   AlsNeueFSinSII varchar(1), 
-  Leitfach_ID int, 
-  Leitfach2_ID int, 
+  Leitfach_ID bigint, 
+  Leitfach2_ID bigint, 
   E1_WZE int, 
   E2_WZE int, 
   Q_WZE int, 
@@ -151,8 +151,8 @@ CREATE TABLE EigeneSchule_Faecher (
 
 CREATE TABLE EigeneSchule_FachTeilleistungen (
   SchulnrEigner int NOT NULL, 
-  Fach_ID int NOT NULL, 
-  Teilleistung_ID int NOT NULL, 
+  Fach_ID bigint NOT NULL, 
+  Teilleistung_ID bigint NOT NULL, 
   Kursart varchar(5),
   CONSTRAINT PK_EigeneSchule_FachTeilleistungen PRIMARY KEY (Fach_ID, Kursart, SchulnrEigner, Teilleistung_ID),
   CONSTRAINT EigeneSchule_FachTeilleistungen_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE
@@ -160,12 +160,12 @@ CREATE TABLE EigeneSchule_FachTeilleistungen (
 
 
 CREATE TABLE EigeneSchule_Jahrgaenge (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   InternKrz varchar(20), 
   ASDJahrgang varchar(2), 
   ASDBezeichnung varchar(100), 
   Sichtbar varchar(1) DEFAULT '+', 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   IstChronologisch varchar(1) DEFAULT '+', 
   Spaltentitel varchar(2), 
   SekStufe varchar(6), 
@@ -173,7 +173,7 @@ CREATE TABLE EigeneSchule_Jahrgaenge (
   JahrgangNum smallint, 
   Restabschnitte int, 
   SchulnrEigner int, 
-  Folgejahrgang_ID int,
+  Folgejahrgang_ID bigint,
   CONSTRAINT PK_EigeneSchule_Jahrgaenge PRIMARY KEY (ID),
   CONSTRAINT EigeneSchule_Jahrgaenge_UC1 UNIQUE (InternKrz)
 );
@@ -193,12 +193,12 @@ CREATE TABLE EigeneSchule_KAoADaten (
 
 
 CREATE TABLE EigeneSchule_Kursart (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   Bezeichnung varchar(120), 
   InternBez varchar(20), 
   Kursart varchar(5), 
   KursartAllg varchar(5), 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   Sichtbar varchar(1) DEFAULT '+', 
   Aenderbar varchar(1) DEFAULT '+', 
   SchulnrEigner int,
@@ -208,12 +208,12 @@ CREATE TABLE EigeneSchule_Kursart (
 
 
 CREATE TABLE EigeneSchule_KursartAllg (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   KursartAllg varchar(5), 
   InternBez varchar(20), 
   KursartASD varchar(2), 
   Bezeichnung varchar(120), 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   Sichtbar varchar(1) DEFAULT '+', 
   SchulnrEigner int,
   CONSTRAINT PK_EigeneSchule_KursartAllg PRIMARY KEY (ID),
@@ -222,7 +222,7 @@ CREATE TABLE EigeneSchule_KursartAllg (
 
 
 CREATE TABLE EigeneSchule_Merkmale (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   Schule varchar(1), 
   Schueler varchar(1), 
   Kurztext varchar(10), 
@@ -233,12 +233,12 @@ CREATE TABLE EigeneSchule_Merkmale (
 
 
 CREATE TABLE EigeneSchule_Schulformen (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   SGL varchar(3), 
   SF_SGL varchar(5), 
   Schulform varchar(100), 
   DoppelQualifikation varchar(1), 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   Sichtbar varchar(1) DEFAULT '+', 
   BKIndex int, 
   SchulnrEigner int, 
@@ -262,7 +262,7 @@ CREATE TABLE EigeneSchule_Teilstandorte (
 
 
 CREATE TABLE EigeneSchule_Texte (
-  ID int NOT NULL, 
+  ID bigint NOT NULL, 
   SchulnrEigner int NOT NULL, 
   Kuerzel varchar(50), 
   Inhalt varchar(255), 
@@ -273,7 +273,7 @@ CREATE TABLE EigeneSchule_Texte (
 
 
 CREATE TABLE EigeneSchule_Zertifikate (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   SchulnrEigner int NOT NULL, 
   Kuerzel varchar(20) NOT NULL, 
   Bezeichnung varchar(100), 
@@ -285,7 +285,7 @@ CREATE TABLE EigeneSchule_Zertifikate (
 
 
 CREATE TABLE EigeneSchule_Zertifikatsfaecher (
-  Zertifikat_ID int NOT NULL, 
+  Zertifikat_ID bigint NOT NULL, 
   SchulnrEigner int NOT NULL, 
   Kuerzel varchar(20) NOT NULL, 
   Klartext varchar(100), 
@@ -297,7 +297,7 @@ CREATE TABLE EigeneSchule_Zertifikatsfaecher (
 
 
 CREATE TABLE Fach_Gliederungen (
-  Fach_ID int NOT NULL, 
+  Fach_ID bigint NOT NULL, 
   Gliederung varchar(3) NOT NULL, 
   SchulnrEigner int NOT NULL, 
   Faechergruppe int, 
@@ -308,8 +308,8 @@ CREATE TABLE Fach_Gliederungen (
   GymOSFach varchar(1), 
   ZeugnisBez varchar(130), 
   Lernfelder text, 
-  Fachklasse_ID int DEFAULT '0' NOT NULL, 
-  Sortierung int DEFAULT '32000',
+  Fachklasse_ID bigint DEFAULT 0 NOT NULL, 
+  Sortierung int DEFAULT 32000,
   CONSTRAINT PK_Fach_Gliederungen PRIMARY KEY (Fach_ID, Fachklasse_ID)
 );
 
@@ -337,8 +337,8 @@ CREATE TABLE Floskeln (
 
 
 CREATE TABLE K42_Blockgruppen (
-  IdNr int NOT NULL, 
-  BlockungsId int NOT NULL, 
+  IdNr bigint NOT NULL, 
+  BlockungsID bigint NOT NULL, 
   Bezeichnung varchar(255), 
   Jahrgang varchar(16), 
   Semester int, 
@@ -351,95 +351,95 @@ CREATE TABLE K42_Blockgruppen (
 
 
 CREATE TABLE K42_Blockungen (
-  Id int NOT NULL, 
+  ID bigint NOT NULL, 
   Bezeichnung varchar(128), 
   Schuljahr int, 
   Abschnitt int, 
   Angelegt datetime, 
   LetzteBearbeitung datetime, 
   Jahrgang varchar(64),
-  CONSTRAINT PK_K42_Blockungen PRIMARY KEY (Id)
+  CONSTRAINT PK_K42_Blockungen PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE K42_Faecher (
-  IdNr int NOT NULL, 
-  BlockungsId int NOT NULL, 
+  IdNr bigint NOT NULL, 
+  BlockungsID bigint NOT NULL, 
   FachKrz varchar(20), 
   Bezeichnung varchar(64), 
   StatistikKrz varchar(5), 
   Sortierung int, 
-  Fachgruppe_ID int, 
+  Fachgruppe_ID bigint, 
   IstSprache varchar(1),
   CONSTRAINT PK_K42_Faecher PRIMARY KEY (IdNr)
 );
 
 
 CREATE TABLE K42_IdnrListe (
-  Id int NOT NULL, 
-  BlockungsId int NOT NULL, 
+  ID bigint NOT NULL, 
+  BlockungsID bigint NOT NULL, 
   Owner int, 
   Typ int, 
-  Idnr int, 
+  Idnr bigint, 
   Fix int, 
   Tag int, 
   TerminNr int,
-  CONSTRAINT PK_K42_IdnrListe PRIMARY KEY (Id)
+  CONSTRAINT PK_K42_IdnrListe PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE K42_Jahrgaenge (
-  Id int NOT NULL, 
-  BlockungsId int NOT NULL, 
+  ID bigint NOT NULL, 
+  BlockungsID bigint NOT NULL, 
   InternKrz varchar(20), 
   ASDJahrgang varchar(2), 
   ASDBezeichnung varchar(200), 
   SGL varchar(3), 
   SGLText varchar(100),
-  CONSTRAINT PK_K42_Jahrgaenge PRIMARY KEY (Id)
+  CONSTRAINT PK_K42_Jahrgaenge PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE K42_JgBereiche (
   JG_Bereich int, 
-  BlockungsId int NOT NULL, 
+  BlockungsID bigint NOT NULL, 
   Jahrgang varchar(2),
-  CONSTRAINT PK_K42_JgBereiche PRIMARY KEY (BlockungsId, JG_Bereich, Jahrgang)
+  CONSTRAINT PK_K42_JgBereiche PRIMARY KEY (BlockungsID, JG_Bereich, Jahrgang)
 );
 
 
 CREATE TABLE K42_KlausurTermine (
   TerminNr int, 
-  BlockungsId int NOT NULL, 
-  BlockgruppenId int, 
+  BlockungsID bigint NOT NULL, 
+  BlockgruppenID bigint, 
   Bezeichnung varchar(128), 
   IstAbiturTermin varchar(1),
-  CONSTRAINT PK_K42_KlausurTermine PRIMARY KEY (BlockgruppenId, BlockungsId, TerminNr)
+  CONSTRAINT PK_K42_KlausurTermine PRIMARY KEY (BlockgruppenID, BlockungsID, TerminNr)
 );
 
 
 CREATE TABLE K42_Klausurschienen (
-  Id int NOT NULL, 
-  Idnr int, 
-  BlockungsId int NOT NULL, 
+  ID bigint NOT NULL, 
+  Idnr bigint, 
+  BlockungsID bigint NOT NULL, 
   Bezeichnung varchar(64), 
   Klausurdatum datetime, 
   VonStd int, 
   BisStd int, 
   NurSchriftlich varchar(1), 
-  BlockgruppenId int, 
+  BlockgruppenID bigint, 
   TerminNr int,
-  CONSTRAINT PK_K42_Klausurschienen PRIMARY KEY (Id)
+  CONSTRAINT PK_K42_Klausurschienen PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE K42_Kurse (
-  Id int NOT NULL, 
-  IdNr int NOT NULL, 
-  BlockungsId int NOT NULL, 
-  BlockgruppenId int, 
+  ID bigint NOT NULL, 
+  IdNr bigint NOT NULL, 
+  BlockungsID bigint NOT NULL, 
+  BlockgruppenID bigint, 
   Typ int, 
-  SchienenId int, 
+  SchienenID bigint, 
   Bezeichnung varchar(128), 
   Fach varchar(20), 
   Stunden int, 
@@ -474,13 +474,13 @@ CREATE TABLE K42_Kurse (
   StundenPlan varbinary(16777216), 
   TerminNr int, 
   KursPlanRaum int,
-  CONSTRAINT PK_K42_Kurse PRIMARY KEY (Id)
+  CONSTRAINT PK_K42_Kurse PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE K42_Lehrer (
-  Id int NOT NULL, 
-  BlockungsId int NOT NULL, 
+  ID bigint NOT NULL, 
+  BlockungsID bigint NOT NULL, 
   Kuerzel varchar(10), 
   Name varchar(64), 
   Vorname varchar(64), 
@@ -488,27 +488,27 @@ CREATE TABLE K42_Lehrer (
   Geschlecht varchar(1), 
   AmtsBez varchar(16), 
   EMail varchar(128),
-  CONSTRAINT PK_K42_Lehrer PRIMARY KEY (Id)
+  CONSTRAINT PK_K42_Lehrer PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE K42_Schienen (
-  Id int NOT NULL, 
-  IdNr int, 
-  BlockungsId int NOT NULL, 
-  BlockgruppenId int, 
+  ID bigint NOT NULL, 
+  IdNr bigint, 
+  BlockungsID bigint NOT NULL, 
+  BlockgruppenID bigint, 
   Bezeichnung varchar(128), 
   Umwaehlerzahl int, 
   KopplungsId varchar(32), 
   Sortierung int, 
   Stundenraster varbinary(16777216),
-  CONSTRAINT PK_K42_Schienen PRIMARY KEY (Id)
+  CONSTRAINT PK_K42_Schienen PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE K42_Schueler (
-  IdNr int NOT NULL, 
-  BlockungsId int NOT NULL, 
+  IdNr bigint NOT NULL, 
+  BlockungsId bigint NOT NULL, 
   Status int NOT NULL, 
   Geschlecht int, 
   Jahrgang varchar(32), 
@@ -518,11 +518,11 @@ CREATE TABLE K42_Schueler (
   CollCount int, 
   GebDat datetime, 
   SchulNr int, 
-  DB_IdNr int, 
+  DB_IdNr bigint, 
   Tutor varchar(16), 
   PruefOrd varchar(32), 
   EMail varchar(128), 
-  KoopDBIdNr int, 
+  KoopDBIdNr bigint, 
   VersNr int, 
   Bemerkung varchar(1024),
   CONSTRAINT PK_K42_Schueler PRIMARY KEY (IdNr)
@@ -530,10 +530,10 @@ CREATE TABLE K42_Schueler (
 
 
 CREATE TABLE K42_SchuelerFaecher (
-  Id int NOT NULL, 
-  Schueler_ID int, 
+  ID bigint NOT NULL, 
+  Schueler_ID bigint, 
   BlockungsId int NOT NULL, 
-  Fach_ID int, 
+  Fach_ID bigint, 
   KursartInd varchar(5), 
   Fixiert varchar(1), 
   FehlStd int, 
@@ -548,16 +548,16 @@ CREATE TABLE K42_SchuelerFaecher (
   KursBez varchar(32), 
   Fehl varchar(16), 
   UFehl varchar(16), 
-  LeistungsID int, 
+  LeistungsID bigint, 
   KursartAllg varchar(5), 
   VersNr int,
-  CONSTRAINT PK_K42_SchuelerFaecher PRIMARY KEY (Id)
+  CONSTRAINT PK_K42_SchuelerFaecher PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE K42_Versetzungstabelle (
   IdNr int NOT NULL, 
-  BlockungsId int NOT NULL, 
+  BlockungsID bigint NOT NULL, 
   Klasse varchar(6), 
   JG varchar(20), 
   FolgeKl varchar(6), 
@@ -569,14 +569,14 @@ CREATE TABLE K42_Versetzungstabelle (
   StvKlLehrer varchar(6), 
   SLBNR int, 
   ASDSCHGL varchar(6), 
-  Jahrgangs_Id varchar(9),
+  Jahrgangs_ID varchar(9),
   CONSTRAINT PK_K42_Versetzungstabelle PRIMARY KEY (IdNr)
 );
 
 
 CREATE TABLE K42_ZulKursarten (
-  Id int NOT NULL, 
-  BlockungsId int NOT NULL, 
+  ID bigint NOT NULL, 
+  BlockungsID bigint NOT NULL, 
   Sortierung int, 
   KursartInd varchar(5), 
   Bezeichnung varchar(255), 
@@ -585,14 +585,14 @@ CREATE TABLE K42_ZulKursarten (
   IsVisible varchar(1), 
   Schriftlich varchar(1), 
   KursartAllg varchar(5),
-  CONSTRAINT PK_K42_ZulKursarten PRIMARY KEY (Id)
+  CONSTRAINT PK_K42_ZulKursarten PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE K_Adressart (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   Bezeichnung varchar(30) NOT NULL, 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   Sichtbar varchar(1) DEFAULT '+', 
   Aenderbar varchar(1) DEFAULT '+', 
   SchulnrEigner int,
@@ -602,7 +602,7 @@ CREATE TABLE K_Adressart (
 
 
 CREATE TABLE K_Ankreuzdaten (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   SchulnrEigner int NOT NULL, 
   TextStufe1 varchar(100), 
   TextStufe2 varchar(100), 
@@ -617,7 +617,7 @@ CREATE TABLE K_Ankreuzdaten (
 CREATE TABLE K_Ankreuzfloskeln (
   ID bigint AUTOINCREMENT NOT NULL, 
   SchulnrEigner int NOT NULL, 
-  Fach_ID int NOT NULL, 
+  Fach_ID bigint NOT NULL, 
   Jahrgang varchar(2) NOT NULL, 
   Floskeltext varchar(255) NOT NULL, 
   Sortierung int, 
@@ -630,9 +630,9 @@ CREATE TABLE K_Ankreuzfloskeln (
 
 
 CREATE TABLE K_BeschaeftigungsArt (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   Bezeichnung varchar(100), 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   Sichtbar varchar(1) DEFAULT '+', 
   Aenderbar varchar(1) DEFAULT '+', 
   SchulnrEigner int,
@@ -642,21 +642,21 @@ CREATE TABLE K_BeschaeftigungsArt (
 
 
 CREATE TABLE K_Datenschutz (
-  ID int AUTOINCREMENT NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   Bezeichnung varchar(250), 
   Sichtbar varchar(1) DEFAULT '+' NOT NULL, 
   Schluessel varchar(20), 
   SchulnrEigner int NOT NULL, 
-  Sortierung int DEFAULT '32000' NOT NULL, 
+  Sortierung int DEFAULT 32000 NOT NULL, 
   Beschreibung text,
   CONSTRAINT PK_K_Datenschutz PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE K_EinschulungsArt (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   Bezeichnung varchar(40) NOT NULL, 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   Sichtbar varchar(1) DEFAULT '+', 
   Aenderbar varchar(1) DEFAULT '+', 
   SchulnrEigner int,
@@ -666,10 +666,10 @@ CREATE TABLE K_EinschulungsArt (
 
 
 CREATE TABLE K_Einzelleistungen (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   SchulnrEigner int NOT NULL, 
   Bezeichnung varchar(50), 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   Sichtbar varchar(1), 
   Gewichtung float,
   CONSTRAINT PK_K_Einzelleistungen PRIMARY KEY (ID)
@@ -677,9 +677,9 @@ CREATE TABLE K_Einzelleistungen (
 
 
 CREATE TABLE K_EntlassGrund (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   Bezeichnung varchar(30) NOT NULL, 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   Sichtbar varchar(1) DEFAULT '+', 
   Aenderbar varchar(1) DEFAULT '+', 
   SchulnrEigner int,
@@ -689,9 +689,9 @@ CREATE TABLE K_EntlassGrund (
 
 
 CREATE TABLE K_ErzieherArt (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   Bezeichnung varchar(30) NOT NULL, 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   Sichtbar varchar(1) DEFAULT '+', 
   Aenderbar varchar(1) DEFAULT '+', 
   ExportBez varchar(20), 
@@ -702,9 +702,9 @@ CREATE TABLE K_ErzieherArt (
 
 
 CREATE TABLE K_ErzieherFunktion (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   Bezeichnung varchar(50) NOT NULL, 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   Sichtbar varchar(1) DEFAULT '+', 
   Aenderbar varchar(1) DEFAULT '+', 
   SchulnrEigner int,
@@ -714,9 +714,9 @@ CREATE TABLE K_ErzieherFunktion (
 
 
 CREATE TABLE K_FahrschuelerArt (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   Bezeichnung varchar(30) NOT NULL, 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   Sichtbar varchar(1) DEFAULT '+', 
   Aenderbar varchar(1) DEFAULT '+', 
   SchulnrEigner int,
@@ -726,10 +726,10 @@ CREATE TABLE K_FahrschuelerArt (
 
 
 CREATE TABLE K_Foerderschwerpunkt (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   Bezeichnung varchar(50) NOT NULL, 
   StatistikKrz varchar(2), 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   Sichtbar varchar(1) DEFAULT '+', 
   Aenderbar varchar(1) DEFAULT '+', 
   SchulnrEigner int,
@@ -739,9 +739,9 @@ CREATE TABLE K_Foerderschwerpunkt (
 
 
 CREATE TABLE K_Haltestelle (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   Bezeichnung varchar(30) NOT NULL, 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   Sichtbar varchar(1) DEFAULT '+', 
   Aenderbar varchar(1) DEFAULT '+', 
   EntfernungSchule float, 
@@ -752,7 +752,7 @@ CREATE TABLE K_Haltestelle (
 
 
 CREATE TABLE K_Kindergarten (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   Bezeichnung varchar(50), 
   PLZ varchar(10), 
   Ort varchar(30), 
@@ -768,10 +768,10 @@ CREATE TABLE K_Kindergarten (
 
 
 CREATE TABLE K_KlassenOrgForm (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   Bezeichnung varchar(100) NOT NULL, 
   StatistikKrz varchar(2), 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   Sichtbar varchar(1) DEFAULT '+', 
   Aenderbar varchar(1) DEFAULT '+',
   CONSTRAINT PK_K_KlassenOrgForm PRIMARY KEY (ID),
@@ -780,11 +780,11 @@ CREATE TABLE K_KlassenOrgForm (
 
 
 CREATE TABLE K_Ort (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   PLZ varchar(10) NOT NULL, 
   Bezeichnung varchar(50), 
   Kreis varchar(3), 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   Sichtbar varchar(1) DEFAULT '+', 
   Aenderbar varchar(1) DEFAULT '+', 
   Land varchar(2), 
@@ -797,19 +797,19 @@ CREATE INDEX K_Ort_IDX1 ON K_Ort(PLZ);
 
 
 CREATE TABLE K_AllgAdresse (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   AllgAdrAdressArt varchar(30) NOT NULL, 
   AllgAdrName1 varchar(50), 
   AllgAdrName2 varchar(50), 
   AllgAdrStrasse varchar(50), 
-  AllgAdrOrt_ID int, 
+  AllgAdrOrt_ID bigint, 
   AllgAdrPLZ varchar(10), 
   AllgAdrTelefon1 varchar(20), 
   AllgAdrTelefon2 varchar(20), 
   AllgAdrFax varchar(20), 
   AllgAdrEmail varchar(100), 
   AllgAdrBemerkungen varchar(255), 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   AllgAdrAusbildungsBetrieb varchar(1) DEFAULT '-', 
   AllgAdrBietetPraktika varchar(1) DEFAULT '-', 
   AllgAdrBranche varchar(50), 
@@ -830,7 +830,7 @@ CREATE TABLE K_AllgAdresse (
 
 
 CREATE TABLE K_Lehrer (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   GU_ID varchar(40), 
   Kuerzel varchar(10) NOT NULL, 
   LIDKrz varchar(4), 
@@ -838,13 +838,13 @@ CREATE TABLE K_Lehrer (
   Vorname varchar(20), 
   PersonTyp varchar(20) DEFAULT 'LEHRKRAFT', 
   SchulnrEigner int, 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   Sichtbar varchar(1) DEFAULT '+', 
   Aenderbar varchar(1) DEFAULT '+', 
   FuerExport varchar(1) DEFAULT '+', 
   Statistik varchar(1), 
   Strasse varchar(50), 
-  Ort_ID int, 
+  Ort_ID bigint, 
   PLZ varchar(10), 
   Tel varchar(20), 
   Handy varchar(20), 
@@ -893,8 +893,8 @@ CREATE TABLE K_Lehrer (
 
 
 CREATE TABLE AllgAdrAnsprechpartner (
-  ID int NOT NULL, 
-  Adresse_ID int, 
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Adresse_ID bigint, 
   Name varchar(60), 
   Vorname varchar(60), 
   Anrede varchar(10), 
@@ -910,7 +910,7 @@ CREATE TABLE AllgAdrAnsprechpartner (
 
 
 CREATE TABLE EigeneSchule_Abteilungen (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   Bezeichnung varchar(50) NOT NULL, 
   AbteilungsLeiter varchar(10), 
   Sichtbar varchar(1) DEFAULT '+', 
@@ -925,10 +925,10 @@ CREATE TABLE EigeneSchule_Abteilungen (
 
 
 CREATE TABLE K_Ortsteil (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   Bezeichnung varchar(30) NOT NULL, 
   PLZ varchar(10), 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   Sichtbar varchar(1) DEFAULT '+', 
   Aenderbar varchar(1) DEFAULT '+', 
   SchulnrEigner int, 
@@ -939,10 +939,10 @@ CREATE TABLE K_Ortsteil (
 
 
 CREATE TABLE K_Religion (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   Bezeichnung varchar(30) NOT NULL, 
   StatistikKrz varchar(10), 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   Sichtbar varchar(1) DEFAULT '+', 
   Aenderbar varchar(1) DEFAULT '+', 
   ExportBez varchar(20), 
@@ -954,7 +954,7 @@ CREATE TABLE K_Religion (
 
 
 CREATE TABLE K_Schule (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   SchulNr varchar(6) NOT NULL, 
   Name varchar(100), 
   SchulformNr varchar(3), 
@@ -967,7 +967,7 @@ CREATE TABLE K_Schule (
   Fax varchar(20), 
   Email varchar(40), 
   Schulleiter varchar(40), 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   Sichtbar varchar(1) DEFAULT '+', 
   Aenderbar varchar(1) DEFAULT '+', 
   SchulNr_SIM varchar(6), 
@@ -980,7 +980,7 @@ CREATE TABLE K_Schule (
 
 
 CREATE TABLE K_Schulfunktionen (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   Bezeichnung varchar(50), 
   Sortierung int, 
   Sichtbar varchar(1), 
@@ -990,9 +990,9 @@ CREATE TABLE K_Schulfunktionen (
 
 
 CREATE TABLE K_Schwerpunkt (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   Bezeichnung varchar(50) NOT NULL, 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   Sichtbar varchar(1) DEFAULT '+', 
   Aenderbar varchar(1) DEFAULT '+', 
   SchulnrEigner int,
@@ -1003,8 +1003,8 @@ CREATE TABLE K_Schwerpunkt (
 
 CREATE TABLE Fachklassen_Schwerpunkte (
   SchulnrEigner int NOT NULL, 
-  Fachklasse_ID int NOT NULL, 
-  Schwerpunkt_ID int NOT NULL,
+  Fachklasse_ID bigint NOT NULL, 
+  Schwerpunkt_ID bigint NOT NULL,
   CONSTRAINT PK_Fachklassen_Schwerpunkte PRIMARY KEY (Fachklasse_ID, SchulnrEigner, Schwerpunkt_ID),
   CONSTRAINT Fachklassen_Schwerpunkte_Fachkl_FK FOREIGN KEY (Fachklasse_ID) REFERENCES EigeneSchule_Fachklassen(ID) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT Fachklassen_Schwerpunkte_Schwerp_FK FOREIGN KEY (Schwerpunkt_ID) REFERENCES K_Schwerpunkt(ID) ON UPDATE CASCADE ON DELETE CASCADE
@@ -1012,9 +1012,9 @@ CREATE TABLE Fachklassen_Schwerpunkte (
 
 
 CREATE TABLE K_Sportbefreiung (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   Bezeichnung varchar(50) NOT NULL, 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   Sichtbar varchar(1) DEFAULT '+', 
   Aenderbar varchar(1) DEFAULT '+', 
   SchulnrEigner int,
@@ -1024,10 +1024,10 @@ CREATE TABLE K_Sportbefreiung (
 
 
 CREATE TABLE K_Staat (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   Bezeichnung varchar(80) NOT NULL, 
   StatistikKrz varchar(3), 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   Sichtbar varchar(1) DEFAULT '+', 
   Aenderbar varchar(1) DEFAULT '+', 
   ExportBez varchar(20), 
@@ -1039,9 +1039,9 @@ CREATE TABLE K_Staat (
 
 
 CREATE TABLE K_TXTDATEIEN (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   BEZEICHNUNG varchar(32), 
-  TEXT_ID int NOT NULL, 
+  TEXT_ID bigint NOT NULL, 
   TEXT_BODY text, 
   Sichtbar varchar(1) DEFAULT '+', 
   Sortierung smallint, 
@@ -1051,9 +1051,9 @@ CREATE TABLE K_TXTDATEIEN (
 
 
 CREATE TABLE K_TelefonArt (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   Bezeichnung varchar(30) NOT NULL, 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   Sichtbar varchar(1) DEFAULT '+', 
   Aenderbar varchar(1) DEFAULT '+', 
   SchulnrEigner int,
@@ -1063,7 +1063,7 @@ CREATE TABLE K_TelefonArt (
 
 
 CREATE TABLE K_Verkehrssprachen (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   Kurztext varchar(10), 
   Langtext varchar(100), 
   Sichtbar varchar(1), 
@@ -1074,9 +1074,9 @@ CREATE TABLE K_Verkehrssprachen (
 
 
 CREATE TABLE K_Vermerkart (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   Bezeichnung varchar(30) NOT NULL, 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   Sichtbar varchar(1) DEFAULT '+', 
   Aenderbar varchar(1) DEFAULT '+', 
   SchulnrEigner int,
@@ -1093,42 +1093,82 @@ CREATE TABLE K_Zertifikate (
 );
 
 
+CREATE TABLE Katalog_Aufsichtsbereich (
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Kuerzel varchar(20) NOT NULL, 
+  Beschreibung varchar(1000) DEFAULT '' NOT NULL,
+  CONSTRAINT PK_Katalog_Aufsichtsbereich PRIMARY KEY (ID),
+  CONSTRAINT Katalog_Aufsichtsbereich_UC1 UNIQUE (Kuerzel)
+);
+
+
+CREATE TABLE Katalog_Pausenzeiten (
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Tag int NOT NULL, 
+  Beginn timestamp DEFAULT Now() NOT NULL, 
+  Ende timestamp DEFAULT Now() NOT NULL,
+  CONSTRAINT PK_Katalog_Pausenzeiten PRIMARY KEY (ID),
+  CONSTRAINT Katalog_Pausenzeiten_UC1 UNIQUE (Beginn, Ende, Tag)
+);
+
+
+CREATE TABLE Katalog_Raeume (
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Kuerzel varchar(20) NOT NULL, 
+  Beschreibung varchar(1000) DEFAULT '' NOT NULL, 
+  Groesse int DEFAULT 40 NOT NULL,
+  CONSTRAINT PK_Katalog_Raeume PRIMARY KEY (ID),
+  CONSTRAINT Katalog_Raeume_UC1 UNIQUE (Kuerzel)
+);
+
+
+CREATE TABLE Katalog_Zeitraster (
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Tag int NOT NULL, 
+  Stunde int NOT NULL, 
+  Beginn timestamp DEFAULT Now() NOT NULL, 
+  Ende timestamp DEFAULT Now() NOT NULL,
+  CONSTRAINT PK_Katalog_Zeitraster PRIMARY KEY (ID),
+  CONSTRAINT Katalog_Zeitraster_UC1 UNIQUE (Stunde, Tag)
+);
+
+
 CREATE TABLE Kompetenzen (
-  KO_ID int NOT NULL, 
-  KO_Gruppe int NOT NULL, 
+  KO_ID bigint NOT NULL, 
+  KO_Gruppe bigint NOT NULL, 
   KO_Bezeichnung varchar(64) NOT NULL,
   CONSTRAINT PK_Kompetenzen PRIMARY KEY (KO_Gruppe, KO_ID)
 );
 
 
 CREATE TABLE Kompetenzgruppen (
-  KG_Spalte int NOT NULL, 
-  KG_Zeile int NOT NULL, 
-  KG_ID int NOT NULL, 
+  KG_Spalte bigint NOT NULL, 
+  KG_Zeile bigint NOT NULL, 
+  KG_ID bigint NOT NULL, 
   KG_Bezeichnung varchar(50) NOT NULL,
   CONSTRAINT PK_Kompetenzgruppen PRIMARY KEY (KG_Bezeichnung, KG_ID, KG_Spalte, KG_Zeile)
 );
 
 
 CREATE TABLE KursKombinationen (
-  Kurs1_ID int NOT NULL, 
-  Kurs2_ID int NOT NULL,
+  Kurs1_ID bigint NOT NULL, 
+  Kurs2_ID bigint NOT NULL,
   CONSTRAINT PK_KursKombinationen PRIMARY KEY (Kurs1_ID, Kurs2_ID)
 );
 
 
 CREATE TABLE Kurse (
-  ID int AUTOINCREMENT NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   Jahr smallint NOT NULL, 
   Abschnitt smallint NOT NULL, 
   KurzBez varchar(20) NOT NULL, 
-  Jahrgang_ID int, 
+  Jahrgang_ID bigint, 
   ASDJahrgang varchar(2), 
-  Fach_ID int NOT NULL, 
+  Fach_ID bigint NOT NULL, 
   KursartAllg varchar(5), 
   Wochenstd smallint, 
   LehrerKrz varchar(10), 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   Sichtbar varchar(1) DEFAULT '+', 
   Schienen varchar(20), 
   Fortschreibungsart varchar(1), 
@@ -1144,8 +1184,8 @@ CREATE TABLE Kurse (
 
 
 CREATE TABLE KursLehrer (
-  Kurs_ID int NOT NULL, 
-  Lehrer_ID int NOT NULL, 
+  Kurs_ID bigint NOT NULL, 
+  Lehrer_ID bigint NOT NULL, 
   Anteil float, 
   SchulnrEigner int,
   CONSTRAINT PK_KursLehrer PRIMARY KEY (Kurs_ID, Lehrer_ID),
@@ -1155,7 +1195,7 @@ CREATE TABLE KursLehrer (
 
 
 CREATE TABLE LehrerAbschnittsdaten (
-  Lehrer_ID int NOT NULL, 
+  Lehrer_ID bigint NOT NULL, 
   Jahr int NOT NULL, 
   Abschnitt int NOT NULL, 
   Rechtsverhaeltnis varchar(1), 
@@ -1174,7 +1214,7 @@ CREATE TABLE LehrerAbschnittsdaten (
 
 
 CREATE TABLE LehrerAnrechnung (
-  Lehrer_ID int NOT NULL, 
+  Lehrer_ID bigint NOT NULL, 
   AnrechnungsgrundKrz varchar(10), 
   AnrechnungStd float, 
   Jahr int, 
@@ -1186,7 +1226,7 @@ CREATE TABLE LehrerAnrechnung (
 
 
 CREATE TABLE LehrerEntlastung (
-  Lehrer_ID int NOT NULL, 
+  Lehrer_ID bigint NOT NULL, 
   EntlastungsgrundKrz varchar(10), 
   EntlastungStd float, 
   Jahr int, 
@@ -1198,7 +1238,7 @@ CREATE TABLE LehrerEntlastung (
 
 
 CREATE TABLE LehrerFotos (
-  Lehrer_ID int NOT NULL, 
+  Lehrer_ID bigint NOT NULL, 
   Foto varbinary(16777216), 
   SchulnrEigner int,
   CONSTRAINT PK_LehrerFotos PRIMARY KEY (Lehrer_ID)
@@ -1206,10 +1246,10 @@ CREATE TABLE LehrerFotos (
 
 
 CREATE TABLE LehrerFunktionen (
-  Lehrer_ID int NOT NULL, 
+  Lehrer_ID bigint NOT NULL, 
   Jahr int NOT NULL, 
   Abschnitt int NOT NULL, 
-  Funktion_ID int NOT NULL, 
+  Funktion_ID bigint NOT NULL, 
   SchulnrEigner int,
   CONSTRAINT PK_LehrerFunktionen PRIMARY KEY (Abschnitt, Funktion_ID, Jahr, Lehrer_ID),
   CONSTRAINT LehrerFunktionen_Funktion_FK FOREIGN KEY (Funktion_ID) REFERENCES K_Schulfunktionen(ID) ON UPDATE CASCADE ON DELETE CASCADE,
@@ -1218,7 +1258,7 @@ CREATE TABLE LehrerFunktionen (
 
 
 CREATE TABLE LehrerLehramt (
-  Lehrer_ID int NOT NULL, 
+  Lehrer_ID bigint NOT NULL, 
   LehramtKrz varchar(10), 
   LehramtAnerkennungKrz varchar(10), 
   SchulnrEigner int,
@@ -1228,7 +1268,7 @@ CREATE TABLE LehrerLehramt (
 
 
 CREATE TABLE LehrerLehramtFachr (
-  Lehrer_ID int NOT NULL, 
+  Lehrer_ID bigint NOT NULL, 
   LehramtKrz varchar(10), 
   FachrKrz varchar(10), 
   FachrAnerkennungKrz varchar(10), 
@@ -1238,7 +1278,7 @@ CREATE TABLE LehrerLehramtFachr (
 
 
 CREATE TABLE LehrerLehramtLehrbef (
-  Lehrer_ID int NOT NULL, 
+  Lehrer_ID bigint NOT NULL, 
   LehramtKrz varchar(10), 
   LehrbefKrz varchar(10), 
   LehrbefAnerkennungKrz varchar(10), 
@@ -1248,7 +1288,7 @@ CREATE TABLE LehrerLehramtLehrbef (
 
 
 CREATE TABLE LehrerMehrleistung (
-  Lehrer_ID int NOT NULL, 
+  Lehrer_ID bigint NOT NULL, 
   MehrleistungsgrundKrz varchar(10) NOT NULL, 
   MehrleistungStd float, 
   Jahr int NOT NULL, 
@@ -1260,8 +1300,8 @@ CREATE TABLE LehrerMehrleistung (
 
 
 CREATE TABLE Lehrer_IMEI (
-  ID int NOT NULL, 
-  Lehrer_ID int NOT NULL, 
+  ID bigint NOT NULL, 
+  Lehrer_ID bigint NOT NULL, 
   SchulnrEigner int NOT NULL, 
   IMEI varchar(20),
   CONSTRAINT PK_Lehrer_IMEI PRIMARY KEY (ID),
@@ -1270,7 +1310,7 @@ CREATE TABLE Lehrer_IMEI (
 
 
 CREATE TABLE Logins (
-  LI_UserID int NOT NULL, 
+  LI_UserID bigint NOT NULL, 
   LI_LoginTime datetime, 
   LI_LogoffTime datetime, 
   SchulnrEigner int,
@@ -1280,16 +1320,16 @@ CREATE TABLE Logins (
 
 CREATE TABLE LuPO_Beratungslehrer (
   Abi_Jahrgang int NOT NULL, 
-  Lehrer_ID int NOT NULL,
+  Lehrer_ID bigint NOT NULL,
   CONSTRAINT PK_LuPO_Beratungslehrer PRIMARY KEY (Abi_Jahrgang, Lehrer_ID)
 );
 
 
 CREATE TABLE LuPO_Fachgruppen (
-  ID int NOT NULL, 
-  Aufgabenfeld int DEFAULT '0', 
+  ID bigint NOT NULL, 
+  Aufgabenfeld int DEFAULT 0, 
   FachgruppeKrz varchar(2), 
-  Farbe int DEFAULT '16777215', 
+  Farbe int DEFAULT 16777215, 
   Bezeichnung varchar(100),
   CONSTRAINT PK_LuPO_Fachgruppen PRIMARY KEY (ID)
 );
@@ -1298,38 +1338,38 @@ CREATE TABLE LuPO_Fachgruppen (
 CREATE TABLE LuPO_FachgruppenFaecher (
   Fach varchar(2) NOT NULL, 
   Bezeichnung varchar(80), 
-  Fachgruppe_ID int,
+  Fachgruppe_ID bigint,
   CONSTRAINT PK_LuPO_FachgruppenFaecher PRIMARY KEY (Fach)
 );
 
 
 CREATE TABLE LuPO_Faecher (
   Abi_Jahrgang int NOT NULL, 
-  Fach_ID int NOT NULL, 
-  ID int DEFAULT '0' NOT NULL, 
+  Fach_ID bigint NOT NULL, 
+  ID bigint DEFAULT 0 NOT NULL, 
   Bezeichnung varchar(80), 
   StatistikKrz varchar(2), 
-  Sortierung int DEFAULT '32000' NOT NULL, 
-  IstSprache int DEFAULT '0' NOT NULL, 
+  Sortierung int DEFAULT 32000 NOT NULL, 
+  IstSprache int DEFAULT 0 NOT NULL, 
   Unterichtssprache varchar(1) DEFAULT 'D' NOT NULL, 
-  E1 int DEFAULT '1' NOT NULL, 
-  E2 int DEFAULT '1' NOT NULL, 
-  Q1 int DEFAULT '1' NOT NULL, 
-  Q2 int DEFAULT '1' NOT NULL, 
-  Q3 int DEFAULT '1' NOT NULL, 
-  Q4 int DEFAULT '1' NOT NULL, 
-  Abi_Moegl int DEFAULT '1' NOT NULL, 
-  LK_Moegl int DEFAULT '1' NOT NULL, 
-  AlsNeueFSInSII int DEFAULT '0' NOT NULL, 
-  Leitfach_1_ID int, 
-  Leitfach_2_ID int, 
+  E1 int DEFAULT 1 NOT NULL, 
+  E2 int DEFAULT 1 NOT NULL, 
+  Q1 int DEFAULT 1 NOT NULL, 
+  Q2 int DEFAULT 1 NOT NULL, 
+  Q3 int DEFAULT 1 NOT NULL, 
+  Q4 int DEFAULT 1 NOT NULL, 
+  Abi_Moegl int DEFAULT 1 NOT NULL, 
+  LK_Moegl int DEFAULT 1 NOT NULL, 
+  AlsNeueFSInSII int DEFAULT 0 NOT NULL, 
+  Leitfach_1_ID bigint, 
+  Leitfach_2_ID bigint, 
   E1_WStd int, 
   E2_WStd int, 
   E1_S_M varchar(1), 
   E2_S_M varchar(1), 
   Q_WStd int, 
   E_ExportKursart varchar(5), 
-  NurMuendlich int DEFAULT '0' NOT NULL,
+  NurMuendlich int DEFAULT 0 NOT NULL,
   CONSTRAINT PK_LuPO_Faecher PRIMARY KEY (Abi_Jahrgang, Fach_ID)
 );
 
@@ -1347,8 +1387,8 @@ CREATE TABLE LuPO_Jahrgangsdaten (
 CREATE TABLE LuPO_NichtMoeglAbiFachKombi (
   Abi_Jahrgang int NOT NULL, 
   ID varchar(30) NOT NULL, 
-  Fach1_ID int NOT NULL, 
-  Fach2_ID int NOT NULL, 
+  Fach1_ID bigint NOT NULL, 
+  Fach2_ID bigint NOT NULL, 
   Kursart1 varchar(5), 
   Kursart2 varchar(5), 
   Phase varchar(10) DEFAULT '-' NOT NULL, 
@@ -1358,12 +1398,12 @@ CREATE TABLE LuPO_NichtMoeglAbiFachKombi (
 
 
 CREATE TABLE LuPO_Schueler (
-  Schueler_ID int NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
   DatumBeratung datetime, 
   DatumRuecklauf datetime, 
-  SPP int DEFAULT '0' NOT NULL, 
-  Latein int DEFAULT '0' NOT NULL, 
-  Sportattest int DEFAULT '0' NOT NULL, 
+  SPP int DEFAULT 0 NOT NULL, 
+  Latein int DEFAULT 0 NOT NULL, 
+  Sportattest int DEFAULT 0 NOT NULL, 
   Kommentar text, 
   PruefOrdnung varchar(20), 
   Email varchar(100), 
@@ -1389,38 +1429,38 @@ CREATE TABLE LuPO_Schueler (
   Zulassung varchar(1), 
   BLL_Art varchar(1), 
   BLL_Punkte int, 
-  FS2_SekI_manuell int DEFAULT '0' NOT NULL,
+  FS2_SekI_manuell int DEFAULT 0 NOT NULL,
   CONSTRAINT PK_LuPO_Schueler PRIMARY KEY (Schueler_ID)
 );
 
 
 CREATE TABLE LuPO_SchuelerFaecher (
-  ID int NOT NULL, 
-  Schueler_ID int NOT NULL, 
-  Fach_ID int NOT NULL, 
+  ID bigint NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  Fach_ID bigint NOT NULL, 
   Kursart_E1 varchar(5), 
   Punkte_E1 varchar(2), 
-  Konflikt_E1 int DEFAULT '0' NOT NULL, 
+  Konflikt_E1 int DEFAULT 0 NOT NULL, 
   Kursart_E2 varchar(5), 
   Punkte_E2 varchar(2), 
-  Konflikt_E2 int DEFAULT '0' NOT NULL, 
+  Konflikt_E2 int DEFAULT 0 NOT NULL, 
   Kursart_Q1 varchar(5), 
   Punkte_Q1 varchar(2), 
-  Konflikt_Q1 int DEFAULT '0' NOT NULL, 
+  Konflikt_Q1 int DEFAULT 0 NOT NULL, 
   Kursart_Q2 varchar(5), 
   Punkte_Q2 varchar(2), 
-  Konflikt_Q2 int DEFAULT '0' NOT NULL, 
+  Konflikt_Q2 int DEFAULT 0 NOT NULL, 
   Kursart_Q3 varchar(5), 
   Punkte_Q3 varchar(2), 
-  Konflikt_Q3 int DEFAULT '0' NOT NULL, 
+  Konflikt_Q3 int DEFAULT 0 NOT NULL, 
   Kursart_Q4 varchar(5), 
   Punkte_Q4 varchar(2), 
-  Konflikt_Q4 int DEFAULT '0' NOT NULL, 
+  Konflikt_Q4 int DEFAULT 0 NOT NULL, 
   AbiturFach int, 
-  Konflikt_AF int DEFAULT '0' NOT NULL, 
+  Konflikt_AF int DEFAULT 0 NOT NULL, 
   Bemerkungen varchar(50), 
   Fachgruppe varchar(5), 
-  Aufgabenfeld int DEFAULT '0' NOT NULL, 
+  Aufgabenfeld int DEFAULT 0 NOT NULL, 
   Aendern_E1 int, 
   Aendern_E2 int, 
   Aendern_Q1 int, 
@@ -1439,8 +1479,8 @@ CREATE TABLE LuPO_SchuelerFaecher (
 
 
 CREATE TABLE LuPO_SchuelerFehlermeldungen (
-  ID int NOT NULL, 
-  Schueler_ID int NOT NULL, 
+  ID bigint NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
   Fehlercode varchar(20), 
   Fehlertext varchar(800), 
   Fehlergruppe varchar(2), 
@@ -1449,28 +1489,9 @@ CREATE TABLE LuPO_SchuelerFehlermeldungen (
 );
 
 
-CREATE TABLE NUES_Kategorien (
-  KategorieKuerzel varchar(20) NOT NULL, 
-  KategorieText varchar(100) NOT NULL, 
-  KategorieArt varchar(1),
-  CONSTRAINT PK_NUES_Kategorien PRIMARY KEY (KategorieKuerzel)
-);
-
-
-CREATE TABLE NUES_Merkmale (
-  MerkmalKuerzel varchar(20) NOT NULL, 
-  MerkmalText varchar(200) NOT NULL, 
-  Jahrgang varchar(2), 
-  HauptKategorie varchar(20) NOT NULL, 
-  NebenKategorie varchar(20),
-  CONSTRAINT PK_NUES_Merkmale PRIMARY KEY (MerkmalKuerzel),
-  CONSTRAINT NUES_Merkmale_Kategorie_FK FOREIGN KEY (HauptKategorie) REFERENCES NUES_Kategorien(KategorieKuerzel) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
 CREATE TABLE NichtMoeglAbiFachKombi (
-  Fach1_ID int NOT NULL, 
-  Fach2_ID int NOT NULL, 
+  Fach1_ID bigint NOT NULL, 
+  Fach2_ID bigint NOT NULL, 
   SchulnrEigner int NOT NULL, 
   Kursart1 varchar(5), 
   Kursart2 varchar(5), 
@@ -1483,24 +1504,24 @@ CREATE TABLE NichtMoeglAbiFachKombi (
 
 
 CREATE TABLE Personengruppen (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   SchulnrEigner int NOT NULL, 
   Gruppenname varchar(100) NOT NULL, 
   Zusatzinfo varchar(100), 
   SammelEMail varchar(100), 
   GruppenArt varchar(20), 
   XMLExport varchar(1), 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   Sichtbar varchar(1) DEFAULT '+',
   CONSTRAINT PK_Personengruppen PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE Personengruppen_Personen (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   SchulnrEigner int NOT NULL, 
-  Gruppe_ID int NOT NULL, 
-  Person_ID int, 
+  Gruppe_ID bigint NOT NULL, 
+  Person_ID bigint, 
   PersonNr int, 
   PersonArt varchar(1), 
   PersonName varchar(50) NOT NULL, 
@@ -1524,13 +1545,13 @@ CREATE TABLE PrfSemAbschl (
   Nr varchar(2) NOT NULL, 
   Klartext varchar(30), 
   StatistikKrz varchar(1), 
-  Sortierung int DEFAULT '32000',
+  Sortierung int DEFAULT 32000,
   CONSTRAINT PK_PrfSemAbschl PRIMARY KEY (Nr)
 );
 
 
 CREATE TABLE SETTINGS (
-  ID int NOT NULL, 
+  ID bigint NOT NULL, 
   NAME varchar(32), 
   SchulNrEigner int NOT NULL, 
   VALUE_FLOAT float, 
@@ -1546,19 +1567,19 @@ CREATE INDEX SETTINGS_IDX3 ON SETTINGS(SchulNrEigner);
 
 CREATE TABLE SVWS_DB_AutoInkremente (
   NameTabelle varchar(200) NOT NULL, 
-  MaxID bigint DEFAULT '1' NOT NULL,
+  MaxID bigint DEFAULT 1 NOT NULL,
   CONSTRAINT PK_SVWS_DB_AutoInkremente PRIMARY KEY (NameTabelle)
 );
 
 
 CREATE TABLE SVWS_DB_Version (
-  Revision int DEFAULT '0' NOT NULL,
+  Revision int DEFAULT 0 NOT NULL,
   CONSTRAINT PK_SVWS_DB_Version PRIMARY KEY (Revision)
 );
 
 
 CREATE TABLE SchildFilter (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   Art varchar(1), 
   Name varchar(50) NOT NULL, 
   Beschreibung varchar(255), 
@@ -1631,7 +1652,7 @@ CREATE TABLE Schildintern_Datenart (
 
 
 CREATE TABLE Schildintern_Fachgruppen (
-  FG_ID int NOT NULL, 
+  FG_ID bigint NOT NULL, 
   FG_SF varchar(50), 
   FG_Bezeichnung varchar(50), 
   FG_Farbe int, 
@@ -1647,7 +1668,7 @@ CREATE TABLE Schildintern_FaecherSortierung (
   Bezeichnung varchar(80), 
   Sortierung1 int, 
   Sortierung2 int, 
-  Fachgruppe_ID int, 
+  Fachgruppe_ID bigint, 
   FachgruppeKrz varchar(2), 
   AufgabenbereichAbitur varchar(5),
   CONSTRAINT PK_Schildintern_FaecherSortierung PRIMARY KEY (Fach)
@@ -1655,7 +1676,7 @@ CREATE TABLE Schildintern_FaecherSortierung (
 
 
 CREATE TABLE Schildintern_FilterFehlendeEintraege (
-  ID int NOT NULL, 
+  ID bigint NOT NULL, 
   Beschreibung varchar(100), 
   Feldname varchar(30), 
   Tabellen varchar(50), 
@@ -1667,7 +1688,7 @@ CREATE TABLE Schildintern_FilterFehlendeEintraege (
 
 
 CREATE TABLE Schildintern_FilterFeldListe (
-  ID int NOT NULL, 
+  ID bigint NOT NULL, 
   Bezeichnung varchar(50), 
   DBFeld varchar(50), 
   Typ varchar(50), 
@@ -1731,7 +1752,7 @@ CREATE TABLE Schildintern_KAoA_Zusatzmerkmal (
 
 
 CREATE TABLE Schildintern_K_Schulnote (
-  ID int NOT NULL, 
+  ID bigint NOT NULL, 
   Krz varchar(2), 
   Art varchar(1), 
   Bezeichnung varchar(40), 
@@ -1794,8 +1815,8 @@ CREATE TABLE Schildintern_PruefungsOrdnung (
   PO_Krz varchar(30) NOT NULL, 
   PO_Name varchar(255) NOT NULL, 
   PO_SGL varchar(50) NOT NULL, 
-  PO_MinJahrgang int DEFAULT '0' NOT NULL, 
-  PO_MaxJahrgang int DEFAULT '20' NOT NULL, 
+  PO_MinJahrgang int DEFAULT 0 NOT NULL, 
+  PO_MaxJahrgang int DEFAULT 20 NOT NULL, 
   PO_Jahrgaenge varchar(30) NOT NULL,
   CONSTRAINT PK_Schildintern_PruefungsOrdnung PRIMARY KEY (PO_Krz, PO_SGL, PO_Schulform)
 );
@@ -1817,7 +1838,7 @@ CREATE TABLE Schildintern_SchuelerImpExp (
 
 
 CREATE TABLE Schildintern_SpezialFilterFelder (
-  ID int NOT NULL, 
+  ID bigint NOT NULL, 
   Gruppe varchar(2), 
   KurzBez varchar(50), 
   Bezeichnung varchar(50), 
@@ -1852,7 +1873,7 @@ CREATE TABLE Schildintern_TextExport (
 
 
 CREATE TABLE Schildintern_VerfImportFelder (
-  ID int NOT NULL, 
+  ID bigint NOT NULL, 
   TableDescription varchar(50), 
   FieldDescription varchar(50), 
   DstTable varchar(50), 
@@ -1900,8 +1921,8 @@ CREATE TABLE SchuelerEinzelleistungen (
   SchulnrEigner int NOT NULL, 
   ID bigint AUTOINCREMENT NOT NULL, 
   Datum date, 
-  Lehrer_ID int, 
-  Art_ID int, 
+  Lehrer_ID bigint, 
+  Art_ID bigint, 
   Bemerkung varchar(100), 
   Leistung_ID bigint, 
   NotenKrz varchar(2),
@@ -1911,7 +1932,7 @@ CREATE TABLE SchuelerEinzelleistungen (
 
 
 CREATE TABLE SchuelerGSDaten (
-  Schueler_ID int NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
   SchulnrEigner int NOT NULL, 
   Note_Sprachgebrauch int, 
   Note_Lesen int, 
@@ -1936,7 +1957,7 @@ CREATE TABLE SchuelerGSDaten (
 
 
 CREATE TABLE SchuelerListe (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   Bezeichnung varchar(50) NOT NULL, 
   Erzeuger varchar(20), 
   Privat varchar(1) DEFAULT '+', 
@@ -1947,7 +1968,7 @@ CREATE TABLE SchuelerListe (
 
 
 CREATE TABLE SchuelerReportvorlagen (
-  User_ID int NOT NULL, 
+  User_ID bigint NOT NULL, 
   SchulnrEigner int, 
   ReportVorlage varchar(255), 
   Schueler_IDs text
@@ -1955,14 +1976,14 @@ CREATE TABLE SchuelerReportvorlagen (
 
 
 CREATE TABLE SchuelerWiedervorlage (
-  ID int NOT NULL, 
-  Schueler_ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
   SchulnrEigner int NOT NULL, 
   Bemerkung varchar(255), 
   AngelegtAm datetime, 
   WiedervorlageAm datetime, 
   ErledigtAm datetime, 
-  User_ID int, 
+  User_ID bigint, 
   Sekretariat varchar(1), 
   Typ varchar(1), 
   NichtLoeschen varchar(1),
@@ -1973,6 +1994,8 @@ CREATE TABLE SchuelerWiedervorlage (
 CREATE TABLE Schulver_DBS (
   Schulnr varchar(6) NOT NULL, 
   Regschl varchar(6), 
+  KoRe float, 
+  KoHo float, 
   ABez1 varchar(40), 
   ABez2 varchar(40), 
   ABez3 varchar(40), 
@@ -1980,18 +2003,41 @@ CREATE TABLE Schulver_DBS (
   Ort varchar(34), 
   Strasse varchar(40), 
   TelVorw varchar(6), 
-  SchultraegerNr varchar(6), 
   Telefon varchar(12), 
   FaxVorw varchar(6), 
   Fax varchar(15), 
+  ModemVorw varchar(6), 
+  Modem varchar(15), 
   SF varchar(2), 
   OeffPri varchar(1), 
   Kurzbez varchar(40), 
-  EMail varchar(100), 
-  Ganztagsbetrieb varchar(1), 
-  ArtderTraegerschaft varchar(2), 
   SchBetrSchl int, 
-  FSP varchar(2),
+  SchBetrSchlDatum varchar(8), 
+  SchuelerZahlASD int, 
+  SchuelerZahlVS int, 
+  ArtderTraegerschaft varchar(2), 
+  SchultraegerNr varchar(6), 
+  Schulgliederung varchar(3), 
+  Schulart varchar(3), 
+  Ganztagsbetrieb varchar(1), 
+  FSP varchar(2), 
+  Verbund varchar(1), 
+  Bus varchar(1), 
+  Fachberater int, 
+  FachberHauptamtl int, 
+  TelNrDBSalt varchar(15), 
+  RP varchar(1), 
+  EMail varchar(100), 
+  URL varchar(1000), 
+  Bemerkung text, 
+  CD int, 
+  Stift int, 
+  OGTS varchar(1), 
+  SELB varchar(1), 
+  Internat varchar(1), 
+  InternatPlaetze int DEFAULT 0, 
+  SMail varchar(50), 
+  SportImAbi varchar(1) DEFAULT '0',
   CONSTRAINT PK_Schulver_DBS PRIMARY KEY (Schulnr)
 );
 
@@ -2014,13 +2060,13 @@ CREATE TABLE Schulver_Schultraeger (
   KurzBez varchar(255), 
   SchBetrSchl int, 
   SchBetrSchlDatum varchar(255), 
-  SchuelerZahlASD int DEFAULT '0', 
-  SchuelerZahlVS int DEFAULT '0', 
+  SchuelerZahlASD int DEFAULT 0, 
+  SchuelerZahlVS int DEFAULT 0, 
   ArtderTraegerschaft varchar(255), 
   SchultraegerNr varchar(255), 
   Schulgliederung varchar(255), 
   Ganztagsbetrieb varchar(255), 
-  aktiv int DEFAULT '1' NOT NULL,
+  aktiv int DEFAULT 1 NOT NULL,
   CONSTRAINT PK_Schulver_Schultraeger PRIMARY KEY (Schulnr)
 );
 
@@ -2029,18 +2075,18 @@ CREATE TABLE Statkue_Abgangsart (
   SF varchar(2) NOT NULL, 
   Art varchar(2) NOT NULL, 
   Beschreibung varchar(200), 
-  KZ_Bereich int DEFAULT '0', 
-  KZ_Bereich_JG int DEFAULT '0', 
+  KZ_Bereich int DEFAULT 0, 
+  KZ_Bereich_JG int DEFAULT 0, 
   AbgangsJG varchar(2), 
   Flag varchar(1) DEFAULT '1', 
   geaendert datetime, 
-  Sortierung int DEFAULT '0',
+  Sortierung int DEFAULT 0,
   CONSTRAINT PK_Statkue_Abgangsart PRIMARY KEY (AbgangsJG, Art, KZ_Bereich, SF)
 );
 
 
 CREATE TABLE Statkue_AllgMerkmale (
-  ID int NOT NULL, 
+  ID bigint NOT NULL, 
   SF varchar(2) NOT NULL, 
   Kurztext varchar(10) NOT NULL, 
   StatistikKrz varchar(5), 
@@ -2078,7 +2124,7 @@ CREATE TABLE Statkue_Bilingual (
 
 CREATE TABLE Statkue_Einschulungsart (
   Art varchar(2) NOT NULL, 
-  Sortierung int DEFAULT '0', 
+  Sortierung int DEFAULT 0, 
   Beschreibung varchar(100), 
   geaendert datetime,
   CONSTRAINT PK_Statkue_Einschulungsart PRIMARY KEY (Art)
@@ -2086,13 +2132,13 @@ CREATE TABLE Statkue_Einschulungsart (
 
 
 CREATE TABLE Statkue_Fachklasse (
-  BKIndex int DEFAULT '0' NOT NULL, 
+  BKIndex int DEFAULT 0 NOT NULL, 
   Flag varchar(1), 
   FKS varchar(3) NOT NULL, 
   AP varchar(2) NOT NULL, 
   BGrp varchar(1), 
   BFeld varchar(2), 
-  Sortierung int DEFAULT '0', 
+  Sortierung int DEFAULT 0, 
   Status varchar(20), 
   Beschreibung varchar(100), 
   Beschreibung_W varchar(100), 
@@ -2125,7 +2171,7 @@ CREATE TABLE Statkue_Gliederung (
   Flag varchar(1) NOT NULL, 
   BKAnlage varchar(1) NOT NULL, 
   BKTyp varchar(2) NOT NULL, 
-  BKIndex int DEFAULT '0', 
+  BKIndex int DEFAULT 0, 
   Beschreibung varchar(100), 
   geaendert datetime,
   CONSTRAINT PK_Statkue_Gliederung PRIMARY KEY (BKAnlage, BKTyp, Flag, SF)
@@ -2137,7 +2183,7 @@ CREATE TABLE Statkue_Herkunftsart (
   Art varchar(2) NOT NULL, 
   Beschreibung varchar(255) NOT NULL, 
   Flag varchar(1) DEFAULT '1' NOT NULL, 
-  Sortierung int DEFAULT '0' NOT NULL, 
+  Sortierung int DEFAULT 0 NOT NULL, 
   geaendert datetime,
   CONSTRAINT PK_Statkue_Herkunftsart PRIMARY KEY (Art, SF)
 );
@@ -2153,170 +2199,170 @@ CREATE TABLE Statkue_Herkunftsschulform (
 );
 
 
-CREATE TABLE Statkue_LehrerAbgangKat (
-  ID int NOT NULL, 
+CREATE TABLE Statkue_LehrerAbgang (
+  ID bigint NOT NULL, 
   Kurztext varchar(10) NOT NULL, 
   Langtext varchar(255) NOT NULL, 
   Beginn datetime, 
   Ende datetime, 
-  Sort int DEFAULT '0' NOT NULL, 
+  Sort int DEFAULT 0 NOT NULL, 
   ASDSchluessel varchar(2),
-  CONSTRAINT PK_Statkue_LehrerAbgangKat PRIMARY KEY (ID)
+  CONSTRAINT PK_Statkue_LehrerAbgang PRIMARY KEY (ID)
 );
 
 
-CREATE TABLE Statkue_LehrerAnrechnungKat (
-  ID int NOT NULL, 
+CREATE TABLE Statkue_LehrerAnrechnung (
+  ID bigint NOT NULL, 
   Kurztext varchar(10) NOT NULL, 
   Langtext varchar(255) NOT NULL, 
   Beginn datetime, 
   Ende datetime, 
-  Sort int DEFAULT '0' NOT NULL,
-  CONSTRAINT PK_Statkue_LehrerAnrechnungKat PRIMARY KEY (ID)
+  Sort int DEFAULT 0 NOT NULL,
+  CONSTRAINT PK_Statkue_LehrerAnrechnung PRIMARY KEY (ID)
 );
 
 
-CREATE TABLE Statkue_LehrerBeschaeftigungsartKat (
-  ID int NOT NULL, 
+CREATE TABLE Statkue_LehrerBeschaeftigungsart (
+  ID bigint NOT NULL, 
   Kurztext varchar(10) NOT NULL, 
   Langtext varchar(255) NOT NULL, 
   Beginn datetime, 
   Ende datetime, 
-  Sort int DEFAULT '0' NOT NULL,
-  CONSTRAINT PK_Statkue_LehrerBeschaeftigungsartKat PRIMARY KEY (ID)
+  Sort int DEFAULT 0 NOT NULL,
+  CONSTRAINT PK_Statkue_LehrerBeschaeftigungsart PRIMARY KEY (ID)
 );
 
 
-CREATE TABLE Statkue_LehrerEinsatzstatusKat (
-  ID int NOT NULL, 
+CREATE TABLE Statkue_LehrerEinsatzstatus (
+  ID bigint NOT NULL, 
   Kurztext varchar(10) NOT NULL, 
   Langtext varchar(255) NOT NULL, 
   Beginn datetime, 
   Ende datetime, 
-  Sort int DEFAULT '0' NOT NULL,
-  CONSTRAINT PK_Statkue_LehrerEinsatzstatusKat PRIMARY KEY (ID)
+  Sort int DEFAULT 0 NOT NULL,
+  CONSTRAINT PK_Statkue_LehrerEinsatzstatus PRIMARY KEY (ID)
 );
 
 
-CREATE TABLE Statkue_LehrerFachrAnerkennungKat (
-  ID int NOT NULL, 
+CREATE TABLE Statkue_LehrerFachrAnerkennung (
+  ID bigint NOT NULL, 
   Kurztext varchar(10) NOT NULL, 
   Langtext varchar(255) NOT NULL, 
   Beginn datetime, 
   Ende datetime, 
-  Sort int DEFAULT '0' NOT NULL,
-  CONSTRAINT PK_Statkue_LehrerFachrAnerkennungKat PRIMARY KEY (ID)
+  Sort int DEFAULT 0 NOT NULL,
+  CONSTRAINT PK_Statkue_LehrerFachrAnerkennung PRIMARY KEY (ID)
 );
 
 
-CREATE TABLE Statkue_LehrerFachrichtungKat (
-  ID int NOT NULL, 
+CREATE TABLE Statkue_LehrerFachrichtung (
+  ID bigint NOT NULL, 
   Kurztext varchar(10) NOT NULL, 
   Langtext varchar(255) NOT NULL, 
   Beginn datetime, 
   Ende datetime, 
-  Sort int DEFAULT '0' NOT NULL,
-  CONSTRAINT PK_Statkue_LehrerFachrichtungKat PRIMARY KEY (ID)
+  Sort int DEFAULT 0 NOT NULL,
+  CONSTRAINT PK_Statkue_LehrerFachrichtung PRIMARY KEY (ID)
 );
 
 
-CREATE TABLE Statkue_LehrerLehramtAnerkennungKat (
-  ID int NOT NULL, 
+CREATE TABLE Statkue_LehrerLehramt (
+  ID bigint NOT NULL, 
   Kurztext varchar(10) NOT NULL, 
   Langtext varchar(255) NOT NULL, 
   Beginn datetime, 
   Ende datetime, 
-  Sort int DEFAULT '0' NOT NULL,
-  CONSTRAINT PK_Statkue_LehrerLehramtAnerkennungKat PRIMARY KEY (ID)
+  Sort int DEFAULT 0 NOT NULL,
+  CONSTRAINT PK_Statkue_LehrerLehramt PRIMARY KEY (ID)
 );
 
 
-CREATE TABLE Statkue_LehrerLehramtKat (
-  ID int NOT NULL, 
+CREATE TABLE Statkue_LehrerLehramtAnerkennung (
+  ID bigint NOT NULL, 
   Kurztext varchar(10) NOT NULL, 
   Langtext varchar(255) NOT NULL, 
   Beginn datetime, 
   Ende datetime, 
-  Sort int DEFAULT '0' NOT NULL,
-  CONSTRAINT PK_Statkue_LehrerLehramtKat PRIMARY KEY (ID)
+  Sort int DEFAULT 0 NOT NULL,
+  CONSTRAINT PK_Statkue_LehrerLehramtAnerkennung PRIMARY KEY (ID)
 );
 
 
-CREATE TABLE Statkue_LehrerLehrbefAnerkennungKat (
-  ID int NOT NULL, 
+CREATE TABLE Statkue_LehrerLehrbefAnerkennung (
+  ID bigint NOT NULL, 
   Kurztext varchar(10) NOT NULL, 
   Langtext varchar(255) NOT NULL, 
   Beginn datetime, 
   Ende datetime, 
-  Sort int DEFAULT '0' NOT NULL,
-  CONSTRAINT PK_Statkue_LehrerLehrbefAnerkennungKat PRIMARY KEY (ID)
+  Sort int DEFAULT 0 NOT NULL,
+  CONSTRAINT PK_Statkue_LehrerLehrbefAnerkennung PRIMARY KEY (ID)
 );
 
 
-CREATE TABLE Statkue_LehrerLehrbefaehigungKat (
-  ID int NOT NULL, 
+CREATE TABLE Statkue_LehrerLehrbefaehigung (
+  ID bigint NOT NULL, 
   Kurztext varchar(10) NOT NULL, 
   Langtext varchar(255) NOT NULL, 
   Beginn datetime, 
   Ende datetime, 
-  Sort int DEFAULT '0' NOT NULL,
-  CONSTRAINT PK_Statkue_LehrerLehrbefaehigungKat PRIMARY KEY (ID)
+  Sort int DEFAULT 0 NOT NULL,
+  CONSTRAINT PK_Statkue_LehrerLehrbefaehigung PRIMARY KEY (ID)
 );
 
 
-CREATE TABLE Statkue_LehrerLeitungKat (
-  ID int NOT NULL, 
+CREATE TABLE Statkue_LehrerLeitung (
+  ID bigint NOT NULL, 
   Kurztext varchar(10) NOT NULL, 
   Langtext varchar(255) NOT NULL, 
   Beginn datetime, 
   Ende datetime, 
-  Sort int DEFAULT '0' NOT NULL,
-  CONSTRAINT PK_Statkue_LehrerLeitungKat PRIMARY KEY (ID)
+  Sort int DEFAULT 0 NOT NULL,
+  CONSTRAINT PK_Statkue_LehrerLeitung PRIMARY KEY (ID)
 );
 
 
-CREATE TABLE Statkue_LehrerMehrleistungKat (
-  ID int NOT NULL, 
+CREATE TABLE Statkue_LehrerMehrleistung (
+  ID bigint NOT NULL, 
   Kurztext varchar(10) NOT NULL, 
   Langtext varchar(255) NOT NULL, 
   Beginn datetime, 
   Ende datetime, 
-  Sort int DEFAULT '0' NOT NULL,
-  CONSTRAINT PK_Statkue_LehrerMehrleistungKat PRIMARY KEY (ID)
+  Sort int DEFAULT 0 NOT NULL,
+  CONSTRAINT PK_Statkue_LehrerMehrleistung PRIMARY KEY (ID)
 );
 
 
-CREATE TABLE Statkue_LehrerMinderleistungKat (
-  ID int NOT NULL, 
+CREATE TABLE Statkue_LehrerMinderleistung (
+  ID bigint NOT NULL, 
   Kurztext varchar(10) NOT NULL, 
   Langtext varchar(255) NOT NULL, 
   Beginn datetime, 
   Ende datetime, 
-  Sort int DEFAULT '0' NOT NULL,
-  CONSTRAINT PK_Statkue_LehrerMinderleistungKat PRIMARY KEY (ID)
+  Sort int DEFAULT 0 NOT NULL,
+  CONSTRAINT PK_Statkue_LehrerMinderleistung PRIMARY KEY (ID)
 );
 
 
-CREATE TABLE Statkue_LehrerRechtsverhaeltnisKat (
-  ID int NOT NULL, 
+CREATE TABLE Statkue_LehrerRechtsverhaeltnis (
+  ID bigint NOT NULL, 
   Kurztext varchar(10) NOT NULL, 
   Langtext varchar(255) NOT NULL, 
   Beginn datetime, 
   Ende datetime, 
-  Sort int DEFAULT '0' NOT NULL,
-  CONSTRAINT PK_Statkue_LehrerRechtsverhaeltnisKat PRIMARY KEY (ID)
+  Sort int DEFAULT 0 NOT NULL,
+  CONSTRAINT PK_Statkue_LehrerRechtsverhaeltnis PRIMARY KEY (ID)
 );
 
 
-CREATE TABLE Statkue_LehrerZugangKat (
-  ID int NOT NULL, 
+CREATE TABLE Statkue_LehrerZugang (
+  ID bigint NOT NULL, 
   Kurztext varchar(10) NOT NULL, 
   Langtext varchar(255) NOT NULL, 
   Beginn datetime, 
   Ende datetime, 
-  Sort int DEFAULT '0' NOT NULL, 
+  Sort int DEFAULT 0 NOT NULL, 
   ASDSchluessel varchar(2),
-  CONSTRAINT PK_Statkue_LehrerZugangKat PRIMARY KEY (ID)
+  CONSTRAINT PK_Statkue_LehrerZugang PRIMARY KEY (ID)
 );
 
 
@@ -2344,11 +2390,11 @@ CREATE TABLE Statkue_Organisationsform (
 
 
 CREATE TABLE Statkue_PLZOrt (
-  ID int NOT NULL, 
+  ID bigint NOT NULL, 
   PLZ varchar(50), 
   REGSCHL varchar(50), 
   ORT varchar(50), 
-  Sortierung int DEFAULT '1',
+  Sortierung int DEFAULT 1,
   CONSTRAINT PK_Statkue_PLZOrt PRIMARY KEY (ID)
 );
 
@@ -2371,32 +2417,32 @@ CREATE TABLE Statkue_Religionen (
 
 
 CREATE TABLE Statkue_SchuelerErsteSchulformSekI (
-  ID int NOT NULL, 
+  ID bigint NOT NULL, 
   SF varchar(2), 
   Kurztext varchar(10) NOT NULL, 
   Langtext varchar(255) NOT NULL, 
   Beginn datetime, 
   Ende datetime, 
-  Sort int DEFAULT '0' NOT NULL, 
+  Sort int DEFAULT 0 NOT NULL, 
   geaendert datetime,
   CONSTRAINT PK_Statkue_SchuelerErsteSchulformSekI PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE Statkue_SchuelerKindergartenbesuch (
-  ID int NOT NULL, 
+  ID bigint NOT NULL, 
   SF varchar(2), 
   Kurztext varchar(10) NOT NULL, 
   Langtext varchar(255) NOT NULL, 
   Beginn datetime, 
   Ende datetime, 
-  Sort int DEFAULT '0' NOT NULL,
+  Sort int DEFAULT 0 NOT NULL,
   CONSTRAINT PK_Statkue_SchuelerKindergartenbesuch PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE Statkue_SchuelerUebergangsempfehlung5Jg (
-  ID int NOT NULL, 
+  ID bigint NOT NULL, 
   SF varchar(2), 
   Kurztext varchar(10) NOT NULL, 
   Langtext varchar(255) NOT NULL, 
@@ -2409,7 +2455,7 @@ CREATE TABLE Statkue_SchuelerUebergangsempfehlung5Jg (
 
 
 CREATE TABLE Statkue_SchuelerVerkehrssprache (
-  ID int NOT NULL, 
+  ID bigint NOT NULL, 
   Kurztext varchar(10) NOT NULL, 
   Langtext varchar(255) NOT NULL, 
   Gesprochen_in varchar(255), 
@@ -2425,7 +2471,7 @@ CREATE TABLE Statkue_Schulformen (
   Bezeichnung varchar(50) NOT NULL, 
   Flag varchar(1) DEFAULT '1' NOT NULL, 
   geaendert datetime, 
-  Sortierung int DEFAULT '0',
+  Sortierung int DEFAULT 0,
   CONSTRAINT PK_Statkue_Schulformen PRIMARY KEY (Bezeichnung, SF)
 );
 
@@ -2436,21 +2482,21 @@ CREATE TABLE Statkue_ZulFaecher (
   BG varchar(2) NOT NULL, 
   Fach varchar(2) NOT NULL, 
   Bezeichnung varchar(80) NOT NULL, 
-  KZ_Bereich int DEFAULT '0', 
+  KZ_Bereich int DEFAULT 0, 
   Flag varchar(1) DEFAULT '1', 
-  Sortierung int DEFAULT '0', 
+  Sortierung int DEFAULT 0, 
   geaendert datetime,
   CONSTRAINT PK_Statkue_ZulFaecher PRIMARY KEY (BG, Bezeichnung, FSP, Fach, Flag, Schulform)
 );
 
 
 CREATE TABLE Statkue_ZulJahrgaenge (
-  ID int NOT NULL, 
+  ID bigint NOT NULL, 
   Schulform varchar(2) NOT NULL, 
   SNR varchar(6), 
   FSP varchar(2), 
   Jahrgang varchar(2), 
-  KZ_Bereich int DEFAULT '0', 
+  KZ_Bereich int DEFAULT 0, 
   Beschreibung varchar(255), 
   geaendert datetime,
   CONSTRAINT PK_Statkue_ZulJahrgaenge PRIMARY KEY (ID)
@@ -2474,39 +2520,121 @@ CREATE TABLE Statkue_ZulKuArt (
   Kursart varchar(3) NOT NULL, 
   Kursart2 varchar(5) NOT NULL, 
   Bezeichnung varchar(120) NOT NULL, 
-  JgBereich int DEFAULT '0' NOT NULL, 
+  JgBereich int DEFAULT 0 NOT NULL, 
   Flag varchar(1) DEFAULT '1' NOT NULL, 
   geaendert datetime,
   CONSTRAINT PK_Statkue_ZulKuArt PRIMARY KEY (BG, Bezeichnung, FSP, Flag, JgBereich, Kursart, Kursart2, SF)
 );
 
 
+CREATE TABLE Stundenplan (
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Schuljahr int NOT NULL, 
+  SchuljahrAbschnitt int NOT NULL, 
+  Beginn date DEFAULT '1899-01-01' NOT NULL, 
+  Ende date, 
+  Beschreibung varchar(1000) DEFAULT '' NOT NULL,
+  CONSTRAINT PK_Stundenplan PRIMARY KEY (ID)
+);
+
+
+CREATE TABLE Stundenplan_Aufsichtsbereiche (
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Stundenplan_ID bigint NOT NULL, 
+  Kuerzel varchar(20) NOT NULL, 
+  Beschreibung varchar(1000) DEFAULT '' NOT NULL,
+  CONSTRAINT PK_Stundenplan_Aufsichtsbereiche PRIMARY KEY (ID),
+  CONSTRAINT Stundenplan_Aufsichtsbereiche_Stundenplan_FK FOREIGN KEY (Stundenplan_ID) REFERENCES Stundenplan(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_Aufsichtsbereiche_UC1 UNIQUE (Kuerzel, Stundenplan_ID)
+);
+
+
+CREATE TABLE Stundenplan_Pausenzeit (
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Stundenplan_ID bigint NOT NULL, 
+  Tag int NOT NULL, 
+  Beginn timestamp DEFAULT Now() NOT NULL, 
+  Ende timestamp DEFAULT Now() NOT NULL,
+  CONSTRAINT PK_Stundenplan_Pausenzeit PRIMARY KEY (ID),
+  CONSTRAINT Stundenplan_Pausenzeit_Stundenplan_FK FOREIGN KEY (Stundenplan_ID) REFERENCES Stundenplan(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_Pausenzeit_UC1 UNIQUE (Beginn, Ende, Stundenplan_ID, Tag)
+);
+
+
+CREATE TABLE Stundenplan_Pausenaufsichten (
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Pausenzeit_ID bigint NOT NULL, 
+  Wochentyp int DEFAULT 0 NOT NULL, 
+  Lehrer_ID bigint NOT NULL,
+  CONSTRAINT PK_Stundenplan_Pausenaufsichten PRIMARY KEY (ID),
+  CONSTRAINT Stundenplan_Pausenaufsichten_K_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_Pausenaufsichten_Pausenzeit_FK FOREIGN KEY (Pausenzeit_ID) REFERENCES Stundenplan_Pausenzeit(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_Pausenaufsichten_UC1 UNIQUE (Lehrer_ID, Pausenzeit_ID)
+);
+
+
+CREATE TABLE Stundenplan_PausenaufsichtenBereich (
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Pausenaufsicht_ID bigint NOT NULL, 
+  Aufsichtsbereich_ID bigint NOT NULL,
+  CONSTRAINT PK_Stundenplan_PausenaufsichtenBereich PRIMARY KEY (ID),
+  CONSTRAINT Stundenplan_PausenaufsichtenBereich_Aufsicht_FK FOREIGN KEY (Pausenaufsicht_ID) REFERENCES Stundenplan_Pausenaufsichten(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_PausenaufsichtenBereich_Aufsichtsbereiche_FK FOREIGN KEY (Aufsichtsbereich_ID) REFERENCES Stundenplan_Aufsichtsbereiche(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT Stundenplan_PausenaufsichtenBereich_UC1 UNIQUE (Aufsichtsbereich_ID, Pausenaufsicht_ID)
+);
+
+
+CREATE TABLE Stundenplan_Raeume (
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Stundenplan_ID bigint NOT NULL, 
+  Kuerzel varchar(20) NOT NULL, 
+  Beschreibung varchar(1000) DEFAULT '' NOT NULL, 
+  Groesse int DEFAULT 40 NOT NULL,
+  CONSTRAINT PK_Stundenplan_Raeume PRIMARY KEY (ID),
+  CONSTRAINT Stundenplan_Raeume_Stundenplan_FK FOREIGN KEY (Stundenplan_ID) REFERENCES Stundenplan(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_Raeume_UC1 UNIQUE (Kuerzel, Stundenplan_ID)
+);
+
+
+CREATE TABLE Stundenplan_Zeitraster (
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Stundenplan_ID bigint NOT NULL, 
+  Tag int NOT NULL, 
+  Stunde int NOT NULL, 
+  Beginn timestamp DEFAULT Now() NOT NULL, 
+  Ende timestamp DEFAULT Now() NOT NULL,
+  CONSTRAINT PK_Stundenplan_Zeitraster PRIMARY KEY (ID),
+  CONSTRAINT Stundenplan_Zeitraster_Stundenplan_FK FOREIGN KEY (Stundenplan_ID) REFERENCES Stundenplan(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_Zeitraster_UC1 UNIQUE (Stunde, Stundenplan_ID, Tag)
+);
+
+
 CREATE TABLE Stundentafel (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   Bezeichnung varchar(50) NOT NULL, 
-  Jahrgang_ID int, 
+  Jahrgang_ID bigint, 
   ASDJahrgang varchar(2), 
   Klasse varchar(6), 
   SGL varchar(3), 
-  Fachklasse_ID int, 
+  Fachklasse_ID bigint, 
   Sichtbar varchar(1) DEFAULT '+', 
   SchulnrEigner int, 
-  Sortierung int DEFAULT '32000',
+  Sortierung int DEFAULT 32000,
   CONSTRAINT PK_Stundentafel PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE Stundentafel_Faecher (
-  ID int NOT NULL, 
-  Stundentafel_ID int NOT NULL, 
-  Fach_ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Stundentafel_ID bigint NOT NULL, 
+  Fach_ID bigint NOT NULL, 
   KursartAllg varchar(5), 
   WochenStd smallint, 
   LehrerKrz varchar(10), 
   EpochenUnterricht varchar(1) DEFAULT '-', 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   Sichtbar varchar(1) DEFAULT '+', 
-  Gewichtung int DEFAULT '1', 
+  Gewichtung int DEFAULT 1, 
   SchulnrEigner int,
   CONSTRAINT PK_Stundentafel_Faecher PRIMARY KEY (ID),
   CONSTRAINT StundentafelFaecher_Faecher_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
@@ -2524,7 +2652,7 @@ CREATE TABLE TextExportVorlagen (
 
 
 CREATE TABLE Usergroups (
-  UG_ID int NOT NULL, 
+  UG_ID bigint NOT NULL, 
   UG_Bezeichnung varchar(64), 
   UG_Kompetenzen varchar(255), 
   UG_Nr int, 
@@ -2535,7 +2663,7 @@ CREATE TABLE Usergroups (
 
 
 CREATE TABLE Users (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   US_Name varchar(50) NOT NULL, 
   US_LoginName varchar(20) NOT NULL, 
   US_Password varchar(20), 
@@ -2556,11 +2684,11 @@ CREATE TABLE Users (
 
 
 CREATE TABLE Versetzung (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   Bezeichnung varchar(150), 
   ASDKlasse varchar(6), 
   Klasse varchar(15) NOT NULL, 
-  Jahrgang_ID int, 
+  Jahrgang_ID bigint, 
   FKlasse varchar(15), 
   VKlasse varchar(15), 
   OrgFormKrz varchar(1), 
@@ -2568,10 +2696,10 @@ CREATE TABLE Versetzung (
   StvKlassenlehrerKrz varchar(10), 
   Restabschnitte smallint, 
   ASDSchulformNr varchar(3), 
-  Fachklasse_ID int, 
+  Fachklasse_ID bigint, 
   PruefOrdnung varchar(20), 
   Sichtbar varchar(1) DEFAULT '+', 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   Klassenart varchar(2), 
   SommerSem varchar(1), 
   NotenGesperrt varchar(1), 
@@ -2587,8 +2715,8 @@ CREATE TABLE Versetzung (
 
 
 CREATE TABLE EigeneSchule_Abt_Kl (
-  ID int NOT NULL, 
-  Abteilung_ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Abteilung_ID bigint NOT NULL, 
   Klasse varchar(15) NOT NULL, 
   Sichtbar varchar(1) DEFAULT '+', 
   SchulnrEigner int,
@@ -2599,7 +2727,7 @@ CREATE TABLE EigeneSchule_Abt_Kl (
 
 
 CREATE TABLE Schueler (
-  ID int AUTOINCREMENT NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   GU_ID varchar(40), 
   SrcID int, 
   IDext varchar(30), 
@@ -2609,10 +2737,10 @@ CREATE TABLE Schueler (
   Zusatz varchar(255), 
   Geburtsname varchar(60), 
   Strasse varchar(50), 
-  Ort_ID int, 
+  Ort_ID bigint, 
   PLZ varchar(10), 
   OrtAbk varchar(50), 
-  Ortsteil_ID int, 
+  Ortsteil_ID bigint, 
   Telefon varchar(20), 
   Email varchar(100), 
   Fax varchar(20), 
@@ -2629,26 +2757,26 @@ CREATE TABLE Schueler (
   StaatKrz2 varchar(3), 
   StaatAbk varchar(50), 
   Aussiedler varchar(1) DEFAULT '-', 
-  Religion_ID int, 
+  Religion_ID bigint, 
   ReligionAbk varchar(30), 
   Religionsabmeldung date, 
   Religionsanmeldung date, 
   Bafoeg varchar(1) DEFAULT '-', 
   Schwerbehinderung varchar(1) DEFAULT '-', 
-  Foerderschwerpunkt_ID int, 
-  Sportbefreiung_ID int, 
-  Fahrschueler_ID int, 
-  Haltestelle_ID int, 
+  Foerderschwerpunkt_ID bigint, 
+  Sportbefreiung_ID bigint, 
+  Fahrschueler_ID bigint, 
+  Haltestelle_ID bigint, 
   HaltestelleAbk varchar(30), 
   ASDSchulform varchar(3), 
-  Jahrgang_ID int, 
+  Jahrgang_ID bigint, 
   ASDJahrgang varchar(2), 
-  Fachklasse_ID int, 
+  Fachklasse_ID bigint, 
   SchulpflichtErf varchar(1) DEFAULT '-', 
   Anschreibdatum date, 
   Aufnahmedatum date, 
   Einschulungsjahr smallint, 
-  Einschulungsart_ID int, 
+  Einschulungsart_ID bigint, 
   LSSchulNr varchar(6), 
   LSSchulformSIM varchar(3), 
   LSJahrgang varchar(2), 
@@ -2661,7 +2789,7 @@ CREATE TABLE Schueler (
   LSKlassenart varchar(2), 
   LSRefPaed varchar(1), 
   Entlassjahrgang varchar(2), 
-  Entlassjahrgang_ID int, 
+  Entlassjahrgang_ID bigint, 
   Entlassdatum date, 
   Entlassgrund varchar(50), 
   Entlassart varchar(2), 
@@ -2690,11 +2818,11 @@ CREATE TABLE Schueler (
   KonfDruck varchar(1), 
   DSN_Text varchar(15), 
   Berufsabschluss varchar(1), 
-  Schwerpunkt_ID int, 
+  Schwerpunkt_ID bigint, 
   LSSGL_SIM varchar(3), 
   BerufsschulpflErf varchar(1), 
   StatusNSJ int, 
-  FachklasseNSJ_ID int, 
+  FachklasseNSJ_ID bigint, 
   Buchkonto float, 
   VerkehrsspracheFamilie varchar(2), 
   JahrZuzug int, 
@@ -2711,10 +2839,10 @@ CREATE TABLE Schueler (
   JahrWechsel_SI int, 
   JahrWechsel_SII int, 
   Migrationshintergrund varchar(1), 
-  Foerderschwerpunkt2_ID int, 
+  Foerderschwerpunkt2_ID bigint, 
   SortierungKlasse int, 
   ExterneSchulnr varchar(6), 
-  Kindergarten_ID int, 
+  Kindergarten_ID bigint, 
   LetzterBerufsAbschluss varchar(10), 
   LetzterAllgAbschluss varchar(10), 
   Land varchar(2), 
@@ -2739,7 +2867,7 @@ CREATE TABLE Schueler (
   HatBerufsausbildung varchar(1) DEFAULT '-', 
   Ausweisnummer varchar(30), 
   AOSF varchar(1) DEFAULT '+', 
-  EPJahre int DEFAULT '2', 
+  EPJahre int DEFAULT 2, 
   LSBemerkung varchar(255), 
   WechselBestaetigt varchar(1) DEFAULT '-', 
   DauerBildungsgang int, 
@@ -2769,19 +2897,35 @@ CREATE TABLE Schueler (
 );
 
 
+CREATE TABLE Stundenplan_Unterricht (
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Zeitraster_ID bigint NOT NULL, 
+  Wochentyp int DEFAULT 0 NOT NULL, 
+  Klasse_ID bigint, 
+  Kurs_ID bigint, 
+  Fach_ID bigint NOT NULL,
+  CONSTRAINT PK_Stundenplan_Unterricht PRIMARY KEY (ID),
+  CONSTRAINT Stundenplan_Unterricht_EigeneSchule_Faecher_FK FOREIGN KEY (Kurs_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_Unterricht_Kurse_FK FOREIGN KEY (Kurs_ID) REFERENCES Kurse(ID) ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT Stundenplan_Unterricht_Stundenplan_Zeitraster_FK FOREIGN KEY (Zeitraster_ID) REFERENCES Stundenplan_Zeitraster(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_Unterricht_Versetzung_FK FOREIGN KEY (Klasse_ID) REFERENCES Versetzung(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_Unterricht_UC1 UNIQUE (Klasse_ID, Kurs_ID, Zeitraster_ID)
+);
+
+
 CREATE TABLE Schueler_AllgAdr (
-  ID int NOT NULL, 
-  Schueler_ID int NOT NULL, 
-  Adresse_ID int NOT NULL, 
-  Vertragsart_ID int, 
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  Adresse_ID bigint NOT NULL, 
+  Vertragsart_ID bigint, 
   Vertragsbeginn date, 
   Vertragsende date, 
   Ausbilder varchar(30), 
   AllgAdrAnschreiben varchar(1) DEFAULT '-', 
   Praktikum varchar(1) DEFAULT '-', 
   Sortierung int, 
-  Ansprechpartner_ID int, 
-  Betreuungslehrer_ID int, 
+  Ansprechpartner_ID bigint, 
+  Betreuungslehrer_ID bigint, 
   SchulnrEigner int,
   CONSTRAINT PK_Schueler_AllgAdr PRIMARY KEY (ID),
   CONSTRAINT SchuelerAllgAdr_Adresse_FK FOREIGN KEY (Adresse_ID) REFERENCES K_AllgAdresse(ID) ON UPDATE CASCADE ON DELETE CASCADE,
@@ -2794,8 +2938,8 @@ CREATE INDEX Schueler_AllgAdr_IDX1 ON Schueler_AllgAdr(Schueler_ID);
 
 
 CREATE TABLE SchuelerAbgaenge (
-  ID int NOT NULL, 
-  Schueler_ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
   BemerkungIntern varchar(30), 
   AbgangsSchulform varchar(2), 
   AbgangsBeschreibung varchar(200), 
@@ -2823,13 +2967,13 @@ CREATE INDEX SchuelerAbgaenge_IDX1 ON SchuelerAbgaenge(LSSchulEntlassDatum, Schu
 
 
 CREATE TABLE SchuelerAbiFaecher (
-  ID int NOT NULL, 
-  Schueler_ID int NOT NULL, 
-  Fach_ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  Fach_ID bigint NOT NULL, 
   FachKrz varchar(20), 
   FSortierung int, 
   Gekoppelt varchar(1), 
-  Kurs_ID int, 
+  Kurs_ID bigint, 
   KursartAllg varchar(5), 
   Fachlehrer varchar(10), 
   AbiFach varchar(1), 
@@ -2877,8 +3021,8 @@ CREATE TABLE SchuelerAbiFaecher (
 
 
 CREATE TABLE SchuelerAbitur (
-  ID int NOT NULL, 
-  Schueler_ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
   FA_Fach varchar(130), 
   FA_Punkte int, 
   FehlStd int, 
@@ -2928,11 +3072,11 @@ CREATE TABLE SchuelerAbitur (
 
 CREATE TABLE SchuelerAnkreuzfloskeln (
   ID bigint AUTOINCREMENT NOT NULL, 
-  Schueler_ID int NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
   SchulnrEigner int NOT NULL, 
   Jahr int NOT NULL, 
   Abschnitt int NOT NULL, 
-  Floskel_ID int NOT NULL, 
+  Floskel_ID bigint NOT NULL, 
   Stufe1 varchar(1), 
   Stufe2 varchar(1), 
   Stufe3 varchar(1), 
@@ -2944,7 +3088,7 @@ CREATE TABLE SchuelerAnkreuzfloskeln (
 
 
 CREATE TABLE SchuelerBKAbschluss (
-  Schueler_ID int NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
   Zulassung char(1), 
   Bestanden char(1), 
   Zeugnis char(1), 
@@ -2968,9 +3112,9 @@ CREATE TABLE SchuelerBKAbschluss (
 
 
 CREATE TABLE SchuelerBKFaecher (
-  ID int NOT NULL, 
-  Schueler_ID int NOT NULL, 
-  Fach_ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  Fach_ID bigint NOT NULL, 
   FachKrz varchar(20), 
   FachSchriftlich char(1), 
   FachSchriftlichBA char(1), 
@@ -2995,9 +3139,9 @@ CREATE TABLE SchuelerBKFaecher (
 
 
 CREATE TABLE SchuelerErzAdr (
-  ID int NOT NULL, 
-  Schueler_ID int NOT NULL, 
-  ErzieherArt_ID int, 
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  ErzieherArt_ID bigint, 
   Anrede1 varchar(20), 
   Titel1 varchar(10), 
   Name1 varchar(50), 
@@ -3007,9 +3151,9 @@ CREATE TABLE SchuelerErzAdr (
   Name2 varchar(50), 
   Vorname2 varchar(50), 
   ErzStrasse varchar(50), 
-  ErzOrt_ID int, 
+  ErzOrt_ID bigint, 
   ErzPLZ varchar(10), 
-  ErzOrtsteil_ID int, 
+  ErzOrtsteil_ID bigint, 
   ErzAnschreiben varchar(1) DEFAULT '+', 
   ErzBemerkung varchar(255), 
   Sortierung int, 
@@ -3033,8 +3177,8 @@ CREATE INDEX SchuelerErzAdr_IDX1 ON SchuelerErzAdr(Schueler_ID);
 
 
 CREATE TABLE SchuelerLernabschnittsdaten (
-  ID int AUTOINCREMENT NOT NULL, 
-  Schueler_ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
   Jahr smallint NOT NULL, 
   Abschnitt smallint NOT NULL, 
   Bildungsgang varchar(1) NOT NULL, 
@@ -3045,13 +3189,13 @@ CREATE TABLE SchuelerLernabschnittsdaten (
   PruefOrdnung varchar(20), 
   Klasse varchar(10), 
   Verspaetet smallint, 
-  NPV_Fach_ID int, 
+  NPV_Fach_ID bigint, 
   NPV_NoteKrz varchar(2), 
   NPV_Datum date, 
-  NPAA_Fach_ID int, 
+  NPAA_Fach_ID bigint, 
   NPAA_NoteKrz varchar(2), 
   NPAA_Datum date, 
-  NPBQ_Fach_ID int, 
+  NPBQ_Fach_ID bigint, 
   NPBQ_NoteKrz varchar(2), 
   NPBQ_Datum date, 
   VersetzungKrz varchar(2), 
@@ -3062,12 +3206,12 @@ CREATE TABLE SchuelerLernabschnittsdaten (
   KlassenLehrer varchar(10), 
   ASDSchulgliederung varchar(3), 
   ASDJahrgang varchar(2), 
-  Jahrgang_ID int, 
-  Fachklasse_ID int, 
-  Schwerpunkt_ID int, 
+  Jahrgang_ID bigint, 
+  Fachklasse_ID bigint, 
+  Schwerpunkt_ID bigint, 
   ZeugnisBem text, 
   Schwerbehinderung varchar(1) DEFAULT '-', 
-  Foerderschwerpunkt_ID int, 
+  Foerderschwerpunkt_ID bigint, 
   OrgFormKrz varchar(1), 
   RefPaed varchar(1) DEFAULT '-', 
   Klassenart varchar(2), 
@@ -3077,7 +3221,7 @@ CREATE TABLE SchuelerLernabschnittsdaten (
   Gesamtnote_GS int, 
   Gesamtnote_NW int, 
   Folgeklasse varchar(10), 
-  Foerderschwerpunkt2_ID int, 
+  Foerderschwerpunkt2_ID bigint, 
   Abschluss varchar(50), 
   Abschluss_B varchar(50), 
   DSNote varchar(4), 
@@ -3089,7 +3233,7 @@ CREATE TABLE SchuelerLernabschnittsdaten (
   SV_Koop int, 
   KN_Lehrer varchar(10), 
   SchulnrEigner int, 
-  StvKlassenlehrer_ID int, 
+  StvKlassenlehrer_ID bigint, 
   MoeglNPFaecher text, 
   Zertifikate varchar(30), 
   DatumFHR date, 
@@ -3108,8 +3252,8 @@ CREATE TABLE SchuelerLernabschnittsdaten (
 
 
 CREATE TABLE SchuelerFHR (
-  ID int NOT NULL, 
-  Schueler_ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
   FHRErreicht varchar(1) DEFAULT '-', 
   Note varchar(3), 
   GesamtPunktzahl smallint, 
@@ -3154,9 +3298,9 @@ CREATE TABLE SchuelerFHR (
 
 
 CREATE TABLE SchuelerFHRFaecher (
-  ID int NOT NULL, 
-  Schueler_ID int NOT NULL, 
-  Fach_ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  Fach_ID bigint NOT NULL, 
   KursartAllg varchar(5), 
   FachKrz varchar(20), 
   PSII_2_1 varchar(2), 
@@ -3201,14 +3345,14 @@ CREATE TABLE SchuelerFHRFaecher (
 
 CREATE TABLE SchuelerFoerderempfehlungen (
   GU_ID varchar(40) NOT NULL, 
-  Schueler_ID int NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
   SchulnrEigner int NOT NULL, 
   DatumAngelegt date DEFAULT Date() NOT NULL, 
   Klasse varchar(15), 
   Jahr int, 
   Abschnitt int, 
-  Fach_ID int, 
-  Lehrer_ID int, 
+  Fach_ID bigint, 
+  Lehrer_ID bigint, 
   DatumAenderungSchild datetime, 
   DatumAenderungSchildWeb datetime, 
   Kurs varchar(20), 
@@ -3224,8 +3368,8 @@ CREATE TABLE SchuelerFoerderempfehlungen (
   Zeitrahmen_bis_Datum date, 
   Ueberpruefung_Datum date, 
   Naechstes_Beratungsgespraech date, 
-  Leistung_ID int, 
-  Kurs_ID int, 
+  Leistung_ID bigint, 
+  Kurs_ID bigint, 
   EingabeFertig varchar(1) DEFAULT '-', 
   Faecher varchar(255), 
   Abgeschlossen varchar(1) DEFAULT '-',
@@ -3235,7 +3379,7 @@ CREATE TABLE SchuelerFoerderempfehlungen (
 
 
 CREATE TABLE SchuelerFotos (
-  Schueler_ID int NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
   Foto varbinary(16777216), 
   SchulnrEigner int,
   CONSTRAINT PK_SchuelerFotos PRIMARY KEY (Schueler_ID),
@@ -3244,8 +3388,8 @@ CREATE TABLE SchuelerFotos (
 
 
 CREATE TABLE SchuelerListe_Inhalt (
-  Liste_ID int NOT NULL, 
-  Schueler_ID int NOT NULL, 
+  Liste_ID bigint NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
   SchulnrEigner int,
   CONSTRAINT PK_SchuelerListe_Inhalt PRIMARY KEY (Liste_ID, Schueler_ID),
   CONSTRAINT SchuelerListeInhalt_Liste_FK FOREIGN KEY (Liste_ID) REFERENCES SchuelerListe(ID) ON UPDATE CASCADE ON DELETE CASCADE,
@@ -3254,8 +3398,8 @@ CREATE TABLE SchuelerListe_Inhalt (
 
 
 CREATE TABLE SchuelerMerkmale (
-  ID int NOT NULL, 
-  Schueler_ID int NOT NULL, 
+  ID bigint NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
   Kurztext varchar(10), 
   SchulnrEigner int, 
   DatumVon date, 
@@ -3265,24 +3409,10 @@ CREATE TABLE SchuelerMerkmale (
 );
 
 
-CREATE TABLE SchuelerNUESDaten (
-  ID int NOT NULL, 
-  Schueler_ID int NOT NULL, 
-  SchulnrEigner int NOT NULL, 
-  Jahr int NOT NULL, 
-  Abschnitt int NOT NULL, 
-  JahrgangIst varchar(2), 
-  HauptMerkmal varchar(20) NOT NULL, 
-  NebenMerkmal varchar(20),
-  CONSTRAINT PK_SchuelerNUESDaten PRIMARY KEY (ID),
-  CONSTRAINT SchuelerNUESDaten_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
 CREATE TABLE SchuelerSprachenfolge (
-  ID int NOT NULL, 
-  Schueler_ID int NOT NULL, 
-  Fach_ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  Fach_ID bigint NOT NULL, 
   JahrgangVon smallint, 
   JahrgangBis smallint, 
   Reihenfolge varchar(1), 
@@ -3298,12 +3428,12 @@ CREATE TABLE SchuelerSprachenfolge (
 
 
 CREATE TABLE SchuelerTelefone (
-  ID int NOT NULL, 
-  Schueler_ID int NOT NULL, 
-  TelefonArt_ID int, 
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  TelefonArt_ID bigint, 
   Telefonnummer varchar(20), 
   Bemerkung varchar(50), 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   SchulnrEigner int, 
   Gesperrt varchar(1) DEFAULT '-',
   CONSTRAINT PK_SchuelerTelefone PRIMARY KEY (ID),
@@ -3315,9 +3445,9 @@ CREATE INDEX SchuelerTelefone_IDX1 ON SchuelerTelefone(Schueler_ID);
 
 
 CREATE TABLE SchuelerVermerke (
-  ID int NOT NULL, 
-  Schueler_ID int NOT NULL, 
-  VermerkArt_ID int, 
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  VermerkArt_ID bigint, 
   Datum date, 
   Bemerkung text, 
   SchulnrEigner int, 
@@ -3332,8 +3462,8 @@ CREATE INDEX SchuelerVermerke_IDX1 ON SchuelerVermerke(Schueler_ID);
 
 
 CREATE TABLE SchildKursSchueler (
-  Kurs_ID int NOT NULL, 
-  Schueler_ID int NOT NULL,
+  Kurs_ID bigint NOT NULL, 
+  Schueler_ID bigint NOT NULL,
   CONSTRAINT PK_SchildKursSchueler PRIMARY KEY (Kurs_ID, Schueler_ID),
   CONSTRAINT SchildKursSchueler_Kurse_FK FOREIGN KEY (Kurs_ID) REFERENCES Kurse(ID) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT SchildKursSchueler_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
@@ -3341,8 +3471,8 @@ CREATE TABLE SchildKursSchueler (
 
 
 CREATE TABLE SchuelerKAoADaten (
-  ID int NOT NULL, 
-  Schueler_ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
   SchulnrEigner int NOT NULL, 
   Jahr int NOT NULL, 
   Abschnitt int NOT NULL, 
@@ -3359,8 +3489,8 @@ CREATE TABLE SchuelerKAoADaten (
 
 
 CREATE TABLE SchuelerDatenschutz (
-  Schueler_ID int NOT NULL, 
-  Datenschutz_ID int NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  Datenschutz_ID bigint NOT NULL, 
   Status varchar(1) DEFAULT '-' NOT NULL, 
   SchulnrEigner int NOT NULL,
   CONSTRAINT PK_SchuelerDatenschutz PRIMARY KEY (Datenschutz_ID, Schueler_ID),
@@ -3369,10 +3499,32 @@ CREATE TABLE SchuelerDatenschutz (
 );
 
 
+CREATE TABLE Stundenplan_UnterrichtRaum (
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Unterricht_ID bigint NOT NULL, 
+  Raum_ID bigint NOT NULL,
+  CONSTRAINT PK_Stundenplan_UnterrichtRaum PRIMARY KEY (ID),
+  CONSTRAINT Stundenplan_UnterrichtRaum_Raeume_FK FOREIGN KEY (Raum_ID) REFERENCES Stundenplan_Raeume(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT Stundenplan_UnterrichtRaum_Unterricht_FK FOREIGN KEY (Unterricht_ID) REFERENCES Stundenplan_Unterricht(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_UnterrichtRaum_UC1 UNIQUE (Raum_ID, Unterricht_ID)
+);
+
+
+CREATE TABLE Stundenplan_UnterrichtLehrer (
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Unterricht_ID bigint NOT NULL, 
+  Lehrer_ID bigint NOT NULL,
+  CONSTRAINT PK_Stundenplan_UnterrichtLehrer PRIMARY KEY (ID),
+  CONSTRAINT Stundenplan_UnterrichtLehrer_K_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_UnterrichtLehrer_Unterricht_FK FOREIGN KEY (Unterricht_ID) REFERENCES Stundenplan_Unterricht(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_UnterrichtLehrer_UC1 UNIQUE (Lehrer_ID, Unterricht_ID)
+);
+
+
 CREATE TABLE SchuelerErzFunktion (
-  ID int NOT NULL, 
-  Erzieher_ID int NOT NULL, 
-  Funktion_ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Erzieher_ID bigint NOT NULL, 
+  Funktion_ID bigint NOT NULL, 
   Person smallint, 
   Klasse varchar(10), 
   SchulnrEigner int,
@@ -3385,22 +3537,22 @@ CREATE TABLE SchuelerErzFunktion (
 CREATE TABLE SchuelerFehlstunden (
   ID bigint AUTOINCREMENT NOT NULL, 
   SchulnrEigner int NOT NULL, 
-  Abschnitt_ID int NOT NULL, 
+  Abschnitt_ID bigint NOT NULL, 
   Datum date DEFAULT Date() NOT NULL, 
-  Fach_ID int, 
+  Fach_ID bigint, 
   Fehlstd float NOT NULL, 
   VonStd int, 
   BisStd int, 
   Entschuldigt varchar(1), 
-  Lehrer_ID int,
+  Lehrer_ID bigint,
   CONSTRAINT PK_SchuelerFehlstunden PRIMARY KEY (ID),
   CONSTRAINT SchuelerFehlstunden_Abschnitt_FK FOREIGN KEY (Abschnitt_ID) REFERENCES SchuelerLernabschnittsdaten(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
 CREATE TABLE SchuelerLD_PSFachBem (
-  ID int NOT NULL, 
-  Abschnitt_ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Abschnitt_ID bigint NOT NULL, 
   ASV text, 
   LELS text, 
   ESF text, 
@@ -3415,13 +3567,13 @@ CREATE TABLE SchuelerLD_PSFachBem (
 
 CREATE TABLE SchuelerLeistungsdaten (
   ID bigint AUTOINCREMENT NOT NULL, 
-  Abschnitt_ID int NOT NULL, 
-  Fach_ID int NOT NULL, 
+  Abschnitt_ID bigint NOT NULL, 
+  Fach_ID bigint NOT NULL, 
   Hochrechnung int, 
   FachLehrer varchar(10), 
   Kursart varchar(5), 
   KursartAllg varchar(5), 
-  Kurs_ID int, 
+  Kurs_ID bigint, 
   NotenKrz varchar(2), 
   Warnung varchar(1) DEFAULT '-', 
   Warndatum date, 
@@ -3431,7 +3583,7 @@ CREATE TABLE SchuelerLeistungsdaten (
   Prognose varchar(1), 
   Fehlstd smallint, 
   uFehlstd smallint, 
-  Sortierung int DEFAULT '32000', 
+  Sortierung int DEFAULT 32000, 
   Lernentw text, 
   Gekoppelt varchar(1) DEFAULT '-', 
   VorherAbgeschl varchar(1) DEFAULT '-', 
@@ -3442,7 +3594,7 @@ CREATE TABLE SchuelerLeistungsdaten (
   WochenstdZusatzkraft int, 
   Prf10Fach varchar(1), 
   AufZeugnis varchar(1) DEFAULT '+', 
-  Gewichtung int DEFAULT '1', 
+  Gewichtung int DEFAULT 1, 
   SchulnrEigner int, 
   NoteAbschlussBA varchar(2),
   CONSTRAINT PK_SchuelerLeistungsdaten PRIMARY KEY (ID),
@@ -3459,8 +3611,8 @@ CREATE INDEX SchuelerLeistungsdaten_IDX3 ON SchuelerLeistungsdaten(FachLehrer);
 
 
 CREATE TABLE SchuelerZuweisungen (
-  Abschnitt_ID int NOT NULL, 
-  Fach_ID int NOT NULL, 
+  Abschnitt_ID bigint NOT NULL, 
+  Fach_ID bigint NOT NULL, 
   Kursart varchar(5), 
   SchulnrEigner int,
   CONSTRAINT PK_SchuelerZuweisungen PRIMARY KEY (Abschnitt_ID, Fach_ID),
@@ -3469,14 +3621,14 @@ CREATE TABLE SchuelerZuweisungen (
 
 
 CREATE TABLE ZuordnungReportvorlagen (
-  ID int NOT NULL, 
+  ID bigint AUTOINCREMENT NOT NULL, 
   SchulnrEigner int NOT NULL, 
-  Jahrgang_ID int NOT NULL, 
+  Jahrgang_ID bigint NOT NULL, 
   Abschluss varchar(50), 
   AbschlussBB varchar(50), 
   AbschlussArt int, 
   VersetzungKrz varchar(2), 
-  Fachklasse_ID int, 
+  Fachklasse_ID bigint, 
   Reportvorlage varchar(255), 
   Beschreibung varchar(255), 
   Gruppe varchar(50), 
@@ -3497,7 +3649,7 @@ FROM
         JOIN SchuelerLernabschnittsdaten ON SchuelerLeistungsdaten.Abschnitt_ID = SchuelerLernabschnittsdaten.ID
         JOIN Schueler ON SchuelerLernabschnittsdaten.Schueler_ID = Schueler.ID;
 
-INSERT INTO SVWS_DB_Version(Revision) VALUES (3);
+INSERT INTO SVWS_DB_Version(Revision) VALUES (7);
 
 
 INSERT INTO Users (ID,US_Name,US_LoginName,US_UserGroups,US_Privileges) VALUES (1,'Administrator','Admin','1;2;3;4;5','$');
