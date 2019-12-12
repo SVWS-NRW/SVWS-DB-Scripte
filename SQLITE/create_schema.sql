@@ -829,6 +829,38 @@ CREATE TABLE K_AllgAdresse (
 );
 
 
+CREATE TABLE AllgAdrAnsprechpartner (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Adresse_ID bigint, 
+  Name varchar(60), 
+  Vorname varchar(60), 
+  Anrede varchar(10), 
+  Telefon varchar(20), 
+  EMail varchar(100), 
+  Abteilung varchar(50), 
+  SchulnrEigner int, 
+  Titel varchar(15), 
+  GU_ID varchar(40),
+  CONSTRAINT PK_AllgAdrAnsprechpartner PRIMARY KEY (ID),
+  CONSTRAINT Ansprechpartner_Adr_FK FOREIGN KEY (Adresse_ID) REFERENCES K_AllgAdresse(ID) ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+
+
+CREATE TABLE K_Ortsteil (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Bezeichnung varchar(30) NOT NULL, 
+  Ort_ID bigint, 
+  PLZ varchar(10), 
+  Sortierung int DEFAULT 32000, 
+  Sichtbar varchar(1) DEFAULT '+', 
+  Aenderbar varchar(1) DEFAULT '+', 
+  SchulnrEigner int, 
+  OrtsteilSchluessel varchar(30),
+  CONSTRAINT PK_K_Ortsteil PRIMARY KEY (ID),
+  CONSTRAINT K_Ortsteil_UC1 UNIQUE (Bezeichnung)
+);
+
+
 CREATE TABLE K_Lehrer (
   ID bigint DEFAULT -1 NOT NULL, 
   GU_ID varchar(40), 
@@ -846,6 +878,7 @@ CREATE TABLE K_Lehrer (
   Strasse varchar(50), 
   Ort_ID bigint, 
   PLZ varchar(10), 
+  Ortsteil_ID bigint, 
   Tel varchar(20), 
   Handy varchar(20), 
   EMail varchar(100), 
@@ -888,24 +921,8 @@ CREATE TABLE K_Lehrer (
   KennwortToolsAktuell varchar(3) DEFAULT '-;5',
   CONSTRAINT PK_K_Lehrer PRIMARY KEY (ID),
   CONSTRAINT K_Lehrer_Ort_FK FOREIGN KEY (Ort_ID) REFERENCES K_Ort(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT K_Lehrer_Ortsteil_FK FOREIGN KEY (Ortsteil_ID) REFERENCES K_Ortsteil(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT K_Lehrer_UC1 UNIQUE (Kuerzel)
-);
-
-
-CREATE TABLE AllgAdrAnsprechpartner (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Adresse_ID bigint, 
-  Name varchar(60), 
-  Vorname varchar(60), 
-  Anrede varchar(10), 
-  Telefon varchar(20), 
-  EMail varchar(100), 
-  Abteilung varchar(50), 
-  SchulnrEigner int, 
-  Titel varchar(15), 
-  GU_ID varchar(40),
-  CONSTRAINT PK_AllgAdrAnsprechpartner PRIMARY KEY (ID),
-  CONSTRAINT Ansprechpartner_Adr_FK FOREIGN KEY (Adresse_ID) REFERENCES K_AllgAdresse(ID) ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
 
@@ -921,20 +938,6 @@ CREATE TABLE EigeneSchule_Abteilungen (
   Sortierung int,
   CONSTRAINT PK_EigeneSchule_Abteilungen PRIMARY KEY (ID),
   CONSTRAINT EigeneSchule_Abteilungen_Leiter_FK FOREIGN KEY (AbteilungsLeiter) REFERENCES K_Lehrer(Kuerzel) ON UPDATE CASCADE ON DELETE SET NULL
-);
-
-
-CREATE TABLE K_Ortsteil (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Bezeichnung varchar(30) NOT NULL, 
-  PLZ varchar(10), 
-  Sortierung int DEFAULT 32000, 
-  Sichtbar varchar(1) DEFAULT '+', 
-  Aenderbar varchar(1) DEFAULT '+', 
-  SchulnrEigner int, 
-  OrtsteilSchluessel varchar(30),
-  CONSTRAINT PK_K_Ortsteil PRIMARY KEY (ID),
-  CONSTRAINT K_Ortsteil_UC1 UNIQUE (Bezeichnung)
 );
 
 
@@ -5885,96 +5888,6 @@ BEGIN
 END;
 
 
-CREATE TRIGGER t_AutoIncrement_INSERT_K_Lehrer_1 AFTER INSERT ON K_Lehrer FOR EACH ROW
-	WHEN NEW.ID >= 0 AND 
-	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer') IS NOT NULL AND 
-	  NEW.ID > (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer')
-BEGIN
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle = 'K_Lehrer';
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_K_Lehrer_2 AFTER INSERT ON K_Lehrer FOR EACH ROW
-	WHEN NEW.ID < 0 AND
-	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer') IS NOT NULL
-BEGIN
-  UPDATE K_Lehrer SET ID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer') + 1 WHERE ID = NEW.ID;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = MaxID + 1 WHERE NameTabelle = 'K_Lehrer';
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_K_Lehrer_3 AFTER INSERT ON K_Lehrer FOR EACH ROW
-	WHEN NEW.ID >= 0 AND 
-	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer') IS NULL AND
-	  NEW.ID < coalesce((SELECT max(ID) FROM K_Lehrer), 0)
-BEGIN
-  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Lehrer', coalesce((SELECT max(ID) FROM K_Lehrer), 0));
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_K_Lehrer_4 AFTER INSERT ON K_Lehrer FOR EACH ROW
-	WHEN NEW.ID >= 0 AND 
-	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer') IS NULL AND
-	  NEW.ID >= coalesce((SELECT max(ID) FROM K_Lehrer), 0)
-BEGIN
-  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Lehrer',  NEW.ID);
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_K_Lehrer_5 AFTER INSERT ON K_Lehrer FOR EACH ROW
-	WHEN NEW.ID < 0 AND
-	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer') IS NULL
-BEGIN
-  UPDATE K_Lehrer SET ID = coalesce((SELECT max(ID) FROM K_Lehrer), 0) + 1 WHERE ID = NEW.ID;
-  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Lehrer',  coalesce((SELECT max(ID) FROM K_Lehrer), 0) + 1);
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_K_Lehrer_1 AFTER UPDATE ON K_Lehrer FOR EACH ROW
-	WHEN NEW.ID >= 0 AND 
-	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer') IS NOT NULL AND 
-	  NEW.ID > (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer')
-BEGIN
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle = 'K_Lehrer';
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_K_Lehrer_2 AFTER UPDATE ON K_Lehrer FOR EACH ROW
-	WHEN NEW.ID < 0 AND
-	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer') IS NOT NULL
-BEGIN
-  UPDATE K_Lehrer SET ID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer') + 1 WHERE ID = NEW.ID;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = MaxID + 1 WHERE NameTabelle = 'K_Lehrer';
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_K_Lehrer_3 AFTER UPDATE ON K_Lehrer FOR EACH ROW
-	WHEN NEW.ID >= 0 AND 
-	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer') IS NULL AND
-	  NEW.ID < coalesce((SELECT max(ID) FROM K_Lehrer), 0)
-BEGIN
-  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Lehrer', coalesce((SELECT max(ID) FROM K_Lehrer), 0));
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_K_Lehrer_4 AFTER UPDATE ON K_Lehrer FOR EACH ROW
-	WHEN NEW.ID >= 0 AND 
-	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer') IS NULL AND
-	  NEW.ID >= coalesce((SELECT max(ID) FROM K_Lehrer), 0)
-BEGIN
-  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Lehrer',  NEW.ID);
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_K_Lehrer_5 AFTER UPDATE ON K_Lehrer FOR EACH ROW
-	WHEN NEW.ID < 0 AND
-	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer') IS NULL
-BEGIN
-  -- Update der ID in der Tabelle K_Lehrer erfolgt durch den Autoinkrement-Trigger 2, daher hier auch kein +1, sondern nur den Max-Wert schreiben
-  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Lehrer',  coalesce((SELECT max(ID) FROM K_Lehrer), 0));
-END;
-
-
 CREATE TRIGGER t_AutoIncrement_INSERT_AllgAdrAnsprechpartner_1 AFTER INSERT ON AllgAdrAnsprechpartner FOR EACH ROW
 	WHEN NEW.ID >= 0 AND 
 	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='AllgAdrAnsprechpartner') IS NOT NULL AND 
@@ -6065,96 +5978,6 @@ BEGIN
 END;
 
 
-CREATE TRIGGER t_AutoIncrement_INSERT_EigeneSchule_Abteilungen_1 AFTER INSERT ON EigeneSchule_Abteilungen FOR EACH ROW
-	WHEN NEW.ID >= 0 AND 
-	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen') IS NOT NULL AND 
-	  NEW.ID > (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen')
-BEGIN
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle = 'EigeneSchule_Abteilungen';
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_EigeneSchule_Abteilungen_2 AFTER INSERT ON EigeneSchule_Abteilungen FOR EACH ROW
-	WHEN NEW.ID < 0 AND
-	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen') IS NOT NULL
-BEGIN
-  UPDATE EigeneSchule_Abteilungen SET ID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen') + 1 WHERE ID = NEW.ID;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = MaxID + 1 WHERE NameTabelle = 'EigeneSchule_Abteilungen';
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_EigeneSchule_Abteilungen_3 AFTER INSERT ON EigeneSchule_Abteilungen FOR EACH ROW
-	WHEN NEW.ID >= 0 AND 
-	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen') IS NULL AND
-	  NEW.ID < coalesce((SELECT max(ID) FROM EigeneSchule_Abteilungen), 0)
-BEGIN
-  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abteilungen', coalesce((SELECT max(ID) FROM EigeneSchule_Abteilungen), 0));
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_EigeneSchule_Abteilungen_4 AFTER INSERT ON EigeneSchule_Abteilungen FOR EACH ROW
-	WHEN NEW.ID >= 0 AND 
-	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen') IS NULL AND
-	  NEW.ID >= coalesce((SELECT max(ID) FROM EigeneSchule_Abteilungen), 0)
-BEGIN
-  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abteilungen',  NEW.ID);
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_EigeneSchule_Abteilungen_5 AFTER INSERT ON EigeneSchule_Abteilungen FOR EACH ROW
-	WHEN NEW.ID < 0 AND
-	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen') IS NULL
-BEGIN
-  UPDATE EigeneSchule_Abteilungen SET ID = coalesce((SELECT max(ID) FROM EigeneSchule_Abteilungen), 0) + 1 WHERE ID = NEW.ID;
-  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abteilungen',  coalesce((SELECT max(ID) FROM EigeneSchule_Abteilungen), 0) + 1);
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_EigeneSchule_Abteilungen_1 AFTER UPDATE ON EigeneSchule_Abteilungen FOR EACH ROW
-	WHEN NEW.ID >= 0 AND 
-	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen') IS NOT NULL AND 
-	  NEW.ID > (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen')
-BEGIN
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle = 'EigeneSchule_Abteilungen';
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_EigeneSchule_Abteilungen_2 AFTER UPDATE ON EigeneSchule_Abteilungen FOR EACH ROW
-	WHEN NEW.ID < 0 AND
-	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen') IS NOT NULL
-BEGIN
-  UPDATE EigeneSchule_Abteilungen SET ID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen') + 1 WHERE ID = NEW.ID;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = MaxID + 1 WHERE NameTabelle = 'EigeneSchule_Abteilungen';
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_EigeneSchule_Abteilungen_3 AFTER UPDATE ON EigeneSchule_Abteilungen FOR EACH ROW
-	WHEN NEW.ID >= 0 AND 
-	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen') IS NULL AND
-	  NEW.ID < coalesce((SELECT max(ID) FROM EigeneSchule_Abteilungen), 0)
-BEGIN
-  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abteilungen', coalesce((SELECT max(ID) FROM EigeneSchule_Abteilungen), 0));
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_EigeneSchule_Abteilungen_4 AFTER UPDATE ON EigeneSchule_Abteilungen FOR EACH ROW
-	WHEN NEW.ID >= 0 AND 
-	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen') IS NULL AND
-	  NEW.ID >= coalesce((SELECT max(ID) FROM EigeneSchule_Abteilungen), 0)
-BEGIN
-  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abteilungen',  NEW.ID);
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_EigeneSchule_Abteilungen_5 AFTER UPDATE ON EigeneSchule_Abteilungen FOR EACH ROW
-	WHEN NEW.ID < 0 AND
-	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen') IS NULL
-BEGIN
-  -- Update der ID in der Tabelle EigeneSchule_Abteilungen erfolgt durch den Autoinkrement-Trigger 2, daher hier auch kein +1, sondern nur den Max-Wert schreiben
-  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abteilungen',  coalesce((SELECT max(ID) FROM EigeneSchule_Abteilungen), 0));
-END;
-
-
 CREATE TRIGGER t_AutoIncrement_INSERT_K_Ortsteil_1 AFTER INSERT ON K_Ortsteil FOR EACH ROW
 	WHEN NEW.ID >= 0 AND 
 	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Ortsteil') IS NOT NULL AND 
@@ -6242,6 +6065,186 @@ CREATE TRIGGER t_AutoIncrement_UPDATE_K_Ortsteil_5 AFTER UPDATE ON K_Ortsteil FO
 BEGIN
   -- Update der ID in der Tabelle K_Ortsteil erfolgt durch den Autoinkrement-Trigger 2, daher hier auch kein +1, sondern nur den Max-Wert schreiben
   INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Ortsteil',  coalesce((SELECT max(ID) FROM K_Ortsteil), 0));
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_K_Lehrer_1 AFTER INSERT ON K_Lehrer FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer') IS NOT NULL AND 
+	  NEW.ID > (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer')
+BEGIN
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle = 'K_Lehrer';
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_K_Lehrer_2 AFTER INSERT ON K_Lehrer FOR EACH ROW
+	WHEN NEW.ID < 0 AND
+	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer') IS NOT NULL
+BEGIN
+  UPDATE K_Lehrer SET ID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer') + 1 WHERE ID = NEW.ID;
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = MaxID + 1 WHERE NameTabelle = 'K_Lehrer';
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_K_Lehrer_3 AFTER INSERT ON K_Lehrer FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer') IS NULL AND
+	  NEW.ID < coalesce((SELECT max(ID) FROM K_Lehrer), 0)
+BEGIN
+  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Lehrer', coalesce((SELECT max(ID) FROM K_Lehrer), 0));
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_K_Lehrer_4 AFTER INSERT ON K_Lehrer FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer') IS NULL AND
+	  NEW.ID >= coalesce((SELECT max(ID) FROM K_Lehrer), 0)
+BEGIN
+  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Lehrer',  NEW.ID);
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_K_Lehrer_5 AFTER INSERT ON K_Lehrer FOR EACH ROW
+	WHEN NEW.ID < 0 AND
+	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer') IS NULL
+BEGIN
+  UPDATE K_Lehrer SET ID = coalesce((SELECT max(ID) FROM K_Lehrer), 0) + 1 WHERE ID = NEW.ID;
+  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Lehrer',  coalesce((SELECT max(ID) FROM K_Lehrer), 0) + 1);
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_K_Lehrer_1 AFTER UPDATE ON K_Lehrer FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer') IS NOT NULL AND 
+	  NEW.ID > (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer')
+BEGIN
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle = 'K_Lehrer';
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_K_Lehrer_2 AFTER UPDATE ON K_Lehrer FOR EACH ROW
+	WHEN NEW.ID < 0 AND
+	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer') IS NOT NULL
+BEGIN
+  UPDATE K_Lehrer SET ID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer') + 1 WHERE ID = NEW.ID;
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = MaxID + 1 WHERE NameTabelle = 'K_Lehrer';
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_K_Lehrer_3 AFTER UPDATE ON K_Lehrer FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer') IS NULL AND
+	  NEW.ID < coalesce((SELECT max(ID) FROM K_Lehrer), 0)
+BEGIN
+  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Lehrer', coalesce((SELECT max(ID) FROM K_Lehrer), 0));
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_K_Lehrer_4 AFTER UPDATE ON K_Lehrer FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer') IS NULL AND
+	  NEW.ID >= coalesce((SELECT max(ID) FROM K_Lehrer), 0)
+BEGIN
+  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Lehrer',  NEW.ID);
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_K_Lehrer_5 AFTER UPDATE ON K_Lehrer FOR EACH ROW
+	WHEN NEW.ID < 0 AND
+	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer') IS NULL
+BEGIN
+  -- Update der ID in der Tabelle K_Lehrer erfolgt durch den Autoinkrement-Trigger 2, daher hier auch kein +1, sondern nur den Max-Wert schreiben
+  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Lehrer',  coalesce((SELECT max(ID) FROM K_Lehrer), 0));
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_EigeneSchule_Abteilungen_1 AFTER INSERT ON EigeneSchule_Abteilungen FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen') IS NOT NULL AND 
+	  NEW.ID > (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen')
+BEGIN
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle = 'EigeneSchule_Abteilungen';
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_EigeneSchule_Abteilungen_2 AFTER INSERT ON EigeneSchule_Abteilungen FOR EACH ROW
+	WHEN NEW.ID < 0 AND
+	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen') IS NOT NULL
+BEGIN
+  UPDATE EigeneSchule_Abteilungen SET ID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen') + 1 WHERE ID = NEW.ID;
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = MaxID + 1 WHERE NameTabelle = 'EigeneSchule_Abteilungen';
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_EigeneSchule_Abteilungen_3 AFTER INSERT ON EigeneSchule_Abteilungen FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen') IS NULL AND
+	  NEW.ID < coalesce((SELECT max(ID) FROM EigeneSchule_Abteilungen), 0)
+BEGIN
+  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abteilungen', coalesce((SELECT max(ID) FROM EigeneSchule_Abteilungen), 0));
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_EigeneSchule_Abteilungen_4 AFTER INSERT ON EigeneSchule_Abteilungen FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen') IS NULL AND
+	  NEW.ID >= coalesce((SELECT max(ID) FROM EigeneSchule_Abteilungen), 0)
+BEGIN
+  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abteilungen',  NEW.ID);
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_EigeneSchule_Abteilungen_5 AFTER INSERT ON EigeneSchule_Abteilungen FOR EACH ROW
+	WHEN NEW.ID < 0 AND
+	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen') IS NULL
+BEGIN
+  UPDATE EigeneSchule_Abteilungen SET ID = coalesce((SELECT max(ID) FROM EigeneSchule_Abteilungen), 0) + 1 WHERE ID = NEW.ID;
+  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abteilungen',  coalesce((SELECT max(ID) FROM EigeneSchule_Abteilungen), 0) + 1);
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_EigeneSchule_Abteilungen_1 AFTER UPDATE ON EigeneSchule_Abteilungen FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen') IS NOT NULL AND 
+	  NEW.ID > (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen')
+BEGIN
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle = 'EigeneSchule_Abteilungen';
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_EigeneSchule_Abteilungen_2 AFTER UPDATE ON EigeneSchule_Abteilungen FOR EACH ROW
+	WHEN NEW.ID < 0 AND
+	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen') IS NOT NULL
+BEGIN
+  UPDATE EigeneSchule_Abteilungen SET ID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen') + 1 WHERE ID = NEW.ID;
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = MaxID + 1 WHERE NameTabelle = 'EigeneSchule_Abteilungen';
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_EigeneSchule_Abteilungen_3 AFTER UPDATE ON EigeneSchule_Abteilungen FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen') IS NULL AND
+	  NEW.ID < coalesce((SELECT max(ID) FROM EigeneSchule_Abteilungen), 0)
+BEGIN
+  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abteilungen', coalesce((SELECT max(ID) FROM EigeneSchule_Abteilungen), 0));
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_EigeneSchule_Abteilungen_4 AFTER UPDATE ON EigeneSchule_Abteilungen FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen') IS NULL AND
+	  NEW.ID >= coalesce((SELECT max(ID) FROM EigeneSchule_Abteilungen), 0)
+BEGIN
+  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abteilungen',  NEW.ID);
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_EigeneSchule_Abteilungen_5 AFTER UPDATE ON EigeneSchule_Abteilungen FOR EACH ROW
+	WHEN NEW.ID < 0 AND
+	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen') IS NULL
+BEGIN
+  -- Update der ID in der Tabelle EigeneSchule_Abteilungen erfolgt durch den Autoinkrement-Trigger 2, daher hier auch kein +1, sondern nur den Max-Wert schreiben
+  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abteilungen',  coalesce((SELECT max(ID) FROM EigeneSchule_Abteilungen), 0));
 END;
 
 

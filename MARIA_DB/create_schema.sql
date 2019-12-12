@@ -829,6 +829,38 @@ CREATE TABLE K_AllgAdresse (
 );
 
 
+CREATE TABLE AllgAdrAnsprechpartner (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Adresse_ID bigint, 
+  Name varchar(60), 
+  Vorname varchar(60), 
+  Anrede varchar(10), 
+  Telefon varchar(20), 
+  EMail varchar(100), 
+  Abteilung varchar(50), 
+  SchulnrEigner int, 
+  Titel varchar(15), 
+  GU_ID varchar(40),
+  CONSTRAINT PK_AllgAdrAnsprechpartner PRIMARY KEY (ID),
+  CONSTRAINT Ansprechpartner_Adr_FK FOREIGN KEY (Adresse_ID) REFERENCES K_AllgAdresse(ID) ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+
+
+CREATE TABLE K_Ortsteil (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Bezeichnung varchar(30) NOT NULL, 
+  Ort_ID bigint, 
+  PLZ varchar(10), 
+  Sortierung int DEFAULT 32000, 
+  Sichtbar varchar(1) DEFAULT '+', 
+  Aenderbar varchar(1) DEFAULT '+', 
+  SchulnrEigner int, 
+  OrtsteilSchluessel varchar(30),
+  CONSTRAINT PK_K_Ortsteil PRIMARY KEY (ID),
+  CONSTRAINT K_Ortsteil_UC1 UNIQUE (Bezeichnung)
+);
+
+
 CREATE TABLE K_Lehrer (
   ID bigint DEFAULT -1 NOT NULL, 
   GU_ID varchar(40), 
@@ -846,6 +878,7 @@ CREATE TABLE K_Lehrer (
   Strasse varchar(50), 
   Ort_ID bigint, 
   PLZ varchar(10), 
+  Ortsteil_ID bigint, 
   Tel varchar(20), 
   Handy varchar(20), 
   EMail varchar(100), 
@@ -888,24 +921,8 @@ CREATE TABLE K_Lehrer (
   KennwortToolsAktuell varchar(3) DEFAULT '-;5',
   CONSTRAINT PK_K_Lehrer PRIMARY KEY (ID),
   CONSTRAINT K_Lehrer_Ort_FK FOREIGN KEY (Ort_ID) REFERENCES K_Ort(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT K_Lehrer_Ortsteil_FK FOREIGN KEY (Ortsteil_ID) REFERENCES K_Ortsteil(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT K_Lehrer_UC1 UNIQUE (Kuerzel)
-);
-
-
-CREATE TABLE AllgAdrAnsprechpartner (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Adresse_ID bigint, 
-  Name varchar(60), 
-  Vorname varchar(60), 
-  Anrede varchar(10), 
-  Telefon varchar(20), 
-  EMail varchar(100), 
-  Abteilung varchar(50), 
-  SchulnrEigner int, 
-  Titel varchar(15), 
-  GU_ID varchar(40),
-  CONSTRAINT PK_AllgAdrAnsprechpartner PRIMARY KEY (ID),
-  CONSTRAINT Ansprechpartner_Adr_FK FOREIGN KEY (Adresse_ID) REFERENCES K_AllgAdresse(ID) ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
 
@@ -921,20 +938,6 @@ CREATE TABLE EigeneSchule_Abteilungen (
   Sortierung int,
   CONSTRAINT PK_EigeneSchule_Abteilungen PRIMARY KEY (ID),
   CONSTRAINT EigeneSchule_Abteilungen_Leiter_FK FOREIGN KEY (AbteilungsLeiter) REFERENCES K_Lehrer(Kuerzel) ON UPDATE CASCADE ON DELETE SET NULL
-);
-
-
-CREATE TABLE K_Ortsteil (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Bezeichnung varchar(30) NOT NULL, 
-  PLZ varchar(10), 
-  Sortierung int DEFAULT 32000, 
-  Sichtbar varchar(1) DEFAULT '+', 
-  Aenderbar varchar(1) DEFAULT '+', 
-  SchulnrEigner int, 
-  OrtsteilSchluessel varchar(30),
-  CONSTRAINT PK_K_Ortsteil PRIMARY KEY (ID),
-  CONSTRAINT K_Ortsteil_UC1 UNIQUE (Bezeichnung)
 );
 
 
@@ -4986,60 +4989,6 @@ delimiter ;
 
 
 delimiter $
-CREATE TRIGGER t_AutoIncrement_INSERT_K_Lehrer
-BEFORE INSERT
-  ON K_Lehrer FOR EACH ROW
-BEGIN
-  DECLARE tmpID bigint;
-  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer' INTO tmpID;
-  IF tmpID IS NULL THEN
-    SELECT max(ID) FROM K_Lehrer INTO tmpID;
-    IF tmpID IS NULL THEN
-      SET tmpID = 0;
-    END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Lehrer', tmpID);
-  END IF;
-  IF NEW.ID < 0 THEN
-    SET NEW.ID = tmpID + 1;
-  END IF;
-  IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Lehrer';
-  END IF;
-END
-
-$
-delimiter ;
-
-
-delimiter $
-CREATE TRIGGER t_AutoIncrement_UPDATE_K_Lehrer
-BEFORE UPDATE
-  ON K_Lehrer FOR EACH ROW
-BEGIN
-  DECLARE tmpID bigint;
-  IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer' INTO tmpID;
-    IF tmpID IS NULL THEN
-      SELECT max(ID) FROM K_Lehrer INTO tmpID;
-      IF tmpID IS NULL THEN
-        SET tmpID = 0;
-      END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Lehrer', tmpID);
-    END IF;
-    IF NEW.ID < 0 THEN
-      SET NEW.ID = tmpID + 1;
-    END IF;
-    IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Lehrer';
-    END IF;
-  END IF;
-END
-
-$
-delimiter ;
-
-
-delimiter $
 CREATE TRIGGER t_AutoIncrement_INSERT_AllgAdrAnsprechpartner
 BEFORE INSERT
   ON AllgAdrAnsprechpartner FOR EACH ROW
@@ -5094,60 +5043,6 @@ delimiter ;
 
 
 delimiter $
-CREATE TRIGGER t_AutoIncrement_INSERT_EigeneSchule_Abteilungen
-BEFORE INSERT
-  ON EigeneSchule_Abteilungen FOR EACH ROW
-BEGIN
-  DECLARE tmpID bigint;
-  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen' INTO tmpID;
-  IF tmpID IS NULL THEN
-    SELECT max(ID) FROM EigeneSchule_Abteilungen INTO tmpID;
-    IF tmpID IS NULL THEN
-      SET tmpID = 0;
-    END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abteilungen', tmpID);
-  END IF;
-  IF NEW.ID < 0 THEN
-    SET NEW.ID = tmpID + 1;
-  END IF;
-  IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Abteilungen';
-  END IF;
-END
-
-$
-delimiter ;
-
-
-delimiter $
-CREATE TRIGGER t_AutoIncrement_UPDATE_EigeneSchule_Abteilungen
-BEFORE UPDATE
-  ON EigeneSchule_Abteilungen FOR EACH ROW
-BEGIN
-  DECLARE tmpID bigint;
-  IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen' INTO tmpID;
-    IF tmpID IS NULL THEN
-      SELECT max(ID) FROM EigeneSchule_Abteilungen INTO tmpID;
-      IF tmpID IS NULL THEN
-        SET tmpID = 0;
-      END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abteilungen', tmpID);
-    END IF;
-    IF NEW.ID < 0 THEN
-      SET NEW.ID = tmpID + 1;
-    END IF;
-    IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Abteilungen';
-    END IF;
-  END IF;
-END
-
-$
-delimiter ;
-
-
-delimiter $
 CREATE TRIGGER t_AutoIncrement_INSERT_K_Ortsteil
 BEFORE INSERT
   ON K_Ortsteil FOR EACH ROW
@@ -5193,6 +5088,114 @@ BEGIN
     END IF;
     IF NEW.ID > tmpID THEN
       UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Ortsteil';
+    END IF;
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_INSERT_K_Lehrer
+BEFORE INSERT
+  ON K_Lehrer FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer' INTO tmpID;
+  IF tmpID IS NULL THEN
+    SELECT max(ID) FROM K_Lehrer INTO tmpID;
+    IF tmpID IS NULL THEN
+      SET tmpID = 0;
+    END IF;
+    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Lehrer', tmpID);
+  END IF;
+  IF NEW.ID < 0 THEN
+    SET NEW.ID = tmpID + 1;
+  END IF;
+  IF NEW.ID > tmpID THEN
+    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Lehrer';
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_UPDATE_K_Lehrer
+BEFORE UPDATE
+  ON K_Lehrer FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  IF (OLD.ID <> NEW.ID) THEN
+    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer' INTO tmpID;
+    IF tmpID IS NULL THEN
+      SELECT max(ID) FROM K_Lehrer INTO tmpID;
+      IF tmpID IS NULL THEN
+        SET tmpID = 0;
+      END IF;
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Lehrer', tmpID);
+    END IF;
+    IF NEW.ID < 0 THEN
+      SET NEW.ID = tmpID + 1;
+    END IF;
+    IF NEW.ID > tmpID THEN
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Lehrer';
+    END IF;
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_INSERT_EigeneSchule_Abteilungen
+BEFORE INSERT
+  ON EigeneSchule_Abteilungen FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen' INTO tmpID;
+  IF tmpID IS NULL THEN
+    SELECT max(ID) FROM EigeneSchule_Abteilungen INTO tmpID;
+    IF tmpID IS NULL THEN
+      SET tmpID = 0;
+    END IF;
+    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abteilungen', tmpID);
+  END IF;
+  IF NEW.ID < 0 THEN
+    SET NEW.ID = tmpID + 1;
+  END IF;
+  IF NEW.ID > tmpID THEN
+    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Abteilungen';
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_UPDATE_EigeneSchule_Abteilungen
+BEFORE UPDATE
+  ON EigeneSchule_Abteilungen FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  IF (OLD.ID <> NEW.ID) THEN
+    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen' INTO tmpID;
+    IF tmpID IS NULL THEN
+      SELECT max(ID) FROM EigeneSchule_Abteilungen INTO tmpID;
+      IF tmpID IS NULL THEN
+        SET tmpID = 0;
+      END IF;
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abteilungen', tmpID);
+    END IF;
+    IF NEW.ID < 0 THEN
+      SET NEW.ID = tmpID + 1;
+    END IF;
+    IF NEW.ID > tmpID THEN
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Abteilungen';
     END IF;
   END IF;
 END
