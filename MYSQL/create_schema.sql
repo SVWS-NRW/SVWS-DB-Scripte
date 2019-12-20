@@ -1108,8 +1108,8 @@ CREATE TABLE Katalog_Aufsichtsbereich (
 CREATE TABLE Katalog_Pausenzeiten (
   ID bigint DEFAULT -1 NOT NULL, 
   Tag int NOT NULL, 
-  Beginn time DEFAULT Now() NOT NULL, 
-  Ende time DEFAULT Now() NOT NULL,
+  Beginn time DEFAULT (Now()) NOT NULL, 
+  Ende time DEFAULT (Now()) NOT NULL,
   CONSTRAINT PK_Katalog_Pausenzeiten PRIMARY KEY (ID),
   CONSTRAINT Katalog_Pausenzeiten_UC1 UNIQUE (Beginn, Ende, Tag)
 );
@@ -1129,8 +1129,8 @@ CREATE TABLE Katalog_Zeitraster (
   ID bigint DEFAULT -1 NOT NULL, 
   Tag int NOT NULL, 
   Stunde int NOT NULL, 
-  Beginn time DEFAULT Now() NOT NULL, 
-  Ende time DEFAULT Now() NOT NULL,
+  Beginn time DEFAULT (Now()) NOT NULL, 
+  Ende time DEFAULT (Now()) NOT NULL,
   CONSTRAINT PK_Katalog_Zeitraster PRIMARY KEY (ID),
   CONSTRAINT Katalog_Zeitraster_UC1 UNIQUE (Stunde, Tag)
 );
@@ -2016,8 +2016,6 @@ CREATE TABLE Schulver_DBS (
   Kurzbez varchar(40), 
   SchBetrSchl int, 
   SchBetrSchlDatum varchar(8), 
-  SchuelerZahlASD int, 
-  SchuelerZahlVS int, 
   ArtderTraegerschaft varchar(2), 
   SchultraegerNr varchar(6), 
   Schulgliederung varchar(3), 
@@ -2556,8 +2554,8 @@ CREATE TABLE Stundenplan_Pausenzeit (
   ID bigint DEFAULT -1 NOT NULL, 
   Stundenplan_ID bigint NOT NULL, 
   Tag int NOT NULL, 
-  Beginn time DEFAULT Now() NOT NULL, 
-  Ende time DEFAULT Now() NOT NULL,
+  Beginn time DEFAULT (Now()) NOT NULL, 
+  Ende time DEFAULT (Now()) NOT NULL,
   CONSTRAINT PK_Stundenplan_Pausenzeit PRIMARY KEY (ID),
   CONSTRAINT Stundenplan_Pausenzeit_Stundenplan_FK FOREIGN KEY (Stundenplan_ID) REFERENCES Stundenplan(ID) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT Stundenplan_Pausenzeit_UC1 UNIQUE (Beginn, Ende, Stundenplan_ID, Tag)
@@ -2604,8 +2602,8 @@ CREATE TABLE Stundenplan_Zeitraster (
   Stundenplan_ID bigint NOT NULL, 
   Tag int NOT NULL, 
   Stunde int NOT NULL, 
-  Beginn time DEFAULT Now() NOT NULL, 
-  Ende time DEFAULT Now() NOT NULL,
+  Beginn time DEFAULT (Now()) NOT NULL, 
+  Ende time DEFAULT (Now()) NOT NULL,
   CONSTRAINT PK_Stundenplan_Zeitraster PRIMARY KEY (ID),
   CONSTRAINT Stundenplan_Zeitraster_Stundenplan_FK FOREIGN KEY (Stundenplan_ID) REFERENCES Stundenplan(ID) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT Stundenplan_Zeitraster_UC1 UNIQUE (Stunde, Stundenplan_ID, Tag)
@@ -3350,7 +3348,7 @@ CREATE TABLE SchuelerFoerderempfehlungen (
   GU_ID varchar(40) NOT NULL, 
   Schueler_ID bigint NOT NULL, 
   SchulnrEigner int NOT NULL, 
-  DatumAngelegt date DEFAULT CURRENT_DATE() NOT NULL, 
+  DatumAngelegt date DEFAULT (CURRENT_DATE()) NOT NULL, 
   Klasse varchar(15), 
   Jahr int, 
   Abschnitt int, 
@@ -3541,7 +3539,7 @@ CREATE TABLE SchuelerFehlstunden (
   ID bigint DEFAULT -1 NOT NULL, 
   SchulnrEigner int NOT NULL, 
   Abschnitt_ID bigint NOT NULL, 
-  Datum date DEFAULT CURRENT_DATE() NOT NULL, 
+  Datum date DEFAULT (CURRENT_DATE()) NOT NULL, 
   Fach_ID bigint, 
   Fehlstd float NOT NULL, 
   VonStd int, 

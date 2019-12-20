@@ -2016,8 +2016,6 @@ CREATE TABLE Schulver_DBS (
   Kurzbez varchar(40), 
   SchBetrSchl int, 
   SchBetrSchlDatum varchar(8), 
-  SchuelerZahlASD int, 
-  SchuelerZahlVS int, 
   ArtderTraegerschaft varchar(2), 
   SchultraegerNr varchar(6), 
   Schulgliederung varchar(3), 
