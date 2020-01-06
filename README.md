@@ -11,32 +11,36 @@ Die Revision 3 ist der letzte kompatible Stand für Schild-NRW-2.0 !
 Für aktuelle Schild-NRW-2.0-Installationen also bitte die Revision 3 verwenden.
 
 
+Revision -1
+Dummy Revision, welche anzeigt dass keine Revision definiert ist -
+z.B., um zu kennzeichnen, dass ein Datensatz noch nicht veraltet ist.
+
 Revision 0
-Erste Test-Scripte für Schild-NRW-2.0
+Erste Version der SVWS-Datenbank. Das Schema wurde von der letzten
+Schild-NRW Version 2.x übernommen.
 
 Revision 1
-Änderungen für das aktuelle Schild-NRW-2.0-Update
+Hinzufügen der Tabelle SchildKursSchueler (Erstellen der Tabelle) für
+den schnellen Zugriff auf die Schüler-Zuordnung zu Kursen.
 
 Revision 2
-Ergänzungen in den Default-Daten für Schild-NRW-2.0
+Erstellen der Trigger zur automatischen Aktualisierung der Tabelle
+SchildKursSchueler bei Änderung der Leistungsdaten eines Schülers.
+Außerdem wird die Tabelle mit den Daten aus den Leistungsdaten eines
+Schülers initial befüllt.
 
 Revision 3
-Aktuelle letzte Kompatible Scripte für Schild-NRW-2.0.
-Anlegen der neuen Tabellen DSGVO und KAOA.
+Befüllen der Foreign-Keys auf die Tabelle K_Ort in den Tabellen
+K_AllgAdresse, K_Lehrer, Schueler, SchuelerErzAdr.
 
 Revision 4
-Hinzufügen der AutoInc-Felder für alle ID-Spalten
+Hinzufügen der Kurs42-Tabellen für die Arbeit mit Kurs42-4.0.
 
 Revision 5
-Kurs42-Tabellen angelegt
+NUES-Tabellen wurden entfernt (veraltet).
 
-Revision 5 
-LuPO-Tabellen angelegt
-
-Revision 6
-Stundenplantabellen angelegt
+Revision 6 
+LuPO-Tabellen für die interne Verwaltung hinzugefügt.
 
 Revision 7
-Aktuelle Default-daten in der Schulver-Tabelle.
-Fehlerbehebung bei den Triggern.
-Stabile Test-Scripte für Schild-NRW-3.0
+Tabellen für Stundenpläne mit Unterrichts- und Pausenzeiten.
