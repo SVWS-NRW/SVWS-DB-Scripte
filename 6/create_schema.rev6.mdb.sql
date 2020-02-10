@@ -1096,46 +1096,6 @@ CREATE TABLE K_Zertifikate (
 );
 
 
-CREATE TABLE Katalog_Aufsichtsbereich (
-  ID bigint AUTOINCREMENT NOT NULL, 
-  Kuerzel varchar(20) NOT NULL, 
-  Beschreibung varchar(1000) NOT NULL,
-  CONSTRAINT PK_Katalog_Aufsichtsbereich PRIMARY KEY (ID),
-  CONSTRAINT Katalog_Aufsichtsbereich_UC1 UNIQUE (Kuerzel)
-);
-
-
-CREATE TABLE Katalog_Pausenzeiten (
-  ID bigint AUTOINCREMENT NOT NULL, 
-  Tag int NOT NULL, 
-  Beginn timestamp DEFAULT Now() NOT NULL, 
-  Ende timestamp DEFAULT Now() NOT NULL,
-  CONSTRAINT PK_Katalog_Pausenzeiten PRIMARY KEY (ID),
-  CONSTRAINT Katalog_Pausenzeiten_UC1 UNIQUE (Beginn, Ende, Tag)
-);
-
-
-CREATE TABLE Katalog_Raeume (
-  ID bigint AUTOINCREMENT NOT NULL, 
-  Kuerzel varchar(20) NOT NULL, 
-  Beschreibung varchar(1000) NOT NULL, 
-  Groesse int DEFAULT 40 NOT NULL,
-  CONSTRAINT PK_Katalog_Raeume PRIMARY KEY (ID),
-  CONSTRAINT Katalog_Raeume_UC1 UNIQUE (Kuerzel)
-);
-
-
-CREATE TABLE Katalog_Zeitraster (
-  ID bigint AUTOINCREMENT NOT NULL, 
-  Tag int NOT NULL, 
-  Stunde int NOT NULL, 
-  Beginn timestamp DEFAULT Now() NOT NULL, 
-  Ende timestamp DEFAULT Now() NOT NULL,
-  CONSTRAINT PK_Katalog_Zeitraster PRIMARY KEY (ID),
-  CONSTRAINT Katalog_Zeitraster_UC1 UNIQUE (Stunde, Tag)
-);
-
-
 CREATE TABLE Kompetenzen (
   KO_ID bigint NOT NULL, 
   KO_Gruppe bigint NOT NULL, 
@@ -2538,88 +2498,6 @@ CREATE TABLE Statkue_ZulKuArt (
 );
 
 
-CREATE TABLE Stundenplan (
-  ID bigint AUTOINCREMENT NOT NULL, 
-  Schuljahr int NOT NULL, 
-  SchuljahrAbschnitt int NOT NULL, 
-  Beginn date DEFAULT '1899-01-01' NOT NULL, 
-  Ende date, 
-  Beschreibung varchar(1000) NOT NULL,
-  CONSTRAINT PK_Stundenplan PRIMARY KEY (ID)
-);
-
-
-CREATE TABLE Stundenplan_Aufsichtsbereiche (
-  ID bigint AUTOINCREMENT NOT NULL, 
-  Stundenplan_ID bigint NOT NULL, 
-  Kuerzel varchar(20) NOT NULL, 
-  Beschreibung varchar(1000) NOT NULL,
-  CONSTRAINT PK_Stundenplan_Aufsichtsbereiche PRIMARY KEY (ID),
-  CONSTRAINT Stundenplan_Aufsichtsbereiche_Stundenplan_FK FOREIGN KEY (Stundenplan_ID) REFERENCES Stundenplan(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT Stundenplan_Aufsichtsbereiche_UC1 UNIQUE (Kuerzel, Stundenplan_ID)
-);
-
-
-CREATE TABLE Stundenplan_Pausenzeit (
-  ID bigint AUTOINCREMENT NOT NULL, 
-  Stundenplan_ID bigint NOT NULL, 
-  Tag int NOT NULL, 
-  Beginn timestamp DEFAULT Now() NOT NULL, 
-  Ende timestamp DEFAULT Now() NOT NULL,
-  CONSTRAINT PK_Stundenplan_Pausenzeit PRIMARY KEY (ID),
-  CONSTRAINT Stundenplan_Pausenzeit_Stundenplan_FK FOREIGN KEY (Stundenplan_ID) REFERENCES Stundenplan(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT Stundenplan_Pausenzeit_UC1 UNIQUE (Beginn, Ende, Stundenplan_ID, Tag)
-);
-
-
-CREATE TABLE Stundenplan_Pausenaufsichten (
-  ID bigint AUTOINCREMENT NOT NULL, 
-  Pausenzeit_ID bigint NOT NULL, 
-  Wochentyp int DEFAULT 0 NOT NULL, 
-  Lehrer_ID bigint NOT NULL,
-  CONSTRAINT PK_Stundenplan_Pausenaufsichten PRIMARY KEY (ID),
-  CONSTRAINT Stundenplan_Pausenaufsichten_K_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT Stundenplan_Pausenaufsichten_Pausenzeit_FK FOREIGN KEY (Pausenzeit_ID) REFERENCES Stundenplan_Pausenzeit(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT Stundenplan_Pausenaufsichten_UC1 UNIQUE (Lehrer_ID, Pausenzeit_ID)
-);
-
-
-CREATE TABLE Stundenplan_PausenaufsichtenBereich (
-  ID bigint AUTOINCREMENT NOT NULL, 
-  Pausenaufsicht_ID bigint NOT NULL, 
-  Aufsichtsbereich_ID bigint NOT NULL,
-  CONSTRAINT PK_Stundenplan_PausenaufsichtenBereich PRIMARY KEY (ID),
-  CONSTRAINT Stundenplan_PausenaufsichtenBereich_Aufsicht_FK FOREIGN KEY (Pausenaufsicht_ID) REFERENCES Stundenplan_Pausenaufsichten(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT Stundenplan_PausenaufsichtenBereich_Aufsichtsbereiche_FK FOREIGN KEY (Aufsichtsbereich_ID) REFERENCES Stundenplan_Aufsichtsbereiche(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT Stundenplan_PausenaufsichtenBereich_UC1 UNIQUE (Aufsichtsbereich_ID, Pausenaufsicht_ID)
-);
-
-
-CREATE TABLE Stundenplan_Raeume (
-  ID bigint AUTOINCREMENT NOT NULL, 
-  Stundenplan_ID bigint NOT NULL, 
-  Kuerzel varchar(20) NOT NULL, 
-  Beschreibung varchar(1000) NOT NULL, 
-  Groesse int DEFAULT 40 NOT NULL,
-  CONSTRAINT PK_Stundenplan_Raeume PRIMARY KEY (ID),
-  CONSTRAINT Stundenplan_Raeume_Stundenplan_FK FOREIGN KEY (Stundenplan_ID) REFERENCES Stundenplan(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT Stundenplan_Raeume_UC1 UNIQUE (Kuerzel, Stundenplan_ID)
-);
-
-
-CREATE TABLE Stundenplan_Zeitraster (
-  ID bigint AUTOINCREMENT NOT NULL, 
-  Stundenplan_ID bigint NOT NULL, 
-  Tag int NOT NULL, 
-  Stunde int NOT NULL, 
-  Beginn timestamp DEFAULT Now() NOT NULL, 
-  Ende timestamp DEFAULT Now() NOT NULL,
-  CONSTRAINT PK_Stundenplan_Zeitraster PRIMARY KEY (ID),
-  CONSTRAINT Stundenplan_Zeitraster_Stundenplan_FK FOREIGN KEY (Stundenplan_ID) REFERENCES Stundenplan(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT Stundenplan_Zeitraster_UC1 UNIQUE (Stunde, Stundenplan_ID, Tag)
-);
-
-
 CREATE TABLE Stundentafel (
   ID bigint AUTOINCREMENT NOT NULL, 
   Bezeichnung varchar(50) NOT NULL, 
@@ -2734,22 +2612,6 @@ CREATE TABLE EigeneSchule_Abt_Kl (
   CONSTRAINT PK_EigeneSchule_Abt_Kl PRIMARY KEY (ID),
   CONSTRAINT EigeneSchuleAbtKl_Abteilung_FK FOREIGN KEY (Abteilung_ID) REFERENCES EigeneSchule_Abteilungen(ID) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT EigeneSchuleAbtKl_Klasse_FK FOREIGN KEY (Klasse) REFERENCES Versetzung(Klasse) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE Stundenplan_Unterricht (
-  ID bigint AUTOINCREMENT NOT NULL, 
-  Zeitraster_ID bigint NOT NULL, 
-  Wochentyp int DEFAULT 0 NOT NULL, 
-  Klasse_ID bigint, 
-  Kurs_ID bigint, 
-  Fach_ID bigint NOT NULL,
-  CONSTRAINT PK_Stundenplan_Unterricht PRIMARY KEY (ID),
-  CONSTRAINT Stundenplan_Unterricht_EigeneSchule_Faecher_FK FOREIGN KEY (Kurs_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT Stundenplan_Unterricht_Kurse_FK FOREIGN KEY (Kurs_ID) REFERENCES Kurse(ID) ON UPDATE CASCADE ON DELETE SET NULL,
-  CONSTRAINT Stundenplan_Unterricht_Stundenplan_Zeitraster_FK FOREIGN KEY (Zeitraster_ID) REFERENCES Stundenplan_Zeitraster(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT Stundenplan_Unterricht_Versetzung_FK FOREIGN KEY (Klasse_ID) REFERENCES Versetzung(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT Stundenplan_Unterricht_UC1 UNIQUE (Klasse_ID, Kurs_ID, Zeitraster_ID)
 );
 
 
@@ -3148,28 +3010,6 @@ CREATE TABLE SchuelerAbgaenge (
 );
 
 CREATE INDEX SchuelerAbgaenge_IDX1 ON SchuelerAbgaenge(LSSchulEntlassDatum, Schueler_ID);
-
-
-CREATE TABLE Stundenplan_UnterrichtLehrer (
-  ID bigint AUTOINCREMENT NOT NULL, 
-  Unterricht_ID bigint NOT NULL, 
-  Lehrer_ID bigint NOT NULL,
-  CONSTRAINT PK_Stundenplan_UnterrichtLehrer PRIMARY KEY (ID),
-  CONSTRAINT Stundenplan_UnterrichtLehrer_K_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT Stundenplan_UnterrichtLehrer_Unterricht_FK FOREIGN KEY (Unterricht_ID) REFERENCES Stundenplan_Unterricht(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT Stundenplan_UnterrichtLehrer_UC1 UNIQUE (Lehrer_ID, Unterricht_ID)
-);
-
-
-CREATE TABLE Stundenplan_UnterrichtRaum (
-  ID bigint AUTOINCREMENT NOT NULL, 
-  Unterricht_ID bigint NOT NULL, 
-  Raum_ID bigint NOT NULL,
-  CONSTRAINT PK_Stundenplan_UnterrichtRaum PRIMARY KEY (ID),
-  CONSTRAINT Stundenplan_UnterrichtRaum_Raeume_FK FOREIGN KEY (Raum_ID) REFERENCES Stundenplan_Raeume(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT Stundenplan_UnterrichtRaum_Unterricht_FK FOREIGN KEY (Unterricht_ID) REFERENCES Stundenplan_Unterricht(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT Stundenplan_UnterrichtRaum_UC1 UNIQUE (Raum_ID, Unterricht_ID)
-);
 
 
 CREATE TABLE SchuelerLernabschnittsdaten (
@@ -3660,7 +3500,7 @@ FROM
         JOIN SchuelerLernabschnittsdaten ON SchuelerLeistungsdaten.Abschnitt_ID = SchuelerLernabschnittsdaten.ID
         JOIN Schueler ON SchuelerLernabschnittsdaten.Schueler_ID = Schueler.ID;
 
-INSERT INTO SVWS_DB_Version(Revision) VALUES (7);
+INSERT INTO SVWS_DB_Version(Revision) VALUES (6);
 
 
 INSERT INTO Users (ID,US_Name,US_LoginName,US_UserGroups,US_Privileges) VALUES (1,'Administrator','Admin','1;2;3;4;5','$');
