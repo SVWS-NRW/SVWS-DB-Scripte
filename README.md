@@ -6,7 +6,7 @@ Diese Datenbanscripte können verwendet werden, eine neue Schild-NRW-Datenbank a
 
 Die Unterordner stellen die verschiednen Versionen der Scripte dar.
 Der Ordner "current" stellt den augenblicklichen Entwicklungsstand für Schild2.0 dar.
-Diese Version "current" ist der letzte kompatible Stand für Schild-NRW-2.0 !
+Die Version Revision 3 ist der letzte kompatible Stand für Schild-NRW-2.0 !
 
 
 Die "developer"-Version enthält den Entwicklungsstand für Schild-NRW-3.0.
