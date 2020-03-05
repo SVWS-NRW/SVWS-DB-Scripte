@@ -1,45 +1,45 @@
 CREATE TABLE EigeneSchule (
   ID bigint NOT NULL, 
-  SchulformNr nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SchulformKrz nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SchulformBez nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SchultraegerArt nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SchultraegerNr nvarchar(6) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Schulgliederung nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SchulNr nvarchar(6) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Bezeichnung1 nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Bezeichnung2 nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Bezeichnung3 nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Strasse nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  PLZ nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Ort nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Telefon nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Fax nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Email nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Ganztags nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
+  SchulformNr nvarchar(3), 
+  SchulformKrz nvarchar(3), 
+  SchulformBez nvarchar(50), 
+  SchultraegerArt nvarchar(2), 
+  SchultraegerNr nvarchar(6), 
+  Schulgliederung nvarchar(3), 
+  SchulNr nvarchar(6), 
+  Bezeichnung1 nvarchar(50), 
+  Bezeichnung2 nvarchar(50), 
+  Bezeichnung3 nvarchar(50), 
+  Strasse nvarchar(50), 
+  PLZ nvarchar(10), 
+  Ort nvarchar(50), 
+  Telefon nvarchar(20), 
+  Fax nvarchar(20), 
+  Email nvarchar(100), 
+  Ganztags nvarchar(1) DEFAULT '+', 
   Schuljahr smallint, 
   SchuljahrAbschnitt smallint, 
   AnzahlAbschnitte smallint DEFAULT 2, 
-  Fremdsprachen nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  UpdateSprachenfolge nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  JVAZeigen nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  RefPaedagogikZeigen nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
+  Fremdsprachen nvarchar(1) DEFAULT '+', 
+  UpdateSprachenfolge nvarchar(1) DEFAULT '+', 
+  JVAZeigen nvarchar(1) DEFAULT '-', 
+  RefPaedagogikZeigen nvarchar(1) DEFAULT '-', 
   AnzJGS_Jahr smallint DEFAULT 1, 
-  AbschnittBez nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT 'Halbjahr', 
-  BezAbschnitt1 nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '1. Hj', 
-  BezAbschnitt2 nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '2. Hj', 
-  IstHauptsitz nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  NotenGesperrt nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  BezAbschnitt3 nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  BezAbschnitt4 nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
+  AbschnittBez nvarchar(20) DEFAULT 'Halbjahr', 
+  BezAbschnitt1 nvarchar(10) DEFAULT '1. Hj', 
+  BezAbschnitt2 nvarchar(10) DEFAULT '2. Hj', 
+  IstHauptsitz nvarchar(1) DEFAULT '+', 
+  NotenGesperrt nvarchar(1) DEFAULT '-', 
+  BezAbschnitt3 nvarchar(10), 
+  BezAbschnitt4 nvarchar(10), 
   ZurueckgestelltAnzahl int, 
   ZurueckgestelltWeibl int, 
   ZurueckgestelltAuslaender int, 
   ZurueckgestelltAuslaenderWeibl int, 
   ZurueckgestelltAussiedler int, 
   ZurueckgestelltAussiedlerWeibl int, 
-  TeamTeaching nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  AbiGruppenprozess nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
+  TeamTeaching nvarchar(1) DEFAULT '+', 
+  AbiGruppenprozess nvarchar(1) DEFAULT '+', 
   DauerUnterrichtseinheit int, 
   Gruppen8Bis1 int, 
   Gruppen13Plus int, 
@@ -48,30 +48,30 @@ CREATE TABLE EigeneSchule (
   InternatsplaetzeNeutral int, 
   SchulLogo varbinary(max), 
   SchulnrEigner int, 
-  SchulleiterName nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SchulleiterVorname nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SchulleiterAmtsbez nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8, 
+  SchulleiterName nvarchar(50), 
+  SchulleiterVorname nvarchar(30), 
+  SchulleiterAmtsbez nvarchar(30), 
   SchulleiterGeschlecht int, 
-  StvSchulleiterName nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  StvSchulleiterVorname nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8, 
-  StvSchulleiterAmtsbez nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8, 
+  StvSchulleiterName nvarchar(50), 
+  StvSchulleiterVorname nvarchar(30), 
+  StvSchulleiterAmtsbez nvarchar(30), 
   StvSchulleiterGeschlecht int, 
-  Einstellungen nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Fehlstundenmodell_PrS1 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT 'G', 
-  Fehlstundenmodell_S2 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT 'F', 
-  Tendenznoten_S1 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  WebKL_Modus nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT 'A', 
-  WebMahnungenGesperrt nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  WebNotenGesperrt nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  LogoFormat nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SchILDweb_Config nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
-  WebTeilLeistungenAnlegen nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  WebInfoMail nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  WebAdresse nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Land nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Einstellungen2 nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SchulleiterTitel nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  StvSchulleiterTitel nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8,
+  Einstellungen nvarchar(max), 
+  Fehlstundenmodell_PrS1 nvarchar(1) DEFAULT 'G', 
+  Fehlstundenmodell_S2 nvarchar(1) DEFAULT 'F', 
+  Tendenznoten_S1 nvarchar(1) DEFAULT '-', 
+  WebKL_Modus nvarchar(1) DEFAULT 'A', 
+  WebMahnungenGesperrt nvarchar(1) DEFAULT '-', 
+  WebNotenGesperrt nvarchar(1) DEFAULT '-', 
+  LogoFormat nvarchar(3), 
+  SchILDweb_Config nvarchar(max), 
+  WebTeilLeistungenAnlegen nvarchar(1) DEFAULT '-', 
+  WebInfoMail nvarchar(1) DEFAULT '-', 
+  WebAdresse nvarchar(100), 
+  Land nvarchar(50), 
+  Einstellungen2 nvarchar(max), 
+  SchulleiterTitel nvarchar(10), 
+  StvSchulleiterTitel nvarchar(10),
   CONSTRAINT PK_EigeneSchule PRIMARY KEY (ID)
 );
 
@@ -79,23 +79,23 @@ CREATE TABLE EigeneSchule (
 CREATE TABLE EigeneSchule_Fachklassen (
   ID bigint DEFAULT -1 NOT NULL, 
   BKIndex smallint, 
-  FKS nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AP nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Bezeichnung nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
+  FKS nvarchar(3), 
+  AP nvarchar(2), 
+  Bezeichnung nvarchar(100), 
   Sortierung int DEFAULT 32000, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Aenderbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Kennung nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  FKS_AP_SIM nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
-  BKIndexTyp nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Beschreibung_W nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Status nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Sichtbar nvarchar(1) DEFAULT '+', 
+  Aenderbar nvarchar(1) DEFAULT '+', 
+  Kennung nvarchar(10), 
+  FKS_AP_SIM nvarchar(5), 
+  BKIndexTyp nvarchar(3), 
+  Beschreibung_W nvarchar(100), 
+  Status nvarchar(20), 
   SchulnrEigner int, 
-  Lernfelder nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Lernfelder nvarchar(max), 
   DQR_Niveau int, 
-  Ebene1Klartext nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Ebene2Klartext nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Ebene3Klartext nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8,
+  Ebene1Klartext nvarchar(255), 
+  Ebene2Klartext nvarchar(255), 
+  Ebene3Klartext nvarchar(255),
   CONSTRAINT PK_EigeneSchule_Fachklassen PRIMARY KEY (ID),
   CONSTRAINT EigeneSchule_Fachklassen_UC1 UNIQUE (AP, BKIndexTyp, FKS)
 );
@@ -103,45 +103,45 @@ CREATE TABLE EigeneSchule_Fachklassen (
 
 CREATE TABLE EigeneSchule_Faecher (
   ID bigint DEFAULT -1 NOT NULL, 
-  FachKrz nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Bezeichnung nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ZeugnisBez nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  UeZeugnisBez nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  StatistikKrz nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  BasisFach nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  IstSprache nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
+  FachKrz nvarchar(20), 
+  Bezeichnung nvarchar(255), 
+  ZeugnisBez nvarchar(255), 
+  UeZeugnisBez nvarchar(255), 
+  StatistikKrz nvarchar(2), 
+  BasisFach nvarchar(2), 
+  IstSprache nvarchar(1) DEFAULT '-', 
   Sortierung int DEFAULT 32000, 
   SortierungS2 int DEFAULT 32000, 
-  NachprErlaubt nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Aenderbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
+  NachprErlaubt nvarchar(1) DEFAULT '+', 
+  Sichtbar nvarchar(1) DEFAULT '+', 
+  Aenderbar nvarchar(1) DEFAULT '+', 
   Gewichtung smallint DEFAULT 1, 
   Fachgruppe_ID bigint, 
-  Unterichtssprache nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  IstSchriftlich nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  IstSchriftlichBA nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AufZeugnis nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Lernfelder nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Unterichtssprache nvarchar(1), 
+  IstSchriftlich nvarchar(1), 
+  IstSchriftlichBA nvarchar(1), 
+  AufZeugnis nvarchar(1) DEFAULT '+', 
+  Lernfelder nvarchar(max), 
   SchulnrEigner int, 
-  LK_Moegl nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Abi_Moegl nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  E1 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  E2 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Q1 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Q2 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Q3 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Q4 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AlsNeueFSinSII nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
+  LK_Moegl nvarchar(1), 
+  Abi_Moegl nvarchar(1), 
+  E1 nvarchar(1), 
+  E2 nvarchar(1), 
+  Q1 nvarchar(1), 
+  Q2 nvarchar(1), 
+  Q3 nvarchar(1), 
+  Q4 nvarchar(1), 
+  AlsNeueFSinSII nvarchar(1), 
   Leitfach_ID bigint, 
   Leitfach2_ID bigint, 
   E1_WZE int, 
   E2_WZE int, 
   Q_WZE int, 
-  E1_S nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  E2_S nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  NurMuendlich nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  Aufgabenfeld nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AbgeschlFaecherHolen nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
+  E1_S nvarchar(1) DEFAULT '-', 
+  E2_S nvarchar(1) DEFAULT '-', 
+  NurMuendlich nvarchar(1) DEFAULT '-', 
+  Aufgabenfeld nvarchar(2), 
+  AbgeschlFaecherHolen nvarchar(1) DEFAULT '+', 
   GewichtungFHR int, 
   MaxBemZeichen int,
   CONSTRAINT PK_EigeneSchule_Faecher PRIMARY KEY (ID),
@@ -153,7 +153,7 @@ CREATE TABLE EigeneSchule_FachTeilleistungen (
   SchulnrEigner int NOT NULL, 
   Fach_ID bigint NOT NULL, 
   Teilleistung_ID bigint NOT NULL, 
-  Kursart nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8,
+  Kursart nvarchar(5),
   CONSTRAINT PK_EigeneSchule_FachTeilleistungen PRIMARY KEY (Fach_ID, Kursart, SchulnrEigner, Teilleistung_ID),
   CONSTRAINT EigeneSchule_FachTeilleistungen_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
@@ -161,15 +161,15 @@ CREATE TABLE EigeneSchule_FachTeilleistungen (
 
 CREATE TABLE EigeneSchule_Jahrgaenge (
   ID bigint DEFAULT -1 NOT NULL, 
-  InternKrz nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ASDJahrgang nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ASDBezeichnung nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
+  InternKrz nvarchar(20), 
+  ASDJahrgang nvarchar(2), 
+  ASDBezeichnung nvarchar(100), 
+  Sichtbar nvarchar(1) DEFAULT '+', 
   Sortierung int DEFAULT 32000, 
-  IstChronologisch nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Spaltentitel nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SekStufe nvarchar(6) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SGL nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8, 
+  IstChronologisch nvarchar(1) DEFAULT '+', 
+  Spaltentitel nvarchar(2), 
+  SekStufe nvarchar(6), 
+  SGL nvarchar(3), 
   JahrgangNum smallint, 
   Restabschnitte int, 
   SchulnrEigner int, 
@@ -181,26 +181,26 @@ CREATE TABLE EigeneSchule_Jahrgaenge (
 
 CREATE TABLE EigeneSchule_KAoADaten (
   SchulnrEigner int NOT NULL, 
-  Curriculum nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+' NOT NULL, 
-  Koordinator nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+' NOT NULL, 
-  Berufsorientierungsbuero nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+' NOT NULL, 
-  KooperationsvereinbarungAA nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+' NOT NULL, 
-  NutzungReflexionsworkshop nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+' NOT NULL, 
-  NutzungEntscheidungskompetenzI nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+' NOT NULL, 
-  NutzungEntscheidungskompetenzII nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+' NOT NULL,
+  Curriculum nvarchar(1) DEFAULT '+' NOT NULL, 
+  Koordinator nvarchar(1) DEFAULT '+' NOT NULL, 
+  Berufsorientierungsbuero nvarchar(1) DEFAULT '+' NOT NULL, 
+  KooperationsvereinbarungAA nvarchar(1) DEFAULT '+' NOT NULL, 
+  NutzungReflexionsworkshop nvarchar(1) DEFAULT '+' NOT NULL, 
+  NutzungEntscheidungskompetenzI nvarchar(1) DEFAULT '+' NOT NULL, 
+  NutzungEntscheidungskompetenzII nvarchar(1) DEFAULT '+' NOT NULL,
   CONSTRAINT PK_EigeneSchule_KAoADaten PRIMARY KEY (SchulnrEigner)
 );
 
 
 CREATE TABLE EigeneSchule_Kursart (
   ID bigint DEFAULT -1 NOT NULL, 
-  Bezeichnung nvarchar(120) COLLATE Latin1_General_100_BIN2_UTF8, 
-  InternBez nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Kursart nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
-  KursartAllg nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Bezeichnung nvarchar(120), 
+  InternBez nvarchar(20), 
+  Kursart nvarchar(5), 
+  KursartAllg nvarchar(5), 
   Sortierung int DEFAULT 32000, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Aenderbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
+  Sichtbar nvarchar(1) DEFAULT '+', 
+  Aenderbar nvarchar(1) DEFAULT '+', 
   SchulnrEigner int,
   CONSTRAINT PK_EigeneSchule_Kursart PRIMARY KEY (ID),
   CONSTRAINT EigeneSchule_Kursart_UC1 UNIQUE (Kursart, KursartAllg)
@@ -209,12 +209,12 @@ CREATE TABLE EigeneSchule_Kursart (
 
 CREATE TABLE EigeneSchule_KursartAllg (
   ID bigint DEFAULT -1 NOT NULL, 
-  KursartAllg nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
-  InternBez nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  KursartASD nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Bezeichnung nvarchar(120) COLLATE Latin1_General_100_BIN2_UTF8, 
+  KursartAllg nvarchar(5), 
+  InternBez nvarchar(20), 
+  KursartASD nvarchar(2), 
+  Bezeichnung nvarchar(120), 
   Sortierung int DEFAULT 32000, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
+  Sichtbar nvarchar(1) DEFAULT '+', 
   SchulnrEigner int,
   CONSTRAINT PK_EigeneSchule_KursartAllg PRIMARY KEY (ID),
   CONSTRAINT EigeneSchule_KursartAllg_UC1 UNIQUE (KursartAllg)
@@ -223,10 +223,10 @@ CREATE TABLE EigeneSchule_KursartAllg (
 
 CREATE TABLE EigeneSchule_Merkmale (
   ID bigint DEFAULT -1 NOT NULL, 
-  Schule nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Schueler nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Kurztext nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Langtext nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Schule nvarchar(1), 
+  Schueler nvarchar(1), 
+  Kurztext nvarchar(10), 
+  Langtext nvarchar(100), 
   SchulnrEigner int,
   CONSTRAINT PK_EigeneSchule_Merkmale PRIMARY KEY (ID)
 );
@@ -234,15 +234,15 @@ CREATE TABLE EigeneSchule_Merkmale (
 
 CREATE TABLE EigeneSchule_Schulformen (
   ID bigint DEFAULT -1 NOT NULL, 
-  SGL nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SF_SGL nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Schulform nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DoppelQualifikation nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
+  SGL nvarchar(3), 
+  SF_SGL nvarchar(5), 
+  Schulform nvarchar(100), 
+  DoppelQualifikation nvarchar(1), 
   Sortierung int DEFAULT 32000, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
+  Sichtbar nvarchar(1) DEFAULT '+', 
   BKIndex int, 
   SchulnrEigner int, 
-  Schulform2 nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8,
+  Schulform2 nvarchar(100),
   CONSTRAINT PK_EigeneSchule_Schulformen PRIMARY KEY (ID),
   CONSTRAINT EigeneSchule_Schulformen_UC1 UNIQUE (SGL)
 );
@@ -250,13 +250,13 @@ CREATE TABLE EigeneSchule_Schulformen (
 
 CREATE TABLE EigeneSchule_Teilstandorte (
   SchulnrEigner int NOT NULL, 
-  AdrMerkmal nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  PLZ nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Ort nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Strasse nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Hausnr nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Bemerkung nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Kuerzel nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8,
+  AdrMerkmal nvarchar(1) NOT NULL, 
+  PLZ nvarchar(10), 
+  Ort nvarchar(50), 
+  Strasse nvarchar(50), 
+  Hausnr nvarchar(10), 
+  Bemerkung nvarchar(50), 
+  Kuerzel nvarchar(30),
   CONSTRAINT PK_EigeneSchule_Teilstandorte PRIMARY KEY (AdrMerkmal)
 );
 
@@ -264,10 +264,10 @@ CREATE TABLE EigeneSchule_Teilstandorte (
 CREATE TABLE EigeneSchule_Texte (
   ID bigint NOT NULL, 
   SchulnrEigner int NOT NULL, 
-  Kuerzel nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Inhalt nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Beschreibung nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Aenderbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+',
+  Kuerzel nvarchar(50), 
+  Inhalt nvarchar(255), 
+  Beschreibung nvarchar(100), 
+  Aenderbar nvarchar(1) DEFAULT '+',
   CONSTRAINT PK_EigeneSchule_Texte PRIMARY KEY (ID)
 );
 
@@ -275,10 +275,10 @@ CREATE TABLE EigeneSchule_Texte (
 CREATE TABLE EigeneSchule_Zertifikate (
   ID bigint DEFAULT -1 NOT NULL, 
   SchulnrEigner int NOT NULL, 
-  Kuerzel nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Bezeichnung nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Fach nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Formatvorlage nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8,
+  Kuerzel nvarchar(20) NOT NULL, 
+  Bezeichnung nvarchar(100), 
+  Fach nvarchar(100), 
+  Formatvorlage nvarchar(255),
   CONSTRAINT PK_EigeneSchule_Zertifikate PRIMARY KEY (ID),
   CONSTRAINT EigeneSchule_Zertifikate_UC1 UNIQUE (Kuerzel, SchulnrEigner)
 );
@@ -287,9 +287,9 @@ CREATE TABLE EigeneSchule_Zertifikate (
 CREATE TABLE EigeneSchule_Zertifikatsfaecher (
   Zertifikat_ID bigint NOT NULL, 
   SchulnrEigner int NOT NULL, 
-  Kuerzel nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Klartext nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Lernfelder nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Kuerzel nvarchar(20) NOT NULL, 
+  Klartext nvarchar(100), 
+  Lernfelder nvarchar(max), 
   MaxPunkte int, 
   Sortierung int,
   CONSTRAINT PK_EigeneSchule_Zertifikatsfaecher PRIMARY KEY (Kuerzel, SchulnrEigner)
@@ -298,16 +298,16 @@ CREATE TABLE EigeneSchule_Zertifikatsfaecher (
 
 CREATE TABLE Fach_Gliederungen (
   Fach_ID bigint NOT NULL, 
-  Gliederung nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Gliederung nvarchar(3) NOT NULL, 
   SchulnrEigner int NOT NULL, 
   Faechergruppe int, 
   GewichtungAB int, 
   GewichtungBB int, 
-  SchriftlichAB nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SchriftlichBB nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  GymOSFach nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ZeugnisBez nvarchar(130) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Lernfelder nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
+  SchriftlichAB nvarchar(1), 
+  SchriftlichBB nvarchar(1), 
+  GymOSFach nvarchar(1), 
+  ZeugnisBez nvarchar(130), 
+  Lernfelder nvarchar(max), 
   Fachklasse_ID bigint DEFAULT 0 NOT NULL, 
   Sortierung int DEFAULT 32000,
   CONSTRAINT PK_Fach_Gliederungen PRIMARY KEY (Fach_ID, Fachklasse_ID)
@@ -316,9 +316,9 @@ CREATE TABLE Fach_Gliederungen (
 
 CREATE TABLE Floskelgruppen (
   SchulnrEigner int NOT NULL, 
-  Kuerzel nvarchar(4) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Bezeichnung nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Hauptgruppe nvarchar(4) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Kuerzel nvarchar(4) NOT NULL, 
+  Bezeichnung nvarchar(50) NOT NULL, 
+  Hauptgruppe nvarchar(4), 
   Farbe int,
   CONSTRAINT PK_Floskelgruppen PRIMARY KEY (Kuerzel, SchulnrEigner)
 );
@@ -326,22 +326,82 @@ CREATE TABLE Floskelgruppen (
 
 CREATE TABLE Floskeln (
   SchulnrEigner int NOT NULL, 
-  Kuerzel nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Floskeltext nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Floskelgruppe nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Floskelfach nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Floskelniveau nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Floskeljahrgang nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8,
+  Kuerzel nvarchar(10) NOT NULL, 
+  Floskeltext nvarchar(max) NOT NULL, 
+  Floskelgruppe nvarchar(10), 
+  Floskelfach nvarchar(20), 
+  Floskelniveau nvarchar(2), 
+  Floskeljahrgang nvarchar(2),
   CONSTRAINT PK_Floskeln PRIMARY KEY (Kuerzel)
+);
+
+
+CREATE TABLE ImpExp_EigeneImporte (
+  ID int DEFAULT 0 NOT NULL, 
+  Title nvarchar(50), 
+  Delimiter nvarchar(1), 
+  TextQuote nvarchar(1), 
+  SkipLines smallint DEFAULT 0, 
+  DateFormat nvarchar(10), 
+  BooleanTrue nvarchar(10), 
+  AbkWeiblich nvarchar(10), 
+  AbkMaennlich nvarchar(10), 
+  MainTable nvarchar(50), 
+  InsertMode int, 
+  LookupTableDir nvarchar(250), 
+  SchuelerIDMode nvarchar(4),
+  CONSTRAINT PK_ImpExp_EigeneImporte PRIMARY KEY (ID)
+);
+
+
+CREATE TABLE ImpExp_EigeneImporte_Felder (
+  Import_ID int DEFAULT 0 NOT NULL, 
+  Field_ID int DEFAULT 0, 
+  TableDescription nvarchar(50), 
+  FieldDescription nvarchar(50), 
+  SrcPosition smallint DEFAULT 0, 
+  DstTable nvarchar(50), 
+  DstFieldName nvarchar(50), 
+  DstFieldType nvarchar(1), 
+  DstFieldIsIdentifier int, 
+  DstLookupDir nvarchar(250), 
+  DstLookupTable nvarchar(50), 
+  DstLookupFieldName nvarchar(50), 
+  DstLookupTableIDFieldName nvarchar(50), 
+  DstResultFieldName nvarchar(50), 
+  DstKeyLookupInsert int, 
+  DstKeyLookupNameCreateID int, 
+  DstForceNumeric int,
+  CONSTRAINT PK_ImpExp_EigeneImporte_Felder PRIMARY KEY (Field_ID, Import_ID)
+);
+
+
+CREATE TABLE ImpExp_EigeneImporte_Tabellen (
+  Import_ID int DEFAULT 0 NOT NULL, 
+  TableName nvarchar(50), 
+  DstCreateID int, 
+  DstIDFieldName nvarchar(50), 
+  Sequence int DEFAULT 0, 
+  LookupTable nvarchar(50), 
+  LookupFields nvarchar(50), 
+  LookupFieldTypes nvarchar(50), 
+  LookupFieldPos nvarchar(50), 
+  LookupKeyField nvarchar(50), 
+  LookupResultField nvarchar(50), 
+  LookupResultFieldType nvarchar(10), 
+  DstDefaultFieldName nvarchar(50), 
+  DstDefaultFieldValue nvarchar(10), 
+  GU_ID_Field nvarchar(50),
+  CONSTRAINT PK_ImpExp_EigeneImporte_Tabellen PRIMARY KEY (Import_ID, TableName)
 );
 
 
 CREATE TABLE K_Adressart (
   ID bigint DEFAULT -1 NOT NULL, 
-  Bezeichnung nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Bezeichnung nvarchar(30) NOT NULL, 
   Sortierung int DEFAULT 32000, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Aenderbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
+  Sichtbar nvarchar(1) DEFAULT '+', 
+  Aenderbar nvarchar(1) DEFAULT '+', 
   SchulnrEigner int,
   CONSTRAINT PK_K_Adressart PRIMARY KEY (ID),
   CONSTRAINT K_Adressart_UC1 UNIQUE (Bezeichnung)
@@ -351,12 +411,12 @@ CREATE TABLE K_Adressart (
 CREATE TABLE K_Ankreuzdaten (
   ID bigint DEFAULT -1 NOT NULL, 
   SchulnrEigner int NOT NULL, 
-  TextStufe1 nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  TextStufe2 nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  TextStufe3 nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  TextStufe4 nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  TextStufe5 nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  BezeichnungSONST nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8,
+  TextStufe1 nvarchar(100), 
+  TextStufe2 nvarchar(100), 
+  TextStufe3 nvarchar(100), 
+  TextStufe4 nvarchar(100), 
+  TextStufe5 nvarchar(100), 
+  BezeichnungSONST nvarchar(100),
   CONSTRAINT PK_K_Ankreuzdaten PRIMARY KEY (ID)
 );
 
@@ -365,23 +425,23 @@ CREATE TABLE K_Ankreuzfloskeln (
   ID bigint DEFAULT -1 NOT NULL, 
   SchulnrEigner int NOT NULL, 
   Fach_ID bigint NOT NULL, 
-  Jahrgang nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Floskeltext nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Jahrgang nvarchar(2) NOT NULL, 
+  Floskeltext nvarchar(255) NOT NULL, 
   Sortierung int, 
   FachSortierung int, 
   Abschnitt int, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Aktiv nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+',
+  Sichtbar nvarchar(1) DEFAULT '+', 
+  Aktiv nvarchar(1) DEFAULT '+',
   CONSTRAINT PK_K_Ankreuzfloskeln PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE K_BeschaeftigungsArt (
   ID bigint DEFAULT -1 NOT NULL, 
-  Bezeichnung nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Bezeichnung nvarchar(100), 
   Sortierung int DEFAULT 32000, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Aenderbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
+  Sichtbar nvarchar(1) DEFAULT '+', 
+  Aenderbar nvarchar(1) DEFAULT '+', 
   SchulnrEigner int,
   CONSTRAINT PK_K_BeschaeftigungsArt PRIMARY KEY (ID),
   CONSTRAINT K_BeschaeftigungsArt_UC1 UNIQUE (Bezeichnung)
@@ -390,22 +450,22 @@ CREATE TABLE K_BeschaeftigungsArt (
 
 CREATE TABLE K_Datenschutz (
   ID bigint DEFAULT -1 NOT NULL, 
-  Bezeichnung nvarchar(250) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+' NOT NULL, 
-  Schluessel nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Bezeichnung nvarchar(250), 
+  Sichtbar nvarchar(1) DEFAULT '+' NOT NULL, 
+  Schluessel nvarchar(20), 
   SchulnrEigner int NOT NULL, 
   Sortierung int DEFAULT 32000 NOT NULL, 
-  Beschreibung nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8,
+  Beschreibung nvarchar(max),
   CONSTRAINT PK_K_Datenschutz PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE K_EinschulungsArt (
   ID bigint DEFAULT -1 NOT NULL, 
-  Bezeichnung nvarchar(40) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Bezeichnung nvarchar(40) NOT NULL, 
   Sortierung int DEFAULT 32000, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Aenderbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
+  Sichtbar nvarchar(1) DEFAULT '+', 
+  Aenderbar nvarchar(1) DEFAULT '+', 
   SchulnrEigner int,
   CONSTRAINT PK_K_EinschulungsArt PRIMARY KEY (ID),
   CONSTRAINT K_EinschulungsArt_UC1 UNIQUE (Bezeichnung)
@@ -415,9 +475,9 @@ CREATE TABLE K_EinschulungsArt (
 CREATE TABLE K_Einzelleistungen (
   ID bigint DEFAULT -1 NOT NULL, 
   SchulnrEigner int NOT NULL, 
-  Bezeichnung nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Bezeichnung nvarchar(50), 
   Sortierung int DEFAULT 32000, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Sichtbar nvarchar(1), 
   Gewichtung float,
   CONSTRAINT PK_K_Einzelleistungen PRIMARY KEY (ID)
 );
@@ -425,10 +485,10 @@ CREATE TABLE K_Einzelleistungen (
 
 CREATE TABLE K_EntlassGrund (
   ID bigint DEFAULT -1 NOT NULL, 
-  Bezeichnung nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Bezeichnung nvarchar(30) NOT NULL, 
   Sortierung int DEFAULT 32000, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Aenderbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
+  Sichtbar nvarchar(1) DEFAULT '+', 
+  Aenderbar nvarchar(1) DEFAULT '+', 
   SchulnrEigner int,
   CONSTRAINT PK_K_EntlassGrund PRIMARY KEY (ID),
   CONSTRAINT K_EntlassGrund_UC1 UNIQUE (Bezeichnung)
@@ -437,11 +497,11 @@ CREATE TABLE K_EntlassGrund (
 
 CREATE TABLE K_ErzieherArt (
   ID bigint DEFAULT -1 NOT NULL, 
-  Bezeichnung nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Bezeichnung nvarchar(30) NOT NULL, 
   Sortierung int DEFAULT 32000, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Aenderbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  ExportBez nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Sichtbar nvarchar(1) DEFAULT '+', 
+  Aenderbar nvarchar(1) DEFAULT '+', 
+  ExportBez nvarchar(20), 
   SchulnrEigner int,
   CONSTRAINT PK_K_ErzieherArt PRIMARY KEY (ID),
   CONSTRAINT K_ErzieherArt_UC1 UNIQUE (Bezeichnung)
@@ -450,10 +510,10 @@ CREATE TABLE K_ErzieherArt (
 
 CREATE TABLE K_ErzieherFunktion (
   ID bigint DEFAULT -1 NOT NULL, 
-  Bezeichnung nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Bezeichnung nvarchar(50) NOT NULL, 
   Sortierung int DEFAULT 32000, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Aenderbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
+  Sichtbar nvarchar(1) DEFAULT '+', 
+  Aenderbar nvarchar(1) DEFAULT '+', 
   SchulnrEigner int,
   CONSTRAINT PK_K_ErzieherFunktion PRIMARY KEY (ID),
   CONSTRAINT K_ErzieherFunktion_UC1 UNIQUE (Bezeichnung)
@@ -462,10 +522,10 @@ CREATE TABLE K_ErzieherFunktion (
 
 CREATE TABLE K_FahrschuelerArt (
   ID bigint DEFAULT -1 NOT NULL, 
-  Bezeichnung nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Bezeichnung nvarchar(30) NOT NULL, 
   Sortierung int DEFAULT 32000, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Aenderbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
+  Sichtbar nvarchar(1) DEFAULT '+', 
+  Aenderbar nvarchar(1) DEFAULT '+', 
   SchulnrEigner int,
   CONSTRAINT PK_K_FahrschuelerArt PRIMARY KEY (ID),
   CONSTRAINT K_FahrschuelerArt_UC1 UNIQUE (Bezeichnung)
@@ -474,11 +534,11 @@ CREATE TABLE K_FahrschuelerArt (
 
 CREATE TABLE K_Foerderschwerpunkt (
   ID bigint DEFAULT -1 NOT NULL, 
-  Bezeichnung nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  StatistikKrz nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Bezeichnung nvarchar(50) NOT NULL, 
+  StatistikKrz nvarchar(2), 
   Sortierung int DEFAULT 32000, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Aenderbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
+  Sichtbar nvarchar(1) DEFAULT '+', 
+  Aenderbar nvarchar(1) DEFAULT '+', 
   SchulnrEigner int,
   CONSTRAINT PK_K_Foerderschwerpunkt PRIMARY KEY (ID),
   CONSTRAINT K_Foerderschwerpunkt_UC1 UNIQUE (Bezeichnung)
@@ -487,10 +547,10 @@ CREATE TABLE K_Foerderschwerpunkt (
 
 CREATE TABLE K_Haltestelle (
   ID bigint DEFAULT -1 NOT NULL, 
-  Bezeichnung nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Bezeichnung nvarchar(30) NOT NULL, 
   Sortierung int DEFAULT 32000, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Aenderbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
+  Sichtbar nvarchar(1) DEFAULT '+', 
+  Aenderbar nvarchar(1) DEFAULT '+', 
   EntfernungSchule float, 
   SchulnrEigner int,
   CONSTRAINT PK_K_Haltestelle PRIMARY KEY (ID),
@@ -500,14 +560,14 @@ CREATE TABLE K_Haltestelle (
 
 CREATE TABLE K_Kindergarten (
   ID bigint DEFAULT -1 NOT NULL, 
-  Bezeichnung nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  PLZ nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Ort nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Strasse nvarchar(40) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Tel nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  EMail nvarchar(40) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Bemerkung nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Bezeichnung nvarchar(50), 
+  PLZ nvarchar(10), 
+  Ort nvarchar(30), 
+  Strasse nvarchar(40), 
+  Tel nvarchar(20), 
+  EMail nvarchar(40), 
+  Bemerkung nvarchar(50), 
+  Sichtbar nvarchar(1), 
   Sortierung int, 
   SchulnrEigner int,
   CONSTRAINT PK_K_Kindergarten PRIMARY KEY (ID)
@@ -516,11 +576,11 @@ CREATE TABLE K_Kindergarten (
 
 CREATE TABLE K_KlassenOrgForm (
   ID bigint DEFAULT -1 NOT NULL, 
-  Bezeichnung nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  StatistikKrz nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Bezeichnung nvarchar(100) NOT NULL, 
+  StatistikKrz nvarchar(2), 
   Sortierung int DEFAULT 32000, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Aenderbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+',
+  Sichtbar nvarchar(1) DEFAULT '+', 
+  Aenderbar nvarchar(1) DEFAULT '+',
   CONSTRAINT PK_K_KlassenOrgForm PRIMARY KEY (ID),
   CONSTRAINT K_KlassenOrgForm_UC1 UNIQUE (Bezeichnung)
 );
@@ -528,13 +588,13 @@ CREATE TABLE K_KlassenOrgForm (
 
 CREATE TABLE K_Ort (
   ID bigint DEFAULT -1 NOT NULL, 
-  PLZ nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Bezeichnung nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Kreis nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8, 
+  PLZ nvarchar(10) NOT NULL, 
+  Bezeichnung nvarchar(50), 
+  Kreis nvarchar(3), 
   Sortierung int DEFAULT 32000, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Aenderbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Land nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Sichtbar nvarchar(1) DEFAULT '+', 
+  Aenderbar nvarchar(1) DEFAULT '+', 
+  Land nvarchar(2), 
   SchulnrEigner int,
   CONSTRAINT PK_K_Ort PRIMARY KEY (ID),
   CONSTRAINT K_Ort_UC1 UNIQUE (Bezeichnung, PLZ)
@@ -545,31 +605,31 @@ CREATE INDEX K_Ort_IDX1 ON K_Ort(PLZ);
 
 CREATE TABLE K_AllgAdresse (
   ID bigint DEFAULT -1 NOT NULL, 
-  AllgAdrAdressArt nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  AllgAdrName1 nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AllgAdrName2 nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AllgAdrStrasse nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
+  AllgAdrAdressArt nvarchar(30) NOT NULL, 
+  AllgAdrName1 nvarchar(50), 
+  AllgAdrName2 nvarchar(50), 
+  AllgAdrStrasse nvarchar(50), 
   AllgAdrOrt_ID bigint, 
-  AllgAdrPLZ nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AllgAdrTelefon1 nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AllgAdrTelefon2 nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AllgAdrFax nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AllgAdrEmail nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AllgAdrBemerkungen nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
+  AllgAdrPLZ nvarchar(10), 
+  AllgAdrTelefon1 nvarchar(20), 
+  AllgAdrTelefon2 nvarchar(20), 
+  AllgAdrFax nvarchar(20), 
+  AllgAdrEmail nvarchar(100), 
+  AllgAdrBemerkungen nvarchar(255), 
   Sortierung int DEFAULT 32000, 
-  AllgAdrAusbildungsBetrieb nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  AllgAdrBietetPraktika nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  AllgAdrBranche nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AllgAdrZusatz1 nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AllgAdrZusatz2 nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Aenderbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
+  AllgAdrAusbildungsBetrieb nvarchar(1) DEFAULT '-', 
+  AllgAdrBietetPraktika nvarchar(1) DEFAULT '-', 
+  AllgAdrBranche nvarchar(50), 
+  AllgAdrZusatz1 nvarchar(10), 
+  AllgAdrZusatz2 nvarchar(10), 
+  Sichtbar nvarchar(1) DEFAULT '+', 
+  Aenderbar nvarchar(1) DEFAULT '+', 
   SchulnrEigner int, 
-  Massnahmentraeger nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  BelehrungISG nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  GU_ID nvarchar(40) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ErwFuehrungszeugnis nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  ExtID nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8,
+  Massnahmentraeger nvarchar(1) DEFAULT '-', 
+  BelehrungISG nvarchar(1) DEFAULT '-', 
+  GU_ID nvarchar(40), 
+  ErwFuehrungszeugnis nvarchar(1) DEFAULT '-', 
+  ExtID nvarchar(50),
   CONSTRAINT PK_K_AllgAdresse PRIMARY KEY (ID),
   CONSTRAINT K_AllgAdresse_AdressArt_FK FOREIGN KEY (AllgAdrAdressArt) REFERENCES K_Adressart(Bezeichnung) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT K_AllgAdresse_Ort_FK FOREIGN KEY (AllgAdrOrt_ID) REFERENCES K_Ort(ID) ON UPDATE NO ACTION ON DELETE NO ACTION
@@ -579,15 +639,15 @@ CREATE TABLE K_AllgAdresse (
 CREATE TABLE AllgAdrAnsprechpartner (
   ID bigint DEFAULT -1 NOT NULL, 
   Adresse_ID bigint, 
-  Name nvarchar(60) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Vorname nvarchar(60) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Anrede nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Telefon nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  EMail nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Abteilung nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Name nvarchar(60), 
+  Vorname nvarchar(60), 
+  Anrede nvarchar(10), 
+  Telefon nvarchar(20), 
+  EMail nvarchar(100), 
+  Abteilung nvarchar(50), 
   SchulnrEigner int, 
-  Titel nvarchar(15) COLLATE Latin1_General_100_BIN2_UTF8, 
-  GU_ID nvarchar(40) COLLATE Latin1_General_100_BIN2_UTF8,
+  Titel nvarchar(15), 
+  GU_ID nvarchar(40),
   CONSTRAINT PK_AllgAdrAnsprechpartner PRIMARY KEY (ID),
   CONSTRAINT Ansprechpartner_Adr_FK FOREIGN KEY (Adresse_ID) REFERENCES K_AllgAdresse(ID) ON UPDATE NO ACTION ON DELETE NO ACTION
 );
@@ -595,14 +655,14 @@ CREATE TABLE AllgAdrAnsprechpartner (
 
 CREATE TABLE K_Ortsteil (
   ID bigint DEFAULT -1 NOT NULL, 
-  Bezeichnung nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Bezeichnung nvarchar(30) NOT NULL, 
   Ort_ID bigint, 
-  PLZ nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
+  PLZ nvarchar(10), 
   Sortierung int DEFAULT 32000, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Aenderbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
+  Sichtbar nvarchar(1) DEFAULT '+', 
+  Aenderbar nvarchar(1) DEFAULT '+', 
   SchulnrEigner int, 
-  OrtsteilSchluessel nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8,
+  OrtsteilSchluessel nvarchar(30),
   CONSTRAINT PK_K_Ortsteil PRIMARY KEY (ID),
   CONSTRAINT K_Ortsteil_UC1 UNIQUE (Bezeichnung)
 );
@@ -610,62 +670,62 @@ CREATE TABLE K_Ortsteil (
 
 CREATE TABLE K_Lehrer (
   ID bigint DEFAULT -1 NOT NULL, 
-  GU_ID nvarchar(40) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Kuerzel nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  LIDKrz nvarchar(4) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Nachname nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Vorname nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  PersonTyp nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT 'LEHRKRAFT', 
+  GU_ID nvarchar(40), 
+  Kuerzel nvarchar(10) NOT NULL, 
+  LIDKrz nvarchar(4), 
+  Nachname nvarchar(30) NOT NULL, 
+  Vorname nvarchar(20), 
+  PersonTyp nvarchar(20) DEFAULT 'LEHRKRAFT', 
   SchulnrEigner int, 
   Sortierung int DEFAULT 32000, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Aenderbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  FuerExport nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Statistik nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Strasse nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Sichtbar nvarchar(1) DEFAULT '+', 
+  Aenderbar nvarchar(1) DEFAULT '+', 
+  FuerExport nvarchar(1) DEFAULT '+', 
+  Statistik nvarchar(1), 
+  Strasse nvarchar(50), 
   Ort_ID bigint, 
-  PLZ nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
+  PLZ nvarchar(10), 
   Ortsteil_ID bigint, 
-  Tel nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Handy nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  EMail nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  EMailDienstlich nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  StaatKrz nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Geburtsdatum datetime2, 
-  Geschlecht nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Anrede nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Amtsbezeichnung nvarchar(15) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Titel nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Faecher nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  IdentNr1 nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SerNr nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
-  PANr nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LBVNr nvarchar(15) COLLATE Latin1_General_100_BIN2_UTF8, 
-  VSchluessel nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DatumZugang datetime2, 
-  GrundZugang nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DatumAbgang datetime2, 
-  GrundAbgang nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SchulFunktion nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Tel nvarchar(20), 
+  Handy nvarchar(20), 
+  EMail nvarchar(100), 
+  EMailDienstlich nvarchar(100), 
+  StaatKrz nvarchar(3), 
+  Geburtsdatum date, 
+  Geschlecht nvarchar(1), 
+  Anrede nvarchar(10), 
+  Amtsbezeichnung nvarchar(15), 
+  Titel nvarchar(20), 
+  Faecher nvarchar(100), 
+  IdentNr1 nvarchar(10), 
+  SerNr nvarchar(5), 
+  PANr nvarchar(20), 
+  LBVNr nvarchar(15), 
+  VSchluessel nvarchar(1), 
+  DatumZugang date, 
+  GrundZugang nvarchar(10), 
+  DatumAbgang date, 
+  GrundAbgang nvarchar(10), 
+  SchulFunktion nvarchar(10), 
   PflichtstdSoll float, 
-  Rechtsverhaeltnis nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Beschaeftigungsart nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Einsatzstatus nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  StammschulNr nvarchar(6) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Rechtsverhaeltnis nvarchar(1), 
+  Beschaeftigungsart nvarchar(2), 
+  Einsatzstatus nvarchar(1), 
+  StammschulNr nvarchar(6), 
   UnterrichtsStd float, 
   MehrleistungStd float, 
   EntlastungStd float, 
   AnrechnungStd float, 
   RestStd float, 
-  LPassword nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  PWAktuell nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-;5', 
-  SchILDweb_FL nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  SchILDweb_KL nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  SchILDweb_Config nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
-  KennwortTools nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Antwort1 nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Antwort2 nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  KennwortToolsAktuell nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-;5',
+  LPassword nvarchar(255), 
+  PWAktuell nvarchar(3) DEFAULT '-;5', 
+  SchILDweb_FL nvarchar(1) DEFAULT '+', 
+  SchILDweb_KL nvarchar(1) DEFAULT '+', 
+  SchILDweb_Config nvarchar(max), 
+  KennwortTools nvarchar(255), 
+  Antwort1 nvarchar(255), 
+  Antwort2 nvarchar(255), 
+  KennwortToolsAktuell nvarchar(3) DEFAULT '-;5',
   CONSTRAINT PK_K_Lehrer PRIMARY KEY (ID),
   CONSTRAINT K_Lehrer_Ort_FK FOREIGN KEY (Ort_ID) REFERENCES K_Ort(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT K_Lehrer_Ortsteil_FK FOREIGN KEY (Ortsteil_ID) REFERENCES K_Ortsteil(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
@@ -675,13 +735,13 @@ CREATE TABLE K_Lehrer (
 
 CREATE TABLE EigeneSchule_Abteilungen (
   ID bigint DEFAULT -1 NOT NULL, 
-  Bezeichnung nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  AbteilungsLeiter nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
+  Bezeichnung nvarchar(50) NOT NULL, 
+  AbteilungsLeiter nvarchar(10), 
+  Sichtbar nvarchar(1) DEFAULT '+', 
   SchulnrEigner int, 
-  Raum nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  EMail nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Durchwahl nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Raum nvarchar(20), 
+  EMail nvarchar(100), 
+  Durchwahl nvarchar(20), 
   Sortierung int,
   CONSTRAINT PK_EigeneSchule_Abteilungen PRIMARY KEY (ID),
   CONSTRAINT EigeneSchule_Abteilungen_Leiter_FK FOREIGN KEY (AbteilungsLeiter) REFERENCES K_Lehrer(Kuerzel) ON UPDATE CASCADE ON DELETE SET NULL
@@ -690,13 +750,13 @@ CREATE TABLE EigeneSchule_Abteilungen (
 
 CREATE TABLE K_Religion (
   ID bigint DEFAULT -1 NOT NULL, 
-  Bezeichnung nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  StatistikKrz nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Bezeichnung nvarchar(30) NOT NULL, 
+  StatistikKrz nvarchar(10), 
   Sortierung int DEFAULT 32000, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Aenderbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  ExportBez nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ZeugnisBezeichnung nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Sichtbar nvarchar(1) DEFAULT '+', 
+  Aenderbar nvarchar(1) DEFAULT '+', 
+  ExportBez nvarchar(20), 
+  ZeugnisBezeichnung nvarchar(50), 
   SchulnrEigner int,
   CONSTRAINT PK_K_Religion PRIMARY KEY (ID),
   CONSTRAINT K_Religion_UC1 UNIQUE (Bezeichnung)
@@ -705,24 +765,24 @@ CREATE TABLE K_Religion (
 
 CREATE TABLE K_Schule (
   ID bigint DEFAULT -1 NOT NULL, 
-  SchulNr nvarchar(6) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Name nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SchulformNr nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SchulformKrz nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SchulformBez nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Strasse nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  PLZ nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Ort nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Telefon nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Fax nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Email nvarchar(40) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Schulleiter nvarchar(40) COLLATE Latin1_General_100_BIN2_UTF8, 
+  SchulNr nvarchar(6) NOT NULL, 
+  Name nvarchar(100), 
+  SchulformNr nvarchar(3), 
+  SchulformKrz nvarchar(3), 
+  SchulformBez nvarchar(50), 
+  Strasse nvarchar(50), 
+  PLZ nvarchar(10), 
+  Ort nvarchar(50), 
+  Telefon nvarchar(20), 
+  Fax nvarchar(20), 
+  Email nvarchar(40), 
+  Schulleiter nvarchar(40), 
   Sortierung int DEFAULT 32000, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Aenderbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  SchulNr_SIM nvarchar(6) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Kuerzel nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  KurzBez nvarchar(40) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Sichtbar nvarchar(1) DEFAULT '+', 
+  Aenderbar nvarchar(1) DEFAULT '+', 
+  SchulNr_SIM nvarchar(6), 
+  Kuerzel nvarchar(10), 
+  KurzBez nvarchar(40), 
   SchulnrEigner int,
   CONSTRAINT PK_K_Schule PRIMARY KEY (ID),
   CONSTRAINT K_Schule_UC1 UNIQUE (SchulNr)
@@ -731,9 +791,9 @@ CREATE TABLE K_Schule (
 
 CREATE TABLE K_Schulfunktionen (
   ID bigint DEFAULT -1 NOT NULL, 
-  Bezeichnung nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Bezeichnung nvarchar(50), 
   Sortierung int, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Sichtbar nvarchar(1), 
   SchulnrEigner int,
   CONSTRAINT PK_K_Schulfunktionen PRIMARY KEY (ID)
 );
@@ -741,10 +801,10 @@ CREATE TABLE K_Schulfunktionen (
 
 CREATE TABLE K_Schwerpunkt (
   ID bigint DEFAULT -1 NOT NULL, 
-  Bezeichnung nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Bezeichnung nvarchar(50) NOT NULL, 
   Sortierung int DEFAULT 32000, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Aenderbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
+  Sichtbar nvarchar(1) DEFAULT '+', 
+  Aenderbar nvarchar(1) DEFAULT '+', 
   SchulnrEigner int,
   CONSTRAINT PK_K_Schwerpunkt PRIMARY KEY (ID),
   CONSTRAINT K_Schwerpunkt_UC1 UNIQUE (Bezeichnung)
@@ -763,10 +823,10 @@ CREATE TABLE Fachklassen_Schwerpunkte (
 
 CREATE TABLE K_Sportbefreiung (
   ID bigint DEFAULT -1 NOT NULL, 
-  Bezeichnung nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Bezeichnung nvarchar(50) NOT NULL, 
   Sortierung int DEFAULT 32000, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Aenderbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
+  Sichtbar nvarchar(1) DEFAULT '+', 
+  Aenderbar nvarchar(1) DEFAULT '+', 
   SchulnrEigner int,
   CONSTRAINT PK_K_Sportbefreiung PRIMARY KEY (ID),
   CONSTRAINT K_Sportbefreiung_UC1 UNIQUE (Bezeichnung)
@@ -775,14 +835,14 @@ CREATE TABLE K_Sportbefreiung (
 
 CREATE TABLE K_Staat (
   ID bigint DEFAULT -1 NOT NULL, 
-  Bezeichnung nvarchar(80) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  StatistikKrz nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Bezeichnung nvarchar(80) NOT NULL, 
+  StatistikKrz nvarchar(3), 
   Sortierung int DEFAULT 32000, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Aenderbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  ExportBez nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Sichtbar nvarchar(1) DEFAULT '+', 
+  Aenderbar nvarchar(1) DEFAULT '+', 
+  ExportBez nvarchar(20), 
   SchulnrEigner int, 
-  Bezeichnung2 nvarchar(80) COLLATE Latin1_General_100_BIN2_UTF8,
+  Bezeichnung2 nvarchar(80),
   CONSTRAINT PK_K_Staat PRIMARY KEY (ID),
   CONSTRAINT K_Staat_UC1 UNIQUE (StatistikKrz)
 );
@@ -790,10 +850,10 @@ CREATE TABLE K_Staat (
 
 CREATE TABLE K_TXTDATEIEN (
   ID bigint DEFAULT -1 NOT NULL, 
-  BEZEICHNUNG nvarchar(32) COLLATE Latin1_General_100_BIN2_UTF8, 
+  BEZEICHNUNG nvarchar(32), 
   TEXT_ID bigint NOT NULL, 
-  TEXT_BODY nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
+  TEXT_BODY nvarchar(max), 
+  Sichtbar nvarchar(1) DEFAULT '+', 
   Sortierung smallint, 
   SchulnrEigner int,
   CONSTRAINT PK_K_TXTDATEIEN PRIMARY KEY (ID)
@@ -802,10 +862,10 @@ CREATE TABLE K_TXTDATEIEN (
 
 CREATE TABLE K_TelefonArt (
   ID bigint DEFAULT -1 NOT NULL, 
-  Bezeichnung nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Bezeichnung nvarchar(30) NOT NULL, 
   Sortierung int DEFAULT 32000, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Aenderbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
+  Sichtbar nvarchar(1) DEFAULT '+', 
+  Aenderbar nvarchar(1) DEFAULT '+', 
   SchulnrEigner int,
   CONSTRAINT PK_K_TelefonArt PRIMARY KEY (ID),
   CONSTRAINT K_TelefonArt_UC1 UNIQUE (Bezeichnung)
@@ -814,9 +874,9 @@ CREATE TABLE K_TelefonArt (
 
 CREATE TABLE K_Verkehrssprachen (
   ID bigint DEFAULT -1 NOT NULL, 
-  Kurztext nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Langtext nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Kurztext nvarchar(10), 
+  Langtext nvarchar(100), 
+  Sichtbar nvarchar(1), 
   Sortierung int, 
   SchulnrEigner int,
   CONSTRAINT PK_K_Verkehrssprachen PRIMARY KEY (ID)
@@ -825,10 +885,10 @@ CREATE TABLE K_Verkehrssprachen (
 
 CREATE TABLE K_Vermerkart (
   ID bigint DEFAULT -1 NOT NULL, 
-  Bezeichnung nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Bezeichnung nvarchar(30) NOT NULL, 
   Sortierung int DEFAULT 32000, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Aenderbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
+  Sichtbar nvarchar(1) DEFAULT '+', 
+  Aenderbar nvarchar(1) DEFAULT '+', 
   SchulnrEigner int,
   CONSTRAINT PK_K_Vermerkart PRIMARY KEY (ID),
   CONSTRAINT K_Vermerkart_UC1 UNIQUE (Bezeichnung)
@@ -836,8 +896,8 @@ CREATE TABLE K_Vermerkart (
 
 
 CREATE TABLE K_Zertifikate (
-  Kuerzel nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Bezeichnung nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Kuerzel nvarchar(5) NOT NULL, 
+  Bezeichnung nvarchar(50) NOT NULL, 
   SchulnrEigner int NOT NULL,
   CONSTRAINT PK_K_Zertifikate PRIMARY KEY (Kuerzel, SchulnrEigner)
 );
@@ -846,7 +906,7 @@ CREATE TABLE K_Zertifikate (
 CREATE TABLE Kompetenzen (
   KO_ID bigint NOT NULL, 
   KO_Gruppe bigint NOT NULL, 
-  KO_Bezeichnung nvarchar(64) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL,
+  KO_Bezeichnung nvarchar(64) NOT NULL,
   CONSTRAINT PK_Kompetenzen PRIMARY KEY (KO_Gruppe, KO_ID)
 );
 
@@ -855,7 +915,7 @@ CREATE TABLE Kompetenzgruppen (
   KG_Spalte bigint NOT NULL, 
   KG_Zeile bigint NOT NULL, 
   KG_ID bigint NOT NULL, 
-  KG_Bezeichnung nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL,
+  KG_Bezeichnung nvarchar(50) NOT NULL,
   CONSTRAINT PK_Kompetenzgruppen PRIMARY KEY (KG_Bezeichnung, KG_ID, KG_Spalte, KG_Zeile)
 );
 
@@ -871,23 +931,23 @@ CREATE TABLE Kurse (
   ID bigint DEFAULT -1 NOT NULL, 
   Jahr smallint NOT NULL, 
   Abschnitt smallint NOT NULL, 
-  KurzBez nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  KurzBez nvarchar(20) NOT NULL, 
   Jahrgang_ID bigint, 
-  ASDJahrgang nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
+  ASDJahrgang nvarchar(2), 
   Fach_ID bigint NOT NULL, 
-  KursartAllg nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
+  KursartAllg nvarchar(5), 
   Wochenstd smallint, 
-  LehrerKrz nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
+  LehrerKrz nvarchar(10), 
   Sortierung int DEFAULT 32000, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Schienen nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Fortschreibungsart nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Sichtbar nvarchar(1) DEFAULT '+', 
+  Schienen nvarchar(20), 
+  Fortschreibungsart nvarchar(1), 
   WochenstdKL float, 
   SchulNr int, 
-  EpochU nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
+  EpochU nvarchar(1) DEFAULT '-', 
   SchulnrEigner int, 
-  Zeugnisbez nvarchar(130) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Jahrgaenge nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8,
+  Zeugnisbez nvarchar(130), 
+  Jahrgaenge nvarchar(50),
   CONSTRAINT PK_Kurse PRIMARY KEY (ID),
   CONSTRAINT Kurse_UC1 UNIQUE (ASDJahrgang, Abschnitt, Fach_ID, Jahr, Jahrgaenge, KursartAllg, KurzBez, LehrerKrz, Wochenstd)
 );
@@ -908,9 +968,9 @@ CREATE TABLE LehrerAbschnittsdaten (
   Lehrer_ID bigint NOT NULL, 
   Jahr int NOT NULL, 
   Abschnitt int NOT NULL, 
-  Rechtsverhaeltnis nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Beschaeftigungsart nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Einsatzstatus nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Rechtsverhaeltnis nvarchar(1), 
+  Beschaeftigungsart nvarchar(2), 
+  Einsatzstatus nvarchar(1), 
   PflichtstdSoll float, 
   UnterrichtsStd float, 
   MehrleistungStd float, 
@@ -925,7 +985,7 @@ CREATE TABLE LehrerAbschnittsdaten (
 
 CREATE TABLE LehrerAnrechnung (
   Lehrer_ID bigint NOT NULL, 
-  AnrechnungsgrundKrz nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
+  AnrechnungsgrundKrz nvarchar(10), 
   AnrechnungStd float, 
   Jahr int, 
   Abschnitt int, 
@@ -937,7 +997,7 @@ CREATE TABLE LehrerAnrechnung (
 
 CREATE TABLE LehrerEntlastung (
   Lehrer_ID bigint NOT NULL, 
-  EntlastungsgrundKrz nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
+  EntlastungsgrundKrz nvarchar(10), 
   EntlastungStd float, 
   Jahr int, 
   Abschnitt int, 
@@ -969,8 +1029,8 @@ CREATE TABLE LehrerFunktionen (
 
 CREATE TABLE LehrerLehramt (
   Lehrer_ID bigint NOT NULL, 
-  LehramtKrz nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LehramtAnerkennungKrz nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
+  LehramtKrz nvarchar(10), 
+  LehramtAnerkennungKrz nvarchar(10), 
   SchulnrEigner int,
   CONSTRAINT PK_LehrerLehramt PRIMARY KEY (LehramtKrz, Lehrer_ID),
   CONSTRAINT LehrerLehramt_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE
@@ -979,9 +1039,9 @@ CREATE TABLE LehrerLehramt (
 
 CREATE TABLE LehrerLehramtFachr (
   Lehrer_ID bigint NOT NULL, 
-  LehramtKrz nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  FachrKrz nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  FachrAnerkennungKrz nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
+  LehramtKrz nvarchar(10), 
+  FachrKrz nvarchar(10), 
+  FachrAnerkennungKrz nvarchar(10), 
   SchulnrEigner int,
   CONSTRAINT PK_LehrerLehramtFachr PRIMARY KEY (FachrKrz, LehramtKrz, Lehrer_ID)
 );
@@ -989,9 +1049,9 @@ CREATE TABLE LehrerLehramtFachr (
 
 CREATE TABLE LehrerLehramtLehrbef (
   Lehrer_ID bigint NOT NULL, 
-  LehramtKrz nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LehrbefKrz nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LehrbefAnerkennungKrz nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
+  LehramtKrz nvarchar(10), 
+  LehrbefKrz nvarchar(10), 
+  LehrbefAnerkennungKrz nvarchar(10), 
   SchulnrEigner int,
   CONSTRAINT PK_LehrerLehramtLehrbef PRIMARY KEY (LehramtKrz, LehrbefKrz, Lehrer_ID)
 );
@@ -999,7 +1059,7 @@ CREATE TABLE LehrerLehramtLehrbef (
 
 CREATE TABLE LehrerMehrleistung (
   Lehrer_ID bigint NOT NULL, 
-  MehrleistungsgrundKrz nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  MehrleistungsgrundKrz nvarchar(10) NOT NULL, 
   MehrleistungStd float, 
   Jahr int NOT NULL, 
   Abschnitt int NOT NULL, 
@@ -1013,7 +1073,7 @@ CREATE TABLE Lehrer_IMEI (
   ID bigint NOT NULL, 
   Lehrer_ID bigint NOT NULL, 
   SchulnrEigner int NOT NULL, 
-  IMEI nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8,
+  IMEI nvarchar(20),
   CONSTRAINT PK_Lehrer_IMEI PRIMARY KEY (ID),
   CONSTRAINT Lehrer_IMEI_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
@@ -1029,19 +1089,19 @@ CREATE TABLE Logins (
 
 
 CREATE TABLE NUES_Kategorien (
-  KategorieKuerzel nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  KategorieText nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  KategorieArt nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8,
+  KategorieKuerzel nvarchar(20) NOT NULL, 
+  KategorieText nvarchar(100) NOT NULL, 
+  KategorieArt nvarchar(1),
   CONSTRAINT PK_NUES_Kategorien PRIMARY KEY (KategorieKuerzel)
 );
 
 
 CREATE TABLE NUES_Merkmale (
-  MerkmalKuerzel nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  MerkmalText nvarchar(200) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Jahrgang nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  HauptKategorie nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  NebenKategorie nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8,
+  MerkmalKuerzel nvarchar(20) NOT NULL, 
+  MerkmalText nvarchar(200) NOT NULL, 
+  Jahrgang nvarchar(2), 
+  HauptKategorie nvarchar(20) NOT NULL, 
+  NebenKategorie nvarchar(20),
   CONSTRAINT PK_NUES_Merkmale PRIMARY KEY (MerkmalKuerzel),
   CONSTRAINT NUES_Merkmale_Kategorie_FK FOREIGN KEY (HauptKategorie) REFERENCES NUES_Kategorien(KategorieKuerzel) ON UPDATE CASCADE ON DELETE CASCADE
 );
@@ -1051,12 +1111,12 @@ CREATE TABLE NichtMoeglAbiFachKombi (
   Fach1_ID bigint NOT NULL, 
   Fach2_ID bigint NOT NULL, 
   SchulnrEigner int NOT NULL, 
-  Kursart1 nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Kursart2 nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
-  PK nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Kursart1 nvarchar(5), 
+  Kursart2 nvarchar(5), 
+  PK nvarchar(30) NOT NULL, 
   Sortierung int, 
-  Phase nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Typ nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8,
+  Phase nvarchar(10), 
+  Typ nvarchar(1),
   CONSTRAINT PK_NichtMoeglAbiFachKombi PRIMARY KEY (PK)
 );
 
@@ -1064,13 +1124,13 @@ CREATE TABLE NichtMoeglAbiFachKombi (
 CREATE TABLE Personengruppen (
   ID bigint DEFAULT -1 NOT NULL, 
   SchulnrEigner int NOT NULL, 
-  Gruppenname nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Zusatzinfo nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SammelEMail nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  GruppenArt nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  XMLExport nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Gruppenname nvarchar(100) NOT NULL, 
+  Zusatzinfo nvarchar(100), 
+  SammelEMail nvarchar(100), 
+  GruppenArt nvarchar(20), 
+  XMLExport nvarchar(1), 
   Sortierung int DEFAULT 32000, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+',
+  Sichtbar nvarchar(1) DEFAULT '+',
   CONSTRAINT PK_Personengruppen PRIMARY KEY (ID)
 );
 
@@ -1081,28 +1141,28 @@ CREATE TABLE Personengruppen_Personen (
   Gruppe_ID bigint NOT NULL, 
   Person_ID bigint, 
   PersonNr int, 
-  PersonArt nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  PersonName nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  PersonVorname nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8, 
-  PersonPLZ nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  PersonOrt nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  PersonStrasse nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  PersonTelefon nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  PersonMobil nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  PersonEMail nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Bemerkung nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ZusatzInfo nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
+  PersonArt nvarchar(1), 
+  PersonName nvarchar(50) NOT NULL, 
+  PersonVorname nvarchar(30), 
+  PersonPLZ nvarchar(10), 
+  PersonOrt nvarchar(50), 
+  PersonStrasse nvarchar(50), 
+  PersonTelefon nvarchar(20), 
+  PersonMobil nvarchar(20), 
+  PersonEMail nvarchar(100), 
+  Bemerkung nvarchar(100), 
+  ZusatzInfo nvarchar(100), 
   Sortierung int, 
-  PersonAnrede nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  PersonAkadGrad nvarchar(15) COLLATE Latin1_General_100_BIN2_UTF8,
+  PersonAnrede nvarchar(10), 
+  PersonAkadGrad nvarchar(15),
   CONSTRAINT PK_Personengruppen_Personen PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE PrfSemAbschl (
-  Nr nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Klartext nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8, 
-  StatistikKrz nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Nr nvarchar(2) NOT NULL, 
+  Klartext nvarchar(30), 
+  StatistikKrz nvarchar(1), 
   Sortierung int DEFAULT 32000,
   CONSTRAINT PK_PrfSemAbschl PRIMARY KEY (Nr)
 );
@@ -1110,11 +1170,11 @@ CREATE TABLE PrfSemAbschl (
 
 CREATE TABLE SETTINGS (
   ID bigint NOT NULL, 
-  NAME nvarchar(32) COLLATE Latin1_General_100_BIN2_UTF8, 
+  NAME nvarchar(32), 
   SchulNrEigner int NOT NULL, 
   VALUE_FLOAT float, 
   VALUE_INT int, 
-  VALUE_STR nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8,
+  VALUE_STR nvarchar(max),
   CONSTRAINT PK_SETTINGS PRIMARY KEY (ID)
 );
 
@@ -1124,7 +1184,7 @@ CREATE INDEX SETTINGS_IDX3 ON SETTINGS(SchulNrEigner);
 
 
 CREATE TABLE SVWS_DB_AutoInkremente (
-  NameTabelle nvarchar(200) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  NameTabelle nvarchar(200) NOT NULL, 
   MaxID bigint DEFAULT 1 NOT NULL,
   CONSTRAINT PK_SVWS_DB_AutoInkremente PRIMARY KEY (NameTabelle)
 );
@@ -1138,13 +1198,13 @@ CREATE TABLE SVWS_DB_Version (
 
 CREATE TABLE SchildFilter (
   ID bigint DEFAULT -1 NOT NULL, 
-  Art nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Name nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Beschreibung nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Tabellen nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ZusatzTabellen nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Bedingung nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
-  BedingungKlartext nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Art nvarchar(1), 
+  Name nvarchar(50) NOT NULL, 
+  Beschreibung nvarchar(255), 
+  Tabellen nvarchar(255), 
+  ZusatzTabellen nvarchar(255), 
+  Bedingung nvarchar(max), 
+  BedingungKlartext nvarchar(max), 
   SchulnrEigner int,
   CONSTRAINT PK_SchildFilter PRIMARY KEY (ID),
   CONSTRAINT SchildFilter_UC1 UNIQUE (Name)
@@ -1156,16 +1216,16 @@ CREATE TABLE Schild_Verwaltung (
   AutoBerechnung datetime2, 
   DatumStatkue datetime2, 
   DatumSchildIntern datetime2, 
-  Bescheinigung nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Stammblatt nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DatenGeprueft nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  FaecherUebernehmen nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  Version nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  GU_ID nvarchar(40) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Bescheinigung nvarchar(255), 
+  Stammblatt nvarchar(255), 
+  DatenGeprueft nvarchar(1) DEFAULT '-', 
+  FaecherUebernehmen nvarchar(1) DEFAULT '+', 
+  Version nvarchar(10), 
+  GU_ID nvarchar(40) NOT NULL, 
   StatistikJahr int, 
   SchulnrEigner int NOT NULL, 
-  LD_Datentyp nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Version3 nvarchar(16) COLLATE Latin1_General_100_BIN2_UTF8, 
+  LD_Datentyp nvarchar(1), 
+  Version3 nvarchar(16), 
   DatumLoeschfristHinweisDeaktiviert datetime2, 
   DatumLoeschfristHinweisDeaktiviertUserID int, 
   DatumDatenGeloescht datetime2,
@@ -1175,35 +1235,35 @@ CREATE TABLE Schild_Verwaltung (
 
 
 CREATE TABLE Schildintern_AbiturInfos (
-  PrfOrdnung nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  AbiFach nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Bedingung nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AbiInfoKrz nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AbiInfoBeschreibung nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AbiInfoText nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8,
+  PrfOrdnung nvarchar(20) NOT NULL, 
+  AbiFach nvarchar(1) NOT NULL, 
+  Bedingung nvarchar(3), 
+  AbiInfoKrz nvarchar(20), 
+  AbiInfoBeschreibung nvarchar(255), 
+  AbiInfoText nvarchar(max),
   CONSTRAINT PK_Schildintern_AbiturInfos PRIMARY KEY (AbiFach, AbiInfoKrz, Bedingung, PrfOrdnung)
 );
 
 
 CREATE TABLE Schildintern_Berufsebene (
   Berufsebene int NOT NULL, 
-  Kuerzel nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Klartext nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8,
+  Kuerzel nvarchar(2) NOT NULL, 
+  Klartext nvarchar(255),
   CONSTRAINT PK_Schildintern_Berufsebene PRIMARY KEY (Berufsebene, Kuerzel)
 );
 
 
 CREATE TABLE Schildintern_DQR_Niveaus (
-  Gliederung nvarchar(4) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  FKS nvarchar(8) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Gliederung nvarchar(4) NOT NULL, 
+  FKS nvarchar(8) NOT NULL, 
   DQR_Niveau int NOT NULL
 );
 
 
 CREATE TABLE Schildintern_Datenart (
-  DatenartKrz nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Datenart nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Tabellenname nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8, 
+  DatenartKrz nvarchar(10) NOT NULL, 
+  Datenart nvarchar(50), 
+  Tabellenname nvarchar(30), 
   Reihenfolge int,
   CONSTRAINT PK_Schildintern_Datenart PRIMARY KEY (DatenartKrz)
 );
@@ -1211,185 +1271,185 @@ CREATE TABLE Schildintern_Datenart (
 
 CREATE TABLE Schildintern_Fachgruppen (
   FG_ID bigint NOT NULL, 
-  FG_SF nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  FG_Bezeichnung nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
+  FG_SF nvarchar(50), 
+  FG_Bezeichnung nvarchar(50), 
   FG_Farbe int, 
   FG_Sortierung int, 
-  FG_Kuerzel nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
-  FG_Zeugnis nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8,
+  FG_Kuerzel nvarchar(5), 
+  FG_Zeugnis nvarchar(1),
   CONSTRAINT PK_Schildintern_Fachgruppen PRIMARY KEY (FG_ID)
 );
 
 
 CREATE TABLE Schildintern_FaecherSortierung (
-  Fach nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Bezeichnung nvarchar(80) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Fach nvarchar(2) NOT NULL, 
+  Bezeichnung nvarchar(80), 
   Sortierung1 int, 
   Sortierung2 int, 
   Fachgruppe_ID bigint, 
-  FachgruppeKrz nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AufgabenbereichAbitur nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8,
+  FachgruppeKrz nvarchar(2), 
+  AufgabenbereichAbitur nvarchar(5),
   CONSTRAINT PK_Schildintern_FaecherSortierung PRIMARY KEY (Fach)
 );
 
 
 CREATE TABLE Schildintern_FilterFehlendeEintraege (
   ID bigint NOT NULL, 
-  Beschreibung nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Feldname nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Tabellen nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SQLText nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Schulform nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Feldtyp nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8,
+  Beschreibung nvarchar(100), 
+  Feldname nvarchar(30), 
+  Tabellen nvarchar(50), 
+  SQLText nvarchar(100), 
+  Schulform nvarchar(50), 
+  Feldtyp nvarchar(1),
   CONSTRAINT PK_Schildintern_FilterFehlendeEintraege PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE Schildintern_FilterFeldListe (
   ID bigint NOT NULL, 
-  Bezeichnung nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DBFeld nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Typ nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Werte nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  StdWert nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Operator nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Zusatzbedingung nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8,
+  Bezeichnung nvarchar(50), 
+  DBFeld nvarchar(50), 
+  Typ nvarchar(50), 
+  Werte nvarchar(20), 
+  StdWert nvarchar(5), 
+  Operator nvarchar(10), 
+  Zusatzbedingung nvarchar(50),
   CONSTRAINT PK_Schildintern_FilterFeldListe PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE Schildintern_HSchStatus (
   StatusNr int NOT NULL, 
-  Bezeichnung nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Bezeichnung nvarchar(255), 
   Sortierung int, 
-  InSimExp nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SIMAbschnitt nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8,
+  InSimExp nvarchar(1), 
+  SIMAbschnitt nvarchar(1),
   CONSTRAINT PK_Schildintern_HSchStatus PRIMARY KEY (StatusNr)
 );
 
 
 CREATE TABLE Schildintern_KAoA_Anschlussoption (
-  AO_Kuerzel nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  AO_Beschreibung nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AO_Stufen nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8,
+  AO_Kuerzel nvarchar(2) NOT NULL, 
+  AO_Beschreibung nvarchar(255), 
+  AO_Stufen nvarchar(10),
   CONSTRAINT PK_Schildintern_KAoA_Anschlussoption PRIMARY KEY (AO_Kuerzel)
 );
 
 
 CREATE TABLE Schildintern_KAoA_Berufsfeld (
-  BF_Kuerzel nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  BF_Beschreibung nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8,
+  BF_Kuerzel nvarchar(10) NOT NULL, 
+  BF_Beschreibung nvarchar(255),
   CONSTRAINT PK_Schildintern_KAoA_Berufsfeld PRIMARY KEY (BF_Kuerzel)
 );
 
 
 CREATE TABLE Schildintern_KAoA_Kategorie (
-  K_Kuerzel nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  K_Beschreibung nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  K_Jahrgaenge nvarchar(25) COLLATE Latin1_General_100_BIN2_UTF8,
+  K_Kuerzel nvarchar(10) NOT NULL, 
+  K_Beschreibung nvarchar(255), 
+  K_Jahrgaenge nvarchar(25),
   CONSTRAINT PK_Schildintern_KAoA_Kategorie PRIMARY KEY (K_Kuerzel)
 );
 
 
 CREATE TABLE Schildintern_KAoA_Merkmal (
-  M_Kuerzel nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  M_Kategorie nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  M_Beschreibung nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  M_Option nvarchar(25) COLLATE Latin1_General_100_BIN2_UTF8,
+  M_Kuerzel nvarchar(20) NOT NULL, 
+  M_Kategorie nvarchar(10), 
+  M_Beschreibung nvarchar(255), 
+  M_Option nvarchar(25),
   CONSTRAINT PK_Schildintern_KAoA_Merkmal PRIMARY KEY (M_Kuerzel)
 );
 
 
 CREATE TABLE Schildintern_KAoA_Zusatzmerkmal (
-  ZM_Kuerzel nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  ZM_Merkmal nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ZM_Beschreibung nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ZM_Option nvarchar(25) COLLATE Latin1_General_100_BIN2_UTF8,
+  ZM_Kuerzel nvarchar(20) NOT NULL, 
+  ZM_Merkmal nvarchar(20), 
+  ZM_Beschreibung nvarchar(255), 
+  ZM_Option nvarchar(25),
   CONSTRAINT PK_Schildintern_KAoA_Zusatzmerkmal PRIMARY KEY (ZM_Kuerzel)
 );
 
 
 CREATE TABLE Schildintern_K_Schulnote (
   ID bigint NOT NULL, 
-  Krz nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Art nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Bezeichnung nvarchar(40) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Zeugnisnotenbez nvarchar(40) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Punkte nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Krz nvarchar(2), 
+  Art nvarchar(1), 
+  Bezeichnung nvarchar(40), 
+  Zeugnisnotenbez nvarchar(40), 
+  Punkte nvarchar(2), 
   Sortierung int, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Aenderbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8,
+  Sichtbar nvarchar(1), 
+  Aenderbar nvarchar(1),
   CONSTRAINT PK_Schildintern_K_Schulnote PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE Schildintern_KursartenZuordnung (
-  KursartIndiv nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  KursartAllg nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL,
+  KursartIndiv nvarchar(5) NOT NULL, 
+  KursartAllg nvarchar(5) NOT NULL,
   CONSTRAINT PK_Schildintern_KursartenZuordnung PRIMARY KEY (KursartIndiv)
 );
 
 
 CREATE TABLE Schildintern_Laender (
-  Kurztext nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Langtext nvarchar(40) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Kurztext nvarchar(2) NOT NULL, 
+  Langtext nvarchar(40), 
   Sortierung int,
   CONSTRAINT PK_Schildintern_Laender PRIMARY KEY (Kurztext)
 );
 
 
 CREATE TABLE Schildintern_PrfSemAbschl (
-  Nr nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Klartext nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  StatistikKrz nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Nr nvarchar(2) NOT NULL, 
+  Klartext nvarchar(50), 
+  StatistikKrz nvarchar(1), 
   Sortierung int, 
-  Schulform nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  StatistikKrzNeu nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8,
+  Schulform nvarchar(2) NOT NULL, 
+  StatistikKrzNeu nvarchar(2),
   CONSTRAINT PK_Schildintern_PrfSemAbschl PRIMARY KEY (Nr, Schulform)
 );
 
 
 CREATE TABLE Schildintern_PruefOrd_Optionen (
-  OP_Schulformen nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  OP_POKrz nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  OP_Krz nvarchar(40) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  OP_Abgangsart_B nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  OP_Abgangsart_NB nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  OP_Art nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  OP_Typ nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
-  OP_Bildungsgang nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  OP_Name nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  OP_Kommentar nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  OP_Jahrgaenge nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  OP_BKIndex nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  OP_BKAnl_Typ nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
+  OP_Schulformen nvarchar(20) NOT NULL, 
+  OP_POKrz nvarchar(30) NOT NULL, 
+  OP_Krz nvarchar(40) NOT NULL, 
+  OP_Abgangsart_B nvarchar(2), 
+  OP_Abgangsart_NB nvarchar(2), 
+  OP_Art nvarchar(1) NOT NULL, 
+  OP_Typ nvarchar(5), 
+  OP_Bildungsgang nvarchar(1) NOT NULL, 
+  OP_Name nvarchar(255) NOT NULL, 
+  OP_Kommentar nvarchar(100), 
+  OP_Jahrgaenge nvarchar(20) NOT NULL, 
+  OP_BKIndex nvarchar(50), 
+  OP_BKAnl_Typ nvarchar(50), 
   OP_Reihenfolge int NOT NULL,
   CONSTRAINT PK_Schildintern_PruefOrd_Optionen PRIMARY KEY (OP_Art, OP_Bildungsgang, OP_Jahrgaenge, OP_Krz, OP_Name, OP_POKrz, OP_Reihenfolge, OP_Schulformen)
 );
 
 
 CREATE TABLE Schildintern_PruefungsOrdnung (
-  PO_Schulform nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  PO_Krz nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  PO_Name nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  PO_SGL nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  PO_Schulform nvarchar(50) NOT NULL, 
+  PO_Krz nvarchar(30) NOT NULL, 
+  PO_Name nvarchar(255) NOT NULL, 
+  PO_SGL nvarchar(50) NOT NULL, 
   PO_MinJahrgang int DEFAULT 0 NOT NULL, 
   PO_MaxJahrgang int DEFAULT 20 NOT NULL, 
-  PO_Jahrgaenge nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL,
+  PO_Jahrgaenge nvarchar(30) NOT NULL,
   CONSTRAINT PK_Schildintern_PruefungsOrdnung PRIMARY KEY (PO_Krz, PO_SGL, PO_Schulform)
 );
 
 
 CREATE TABLE Schildintern_SchuelerImpExp (
-  Tabelle nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  TabellenAnzeige nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  MasterTable nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ExpCmd nvarchar(250) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SrcGetFieldsSQL nvarchar(250) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DeleteSQL nvarchar(250) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DstGetIDSQL nvarchar(250) COLLATE Latin1_General_100_BIN2_UTF8, 
-  HauptFeld nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DetailFeld nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Tabelle nvarchar(50) NOT NULL, 
+  TabellenAnzeige nvarchar(50), 
+  MasterTable nvarchar(50), 
+  ExpCmd nvarchar(250), 
+  SrcGetFieldsSQL nvarchar(250), 
+  DeleteSQL nvarchar(250), 
+  DstGetIDSQL nvarchar(250), 
+  HauptFeld nvarchar(50), 
+  DetailFeld nvarchar(50), 
   Reihenfolge int,
   CONSTRAINT PK_Schildintern_SchuelerImpExp PRIMARY KEY (Tabelle)
 );
@@ -1397,80 +1457,80 @@ CREATE TABLE Schildintern_SchuelerImpExp (
 
 CREATE TABLE Schildintern_SpezialFilterFelder (
   ID bigint NOT NULL, 
-  Gruppe nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  KurzBez nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Bezeichnung nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Grundschule nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Tabelle nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DBFeld nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Typ nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Control nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  WerteAnzeige nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  WerteSQL nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LookupInfo nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  OperatorenAnzeige nvarchar(150) COLLATE Latin1_General_100_BIN2_UTF8, 
-  OperatorenSQL nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Zusatzbedingung nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ZusatzTabellen nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8,
+  Gruppe nvarchar(2), 
+  KurzBez nvarchar(50), 
+  Bezeichnung nvarchar(50), 
+  Grundschule nvarchar(1), 
+  Tabelle nvarchar(30), 
+  DBFeld nvarchar(50), 
+  Typ nvarchar(1), 
+  Control nvarchar(10), 
+  WerteAnzeige nvarchar(20), 
+  WerteSQL nvarchar(20), 
+  LookupInfo nvarchar(50), 
+  OperatorenAnzeige nvarchar(150), 
+  OperatorenSQL nvarchar(100), 
+  Zusatzbedingung nvarchar(100), 
+  ZusatzTabellen nvarchar(50),
   CONSTRAINT PK_Schildintern_SpezialFilterFelder PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE Schildintern_TextExport (
-  DatenartKrz nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Feldname nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  AnzeigeText nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  FeldTyp nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Feldwerte nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ErgebnisWerte nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LookupFeldname nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LookupSQLText nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DBFormat nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT 'ALLE' NOT NULL,
+  DatenartKrz nvarchar(10) NOT NULL, 
+  Feldname nvarchar(30) NOT NULL, 
+  AnzeigeText nvarchar(50) NOT NULL, 
+  FeldTyp nvarchar(1), 
+  Feldwerte nvarchar(20), 
+  ErgebnisWerte nvarchar(100), 
+  LookupFeldname nvarchar(100), 
+  LookupSQLText nvarchar(max), 
+  DBFormat nvarchar(10) DEFAULT 'ALLE' NOT NULL,
   CONSTRAINT PK_Schildintern_TextExport PRIMARY KEY (AnzeigeText, DBFormat, DatenartKrz, Feldname)
 );
 
 
 CREATE TABLE Schildintern_VerfImportFelder (
   ID bigint NOT NULL, 
-  TableDescription nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  FieldDescription nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DstTable nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DstFieldName nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DstFieldType nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DstRequiredState nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DstLookupTable nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DstLookupTableIDFieldName nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DstLookupFieldName nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DstResultFieldName nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DstKeyLookupInsert nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DstKeyLookupNameCreateID nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DstForceNumeric nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8,
+  TableDescription nvarchar(50), 
+  FieldDescription nvarchar(50), 
+  DstTable nvarchar(50), 
+  DstFieldName nvarchar(50), 
+  DstFieldType nvarchar(1), 
+  DstRequiredState nvarchar(1), 
+  DstLookupTable nvarchar(50), 
+  DstLookupTableIDFieldName nvarchar(50), 
+  DstLookupFieldName nvarchar(50), 
+  DstResultFieldName nvarchar(50), 
+  DstKeyLookupInsert nvarchar(1), 
+  DstKeyLookupNameCreateID nvarchar(1), 
+  DstForceNumeric nvarchar(1),
   CONSTRAINT PK_Schildintern_VerfImportFelder PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE Schildintern_VerfImportTabellen (
-  TableName nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  DstRequiredFields nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DstIDFieldName nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
+  TableName nvarchar(50) NOT NULL, 
+  DstRequiredFields nvarchar(50), 
+  DstIDFieldName nvarchar(50), 
   Sequence int, 
-  LookupTable nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LookupFields nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LookupFieldTypes nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LookupResultField nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LookupResultFieldType nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LookupKeyField nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DstDefaultFieldName nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DstDefaultFieldValue nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DstCreateID nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  GU_ID_Field nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8,
+  LookupTable nvarchar(50), 
+  LookupFields nvarchar(50), 
+  LookupFieldTypes nvarchar(50), 
+  LookupResultField nvarchar(50), 
+  LookupResultFieldType nvarchar(10), 
+  LookupKeyField nvarchar(50), 
+  DstDefaultFieldName nvarchar(50), 
+  DstDefaultFieldValue nvarchar(20), 
+  DstCreateID nvarchar(1), 
+  GU_ID_Field nvarchar(50),
   CONSTRAINT PK_Schildintern_VerfImportTabellen PRIMARY KEY (TableName)
 );
 
 
 CREATE TABLE Schildintern_Zusatzinfos (
-  SGL_BKAbschl nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  JG_BKAbschl nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL,
+  SGL_BKAbschl nvarchar(50) NOT NULL, 
+  JG_BKAbschl nvarchar(50) NOT NULL,
   CONSTRAINT PK_Schildintern_Zusatzinfos PRIMARY KEY (JG_BKAbschl, SGL_BKAbschl)
 );
 
@@ -1478,12 +1538,12 @@ CREATE TABLE Schildintern_Zusatzinfos (
 CREATE TABLE SchuelerEinzelleistungen (
   SchulnrEigner int NOT NULL, 
   ID bigint DEFAULT -1 NOT NULL, 
-  Datum datetime2, 
+  Datum date, 
   Lehrer_ID bigint, 
   Art_ID bigint, 
-  Bemerkung nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Bemerkung nvarchar(100), 
   Leistung_ID bigint, 
-  NotenKrz nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8,
+  NotenKrz nvarchar(2),
   CONSTRAINT PK_SchuelerEinzelleistungen PRIMARY KEY (ID),
   CONSTRAINT SchuelerEL_Art_FK FOREIGN KEY (Art_ID) REFERENCES K_Einzelleistungen(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
@@ -1505,20 +1565,20 @@ CREATE TABLE SchuelerGSDaten (
   Durchschnittsnote_Sprache float, 
   Durchschnittsnote_Einfach float, 
   Durchschnittsnote_Gewichtet float, 
-  Anrede_Klassenlehrer nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Nachname_Klassenlehrer nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  GS_Klasse nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Bemerkungen nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Geschwisterkind nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-',
+  Anrede_Klassenlehrer nvarchar(10), 
+  Nachname_Klassenlehrer nvarchar(50), 
+  GS_Klasse nvarchar(10), 
+  Bemerkungen nvarchar(max), 
+  Geschwisterkind nvarchar(1) DEFAULT '-',
   CONSTRAINT PK_SchuelerGSDaten PRIMARY KEY (Schueler_ID)
 );
 
 
 CREATE TABLE SchuelerListe (
   ID bigint DEFAULT -1 NOT NULL, 
-  Bezeichnung nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Erzeuger nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Privat nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
+  Bezeichnung nvarchar(50) NOT NULL, 
+  Erzeuger nvarchar(20), 
+  Privat nvarchar(1) DEFAULT '+', 
   SchulnrEigner int,
   CONSTRAINT PK_SchuelerListe PRIMARY KEY (ID),
   CONSTRAINT SchuelerListe_UC1 UNIQUE (Bezeichnung)
@@ -1528,8 +1588,8 @@ CREATE TABLE SchuelerListe (
 CREATE TABLE SchuelerReportvorlagen (
   User_ID bigint NOT NULL, 
   SchulnrEigner int, 
-  ReportVorlage nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Schueler_IDs nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8
+  ReportVorlage nvarchar(255), 
+  Schueler_IDs nvarchar(max)
 );
 
 
@@ -1537,114 +1597,122 @@ CREATE TABLE SchuelerWiedervorlage (
   ID bigint DEFAULT -1 NOT NULL, 
   Schueler_ID bigint NOT NULL, 
   SchulnrEigner int NOT NULL, 
-  Bemerkung nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Bemerkung nvarchar(255), 
   AngelegtAm datetime2, 
   WiedervorlageAm datetime2, 
   ErledigtAm datetime2, 
   User_ID bigint, 
-  Sekretariat nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Typ nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  NichtLoeschen nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8,
+  Sekretariat nvarchar(1), 
+  Typ nvarchar(1), 
+  NichtLoeschen nvarchar(1),
   CONSTRAINT PK_SchuelerWiedervorlage PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE Schulver_DBS (
-  SchulNr nvarchar(6) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Regschl nvarchar(6) COLLATE Latin1_General_100_BIN2_UTF8, 
+  SchulNr nvarchar(6) NOT NULL, 
+  Regschl nvarchar(6), 
   KoRe float, 
   KoHo float, 
-  ABez1 nvarchar(40) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ABez2 nvarchar(40) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ABez3 nvarchar(40) COLLATE Latin1_General_100_BIN2_UTF8, 
-  PLZ nvarchar(6) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Ort nvarchar(34) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Strasse nvarchar(40) COLLATE Latin1_General_100_BIN2_UTF8, 
-  TelVorw nvarchar(6) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Telefon nvarchar(12) COLLATE Latin1_General_100_BIN2_UTF8, 
-  FaxVorw nvarchar(6) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Fax nvarchar(15) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ModemVorw nvarchar(6) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Modem nvarchar(15) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SF nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  OeffPri nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  KurzBez nvarchar(40) COLLATE Latin1_General_100_BIN2_UTF8, 
+  ABez1 nvarchar(40), 
+  ABez2 nvarchar(40), 
+  ABez3 nvarchar(40), 
+  PLZ nvarchar(6), 
+  Ort nvarchar(34), 
+  Strasse nvarchar(40), 
+  TelVorw nvarchar(6), 
+  Telefon nvarchar(12), 
+  FaxVorw nvarchar(6), 
+  Fax nvarchar(15), 
+  ModemVorw nvarchar(6), 
+  Modem nvarchar(15), 
+  SF nvarchar(2), 
+  OeffPri nvarchar(1), 
+  KurzBez nvarchar(40), 
   SchBetrSchl int, 
-  SchBetrSchlDatum nvarchar(8) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ArtderTraegerschaft nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SchultraegerNr nvarchar(6) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Schulgliederung nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Schulart nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Ganztagsbetrieb nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  FSP nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Verbund nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Bus nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
+  SchBetrSchlDatum nvarchar(8), 
+  ArtderTraegerschaft nvarchar(2), 
+  SchultraegerNr nvarchar(6), 
+  Schulgliederung nvarchar(3), 
+  Schulart nvarchar(3), 
+  Ganztagsbetrieb nvarchar(1), 
+  FSP nvarchar(2), 
+  Verbund nvarchar(1), 
+  Bus nvarchar(1), 
   Fachberater int, 
   FachberHauptamtl int, 
-  TelNrDBSalt nvarchar(15) COLLATE Latin1_General_100_BIN2_UTF8, 
-  RP nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Email nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  URL nvarchar(1000) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Bemerkung nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
+  TelNrDBSalt nvarchar(15), 
+  RP nvarchar(1), 
+  Email nvarchar(100), 
+  URL nvarchar(1000), 
+  Bemerkung nvarchar(max), 
   CD int, 
   Stift int, 
-  OGTS nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SELB nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Internat nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
+  OGTS nvarchar(1), 
+  SELB nvarchar(1), 
+  Internat nvarchar(1), 
   InternatPlaetze int DEFAULT 0, 
-  SMail nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SportImAbi nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '0',
+  SMail nvarchar(50), 
+  SportImAbi nvarchar(1) DEFAULT '0',
   CONSTRAINT PK_Schulver_DBS PRIMARY KEY (SchulNr)
 );
 
 
 CREATE TABLE Schulver_Schulformen (
-  Schulform nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  SF nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Bezeichnung nvarchar(60) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Flag nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '1', 
+  Schulform nvarchar(2) NOT NULL, 
+  SF nvarchar(2), 
+  Bezeichnung nvarchar(60), 
+  Flag nvarchar(1) DEFAULT '1', 
   geaendert datetime2,
   CONSTRAINT PK_Schulver_Schulformen PRIMARY KEY (Schulform)
 );
 
 
 CREATE TABLE Schulver_Schultraeger (
-  SchulNr nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Regschl nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  KoRe nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  KoHo nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ABez1 nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ABez2 nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ABez3 nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  PLZ nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Ort nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Strasse nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  TelVorw nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Telefon nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SF nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  OeffPri nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  KurzBez nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
+  SchulNr nvarchar(255) NOT NULL, 
+  Regschl nvarchar(255), 
+  KoRe nvarchar(255), 
+  KoHo nvarchar(255), 
+  ABez1 nvarchar(255), 
+  ABez2 nvarchar(255), 
+  ABez3 nvarchar(255), 
+  PLZ nvarchar(255), 
+  Ort nvarchar(255), 
+  Strasse nvarchar(255), 
+  TelVorw nvarchar(255), 
+  Telefon nvarchar(255), 
+  SF nvarchar(255), 
+  OeffPri nvarchar(255), 
+  KurzBez nvarchar(255), 
   SchBetrSchl int, 
-  SchBetrSchlDatum nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
+  SchBetrSchlDatum nvarchar(255), 
   SchuelerZahlASD int DEFAULT 0, 
   SchuelerZahlVS int DEFAULT 0, 
-  ArtderTraegerschaft nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SchultraegerNr nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Schulgliederung nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Ganztagsbetrieb nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
+  ArtderTraegerschaft nvarchar(255), 
+  SchultraegerNr nvarchar(255), 
+  Schulgliederung nvarchar(255), 
+  Ganztagsbetrieb nvarchar(255), 
   aktiv int DEFAULT 1 NOT NULL,
   CONSTRAINT PK_Schulver_Schultraeger PRIMARY KEY (SchulNr)
 );
 
 
+CREATE TABLE Schulver_WeitereSF (
+  SNR nvarchar(6) NOT NULL, 
+  SGL nvarchar(3) DEFAULT '   ' NOT NULL, 
+  FSP nvarchar(2) DEFAULT '  ' NOT NULL,
+  CONSTRAINT PK_Schulver_WeitereSF PRIMARY KEY (FSP, SGL, SNR)
+);
+
+
 CREATE TABLE Statkue_Abgangsart (
-  SF nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Art nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Beschreibung nvarchar(200) COLLATE Latin1_General_100_BIN2_UTF8, 
+  SF nvarchar(2) NOT NULL, 
+  Art nvarchar(2) NOT NULL, 
+  Beschreibung nvarchar(200), 
   KZ_Bereich int DEFAULT 0, 
   KZ_Bereich_JG int DEFAULT 0, 
-  AbgangsJG nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Flag nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '1', 
+  AbgangsJG nvarchar(2), 
+  Flag nvarchar(1) DEFAULT '1', 
   geaendert datetime2, 
   Sortierung int DEFAULT 0,
   CONSTRAINT PK_Statkue_Abgangsart PRIMARY KEY (AbgangsJG, Art, KZ_Bereich, SF)
@@ -1653,10 +1721,10 @@ CREATE TABLE Statkue_Abgangsart (
 
 CREATE TABLE Statkue_AllgMerkmale (
   ID bigint NOT NULL, 
-  SF nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Kurztext nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  StatistikKrz nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Langtext nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  SF nvarchar(2) NOT NULL, 
+  Kurztext nvarchar(10) NOT NULL, 
+  StatistikKrz nvarchar(5), 
+  Langtext nvarchar(255) NOT NULL, 
   Schule int, 
   Schueler int, 
   Beginn datetime2, 
@@ -1667,31 +1735,31 @@ CREATE TABLE Statkue_AllgMerkmale (
 
 
 CREATE TABLE Statkue_AndereGrundschulen (
-  SNR nvarchar(6) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  SF nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ABez1 nvarchar(40) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Strasse nvarchar(40) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Ort nvarchar(40) COLLATE Latin1_General_100_BIN2_UTF8, 
+  SNR nvarchar(6) NOT NULL, 
+  SF nvarchar(2), 
+  ABez1 nvarchar(40), 
+  Strasse nvarchar(40), 
+  Ort nvarchar(40), 
   Auswahl int, 
-  RegSchl nvarchar(6) COLLATE Latin1_General_100_BIN2_UTF8, 
+  RegSchl nvarchar(6), 
   geaendert datetime2,
   CONSTRAINT PK_Statkue_AndereGrundschulen PRIMARY KEY (SNR)
 );
 
 
 CREATE TABLE Statkue_Bilingual (
-  SF nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Fach nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Beschreibung nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
+  SF nvarchar(2) NOT NULL, 
+  Fach nvarchar(2) NOT NULL, 
+  Beschreibung nvarchar(100), 
   geaendert datetime2,
   CONSTRAINT PK_Statkue_Bilingual PRIMARY KEY (Fach, SF)
 );
 
 
 CREATE TABLE Statkue_Einschulungsart (
-  Art nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Art nvarchar(2) NOT NULL, 
   Sortierung int DEFAULT 0, 
-  Beschreibung nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Beschreibung nvarchar(100), 
   geaendert datetime2,
   CONSTRAINT PK_Statkue_Einschulungsart PRIMARY KEY (Art)
 );
@@ -1699,56 +1767,56 @@ CREATE TABLE Statkue_Einschulungsart (
 
 CREATE TABLE Statkue_Fachklasse (
   BKIndex int DEFAULT 0 NOT NULL, 
-  Flag nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  FKS nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  AP nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  BGrp nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  BFeld nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Flag nvarchar(1), 
+  FKS nvarchar(3) NOT NULL, 
+  AP nvarchar(2) NOT NULL, 
+  BGrp nvarchar(1), 
+  BFeld nvarchar(2), 
   Sortierung int DEFAULT 0, 
-  Status nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Beschreibung nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Beschreibung_W nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Status nvarchar(20), 
+  Beschreibung nvarchar(100), 
+  Beschreibung_W nvarchar(100), 
   geaendert datetime2, 
-  Beschreibung_MW nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  BAKLALT nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  BAGRALT nvarchar(4) COLLATE Latin1_General_100_BIN2_UTF8, 
-  BAKL nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
-  BAGR nvarchar(8) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Ebene1 nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Ebene2 nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Ebene3 nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Flag_APOBK nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8,
+  Beschreibung_MW nvarchar(100), 
+  BAKLALT nvarchar(2), 
+  BAGRALT nvarchar(4), 
+  BAKL nvarchar(5), 
+  BAGR nvarchar(8), 
+  Ebene1 nvarchar(2), 
+  Ebene2 nvarchar(2), 
+  Ebene3 nvarchar(2), 
+  Flag_APOBK nvarchar(1),
   CONSTRAINT PK_Statkue_Fachklasse PRIMARY KEY (AP, BKIndex, FKS)
 );
 
 
 CREATE TABLE Statkue_Foerderschwerpunkt (
-  Beschreibung nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  FSP nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Flag nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '1', 
-  SF nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Beschreibung nvarchar(100), 
+  FSP nvarchar(2) NOT NULL, 
+  Flag nvarchar(1) DEFAULT '1', 
+  SF nvarchar(2) NOT NULL, 
   geaendert datetime2,
   CONSTRAINT PK_Statkue_Foerderschwerpunkt PRIMARY KEY (FSP, SF)
 );
 
 
 CREATE TABLE Statkue_Gliederung (
-  SF nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Flag nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  BKAnlage nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  BKTyp nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  SF nvarchar(2) NOT NULL, 
+  Flag nvarchar(1) NOT NULL, 
+  BKAnlage nvarchar(1) NOT NULL, 
+  BKTyp nvarchar(2) NOT NULL, 
   BKIndex int DEFAULT 0, 
-  Beschreibung nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Beschreibung nvarchar(100), 
   geaendert datetime2,
   CONSTRAINT PK_Statkue_Gliederung PRIMARY KEY (BKAnlage, BKTyp, Flag, SF)
 );
 
 
 CREATE TABLE Statkue_Herkunftsart (
-  SF nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Art nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Beschreibung nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Flag nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '1' NOT NULL, 
+  SF nvarchar(2) NOT NULL, 
+  Art nvarchar(2) NOT NULL, 
+  Beschreibung nvarchar(255) NOT NULL, 
+  Flag nvarchar(1) DEFAULT '1' NOT NULL, 
   Sortierung int DEFAULT 0 NOT NULL, 
   geaendert datetime2,
   CONSTRAINT PK_Statkue_Herkunftsart PRIMARY KEY (Art, SF)
@@ -1756,10 +1824,10 @@ CREATE TABLE Statkue_Herkunftsart (
 
 
 CREATE TABLE Statkue_Herkunftsschulform (
-  SF nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  HSF nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Beschreibung nvarchar(150) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Flag nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '1' NOT NULL, 
+  SF nvarchar(2) NOT NULL, 
+  HSF nvarchar(3) NOT NULL, 
+  Beschreibung nvarchar(150) NOT NULL, 
+  Flag nvarchar(1) DEFAULT '1' NOT NULL, 
   geaendert datetime2,
   CONSTRAINT PK_Statkue_Herkunftsschulform PRIMARY KEY (HSF, SF)
 );
@@ -1767,20 +1835,20 @@ CREATE TABLE Statkue_Herkunftsschulform (
 
 CREATE TABLE Statkue_LehrerAbgang (
   ID bigint NOT NULL, 
-  Kurztext nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Langtext nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Kurztext nvarchar(10) NOT NULL, 
+  Langtext nvarchar(255) NOT NULL, 
   Beginn datetime2, 
   Ende datetime2, 
   Sort int DEFAULT 0 NOT NULL, 
-  ASDSchluessel nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8,
+  ASDSchluessel nvarchar(2),
   CONSTRAINT PK_Statkue_LehrerAbgang PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE Statkue_LehrerAnrechnung (
   ID bigint NOT NULL, 
-  Kurztext nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Langtext nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Kurztext nvarchar(10) NOT NULL, 
+  Langtext nvarchar(255) NOT NULL, 
   Beginn datetime2, 
   Ende datetime2, 
   Sort int DEFAULT 0 NOT NULL,
@@ -1790,8 +1858,8 @@ CREATE TABLE Statkue_LehrerAnrechnung (
 
 CREATE TABLE Statkue_LehrerBeschaeftigungsart (
   ID bigint NOT NULL, 
-  Kurztext nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Langtext nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Kurztext nvarchar(10) NOT NULL, 
+  Langtext nvarchar(255) NOT NULL, 
   Beginn datetime2, 
   Ende datetime2, 
   Sort int DEFAULT 0 NOT NULL,
@@ -1801,8 +1869,8 @@ CREATE TABLE Statkue_LehrerBeschaeftigungsart (
 
 CREATE TABLE Statkue_LehrerEinsatzstatus (
   ID bigint NOT NULL, 
-  Kurztext nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Langtext nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Kurztext nvarchar(10) NOT NULL, 
+  Langtext nvarchar(255) NOT NULL, 
   Beginn datetime2, 
   Ende datetime2, 
   Sort int DEFAULT 0 NOT NULL,
@@ -1812,8 +1880,8 @@ CREATE TABLE Statkue_LehrerEinsatzstatus (
 
 CREATE TABLE Statkue_LehrerFachrAnerkennung (
   ID bigint NOT NULL, 
-  Kurztext nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Langtext nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Kurztext nvarchar(10) NOT NULL, 
+  Langtext nvarchar(255) NOT NULL, 
   Beginn datetime2, 
   Ende datetime2, 
   Sort int DEFAULT 0 NOT NULL,
@@ -1823,8 +1891,8 @@ CREATE TABLE Statkue_LehrerFachrAnerkennung (
 
 CREATE TABLE Statkue_LehrerFachrichtung (
   ID bigint NOT NULL, 
-  Kurztext nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Langtext nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Kurztext nvarchar(10) NOT NULL, 
+  Langtext nvarchar(255) NOT NULL, 
   Beginn datetime2, 
   Ende datetime2, 
   Sort int DEFAULT 0 NOT NULL,
@@ -1834,8 +1902,8 @@ CREATE TABLE Statkue_LehrerFachrichtung (
 
 CREATE TABLE Statkue_LehrerLehramt (
   ID bigint NOT NULL, 
-  Kurztext nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Langtext nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Kurztext nvarchar(10) NOT NULL, 
+  Langtext nvarchar(255) NOT NULL, 
   Beginn datetime2, 
   Ende datetime2, 
   Sort int DEFAULT 0 NOT NULL,
@@ -1845,8 +1913,8 @@ CREATE TABLE Statkue_LehrerLehramt (
 
 CREATE TABLE Statkue_LehrerLehramtAnerkennung (
   ID bigint NOT NULL, 
-  Kurztext nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Langtext nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Kurztext nvarchar(10) NOT NULL, 
+  Langtext nvarchar(255) NOT NULL, 
   Beginn datetime2, 
   Ende datetime2, 
   Sort int DEFAULT 0 NOT NULL,
@@ -1856,8 +1924,8 @@ CREATE TABLE Statkue_LehrerLehramtAnerkennung (
 
 CREATE TABLE Statkue_LehrerLehrbefAnerkennung (
   ID bigint NOT NULL, 
-  Kurztext nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Langtext nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Kurztext nvarchar(10) NOT NULL, 
+  Langtext nvarchar(255) NOT NULL, 
   Beginn datetime2, 
   Ende datetime2, 
   Sort int DEFAULT 0 NOT NULL,
@@ -1867,8 +1935,8 @@ CREATE TABLE Statkue_LehrerLehrbefAnerkennung (
 
 CREATE TABLE Statkue_LehrerLehrbefaehigung (
   ID bigint NOT NULL, 
-  Kurztext nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Langtext nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Kurztext nvarchar(10) NOT NULL, 
+  Langtext nvarchar(255) NOT NULL, 
   Beginn datetime2, 
   Ende datetime2, 
   Sort int DEFAULT 0 NOT NULL,
@@ -1878,8 +1946,8 @@ CREATE TABLE Statkue_LehrerLehrbefaehigung (
 
 CREATE TABLE Statkue_LehrerLeitung (
   ID bigint NOT NULL, 
-  Kurztext nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Langtext nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Kurztext nvarchar(10) NOT NULL, 
+  Langtext nvarchar(255) NOT NULL, 
   Beginn datetime2, 
   Ende datetime2, 
   Sort int DEFAULT 0 NOT NULL,
@@ -1889,8 +1957,8 @@ CREATE TABLE Statkue_LehrerLeitung (
 
 CREATE TABLE Statkue_LehrerMehrleistung (
   ID bigint NOT NULL, 
-  Kurztext nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Langtext nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Kurztext nvarchar(10) NOT NULL, 
+  Langtext nvarchar(255) NOT NULL, 
   Beginn datetime2, 
   Ende datetime2, 
   Sort int DEFAULT 0 NOT NULL,
@@ -1900,8 +1968,8 @@ CREATE TABLE Statkue_LehrerMehrleistung (
 
 CREATE TABLE Statkue_LehrerMinderleistung (
   ID bigint NOT NULL, 
-  Kurztext nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Langtext nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Kurztext nvarchar(10) NOT NULL, 
+  Langtext nvarchar(255) NOT NULL, 
   Beginn datetime2, 
   Ende datetime2, 
   Sort int DEFAULT 0 NOT NULL,
@@ -1911,8 +1979,8 @@ CREATE TABLE Statkue_LehrerMinderleistung (
 
 CREATE TABLE Statkue_LehrerRechtsverhaeltnis (
   ID bigint NOT NULL, 
-  Kurztext nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Langtext nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Kurztext nvarchar(10) NOT NULL, 
+  Langtext nvarchar(255) NOT NULL, 
   Beginn datetime2, 
   Ende datetime2, 
   Sort int DEFAULT 0 NOT NULL,
@@ -1922,21 +1990,21 @@ CREATE TABLE Statkue_LehrerRechtsverhaeltnis (
 
 CREATE TABLE Statkue_LehrerZugang (
   ID bigint NOT NULL, 
-  Kurztext nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Langtext nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Kurztext nvarchar(10) NOT NULL, 
+  Langtext nvarchar(255) NOT NULL, 
   Beginn datetime2, 
   Ende datetime2, 
   Sort int DEFAULT 0 NOT NULL, 
-  ASDSchluessel nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8,
+  ASDSchluessel nvarchar(2),
   CONSTRAINT PK_Statkue_LehrerZugang PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE Statkue_Nationalitaeten (
-  Schluessel nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Klartext nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Klartext2 nvarchar(80) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Flag nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Schluessel nvarchar(3) NOT NULL, 
+  Klartext nvarchar(255) NOT NULL, 
+  Klartext2 nvarchar(80) NOT NULL, 
+  Flag nvarchar(1), 
   geaendert datetime2, 
   Beginn datetime2, 
   Ende datetime2,
@@ -1945,11 +2013,11 @@ CREATE TABLE Statkue_Nationalitaeten (
 
 
 CREATE TABLE Statkue_Organisationsform (
-  SF nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  OrgForm nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  FSP nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Beschreibung nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Flag nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
+  SF nvarchar(2) NOT NULL, 
+  OrgForm nvarchar(1) NOT NULL, 
+  FSP nvarchar(2) NOT NULL, 
+  Beschreibung nvarchar(100) NOT NULL, 
+  Flag nvarchar(1), 
   geaendert datetime2,
   CONSTRAINT PK_Statkue_Organisationsform PRIMARY KEY (FSP, OrgForm, SF)
 );
@@ -1957,26 +2025,26 @@ CREATE TABLE Statkue_Organisationsform (
 
 CREATE TABLE Statkue_PLZOrt (
   ID bigint NOT NULL, 
-  PLZ nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  REGSCHL nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ORT nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
+  PLZ nvarchar(50), 
+  REGSCHL nvarchar(50), 
+  ORT nvarchar(50), 
   Sortierung int DEFAULT 1,
   CONSTRAINT PK_Statkue_PLZOrt PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE Statkue_Reformpaedagogik (
-  SF nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  RPG nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Beschreibung nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  SF nvarchar(2) NOT NULL, 
+  RPG nvarchar(1) NOT NULL, 
+  Beschreibung nvarchar(100) NOT NULL, 
   geaendert datetime2,
   CONSTRAINT PK_Statkue_Reformpaedagogik PRIMARY KEY (RPG, SF)
 );
 
 
 CREATE TABLE Statkue_Religionen (
-  Schluessel nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Klartext nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Schluessel nvarchar(2) NOT NULL, 
+  Klartext nvarchar(50) NOT NULL, 
   geaendert datetime2,
   CONSTRAINT PK_Statkue_Religionen PRIMARY KEY (Schluessel)
 );
@@ -1984,9 +2052,9 @@ CREATE TABLE Statkue_Religionen (
 
 CREATE TABLE Statkue_SchuelerErsteSchulformSekI (
   ID bigint NOT NULL, 
-  SF nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Kurztext nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Langtext nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  SF nvarchar(2), 
+  Kurztext nvarchar(10) NOT NULL, 
+  Langtext nvarchar(255) NOT NULL, 
   Beginn datetime2, 
   Ende datetime2, 
   Sort int DEFAULT 0 NOT NULL, 
@@ -1997,9 +2065,9 @@ CREATE TABLE Statkue_SchuelerErsteSchulformSekI (
 
 CREATE TABLE Statkue_SchuelerKindergartenbesuch (
   ID bigint NOT NULL, 
-  SF nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Kurztext nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Langtext nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  SF nvarchar(2), 
+  Kurztext nvarchar(10) NOT NULL, 
+  Langtext nvarchar(255) NOT NULL, 
   Beginn datetime2, 
   Ende datetime2, 
   Sort int DEFAULT 0 NOT NULL,
@@ -2009,22 +2077,22 @@ CREATE TABLE Statkue_SchuelerKindergartenbesuch (
 
 CREATE TABLE Statkue_SchuelerUebergangsempfehlung5Jg (
   ID bigint NOT NULL, 
-  SF nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Kurztext nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Langtext nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  SF nvarchar(2), 
+  Kurztext nvarchar(10) NOT NULL, 
+  Langtext nvarchar(255) NOT NULL, 
   Beginn datetime2, 
   Ende datetime2, 
   Sort int, 
-  HGSEM nvarchar(4) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL,
+  HGSEM nvarchar(4) NOT NULL,
   CONSTRAINT PK_Statkue_SchuelerUebergangsempfehlung5Jg PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE Statkue_SchuelerVerkehrssprache (
   ID bigint NOT NULL, 
-  Kurztext nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Langtext nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Gesprochen_in nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Kurztext nvarchar(10) NOT NULL, 
+  Langtext nvarchar(255) NOT NULL, 
+  Gesprochen_in nvarchar(255), 
   Beginn datetime2, 
   Ende datetime2,
   CONSTRAINT PK_Statkue_SchuelerVerkehrssprache PRIMARY KEY (ID)
@@ -2032,10 +2100,10 @@ CREATE TABLE Statkue_SchuelerVerkehrssprache (
 
 
 CREATE TABLE Statkue_Schulformen (
-  Schulform nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SF nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Bezeichnung nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Flag nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '1' NOT NULL, 
+  Schulform nvarchar(2), 
+  SF nvarchar(2) NOT NULL, 
+  Bezeichnung nvarchar(50) NOT NULL, 
+  Flag nvarchar(1) DEFAULT '1' NOT NULL, 
   geaendert datetime2, 
   Sortierung int DEFAULT 0,
   CONSTRAINT PK_Statkue_Schulformen PRIMARY KEY (Bezeichnung, SF)
@@ -2043,13 +2111,13 @@ CREATE TABLE Statkue_Schulformen (
 
 
 CREATE TABLE Statkue_ZulFaecher (
-  Schulform nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  FSP nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  BG nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Fach nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Bezeichnung nvarchar(80) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Schulform nvarchar(2) NOT NULL, 
+  FSP nvarchar(2) NOT NULL, 
+  BG nvarchar(2) NOT NULL, 
+  Fach nvarchar(2) NOT NULL, 
+  Bezeichnung nvarchar(80) NOT NULL, 
   KZ_Bereich int DEFAULT 0, 
-  Flag nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '1', 
+  Flag nvarchar(1) DEFAULT '1', 
   Sortierung int DEFAULT 0, 
   geaendert datetime2,
   CONSTRAINT PK_Statkue_ZulFaecher PRIMARY KEY (BG, Bezeichnung, FSP, Fach, Flag, Schulform)
@@ -2058,36 +2126,36 @@ CREATE TABLE Statkue_ZulFaecher (
 
 CREATE TABLE Statkue_ZulJahrgaenge (
   ID bigint NOT NULL, 
-  Schulform nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  SNR nvarchar(6) COLLATE Latin1_General_100_BIN2_UTF8, 
-  FSP nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Jahrgang nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Schulform nvarchar(2) NOT NULL, 
+  SNR nvarchar(6), 
+  FSP nvarchar(2), 
+  Jahrgang nvarchar(2), 
   KZ_Bereich int DEFAULT 0, 
-  Beschreibung nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Beschreibung nvarchar(255), 
   geaendert datetime2,
   CONSTRAINT PK_Statkue_ZulJahrgaenge PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE Statkue_ZulKlArt (
-  KlArt nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  FSP nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Bezeichnung nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Schulform nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  KlArt nvarchar(2) NOT NULL, 
+  FSP nvarchar(2) NOT NULL, 
+  Bezeichnung nvarchar(100) NOT NULL, 
+  Schulform nvarchar(2) NOT NULL, 
   geaendert datetime2,
   CONSTRAINT PK_Statkue_ZulKlArt PRIMARY KEY (Bezeichnung, FSP, KlArt, Schulform)
 );
 
 
 CREATE TABLE Statkue_ZulKuArt (
-  SF nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  FSP nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  BG nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Kursart nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Kursart2 nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Bezeichnung nvarchar(120) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  SF nvarchar(2) NOT NULL, 
+  FSP nvarchar(2) NOT NULL, 
+  BG nvarchar(2) NOT NULL, 
+  Kursart nvarchar(3) NOT NULL, 
+  Kursart2 nvarchar(5) NOT NULL, 
+  Bezeichnung nvarchar(120) NOT NULL, 
   JgBereich int DEFAULT 0 NOT NULL, 
-  Flag nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '1' NOT NULL, 
+  Flag nvarchar(1) DEFAULT '1' NOT NULL, 
   geaendert datetime2,
   CONSTRAINT PK_Statkue_ZulKuArt PRIMARY KEY (BG, Bezeichnung, FSP, Flag, JgBereich, Kursart, Kursart2, SF)
 );
@@ -2095,13 +2163,13 @@ CREATE TABLE Statkue_ZulKuArt (
 
 CREATE TABLE Stundentafel (
   ID bigint DEFAULT -1 NOT NULL, 
-  Bezeichnung nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Bezeichnung nvarchar(50) NOT NULL, 
   Jahrgang_ID bigint, 
-  ASDJahrgang nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Klasse nvarchar(6) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SGL nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8, 
+  ASDJahrgang nvarchar(2), 
+  Klasse nvarchar(6), 
+  SGL nvarchar(3), 
   Fachklasse_ID bigint, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
+  Sichtbar nvarchar(1) DEFAULT '+', 
   SchulnrEigner int, 
   Sortierung int DEFAULT 32000,
   CONSTRAINT PK_Stundentafel PRIMARY KEY (ID)
@@ -2112,12 +2180,12 @@ CREATE TABLE Stundentafel_Faecher (
   ID bigint DEFAULT -1 NOT NULL, 
   Stundentafel_ID bigint NOT NULL, 
   Fach_ID bigint NOT NULL, 
-  KursartAllg nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
+  KursartAllg nvarchar(5), 
   WochenStd smallint, 
-  LehrerKrz nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  EpochenUnterricht nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
+  LehrerKrz nvarchar(10), 
+  EpochenUnterricht nvarchar(1) DEFAULT '-', 
   Sortierung int DEFAULT 32000, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
+  Sichtbar nvarchar(1) DEFAULT '+', 
   Gewichtung int DEFAULT 1, 
   SchulnrEigner int,
   CONSTRAINT PK_Stundentafel_Faecher PRIMARY KEY (ID),
@@ -2129,16 +2197,16 @@ CREATE TABLE Stundentafel_Faecher (
 
 CREATE TABLE TextExportVorlagen (
   SchulnrEigner int NOT NULL, 
-  VorlageName nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Daten nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8,
+  VorlageName nvarchar(50) NOT NULL, 
+  Daten nvarchar(max),
   CONSTRAINT PK_TextExportVorlagen PRIMARY KEY (SchulnrEigner, VorlageName)
 );
 
 
 CREATE TABLE Usergroups (
   UG_ID bigint NOT NULL, 
-  UG_Bezeichnung nvarchar(64) COLLATE Latin1_General_100_BIN2_UTF8, 
-  UG_Kompetenzen nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
+  UG_Bezeichnung nvarchar(64), 
+  UG_Kompetenzen nvarchar(255), 
   UG_Nr int, 
   SchulnrEigner int,
   CONSTRAINT PK_Usergroups PRIMARY KEY (UG_ID),
@@ -2148,20 +2216,20 @@ CREATE TABLE Usergroups (
 
 CREATE TABLE Users (
   ID bigint DEFAULT -1 NOT NULL, 
-  US_Name nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  US_LoginName nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  US_Password nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  US_UserGroups nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  US_Privileges nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
+  US_Name nvarchar(50) NOT NULL, 
+  US_LoginName nvarchar(20) NOT NULL, 
+  US_Password nvarchar(20), 
+  US_UserGroups nvarchar(50), 
+  US_Privileges nvarchar(255), 
   SchulnrEigner int, 
-  EMail nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  EMailName nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SMTPUsername nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SMTPPassword nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  EMailSignature nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
+  EMail nvarchar(100), 
+  EMailName nvarchar(100), 
+  SMTPUsername nvarchar(100), 
+  SMTPPassword nvarchar(100), 
+  EMailSignature nvarchar(max), 
   HeartbeatDate int, 
-  ComputerName nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  US_PasswordHash nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8,
+  ComputerName nvarchar(50), 
+  US_PasswordHash nvarchar(255),
   CONSTRAINT PK_Users PRIMARY KEY (ID),
   CONSTRAINT Users_UC1 UNIQUE (US_LoginName)
 );
@@ -2169,203 +2237,191 @@ CREATE TABLE Users (
 
 CREATE TABLE Versetzung (
   ID bigint DEFAULT -1 NOT NULL, 
-  Bezeichnung nvarchar(150) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ASDKlasse nvarchar(6) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Klasse nvarchar(15) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+  Bezeichnung nvarchar(150), 
+  ASDKlasse nvarchar(6), 
+  Klasse nvarchar(15) NOT NULL, 
   Jahrgang_ID bigint, 
-  FKlasse nvarchar(15) COLLATE Latin1_General_100_BIN2_UTF8, 
-  VKlasse nvarchar(15) COLLATE Latin1_General_100_BIN2_UTF8, 
-  OrgFormKrz nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  KlassenlehrerKrz nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  StvKlassenlehrerKrz nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
+  FKlasse nvarchar(15), 
+  VKlasse nvarchar(15), 
+  OrgFormKrz nvarchar(1), 
+  KlassenlehrerKrz nvarchar(10), 
+  StvKlassenlehrerKrz nvarchar(10), 
   Restabschnitte smallint, 
-  ASDSchulformNr nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8, 
+  ASDSchulformNr nvarchar(3), 
   Fachklasse_ID bigint, 
-  PruefOrdnung nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
+  PruefOrdnung nvarchar(20), 
+  Sichtbar nvarchar(1) DEFAULT '+', 
   Sortierung int DEFAULT 32000, 
-  Klassenart nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SommerSem nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  NotenGesperrt nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Klassenart nvarchar(2), 
+  SommerSem nvarchar(1), 
+  NotenGesperrt nvarchar(1), 
   SchulnrEigner int, 
-  AdrMerkmal nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT 'A', 
-  WebNotenGesperrt nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  KoopKlasse nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  Ankreuzzeugnisse nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8,
+  AdrMerkmal nvarchar(1) DEFAULT 'A', 
+  WebNotenGesperrt nvarchar(1) DEFAULT '-', 
+  KoopKlasse nvarchar(1) DEFAULT '-', 
+  Ankreuzzeugnisse nvarchar(1),
   CONSTRAINT PK_Versetzung PRIMARY KEY (ID),
   CONSTRAINT Versetzung_Lehrer_FK FOREIGN KEY (KlassenlehrerKrz) REFERENCES K_Lehrer(Kuerzel) ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT Versetzung_UC1 UNIQUE (Klasse)
 );
 
 
-CREATE TABLE EigeneSchule_Abt_Kl (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Abteilung_ID bigint NOT NULL, 
-  Klasse nvarchar(15) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  Sichtbar nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  SchulnrEigner int,
-  CONSTRAINT PK_EigeneSchule_Abt_Kl PRIMARY KEY (ID),
-  CONSTRAINT EigeneSchuleAbtKl_Abteilung_FK FOREIGN KEY (Abteilung_ID) REFERENCES EigeneSchule_Abteilungen(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT EigeneSchuleAbtKl_Klasse_FK FOREIGN KEY (Klasse) REFERENCES Versetzung(Klasse) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
 CREATE TABLE Schueler (
   ID bigint DEFAULT -1 NOT NULL, 
-  GU_ID nvarchar(40) COLLATE Latin1_General_100_BIN2_UTF8, 
+  GU_ID nvarchar(40), 
   SrcID int, 
-  IDext nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8, 
+  IDext nvarchar(30), 
   Status int, 
-  Name nvarchar(60) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Vorname nvarchar(60) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Zusatz nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Geburtsname nvarchar(60) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Strasse nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Name nvarchar(60), 
+  Vorname nvarchar(60), 
+  Zusatz nvarchar(255), 
+  Geburtsname nvarchar(60), 
+  Strasse nvarchar(50), 
   Ort_ID bigint, 
-  PLZ nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  OrtAbk nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
+  PLZ nvarchar(10), 
+  OrtAbk nvarchar(50), 
   Ortsteil_ID bigint, 
-  Telefon nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Email nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Fax nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Telefon nvarchar(20), 
+  Email nvarchar(100), 
+  Fax nvarchar(20), 
   AktSchuljahr smallint, 
   AktAbschnitt smallint, 
-  Klasse nvarchar(15) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Klasse nvarchar(15), 
   Jahrgang smallint, 
-  PruefOrdnung nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Geburtsdatum datetime2, 
-  Geburtsort nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Volljaehrig nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
+  PruefOrdnung nvarchar(20), 
+  Geburtsdatum date, 
+  Geburtsort nvarchar(100), 
+  Volljaehrig nvarchar(1) DEFAULT '-', 
   Geschlecht smallint, 
-  StaatKrz nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8, 
-  StaatKrz2 nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8, 
-  StaatAbk nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Aussiedler nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
+  StaatKrz nvarchar(3), 
+  StaatKrz2 nvarchar(3), 
+  StaatAbk nvarchar(50), 
+  Aussiedler nvarchar(1) DEFAULT '-', 
   Religion_ID bigint, 
-  ReligionAbk nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Religionsabmeldung datetime2, 
-  Religionsanmeldung datetime2, 
-  Bafoeg nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  Schwerbehinderung nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
+  ReligionAbk nvarchar(30), 
+  Religionsabmeldung date, 
+  Religionsanmeldung date, 
+  Bafoeg nvarchar(1) DEFAULT '-', 
+  Schwerbehinderung nvarchar(1) DEFAULT '-', 
   Foerderschwerpunkt_ID bigint, 
   Sportbefreiung_ID bigint, 
   Fahrschueler_ID bigint, 
   Haltestelle_ID bigint, 
-  HaltestelleAbk nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ASDSchulform nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8, 
+  HaltestelleAbk nvarchar(30), 
+  ASDSchulform nvarchar(3), 
   Jahrgang_ID bigint, 
-  ASDJahrgang nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
+  ASDJahrgang nvarchar(2), 
   Fachklasse_ID bigint, 
-  SchulpflichtErf nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  Anschreibdatum datetime2, 
-  Aufnahmedatum datetime2, 
+  SchulpflichtErf nvarchar(1) DEFAULT '-', 
+  Anschreibdatum date, 
+  Aufnahmedatum date, 
   Einschulungsjahr smallint, 
   Einschulungsart_ID bigint, 
-  LSSchulNr nvarchar(6) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LSSchulformSIM nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LSJahrgang nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LSSchulentlassDatum datetime2, 
-  LSVersetzung nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LSFachklKennung nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LSFachklSIM nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LSEntlassgrund nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LSEntlassArt nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LSKlassenart nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LSRefPaed nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Entlassjahrgang nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
+  LSSchulNr nvarchar(6), 
+  LSSchulformSIM nvarchar(3), 
+  LSJahrgang nvarchar(2), 
+  LSSchulentlassDatum date, 
+  LSVersetzung nvarchar(2), 
+  LSFachklKennung nvarchar(10), 
+  LSFachklSIM nvarchar(5), 
+  LSEntlassgrund nvarchar(50), 
+  LSEntlassArt nvarchar(2), 
+  LSKlassenart nvarchar(2), 
+  LSRefPaed nvarchar(1), 
+  Entlassjahrgang nvarchar(2), 
   Entlassjahrgang_ID bigint, 
-  Entlassdatum datetime2, 
-  Entlassgrund nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Entlassart nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SchulwechselNr nvarchar(6) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Schulwechseldatum datetime2, 
-  Geloescht nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  Gesperrt nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
+  Entlassdatum date, 
+  Entlassgrund nvarchar(50), 
+  Entlassart nvarchar(2), 
+  SchulwechselNr nvarchar(6), 
+  Schulwechseldatum date, 
+  Geloescht nvarchar(1) DEFAULT '-', 
+  Gesperrt nvarchar(1) DEFAULT '-', 
   ModifiziertAm datetime2, 
-  ModifiziertVon nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Markiert nvarchar(21) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  FotoVorhanden nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  JVA nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  RefPaed nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  KeineAuskunft nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  Lehrer nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Beruf nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AbschlussDatum nvarchar(15) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Bemerkungen nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
-  BeginnBildungsgang datetime2, 
-  Durchschnitt nvarchar(4) COLLATE Latin1_General_100_BIN2_UTF8, 
-  OrgFormKrz nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Klassenart nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DurchschnittsNote nvarchar(4) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LSSGL nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LSSchulform nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  KonfDruck nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DSN_Text nvarchar(15) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Berufsabschluss nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
+  ModifiziertVon nvarchar(20), 
+  Markiert nvarchar(21) DEFAULT '-', 
+  FotoVorhanden nvarchar(1) DEFAULT '-', 
+  JVA nvarchar(1) DEFAULT '-', 
+  RefPaed nvarchar(1), 
+  KeineAuskunft nvarchar(1) DEFAULT '-', 
+  Lehrer nvarchar(10), 
+  Beruf nvarchar(100), 
+  AbschlussDatum nvarchar(15), 
+  Bemerkungen nvarchar(max), 
+  BeginnBildungsgang date, 
+  Durchschnitt nvarchar(4), 
+  OrgFormKrz nvarchar(1), 
+  Klassenart nvarchar(2), 
+  DurchschnittsNote nvarchar(4), 
+  LSSGL nvarchar(5), 
+  LSSchulform nvarchar(2), 
+  KonfDruck nvarchar(1), 
+  DSN_Text nvarchar(15), 
+  Berufsabschluss nvarchar(1), 
   Schwerpunkt_ID bigint, 
-  LSSGL_SIM nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8, 
-  BerufsschulpflErf nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
+  LSSGL_SIM nvarchar(3), 
+  BerufsschulpflErf nvarchar(1), 
   StatusNSJ int, 
   FachklasseNSJ_ID bigint, 
   Buchkonto float, 
-  VerkehrsspracheFamilie nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
+  VerkehrsspracheFamilie nvarchar(2), 
   JahrZuzug int, 
-  DauerKindergartenbesuch nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  VerpflichtungSprachfoerderkurs nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  TeilnahmeSprachfoerderkurs nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Schulbuchgeldbefreit nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Autist nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  GeburtslandSchueler nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  GeburtslandVater nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  GeburtslandMutter nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Uebergangsempfehlung_JG5 nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ErsteSchulform_SI nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
+  DauerKindergartenbesuch nvarchar(1), 
+  VerpflichtungSprachfoerderkurs nvarchar(1), 
+  TeilnahmeSprachfoerderkurs nvarchar(1), 
+  Schulbuchgeldbefreit nvarchar(1), 
+  Autist nvarchar(1), 
+  GeburtslandSchueler nvarchar(10), 
+  GeburtslandVater nvarchar(10), 
+  GeburtslandMutter nvarchar(10), 
+  Uebergangsempfehlung_JG5 nvarchar(10), 
+  ErsteSchulform_SI nvarchar(10), 
   JahrWechsel_SI int, 
   JahrWechsel_SII int, 
-  Migrationshintergrund nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Migrationshintergrund nvarchar(1), 
   Foerderschwerpunkt2_ID bigint, 
   SortierungKlasse int, 
-  ExterneSchulNr nvarchar(6) COLLATE Latin1_General_100_BIN2_UTF8, 
+  ExterneSchulNr nvarchar(6), 
   Kindergarten_ID bigint, 
-  LetzterBerufsAbschluss nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LetzterAllgAbschluss nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Land nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
+  LetzterBerufsAbschluss nvarchar(10), 
+  LetzterAllgAbschluss nvarchar(10), 
+  Land nvarchar(2), 
   AV_Leist int, 
   AV_Zuv int, 
   AV_Selbst int, 
   SV_Verant int, 
   SV_Konfl int, 
   SV_Koop int, 
-  Duplikat nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  EinschulungsartASD nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Hausnr nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Strassenname nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Duplikat nvarchar(1) DEFAULT '-', 
+  EinschulungsartASD nvarchar(2), 
+  Hausnr nvarchar(10), 
+  Strassenname nvarchar(50), 
   SchulnrEigner int, 
-  BilingualerZweig nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DurchschnittsnoteFHR nvarchar(4) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DSN_FHR_Text nvarchar(15) COLLATE Latin1_General_100_BIN2_UTF8, 
+  BilingualerZweig nvarchar(1), 
+  DurchschnittsnoteFHR nvarchar(4), 
+  DSN_FHR_Text nvarchar(15), 
   Eigenanteil float, 
-  StaatAbk2 nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ZustimmungFoto nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
+  StaatAbk2 nvarchar(50), 
+  ZustimmungFoto nvarchar(1) DEFAULT '-', 
   BKAZVO int, 
-  HatBerufsausbildung nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  Ausweisnummer nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AOSF nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
+  HatBerufsausbildung nvarchar(1) DEFAULT '-', 
+  Ausweisnummer nvarchar(30), 
+  AOSF nvarchar(1) DEFAULT '+', 
   EPJahre int DEFAULT 2, 
-  LSBemerkung nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  WechselBestaetigt nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
+  LSBemerkung nvarchar(255), 
+  WechselBestaetigt nvarchar(1) DEFAULT '-', 
   DauerBildungsgang int, 
-  AnmeldeDatum datetime2, 
-  MeisterBafoeg nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  OnlineAnmeldung nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  Dokumentenverzeichnis nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Berufsqualifikation nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  HausnrZusatz nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ZieldifferentesLernen nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  ZusatzNachname nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8, 
-  EndeEingliederung datetime2, 
-  SchulEmail nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  EndeAnschlussfoerderung datetime2,
+  AnmeldeDatum date, 
+  MeisterBafoeg nvarchar(1) DEFAULT '-', 
+  OnlineAnmeldung nvarchar(1) DEFAULT '-', 
+  Dokumentenverzeichnis nvarchar(255), 
+  Berufsqualifikation nvarchar(100), 
+  HausnrZusatz nvarchar(30), 
+  ZieldifferentesLernen nvarchar(1) DEFAULT '-', 
+  ZusatzNachname nvarchar(30), 
+  EndeEingliederung date, 
+  SchulEmail nvarchar(100), 
+  EndeAnschlussfoerderung date,
   CONSTRAINT PK_Schueler PRIMARY KEY (ID),
   CONSTRAINT Schueler_Einschulungsart_FK FOREIGN KEY (Einschulungsart_ID) REFERENCES K_EinschulungsArt(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT Schueler_Fahrschueler_FK FOREIGN KEY (Fahrschueler_ID) REFERENCES K_FahrschuelerArt(ID) ON UPDATE CASCADE ON DELETE SET NULL,
@@ -2381,35 +2437,35 @@ CREATE TABLE Schueler (
 );
 
 
-CREATE TABLE SchuelerMerkmale (
-  ID bigint NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  Kurztext nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SchulnrEigner int, 
-  DatumVon datetime2, 
-  DatumBis datetime2,
-  CONSTRAINT PK_SchuelerMerkmale PRIMARY KEY (Schueler_ID),
-  CONSTRAINT SchuelerMerkmale_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+CREATE TABLE EigeneSchule_Abt_Kl (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Abteilung_ID bigint NOT NULL, 
+  Klasse nvarchar(15) NOT NULL, 
+  Sichtbar nvarchar(1) DEFAULT '+', 
+  SchulnrEigner int,
+  CONSTRAINT PK_EigeneSchule_Abt_Kl PRIMARY KEY (ID),
+  CONSTRAINT EigeneSchuleAbtKl_Abteilung_FK FOREIGN KEY (Abteilung_ID) REFERENCES EigeneSchule_Abteilungen(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT EigeneSchuleAbtKl_Klasse_FK FOREIGN KEY (Klasse) REFERENCES Versetzung(Klasse) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
 CREATE TABLE SchuelerBKAbschluss (
   Schueler_ID bigint NOT NULL, 
-  Zulassung nchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Bestanden nchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Zeugnis nchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ZertifikatBK nchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ZulassungErwBK nchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  BestandenErwBK nchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ZulassungBA nchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  BestandenBA nchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  PraktPrfNote nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  NoteKolloquium nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ThemaAbschlussarbeit nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Zulassung nchar(1), 
+  Bestanden nchar(1), 
+  Zeugnis nchar(1), 
+  ZertifikatBK nchar(1), 
+  ZulassungErwBK nchar(1), 
+  BestandenErwBK nchar(1), 
+  ZulassungBA nchar(1), 
+  BestandenBA nchar(1), 
+  PraktPrfNote nvarchar(2), 
+  NoteKolloquium nvarchar(2), 
+  ThemaAbschlussarbeit nvarchar(max), 
   SchulnrEigner int, 
-  BAP_Vorhanden nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  NoteFachpraxis nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  FachPraktAnteilAusr nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
+  BAP_Vorhanden nvarchar(1), 
+  NoteFachpraxis nvarchar(2), 
+  FachPraktAnteilAusr nvarchar(1), 
   Jahr int, 
   Abschnitt int,
   CONSTRAINT PK_SchuelerBKAbschluss PRIMARY KEY (Schueler_ID),
@@ -2417,65 +2473,57 @@ CREATE TABLE SchuelerBKAbschluss (
 );
 
 
-CREATE TABLE SchuelerTelefone (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  TelefonArt_ID bigint, 
-  Telefonnummer nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Bemerkung nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Sortierung int DEFAULT 32000, 
-  SchulnrEigner int, 
-  Gesperrt nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-',
-  CONSTRAINT PK_SchuelerTelefone PRIMARY KEY (ID),
-  CONSTRAINT SchuelerTelefone_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerTelefone_Telefonart_FK FOREIGN KEY (TelefonArt_ID) REFERENCES K_TelefonArt(ID) ON UPDATE CASCADE ON DELETE SET NULL
-);
-
-CREATE INDEX SchuelerTelefone_IDX1 ON SchuelerTelefone(Schueler_ID);
-
-
-CREATE TABLE SchuelerVermerke (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  VermerkArt_ID bigint, 
-  Datum datetime2, 
-  Bemerkung nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SchulnrEigner int, 
-  AngelegtVon nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  GeaendertVon nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8,
-  CONSTRAINT PK_SchuelerVermerke PRIMARY KEY (ID),
-  CONSTRAINT SchuelerVermerke_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerVermerke_VermerkArt_FK FOREIGN KEY (VermerkArt_ID) REFERENCES K_Vermerkart(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-CREATE INDEX SchuelerVermerke_IDX1 ON SchuelerVermerke(Schueler_ID);
-
-
-CREATE TABLE SchuelerSprachenfolge (
+CREATE TABLE SchuelerAbiFaecher (
   ID bigint DEFAULT -1 NOT NULL, 
   Schueler_ID bigint NOT NULL, 
   Fach_ID bigint NOT NULL, 
-  JahrgangVon smallint, 
-  JahrgangBis smallint, 
-  Reihenfolge nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AbschnittVon smallint, 
-  AbschnittBis smallint, 
-  SchulnrEigner int, 
-  Referenzniveau nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8,
-  CONSTRAINT PK_SchuelerSprachenfolge PRIMARY KEY (ID),
-  CONSTRAINT SchuelerSprachenfolge_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerSprachenfolge_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerSprachenfolge_UC1 UNIQUE (Fach_ID, Schueler_ID)
-);
-
-
-CREATE TABLE SchuelerListe_Inhalt (
-  Liste_ID bigint NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
+  FachKrz nvarchar(20), 
+  FSortierung int, 
+  Gekoppelt nvarchar(1), 
+  Kurs_ID bigint, 
+  KursartAllg nvarchar(5), 
+  Fachlehrer nvarchar(10), 
+  AbiFach nvarchar(1), 
+  P11_1 nvarchar(2), 
+  S11_1 nvarchar(1), 
+  P11_2 nvarchar(2), 
+  S11_2 nvarchar(1), 
+  P_FA nvarchar(2), 
+  R_FA nvarchar(1) DEFAULT '-', 
+  W12_1 int, 
+  P12_1 nvarchar(2), 
+  H12_1 int, 
+  R12_1 nvarchar(1) DEFAULT '-', 
+  S12_1 nvarchar(1) DEFAULT '-', 
+  W12_2 int, 
+  P12_2 nvarchar(2), 
+  H12_2 int, 
+  R12_2 nvarchar(1) DEFAULT '-', 
+  S12_2 nvarchar(1) DEFAULT '-', 
+  W13_1 int, 
+  P13_1 nvarchar(2), 
+  H13_1 int, 
+  R13_1 nvarchar(1) DEFAULT '-', 
+  S13_1 nvarchar(1) DEFAULT '-', 
+  W13_2 int, 
+  P13_2 nvarchar(2), 
+  H13_2 int, 
+  R13_2 nvarchar(1) DEFAULT '-', 
+  S13_2 nvarchar(1) DEFAULT '-', 
+  Zulassung smallint, 
+  Durchschnitt float, 
+  AbiPruefErgebnis smallint, 
+  Zwischenstand smallint, 
+  MdlPflichtPruefung nvarchar(1) DEFAULT '-', 
+  MdlBestPruefung nvarchar(1), 
+  MdlFreiwPruefung nvarchar(1) DEFAULT '-', 
+  MdlPruefErgebnis smallint, 
+  MdlPruefFolge smallint, 
+  AbiErgebnis smallint, 
   SchulnrEigner int,
-  CONSTRAINT PK_SchuelerListe_Inhalt PRIMARY KEY (Liste_ID, Schueler_ID),
-  CONSTRAINT SchuelerListeInhalt_Liste_FK FOREIGN KEY (Liste_ID) REFERENCES SchuelerListe(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerListeInhalt_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+  CONSTRAINT PK_SchuelerAbiFaecher PRIMARY KEY (ID),
+  CONSTRAINT SchuelerAbiFaecher_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerAbiFaecher_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -2485,66 +2533,261 @@ CREATE TABLE SchuelerNUESDaten (
   SchulnrEigner int NOT NULL, 
   Jahr int NOT NULL, 
   Abschnitt int NOT NULL, 
-  JahrgangIst nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  HauptMerkmal nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  NebenMerkmal nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8,
+  JahrgangIst nvarchar(2), 
+  HauptMerkmal nvarchar(20) NOT NULL, 
+  NebenMerkmal nvarchar(20),
   CONSTRAINT PK_SchuelerNUESDaten PRIMARY KEY (ID),
   CONSTRAINT SchuelerNUESDaten_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
-CREATE TABLE SchuelerAbiFaecher (
+CREATE TABLE SchuelerVermerke (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  VermerkArt_ID bigint, 
+  Datum date, 
+  Bemerkung nvarchar(max), 
+  SchulnrEigner int, 
+  AngelegtVon nvarchar(20), 
+  GeaendertVon nvarchar(20),
+  CONSTRAINT PK_SchuelerVermerke PRIMARY KEY (ID),
+  CONSTRAINT SchuelerVermerke_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerVermerke_VermerkArt_FK FOREIGN KEY (VermerkArt_ID) REFERENCES K_Vermerkart(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE INDEX SchuelerVermerke_IDX1 ON SchuelerVermerke(Schueler_ID);
+
+
+CREATE TABLE SchuelerMerkmale (
+  ID bigint NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  Kurztext nvarchar(10), 
+  SchulnrEigner int, 
+  DatumVon date, 
+  DatumBis date,
+  CONSTRAINT PK_SchuelerMerkmale PRIMARY KEY (Schueler_ID),
+  CONSTRAINT SchuelerMerkmale_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE SchuelerSprachenfolge (
   ID bigint DEFAULT -1 NOT NULL, 
   Schueler_ID bigint NOT NULL, 
   Fach_ID bigint NOT NULL, 
-  FachKrz nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  FSortierung int, 
-  Gekoppelt nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Kurs_ID bigint, 
-  KursartAllg nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Fachlehrer nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AbiFach nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  P11_1 nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  S11_1 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  P11_2 nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  S11_2 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  P_FA nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  R_FA nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  W12_1 int, 
-  P12_1 nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  H12_1 int, 
-  R12_1 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  S12_1 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  W12_2 int, 
-  P12_2 nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  H12_2 int, 
-  R12_2 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  S12_2 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  W13_1 int, 
-  P13_1 nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  H13_1 int, 
-  R13_1 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  S13_1 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  W13_2 int, 
-  P13_2 nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  H13_2 int, 
-  R13_2 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  S13_2 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  Zulassung smallint, 
-  Durchschnitt float, 
-  AbiPruefErgebnis smallint, 
-  Zwischenstand smallint, 
-  MdlPflichtPruefung nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  MdlBestPruefung nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  MdlFreiwPruefung nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  MdlPruefErgebnis smallint, 
-  MdlPruefFolge smallint, 
-  AbiErgebnis smallint, 
-  SchulnrEigner int,
-  CONSTRAINT PK_SchuelerAbiFaecher PRIMARY KEY (ID),
-  CONSTRAINT SchuelerAbiFaecher_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerAbiFaecher_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+  JahrgangVon smallint, 
+  JahrgangBis smallint, 
+  Reihenfolge nvarchar(1), 
+  AbschnittVon smallint, 
+  AbschnittBis smallint, 
+  SchulnrEigner int, 
+  Referenzniveau nvarchar(5),
+  CONSTRAINT PK_SchuelerSprachenfolge PRIMARY KEY (ID),
+  CONSTRAINT SchuelerSprachenfolge_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerSprachenfolge_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerSprachenfolge_UC1 UNIQUE (Fach_ID, Schueler_ID)
 );
+
+
+CREATE TABLE SchuelerFHRFaecher (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  Fach_ID bigint NOT NULL, 
+  KursartAllg nvarchar(5), 
+  FachKrz nvarchar(20), 
+  PSII_2_1 nvarchar(2), 
+  HSII_2_1 int, 
+  RSII_2_1 nvarchar(1) DEFAULT '-', 
+  PSII_2_2 nvarchar(2), 
+  HSII_2_2 int, 
+  RSII_2_2 nvarchar(1) DEFAULT '-', 
+  PSII_2_1_W nvarchar(2), 
+  HSII_2_1_W int, 
+  RSII_2_1_W nvarchar(1) DEFAULT '-', 
+  PSII_2_2_W nvarchar(2), 
+  HSII_2_2_W int, 
+  RSII_2_2_W nvarchar(1) DEFAULT '-', 
+  PSII_3_1 nvarchar(2), 
+  HSII_3_1 int, 
+  RSII_3_1 nvarchar(1) DEFAULT '-', 
+  PSII_3_2 nvarchar(2), 
+  HSII_3_2 int, 
+  RSII_3_2 nvarchar(1) DEFAULT '-', 
+  PSII_3_1_W nvarchar(2), 
+  HSII_3_1_W int, 
+  RSII_3_1_W nvarchar(1) DEFAULT '-', 
+  PSII_3_2_W nvarchar(2), 
+  HSII_3_2_W int, 
+  RSII_3_2_W nvarchar(1) DEFAULT '-', 
+  KSII_2_1 nvarchar(5), 
+  KSII_2_2 nvarchar(5), 
+  KSII_2_1_W nvarchar(5), 
+  KSII_2_2_W nvarchar(5), 
+  KSII_3_1 nvarchar(5), 
+  KSII_3_2 nvarchar(5), 
+  KSII_3_1_W nvarchar(5), 
+  KSII_3_2_W nvarchar(5), 
+  FSortierung int, 
+  SchulnrEigner int,
+  CONSTRAINT PK_SchuelerFHRFaecher PRIMARY KEY (ID),
+  CONSTRAINT SchuelerFHRFaecher_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerFHRFaecher_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE Schueler_AllgAdr (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  Adresse_ID bigint NOT NULL, 
+  Vertragsart_ID bigint, 
+  Vertragsbeginn date, 
+  Vertragsende date, 
+  Ausbilder nvarchar(30), 
+  AllgAdrAnschreiben nvarchar(1) DEFAULT '-', 
+  Praktikum nvarchar(1) DEFAULT '-', 
+  Sortierung int, 
+  Ansprechpartner_ID bigint, 
+  Betreuungslehrer_ID bigint, 
+  SchulnrEigner int,
+  CONSTRAINT PK_Schueler_AllgAdr PRIMARY KEY (ID),
+  CONSTRAINT SchuelerAllgAdr_Adresse_FK FOREIGN KEY (Adresse_ID) REFERENCES K_AllgAdresse(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerAllgAdr_Ansprech_FK FOREIGN KEY (Ansprechpartner_ID) REFERENCES AllgAdrAnsprechpartner(ID) ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT SchuelerAllgAdr_Beschaeftigungsart_FK FOREIGN KEY (Vertragsart_ID) REFERENCES K_BeschaeftigungsArt(ID) ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT SchuelerAllgAdr_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE INDEX Schueler_AllgAdr_IDX1 ON Schueler_AllgAdr(Schueler_ID);
+
+
+CREATE TABLE SchuelerAnkreuzfloskeln (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  SchulnrEigner int NOT NULL, 
+  Jahr int NOT NULL, 
+  Abschnitt int NOT NULL, 
+  Floskel_ID bigint NOT NULL, 
+  Stufe1 nvarchar(1), 
+  Stufe2 nvarchar(1), 
+  Stufe3 nvarchar(1), 
+  Stufe4 nvarchar(1), 
+  Stufe5 nvarchar(1),
+  CONSTRAINT PK_SchuelerAnkreuzfloskeln PRIMARY KEY (ID),
+  CONSTRAINT SchuelerAKF_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE SchuelerLernabschnittsdaten (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  Jahr smallint NOT NULL, 
+  Abschnitt smallint NOT NULL, 
+  Bildungsgang nvarchar(1) NOT NULL, 
+  WechselNr smallint NOT NULL, 
+  Jahrgang smallint, 
+  Hochrechnung int, 
+  SemesterWertung nvarchar(1) DEFAULT '+', 
+  PruefOrdnung nvarchar(20), 
+  Klasse nvarchar(10), 
+  Verspaetet smallint, 
+  NPV_Fach_ID bigint, 
+  NPV_NoteKrz nvarchar(2), 
+  NPV_Datum date, 
+  NPAA_Fach_ID bigint, 
+  NPAA_NoteKrz nvarchar(2), 
+  NPAA_Datum date, 
+  NPBQ_Fach_ID bigint, 
+  NPBQ_NoteKrz nvarchar(2), 
+  NPBQ_Datum date, 
+  VersetzungKrz nvarchar(2), 
+  AbschlussArt smallint, 
+  AbschlIstPrognose nvarchar(1) DEFAULT '-', 
+  Konferenzdatum date, 
+  ZeugnisDatum date, 
+  KlassenLehrer nvarchar(10), 
+  ASDSchulgliederung nvarchar(3), 
+  ASDJahrgang nvarchar(2), 
+  Jahrgang_ID bigint, 
+  Fachklasse_ID bigint, 
+  Schwerpunkt_ID bigint, 
+  ZeugnisBem nvarchar(max), 
+  Schwerbehinderung nvarchar(1) DEFAULT '-', 
+  Foerderschwerpunkt_ID bigint, 
+  OrgFormKrz nvarchar(1), 
+  RefPaed nvarchar(1) DEFAULT '-', 
+  Klassenart nvarchar(2), 
+  SumFehlStd int, 
+  SumFehlStdU int, 
+  Wiederholung nvarchar(1), 
+  Gesamtnote_GS int, 
+  Gesamtnote_NW int, 
+  Folgeklasse nvarchar(10), 
+  Foerderschwerpunkt2_ID bigint, 
+  Abschluss nvarchar(50), 
+  Abschluss_B nvarchar(50), 
+  DSNote nvarchar(4), 
+  AV_Leist int, 
+  AV_Zuv int, 
+  AV_Selbst int, 
+  SV_Verant int, 
+  SV_Konfl int, 
+  SV_Koop int, 
+  KN_Lehrer nvarchar(10), 
+  SchulnrEigner int, 
+  StvKlassenlehrer_ID bigint, 
+  MoeglNPFaecher nvarchar(max), 
+  Zertifikate nvarchar(30), 
+  DatumFHR date, 
+  PruefAlgoErgebnis nvarchar(max), 
+  Zeugnisart nvarchar(5), 
+  DatumVon date, 
+  DatumBis date, 
+  FehlstundenGrenzwert int,
+  CONSTRAINT PK_SchuelerLernabschnittsdaten PRIMARY KEY (ID),
+  CONSTRAINT SchuelerLernabschnittsdaten_Fachklasse_FK FOREIGN KEY (Fachklasse_ID) REFERENCES EigeneSchule_Fachklassen(ID) ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT SchuelerLernabschnittsdaten_Foerderschwerpunkt_FK FOREIGN KEY (Foerderschwerpunkt_ID) REFERENCES K_Foerderschwerpunkt(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT SchuelerLernabschnittsdaten_Jahrgang_FK FOREIGN KEY (Jahrgang_ID) REFERENCES EigeneSchule_Jahrgaenge(ID) ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT SchuelerLernabschnittsdaten_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerLernabschnittsdaten_UC1 UNIQUE (Abschnitt, Bildungsgang, Jahr, Schueler_ID, WechselNr)
+);
+
+
+CREATE TABLE SchuelerDatenschutz (
+  Schueler_ID bigint NOT NULL, 
+  Datenschutz_ID bigint NOT NULL, 
+  Status nvarchar(1) DEFAULT '-' NOT NULL, 
+  SchulnrEigner int NOT NULL,
+  CONSTRAINT PK_SchuelerDatenschutz PRIMARY KEY (Datenschutz_ID, Schueler_ID),
+  CONSTRAINT SchuelerDatenschutz_K_Datenschutz_FK FOREIGN KEY (Datenschutz_ID) REFERENCES K_Datenschutz(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerDatenschutz_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE SchuelerAbgaenge (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  BemerkungIntern nvarchar(30), 
+  AbgangsSchulform nvarchar(2), 
+  AbgangsBeschreibung nvarchar(200), 
+  OrganisationsformKrz nvarchar(1), 
+  AbgangsSchule nvarchar(100), 
+  AbgangsSchuleAnschr nvarchar(100), 
+  AbgangsSchulNr nvarchar(6), 
+  LSJahrgang nvarchar(2), 
+  LSEntlassArt nvarchar(2), 
+  LSSchulformSIM nvarchar(3), 
+  LSSchulEntlassDatum date, 
+  LSVersetzung nvarchar(2), 
+  LSSGL nvarchar(5), 
+  LSFachklKennung nvarchar(10), 
+  LSFachklSIM nvarchar(5), 
+  FuerSIMExport nvarchar(1) DEFAULT '-', 
+  LSBeginnDatum date, 
+  LSBeginnJahrgang nvarchar(2), 
+  SchulnrEigner int,
+  CONSTRAINT PK_SchuelerAbgaenge PRIMARY KEY (ID),
+  CONSTRAINT SchuelerAbgaenge_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE INDEX SchuelerAbgaenge_IDX1 ON SchuelerAbgaenge(LSSchulEntlassDatum, Schueler_ID);
 
 
 CREATE TABLE SchuelerFotos (
@@ -2560,21 +2803,21 @@ CREATE TABLE SchuelerBKFaecher (
   ID bigint DEFAULT -1 NOT NULL, 
   Schueler_ID bigint NOT NULL, 
   Fach_ID bigint NOT NULL, 
-  FachKrz nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  FachSchriftlich nchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  FachSchriftlichBA nchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Vornote nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  NoteSchriftlich nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  MdlPruefung nchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  MdlPruefungFW nchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  NoteMuendlich nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  NoteAbschluss nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  NotePrfGesamt nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
+  FachKrz nvarchar(20), 
+  FachSchriftlich nchar(1), 
+  FachSchriftlichBA nchar(1), 
+  Vornote nvarchar(2), 
+  NoteSchriftlich nvarchar(2), 
+  MdlPruefung nchar(1), 
+  MdlPruefungFW nchar(1), 
+  NoteMuendlich nvarchar(2), 
+  NoteAbschluss nvarchar(2), 
+  NotePrfGesamt nvarchar(2), 
   FSortierung int, 
   SchulnrEigner int, 
-  Fachlehrer nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  NoteAbschlussBA nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Kursart nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Fachlehrer nvarchar(10), 
+  NoteAbschlussBA nvarchar(2), 
+  Kursart nvarchar(5), 
   Jahr int, 
   Abschnitt int,
   CONSTRAINT PK_SchuelerBKFaecher PRIMARY KEY (ID),
@@ -2583,107 +2826,55 @@ CREATE TABLE SchuelerBKFaecher (
 );
 
 
-CREATE TABLE SchuelerAbgaenge (
+CREATE TABLE SchuelerTelefone (
   ID bigint DEFAULT -1 NOT NULL, 
   Schueler_ID bigint NOT NULL, 
-  BemerkungIntern nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AbgangsSchulform nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AbgangsBeschreibung nvarchar(200) COLLATE Latin1_General_100_BIN2_UTF8, 
-  OrganisationsformKrz nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AbgangsSchule nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AbgangsSchuleAnschr nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AbgangsSchulNr nvarchar(6) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LSJahrgang nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LSEntlassArt nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LSSchulformSIM nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LSSchulEntlassDatum datetime2, 
-  LSVersetzung nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LSSGL nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LSFachklKennung nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LSFachklSIM nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
-  FuerSIMExport nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  LSBeginnDatum datetime2, 
-  LSBeginnJahrgang nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SchulnrEigner int,
-  CONSTRAINT PK_SchuelerAbgaenge PRIMARY KEY (ID),
-  CONSTRAINT SchuelerAbgaenge_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+  TelefonArt_ID bigint, 
+  Telefonnummer nvarchar(20), 
+  Bemerkung nvarchar(50), 
+  Sortierung int DEFAULT 32000, 
+  SchulnrEigner int, 
+  Gesperrt nvarchar(1) DEFAULT '-',
+  CONSTRAINT PK_SchuelerTelefone PRIMARY KEY (ID),
+  CONSTRAINT SchuelerTelefone_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerTelefone_Telefonart_FK FOREIGN KEY (TelefonArt_ID) REFERENCES K_TelefonArt(ID) ON UPDATE CASCADE ON DELETE SET NULL
 );
 
-CREATE INDEX SchuelerAbgaenge_IDX1 ON SchuelerAbgaenge(LSSchulEntlassDatum, Schueler_ID);
+CREATE INDEX SchuelerTelefone_IDX1 ON SchuelerTelefone(Schueler_ID);
 
 
-CREATE TABLE SchuelerLernabschnittsdaten (
-  ID bigint DEFAULT -1 NOT NULL, 
+CREATE TABLE SchuelerFoerderempfehlungen (
+  GU_ID nvarchar(40) NOT NULL, 
   Schueler_ID bigint NOT NULL, 
-  Jahr smallint NOT NULL, 
-  Abschnitt smallint NOT NULL, 
-  Bildungsgang nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
-  WechselNr smallint NOT NULL, 
-  Jahrgang smallint, 
-  Hochrechnung int, 
-  SemesterWertung nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  PruefOrdnung nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Klasse nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Verspaetet smallint, 
-  NPV_Fach_ID bigint, 
-  NPV_NoteKrz nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  NPV_Datum datetime2, 
-  NPAA_Fach_ID bigint, 
-  NPAA_NoteKrz nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  NPAA_Datum datetime2, 
-  NPBQ_Fach_ID bigint, 
-  NPBQ_NoteKrz nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  NPBQ_Datum datetime2, 
-  VersetzungKrz nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AbschlussArt smallint, 
-  AbschlIstPrognose nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  Konferenzdatum datetime2, 
-  ZeugnisDatum datetime2, 
-  KlassenLehrer nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ASDSchulgliederung nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ASDJahrgang nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Jahrgang_ID bigint, 
-  Fachklasse_ID bigint, 
-  Schwerpunkt_ID bigint, 
-  ZeugnisBem nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Schwerbehinderung nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  Foerderschwerpunkt_ID bigint, 
-  OrgFormKrz nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  RefPaed nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  Klassenart nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SumFehlStd int, 
-  SumFehlStdU int, 
-  Wiederholung nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Gesamtnote_GS int, 
-  Gesamtnote_NW int, 
-  Folgeklasse nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Foerderschwerpunkt2_ID bigint, 
-  Abschluss nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Abschluss_B nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DSNote nvarchar(4) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AV_Leist int, 
-  AV_Zuv int, 
-  AV_Selbst int, 
-  SV_Verant int, 
-  SV_Konfl int, 
-  SV_Koop int, 
-  KN_Lehrer nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SchulnrEigner int, 
-  StvKlassenlehrer_ID bigint, 
-  MoeglNPFaecher nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Zertifikate nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DatumFHR datetime2, 
-  PruefAlgoErgebnis nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Zeugnisart nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
-  DatumVon datetime2, 
-  DatumBis datetime2, 
-  FehlstundenGrenzwert int,
-  CONSTRAINT PK_SchuelerLernabschnittsdaten PRIMARY KEY (ID),
-  CONSTRAINT SchuelerLernabschnittsdaten_Fachklasse_FK FOREIGN KEY (Fachklasse_ID) REFERENCES EigeneSchule_Fachklassen(ID) ON UPDATE CASCADE ON DELETE SET NULL,
-  CONSTRAINT SchuelerLernabschnittsdaten_Foerderschwerpunkt_FK FOREIGN KEY (Foerderschwerpunkt_ID) REFERENCES K_Foerderschwerpunkt(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT SchuelerLernabschnittsdaten_Jahrgang_FK FOREIGN KEY (Jahrgang_ID) REFERENCES EigeneSchule_Jahrgaenge(ID) ON UPDATE CASCADE ON DELETE SET NULL,
-  CONSTRAINT SchuelerLernabschnittsdaten_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerLernabschnittsdaten_UC1 UNIQUE (Abschnitt, Bildungsgang, Jahr, Schueler_ID, WechselNr)
+  SchulnrEigner int NOT NULL, 
+  DatumAngelegt date DEFAULT CURRENT_TIMESTAMP NOT NULL, 
+  Klasse nvarchar(15), 
+  Jahr int, 
+  Abschnitt int, 
+  Fach_ID bigint, 
+  Lehrer_ID bigint, 
+  DatumAenderungSchild datetime2, 
+  DatumAenderungSchildWeb datetime2, 
+  Kurs nvarchar(20), 
+  Inhaltl_Prozessbez_Komp nvarchar(max), 
+  Methodische_Komp nvarchar(max), 
+  Lern_Arbeitsverhalten nvarchar(max), 
+  Massn_Inhaltl_Prozessbez_Komp nvarchar(max), 
+  Massn_Methodische_Komp nvarchar(max), 
+  Massn_Lern_Arbeitsverhalten nvarchar(max), 
+  Verantwortlichkeit_Eltern nvarchar(max), 
+  Verantwortlichkeit_Schueler nvarchar(max), 
+  Zeitrahmen_von_Datum date, 
+  Zeitrahmen_bis_Datum date, 
+  Ueberpruefung_Datum date, 
+  Naechstes_Beratungsgespraech date, 
+  Leistung_ID bigint, 
+  Kurs_ID bigint, 
+  EingabeFertig nvarchar(1) DEFAULT '-', 
+  Faecher nvarchar(255), 
+  Abgeschlossen nvarchar(1) DEFAULT '-',
+  CONSTRAINT PK_SchuelerFoerderempfehlungen PRIMARY KEY (GU_ID),
+  CONSTRAINT SchuelerFE_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -2691,30 +2882,30 @@ CREATE TABLE SchuelerErzAdr (
   ID bigint DEFAULT -1 NOT NULL, 
   Schueler_ID bigint NOT NULL, 
   ErzieherArt_ID bigint, 
-  Anrede1 nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Titel1 nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Name1 nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Vorname1 nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Anrede2 nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Titel2 nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Name2 nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Vorname2 nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ErzStrasse nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Anrede1 nvarchar(20), 
+  Titel1 nvarchar(10), 
+  Name1 nvarchar(50), 
+  Vorname1 nvarchar(50), 
+  Anrede2 nvarchar(20), 
+  Titel2 nvarchar(10), 
+  Name2 nvarchar(50), 
+  Vorname2 nvarchar(50), 
+  ErzStrasse nvarchar(50), 
   ErzOrt_ID bigint, 
-  ErzPLZ nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
+  ErzPLZ nvarchar(10), 
   ErzOrtsteil_ID bigint, 
-  ErzAnschreiben nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
-  ErzBemerkung nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
+  ErzAnschreiben nvarchar(1) DEFAULT '+', 
+  ErzBemerkung nvarchar(255), 
   Sortierung int, 
-  ErzEMail nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ErzAdrZusatz nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
+  ErzEMail nvarchar(100), 
+  ErzAdrZusatz nvarchar(50), 
   SchulnrEigner int, 
-  Erz1StaatKrz nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Erz2StaatKrz nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ErzEMail2 nvarchar(100) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Erz1ZusatzNachname nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Erz2ZusatzNachname nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Bemerkungen nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8,
+  Erz1StaatKrz nvarchar(3), 
+  Erz2StaatKrz nvarchar(3), 
+  ErzEMail2 nvarchar(100), 
+  Erz1ZusatzNachname nvarchar(30), 
+  Erz2ZusatzNachname nvarchar(30), 
+  Bemerkungen nvarchar(max),
   CONSTRAINT PK_SchuelerErzAdr PRIMARY KEY (ID),
   CONSTRAINT SchuelerErzAdr_ErzieherArt_FK FOREIGN KEY (ErzieherArt_ID) REFERENCES K_ErzieherArt(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT SchuelerErzAdr_Ort_FK FOREIGN KEY (ErzOrt_ID) REFERENCES K_Ort(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
@@ -2725,159 +2916,21 @@ CREATE TABLE SchuelerErzAdr (
 CREATE INDEX SchuelerErzAdr_IDX1 ON SchuelerErzAdr(Schueler_ID);
 
 
-CREATE TABLE SchuelerDatenschutz (
+CREATE TABLE SchuelerListe_Inhalt (
+  Liste_ID bigint NOT NULL, 
   Schueler_ID bigint NOT NULL, 
-  Datenschutz_ID bigint NOT NULL, 
-  Status nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-' NOT NULL, 
-  SchulnrEigner int NOT NULL,
-  CONSTRAINT PK_SchuelerDatenschutz PRIMARY KEY (Datenschutz_ID, Schueler_ID),
-  CONSTRAINT SchuelerDatenschutz_K_Datenschutz_FK FOREIGN KEY (Datenschutz_ID) REFERENCES K_Datenschutz(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerDatenschutz_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE SchuelerAnkreuzfloskeln (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  SchulnrEigner int NOT NULL, 
-  Jahr int NOT NULL, 
-  Abschnitt int NOT NULL, 
-  Floskel_ID bigint NOT NULL, 
-  Stufe1 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Stufe2 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Stufe3 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Stufe4 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Stufe5 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8,
-  CONSTRAINT PK_SchuelerAnkreuzfloskeln PRIMARY KEY (ID),
-  CONSTRAINT SchuelerAKF_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE SchuelerFHRFaecher (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  Fach_ID bigint NOT NULL, 
-  KursartAllg nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
-  FachKrz nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  PSII_2_1 nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  HSII_2_1 int, 
-  RSII_2_1 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  PSII_2_2 nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  HSII_2_2 int, 
-  RSII_2_2 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  PSII_2_1_W nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  HSII_2_1_W int, 
-  RSII_2_1_W nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  PSII_2_2_W nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  HSII_2_2_W int, 
-  RSII_2_2_W nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  PSII_3_1 nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  HSII_3_1 int, 
-  RSII_3_1 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  PSII_3_2 nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  HSII_3_2 int, 
-  RSII_3_2 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  PSII_3_1_W nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  HSII_3_1_W int, 
-  RSII_3_1_W nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  PSII_3_2_W nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  HSII_3_2_W int, 
-  RSII_3_2_W nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  KSII_2_1 nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
-  KSII_2_2 nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
-  KSII_2_1_W nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
-  KSII_2_2_W nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
-  KSII_3_1 nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
-  KSII_3_2 nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
-  KSII_3_1_W nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
-  KSII_3_2_W nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
-  FSortierung int, 
   SchulnrEigner int,
-  CONSTRAINT PK_SchuelerFHRFaecher PRIMARY KEY (ID),
-  CONSTRAINT SchuelerFHRFaecher_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerFHRFaecher_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE Schueler_AllgAdr (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  Adresse_ID bigint NOT NULL, 
-  Vertragsart_ID bigint, 
-  Vertragsbeginn datetime2, 
-  Vertragsende datetime2, 
-  Ausbilder nvarchar(30) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AllgAdrAnschreiben nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  Praktikum nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  Sortierung int, 
-  Ansprechpartner_ID bigint, 
-  Betreuungslehrer_ID bigint, 
-  SchulnrEigner int,
-  CONSTRAINT PK_Schueler_AllgAdr PRIMARY KEY (ID),
-  CONSTRAINT SchuelerAllgAdr_Adresse_FK FOREIGN KEY (Adresse_ID) REFERENCES K_AllgAdresse(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerAllgAdr_Ansprech_FK FOREIGN KEY (Ansprechpartner_ID) REFERENCES AllgAdrAnsprechpartner(ID) ON UPDATE CASCADE ON DELETE SET NULL,
-  CONSTRAINT SchuelerAllgAdr_Beschaeftigungsart_FK FOREIGN KEY (Vertragsart_ID) REFERENCES K_BeschaeftigungsArt(ID) ON UPDATE CASCADE ON DELETE SET NULL,
-  CONSTRAINT SchuelerAllgAdr_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-CREATE INDEX Schueler_AllgAdr_IDX1 ON Schueler_AllgAdr(Schueler_ID);
-
-
-CREATE TABLE SchuelerAbitur (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  FA_Fach nvarchar(130) COLLATE Latin1_General_100_BIN2_UTF8, 
-  FA_Punkte int, 
-  FehlStd int, 
-  uFehlStd int, 
-  Latinum nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  KlLatinum nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  Graecum nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  Hebraicum nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  FranzBilingual nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  BesondereLernleistung nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  AnzRelLK smallint, 
-  AnzRelGK smallint, 
-  AnzRelOK smallint, 
-  AnzDefLK smallint, 
-  AnzDefGK smallint, 
-  Thema_PJK nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  FS2_SekI_manuell nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  Kurse_I int, 
-  Defizite_I int, 
-  LK_Defizite_I int, 
-  AnzahlKurse_0 int, 
-  Punktsumme_I int, 
-  Durchschnitt_I float, 
-  SummeGK smallint, 
-  SummeLK smallint, 
-  SummenOK smallint, 
-  Zugelassen nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  Jahr int, 
-  Abschnitt int, 
-  BLL_Art nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT 'K', 
-  BLL_Punkte int, 
-  Thema_BLL nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Punktsumme_II int, 
-  Defizite_II int, 
-  LK_Defizite_II int, 
-  PruefungBestanden nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  Note nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8, 
-  GesamtPunktzahl smallint, 
-  Notensprung smallint, 
-  FehlendePunktzahl smallint, 
-  SchulnrEigner int,
-  CONSTRAINT PK_SchuelerAbitur PRIMARY KEY (ID),
-  CONSTRAINT SchuelerAbitur_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerAbitur_UC1 UNIQUE (Schueler_ID)
+  CONSTRAINT PK_SchuelerListe_Inhalt PRIMARY KEY (Liste_ID, Schueler_ID),
+  CONSTRAINT SchuelerListeInhalt_Liste_FK FOREIGN KEY (Liste_ID) REFERENCES SchuelerListe(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerListeInhalt_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
 CREATE TABLE SchuelerFHR (
   ID bigint DEFAULT -1 NOT NULL, 
   Schueler_ID bigint NOT NULL, 
-  FHRErreicht nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  Note nvarchar(3) COLLATE Latin1_General_100_BIN2_UTF8, 
+  FHRErreicht nvarchar(1) DEFAULT '-', 
+  Note nvarchar(3), 
   GesamtPunktzahl smallint, 
   SummeGK smallint, 
   SummeLK smallint, 
@@ -2904,14 +2957,14 @@ CREATE TABLE SchuelerFHR (
   ASII_3_2 smallint, 
   ASII_3_1_W smallint, 
   ASII_3_2_W smallint, 
-  WSII_2_1 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  WSII_2_2 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  WSII_2_1_W nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  WSII_2_2_W nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  WSII_3_1 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  WSII_3_2 nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  WSII_3_1_W nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  WSII_3_2_W nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
+  WSII_2_1 nvarchar(1), 
+  WSII_2_2 nvarchar(1), 
+  WSII_2_1_W nvarchar(1), 
+  WSII_2_2_W nvarchar(1), 
+  WSII_3_1 nvarchar(1), 
+  WSII_3_2 nvarchar(1), 
+  WSII_3_1_W nvarchar(1), 
+  WSII_3_2_W nvarchar(1), 
   SchulnrEigner int,
   CONSTRAINT PK_SchuelerFHR PRIMARY KEY (ID),
   CONSTRAINT SchuelerFHR_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
@@ -2925,73 +2978,106 @@ CREATE TABLE SchuelerKAoADaten (
   SchulnrEigner int NOT NULL, 
   Jahr int NOT NULL, 
   Abschnitt int NOT NULL, 
-  Jahrgang nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Kategorie nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Merkmal nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Zusatzmerkmal nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Anschlussoption nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Berufsfeld nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Bemerkung nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8,
+  Jahrgang nvarchar(2), 
+  Kategorie nvarchar(10), 
+  Merkmal nvarchar(20), 
+  Zusatzmerkmal nvarchar(20), 
+  Anschlussoption nvarchar(2), 
+  Berufsfeld nvarchar(10), 
+  Bemerkung nvarchar(255),
   CONSTRAINT PK_SchuelerKAoADaten PRIMARY KEY (ID),
   CONSTRAINT SchuelerKAoADaten_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
-CREATE TABLE SchuelerFoerderempfehlungen (
-  GU_ID nvarchar(40) COLLATE Latin1_General_100_BIN2_UTF8 NOT NULL, 
+CREATE TABLE SchuelerAbitur (
+  ID bigint DEFAULT -1 NOT NULL, 
   Schueler_ID bigint NOT NULL, 
-  SchulnrEigner int NOT NULL, 
-  DatumAngelegt datetime2 DEFAULT CURRENT_TIMESTAMP NOT NULL, 
-  Klasse nvarchar(15) COLLATE Latin1_General_100_BIN2_UTF8, 
+  FA_Fach nvarchar(130), 
+  FA_Punkte int, 
+  FehlStd int, 
+  uFehlStd int, 
+  Latinum nvarchar(1) DEFAULT '-', 
+  KlLatinum nvarchar(1) DEFAULT '-', 
+  Graecum nvarchar(1) DEFAULT '-', 
+  Hebraicum nvarchar(1) DEFAULT '-', 
+  FranzBilingual nvarchar(1) DEFAULT '-', 
+  BesondereLernleistung nvarchar(1) DEFAULT '-', 
+  AnzRelLK smallint, 
+  AnzRelGK smallint, 
+  AnzRelOK smallint, 
+  AnzDefLK smallint, 
+  AnzDefGK smallint, 
+  Thema_PJK nvarchar(255), 
+  FS2_SekI_manuell nvarchar(1) DEFAULT '-', 
+  Kurse_I int, 
+  Defizite_I int, 
+  LK_Defizite_I int, 
+  AnzahlKurse_0 int, 
+  Punktsumme_I int, 
+  Durchschnitt_I float, 
+  SummeGK smallint, 
+  SummeLK smallint, 
+  SummenOK smallint, 
+  Zugelassen nvarchar(1) DEFAULT '-', 
   Jahr int, 
   Abschnitt int, 
+  BLL_Art nvarchar(1) DEFAULT 'K', 
+  BLL_Punkte int, 
+  Thema_BLL nvarchar(255), 
+  Punktsumme_II int, 
+  Defizite_II int, 
+  LK_Defizite_II int, 
+  PruefungBestanden nvarchar(1) DEFAULT '-', 
+  Note nvarchar(3), 
+  GesamtPunktzahl smallint, 
+  Notensprung smallint, 
+  FehlendePunktzahl smallint, 
+  SchulnrEigner int,
+  CONSTRAINT PK_SchuelerAbitur PRIMARY KEY (ID),
+  CONSTRAINT SchuelerAbitur_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerAbitur_UC1 UNIQUE (Schueler_ID)
+);
+
+
+CREATE TABLE SchuelerFehlstunden (
+  ID bigint DEFAULT -1 NOT NULL, 
+  SchulnrEigner int NOT NULL, 
+  Abschnitt_ID bigint NOT NULL, 
+  Datum date DEFAULT CURRENT_TIMESTAMP NOT NULL, 
   Fach_ID bigint, 
-  Lehrer_ID bigint, 
-  DatumAenderungSchild datetime2, 
-  DatumAenderungSchildWeb datetime2, 
-  Kurs nvarchar(20) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Inhaltl_Prozessbez_Komp nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Methodische_Komp nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Lern_Arbeitsverhalten nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Massn_Inhaltl_Prozessbez_Komp nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Massn_Methodische_Komp nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Massn_Lern_Arbeitsverhalten nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Verantwortlichkeit_Eltern nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Verantwortlichkeit_Schueler nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Zeitrahmen_von_Datum datetime2, 
-  Zeitrahmen_bis_Datum datetime2, 
-  Ueberpruefung_Datum datetime2, 
-  Naechstes_Beratungsgespraech datetime2, 
-  Leistung_ID bigint, 
-  Kurs_ID bigint, 
-  EingabeFertig nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  Faecher nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Abgeschlossen nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-',
-  CONSTRAINT PK_SchuelerFoerderempfehlungen PRIMARY KEY (GU_ID),
-  CONSTRAINT SchuelerFE_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+  Fehlstd float NOT NULL, 
+  VonStd int, 
+  BisStd int, 
+  Entschuldigt nvarchar(1), 
+  Lehrer_ID bigint,
+  CONSTRAINT PK_SchuelerFehlstunden PRIMARY KEY (ID),
+  CONSTRAINT SchuelerFehlstunden_Abschnitt_FK FOREIGN KEY (Abschnitt_ID) REFERENCES SchuelerLernabschnittsdaten(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE SchuelerLD_PSFachBem (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Abschnitt_ID bigint NOT NULL, 
+  ASV nvarchar(max), 
+  LELS nvarchar(max), 
+  ESF nvarchar(max), 
+  BemerkungFSP nvarchar(max), 
+  BemerkungVersetzung nvarchar(max), 
+  SchulnrEigner int,
+  CONSTRAINT PK_SchuelerLD_PSFachBem PRIMARY KEY (ID),
+  CONSTRAINT SchuelerLD_PSFachBem_Abschnitt_FK FOREIGN KEY (Abschnitt_ID) REFERENCES SchuelerLernabschnittsdaten(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerLD_PSFachBem_UC1 UNIQUE (Abschnitt_ID)
 );
 
 
 CREATE TABLE SchuelerZuweisungen (
   Abschnitt_ID bigint NOT NULL, 
   Fach_ID bigint NOT NULL, 
-  Kursart nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Kursart nvarchar(5), 
   SchulnrEigner int,
   CONSTRAINT PK_SchuelerZuweisungen PRIMARY KEY (Abschnitt_ID, Fach_ID),
   CONSTRAINT Zuweisungen_Abschnitt_FK FOREIGN KEY (Abschnitt_ID) REFERENCES SchuelerLernabschnittsdaten(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE SchuelerErzFunktion (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Erzieher_ID bigint NOT NULL, 
-  Funktion_ID bigint NOT NULL, 
-  Person smallint, 
-  Klasse nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  SchulnrEigner int,
-  CONSTRAINT PK_SchuelerErzFunktion PRIMARY KEY (ID),
-  CONSTRAINT SchuelerErzFunktion_Erzieher_FK FOREIGN KEY (Erzieher_ID) REFERENCES SchuelerErzAdr(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerErzFunktion_Funktion_FK FOREIGN KEY (Funktion_ID) REFERENCES K_ErzieherFunktion(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -3000,33 +3086,33 @@ CREATE TABLE SchuelerLeistungsdaten (
   Abschnitt_ID bigint NOT NULL, 
   Fach_ID bigint NOT NULL, 
   Hochrechnung int, 
-  FachLehrer nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Kursart nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
-  KursartAllg nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8, 
+  FachLehrer nvarchar(10), 
+  Kursart nvarchar(5), 
+  KursartAllg nvarchar(5), 
   Kurs_ID bigint, 
-  NotenKrz nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Warnung nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  Warndatum datetime2, 
-  AbiFach nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
+  NotenKrz nvarchar(2), 
+  Warnung nvarchar(1) DEFAULT '-', 
+  Warndatum date, 
+  AbiFach nvarchar(1), 
   Wochenstunden smallint, 
-  AbiZeugnis nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  Prognose nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
+  AbiZeugnis nvarchar(1) DEFAULT '-', 
+  Prognose nvarchar(1), 
   Fehlstd smallint, 
   uFehlstd smallint, 
   Sortierung int DEFAULT 32000, 
-  Lernentw nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Gekoppelt nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  VorherAbgeschl nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '-', 
-  AbschlussJahrgang nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
-  HochrechnungStatus nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Lernentw nvarchar(max), 
+  Gekoppelt nvarchar(1) DEFAULT '-', 
+  VorherAbgeschl nvarchar(1) DEFAULT '-', 
+  AbschlussJahrgang nvarchar(2), 
+  HochrechnungStatus nvarchar(1), 
   SchulNr int, 
-  Zusatzkraft nvarchar(10) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Zusatzkraft nvarchar(10), 
   WochenstdZusatzkraft int, 
-  Prf10Fach nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AufZeugnis nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8 DEFAULT '+', 
+  Prf10Fach nvarchar(1), 
+  AufZeugnis nvarchar(1) DEFAULT '+', 
   Gewichtung int DEFAULT 1, 
   SchulnrEigner int, 
-  NoteAbschlussBA nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8,
+  NoteAbschlussBA nvarchar(2),
   CONSTRAINT PK_SchuelerLeistungsdaten PRIMARY KEY (ID),
   CONSTRAINT SchuelerLeistungsdaten_Abschnitt_FK FOREIGN KEY (Abschnitt_ID) REFERENCES SchuelerLernabschnittsdaten(ID) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT SchuelerLeistungsdaten_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
@@ -3040,34 +3126,16 @@ CREATE INDEX SchuelerLeistungsdaten_IDX2 ON SchuelerLeistungsdaten(Fach_ID);
 CREATE INDEX SchuelerLeistungsdaten_IDX3 ON SchuelerLeistungsdaten(FachLehrer);
 
 
-CREATE TABLE SchuelerLD_PSFachBem (
+CREATE TABLE SchuelerErzFunktion (
   ID bigint DEFAULT -1 NOT NULL, 
-  Abschnitt_ID bigint NOT NULL, 
-  ASV nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
-  LELS nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
-  ESF nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
-  BemerkungFSP nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
-  BemerkungVersetzung nvarchar(max) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Erzieher_ID bigint NOT NULL, 
+  Funktion_ID bigint NOT NULL, 
+  Person smallint, 
+  Klasse nvarchar(10), 
   SchulnrEigner int,
-  CONSTRAINT PK_SchuelerLD_PSFachBem PRIMARY KEY (ID),
-  CONSTRAINT SchuelerLD_PSFachBem_Abschnitt_FK FOREIGN KEY (Abschnitt_ID) REFERENCES SchuelerLernabschnittsdaten(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerLD_PSFachBem_UC1 UNIQUE (Abschnitt_ID)
-);
-
-
-CREATE TABLE SchuelerFehlstunden (
-  ID bigint DEFAULT -1 NOT NULL, 
-  SchulnrEigner int NOT NULL, 
-  Abschnitt_ID bigint NOT NULL, 
-  Datum datetime2 DEFAULT CURRENT_TIMESTAMP NOT NULL, 
-  Fach_ID bigint, 
-  Fehlstd float NOT NULL, 
-  VonStd int, 
-  BisStd int, 
-  Entschuldigt nvarchar(1) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Lehrer_ID bigint,
-  CONSTRAINT PK_SchuelerFehlstunden PRIMARY KEY (ID),
-  CONSTRAINT SchuelerFehlstunden_Abschnitt_FK FOREIGN KEY (Abschnitt_ID) REFERENCES SchuelerLernabschnittsdaten(ID) ON UPDATE CASCADE ON DELETE CASCADE
+  CONSTRAINT PK_SchuelerErzFunktion PRIMARY KEY (ID),
+  CONSTRAINT SchuelerErzFunktion_Erzieher_FK FOREIGN KEY (Erzieher_ID) REFERENCES SchuelerErzAdr(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerErzFunktion_Funktion_FK FOREIGN KEY (Funktion_ID) REFERENCES K_ErzieherFunktion(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -3075,15 +3143,15 @@ CREATE TABLE ZuordnungReportvorlagen (
   ID bigint DEFAULT -1 NOT NULL, 
   SchulnrEigner int NOT NULL, 
   Jahrgang_ID bigint NOT NULL, 
-  Abschluss nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  AbschlussBB nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
+  Abschluss nvarchar(50), 
+  AbschlussBB nvarchar(50), 
   AbschlussArt int, 
-  VersetzungKrz nvarchar(2) COLLATE Latin1_General_100_BIN2_UTF8, 
+  VersetzungKrz nvarchar(2), 
   Fachklasse_ID bigint, 
-  Reportvorlage nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Beschreibung nvarchar(255) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Gruppe nvarchar(50) COLLATE Latin1_General_100_BIN2_UTF8, 
-  Zeugnisart nvarchar(5) COLLATE Latin1_General_100_BIN2_UTF8,
+  Reportvorlage nvarchar(255), 
+  Beschreibung nvarchar(255), 
+  Gruppe nvarchar(50), 
+  Zeugnisart nvarchar(5),
   CONSTRAINT PK_ZuordnungReportvorlagen PRIMARY KEY (ID)
 );
 
@@ -6689,78 +6757,6 @@ END;
 GO
 
 
-CREATE TRIGGER t_AutoIncrement_INSERT_EigeneSchule_Abt_Kl ON EigeneSchule_Abt_Kl INSTEAD OF INSERT AS
-BEGIN
-  DECLARE @tmpID bigint
-  DECLARE @maxInsertedID bigint
-  
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-  INSERT INTO EigeneSchule_Abt_Kl
-    SELECT * FROM inserted WHERE ID >= 0;
-    
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'EigeneSchule_Abt_Kl');
-  IF (@tmpID IS NULL)
-    BEGIN
-      SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Abt_Kl);
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abt_Kl', @tmpID);
-      SET NOCOUNT OFF;
-    END;
-  
-  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
-    BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
-      INSERT INTO EigeneSchule_Abt_Kl
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
-  
-  SET NOCOUNT ON;
-  IF (@maxInsertedID > @tmpID)
-    BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'EigeneSchule_Abt_Kl';
-  SET NOCOUNT OFF;
-END;
-
-GO
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_EigeneSchule_Abt_Kl ON EigeneSchule_Abt_Kl AFTER UPDATE AS
-BEGIN
-  if (UPDATE(ID))
-    BEGIN
-      DECLARE @tmpID bigint
-      DECLARE @maxInsertedID bigint
-  
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'EigeneSchule_Abt_Kl');
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Abt_Kl);
-          IF (@tmpID IS NULL)
-            BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abt_Kl', @tmpID);
-        END;    
-      IF (@maxInsertedID > @tmpID)
-        BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'EigeneSchule_Abt_Kl';
-    END;
-END;
-
-GO
-
-
 CREATE TRIGGER t_AutoIncrement_INSERT_Schueler ON Schueler INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
@@ -6833,25 +6829,25 @@ END;
 GO
 
 
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerTelefone ON SchuelerTelefone INSTEAD OF INSERT AS
+CREATE TRIGGER t_AutoIncrement_INSERT_EigeneSchule_Abt_Kl ON EigeneSchule_Abt_Kl INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
   
   SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-  INSERT INTO SchuelerTelefone
+  INSERT INTO EigeneSchule_Abt_Kl
     SELECT * FROM inserted WHERE ID >= 0;
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerTelefone');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'EigeneSchule_Abt_Kl');
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerTelefone);
+      SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Abt_Kl);
       IF (@tmpID IS NULL)
         BEGIN
           SET @tmpID = 0;
         END;
       SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerTelefone', @tmpID);
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abt_Kl', @tmpID);
       SET NOCOUNT OFF;
     END;
   
@@ -6859,7 +6855,7 @@ BEGIN
     BEGIN  
       SELECT * INTO #tmp FROM inserted WHERE ID < 0;
       UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
-      INSERT INTO SchuelerTelefone
+      INSERT INTO EigeneSchule_Abt_Kl
         SELECT * FROM #tmp;
       DROP TABLE #tmp;
     END;
@@ -6869,14 +6865,14 @@ BEGIN
     BEGIN
       SET @tmpID = @maxInsertedID;
 	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerTelefone';
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'EigeneSchule_Abt_Kl';
   SET NOCOUNT OFF;
 END;
 
 GO
 
 
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerTelefone ON SchuelerTelefone AFTER UPDATE AS
+CREATE TRIGGER t_AutoIncrement_UPDATE_EigeneSchule_Abt_Kl ON EigeneSchule_Abt_Kl AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
     BEGIN
@@ -6884,21 +6880,93 @@ BEGIN
       DECLARE @maxInsertedID bigint
   
       SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerTelefone');
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'EigeneSchule_Abt_Kl');
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerTelefone);
+          SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Abt_Kl);
           IF (@tmpID IS NULL)
             BEGIN
               SET @tmpID = 0;
             END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerTelefone', @tmpID);
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abt_Kl', @tmpID);
         END;    
       IF (@maxInsertedID > @tmpID)
         BEGIN
           SET @tmpID = @maxInsertedID;
 	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerTelefone';
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'EigeneSchule_Abt_Kl';
+    END;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerAbiFaecher ON SchuelerAbiFaecher INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+  
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  INSERT INTO SchuelerAbiFaecher
+    SELECT * FROM inserted WHERE ID >= 0;
+    
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAbiFaecher');
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM SchuelerAbiFaecher);
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0;
+        END;
+      SET NOCOUNT ON;
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbiFaecher', @tmpID);
+      SET NOCOUNT OFF;
+    END;
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      INSERT INTO SchuelerAbiFaecher
+        SELECT * FROM #tmp;
+      DROP TABLE #tmp;
+    END;
+  
+  SET NOCOUNT ON;
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID;
+	END;
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAbiFaecher';
+  SET NOCOUNT OFF;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerAbiFaecher ON SchuelerAbiFaecher AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+  
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAbiFaecher');
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM SchuelerAbiFaecher);
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0;
+            END;
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbiFaecher', @tmpID);
+        END;    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID;
+	      END;
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAbiFaecher';
     END;
 END;
 
@@ -7049,438 +7117,6 @@ END;
 GO
 
 
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerAbiFaecher ON SchuelerAbiFaecher INSTEAD OF INSERT AS
-BEGIN
-  DECLARE @tmpID bigint
-  DECLARE @maxInsertedID bigint
-  
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-  INSERT INTO SchuelerAbiFaecher
-    SELECT * FROM inserted WHERE ID >= 0;
-    
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAbiFaecher');
-  IF (@tmpID IS NULL)
-    BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerAbiFaecher);
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbiFaecher', @tmpID);
-      SET NOCOUNT OFF;
-    END;
-  
-  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
-    BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
-      INSERT INTO SchuelerAbiFaecher
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
-  
-  SET NOCOUNT ON;
-  IF (@maxInsertedID > @tmpID)
-    BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAbiFaecher';
-  SET NOCOUNT OFF;
-END;
-
-GO
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerAbiFaecher ON SchuelerAbiFaecher AFTER UPDATE AS
-BEGIN
-  if (UPDATE(ID))
-    BEGIN
-      DECLARE @tmpID bigint
-      DECLARE @maxInsertedID bigint
-  
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAbiFaecher');
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerAbiFaecher);
-          IF (@tmpID IS NULL)
-            BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbiFaecher', @tmpID);
-        END;    
-      IF (@maxInsertedID > @tmpID)
-        BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAbiFaecher';
-    END;
-END;
-
-GO
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerBKFaecher ON SchuelerBKFaecher INSTEAD OF INSERT AS
-BEGIN
-  DECLARE @tmpID bigint
-  DECLARE @maxInsertedID bigint
-  
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-  INSERT INTO SchuelerBKFaecher
-    SELECT * FROM inserted WHERE ID >= 0;
-    
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerBKFaecher');
-  IF (@tmpID IS NULL)
-    BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerBKFaecher);
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerBKFaecher', @tmpID);
-      SET NOCOUNT OFF;
-    END;
-  
-  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
-    BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
-      INSERT INTO SchuelerBKFaecher
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
-  
-  SET NOCOUNT ON;
-  IF (@maxInsertedID > @tmpID)
-    BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerBKFaecher';
-  SET NOCOUNT OFF;
-END;
-
-GO
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerBKFaecher ON SchuelerBKFaecher AFTER UPDATE AS
-BEGIN
-  if (UPDATE(ID))
-    BEGIN
-      DECLARE @tmpID bigint
-      DECLARE @maxInsertedID bigint
-  
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerBKFaecher');
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerBKFaecher);
-          IF (@tmpID IS NULL)
-            BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerBKFaecher', @tmpID);
-        END;    
-      IF (@maxInsertedID > @tmpID)
-        BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerBKFaecher';
-    END;
-END;
-
-GO
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerAbgaenge ON SchuelerAbgaenge INSTEAD OF INSERT AS
-BEGIN
-  DECLARE @tmpID bigint
-  DECLARE @maxInsertedID bigint
-  
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-  INSERT INTO SchuelerAbgaenge
-    SELECT * FROM inserted WHERE ID >= 0;
-    
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAbgaenge');
-  IF (@tmpID IS NULL)
-    BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerAbgaenge);
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbgaenge', @tmpID);
-      SET NOCOUNT OFF;
-    END;
-  
-  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
-    BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
-      INSERT INTO SchuelerAbgaenge
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
-  
-  SET NOCOUNT ON;
-  IF (@maxInsertedID > @tmpID)
-    BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAbgaenge';
-  SET NOCOUNT OFF;
-END;
-
-GO
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerAbgaenge ON SchuelerAbgaenge AFTER UPDATE AS
-BEGIN
-  if (UPDATE(ID))
-    BEGIN
-      DECLARE @tmpID bigint
-      DECLARE @maxInsertedID bigint
-  
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAbgaenge');
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerAbgaenge);
-          IF (@tmpID IS NULL)
-            BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbgaenge', @tmpID);
-        END;    
-      IF (@maxInsertedID > @tmpID)
-        BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAbgaenge';
-    END;
-END;
-
-GO
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerLernabschnittsdaten ON SchuelerLernabschnittsdaten INSTEAD OF INSERT AS
-BEGIN
-  DECLARE @tmpID bigint
-  DECLARE @maxInsertedID bigint
-  
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-  INSERT INTO SchuelerLernabschnittsdaten
-    SELECT * FROM inserted WHERE ID >= 0;
-    
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerLernabschnittsdaten');
-  IF (@tmpID IS NULL)
-    BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerLernabschnittsdaten);
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLernabschnittsdaten', @tmpID);
-      SET NOCOUNT OFF;
-    END;
-  
-  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
-    BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
-      INSERT INTO SchuelerLernabschnittsdaten
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
-  
-  SET NOCOUNT ON;
-  IF (@maxInsertedID > @tmpID)
-    BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerLernabschnittsdaten';
-  SET NOCOUNT OFF;
-END;
-
-GO
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerLernabschnittsdaten ON SchuelerLernabschnittsdaten AFTER UPDATE AS
-BEGIN
-  if (UPDATE(ID))
-    BEGIN
-      DECLARE @tmpID bigint
-      DECLARE @maxInsertedID bigint
-  
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerLernabschnittsdaten');
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerLernabschnittsdaten);
-          IF (@tmpID IS NULL)
-            BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLernabschnittsdaten', @tmpID);
-        END;    
-      IF (@maxInsertedID > @tmpID)
-        BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerLernabschnittsdaten';
-    END;
-END;
-
-GO
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerErzAdr ON SchuelerErzAdr INSTEAD OF INSERT AS
-BEGIN
-  DECLARE @tmpID bigint
-  DECLARE @maxInsertedID bigint
-  
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-  INSERT INTO SchuelerErzAdr
-    SELECT * FROM inserted WHERE ID >= 0;
-    
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerErzAdr');
-  IF (@tmpID IS NULL)
-    BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerErzAdr);
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerErzAdr', @tmpID);
-      SET NOCOUNT OFF;
-    END;
-  
-  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
-    BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
-      INSERT INTO SchuelerErzAdr
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
-  
-  SET NOCOUNT ON;
-  IF (@maxInsertedID > @tmpID)
-    BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerErzAdr';
-  SET NOCOUNT OFF;
-END;
-
-GO
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerErzAdr ON SchuelerErzAdr AFTER UPDATE AS
-BEGIN
-  if (UPDATE(ID))
-    BEGIN
-      DECLARE @tmpID bigint
-      DECLARE @maxInsertedID bigint
-  
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerErzAdr');
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerErzAdr);
-          IF (@tmpID IS NULL)
-            BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerErzAdr', @tmpID);
-        END;    
-      IF (@maxInsertedID > @tmpID)
-        BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerErzAdr';
-    END;
-END;
-
-GO
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerAnkreuzfloskeln ON SchuelerAnkreuzfloskeln INSTEAD OF INSERT AS
-BEGIN
-  DECLARE @tmpID bigint
-  DECLARE @maxInsertedID bigint
-  
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-  INSERT INTO SchuelerAnkreuzfloskeln
-    SELECT * FROM inserted WHERE ID >= 0;
-    
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAnkreuzfloskeln');
-  IF (@tmpID IS NULL)
-    BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerAnkreuzfloskeln);
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAnkreuzfloskeln', @tmpID);
-      SET NOCOUNT OFF;
-    END;
-  
-  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
-    BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
-      INSERT INTO SchuelerAnkreuzfloskeln
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
-  
-  SET NOCOUNT ON;
-  IF (@maxInsertedID > @tmpID)
-    BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAnkreuzfloskeln';
-  SET NOCOUNT OFF;
-END;
-
-GO
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerAnkreuzfloskeln ON SchuelerAnkreuzfloskeln AFTER UPDATE AS
-BEGIN
-  if (UPDATE(ID))
-    BEGIN
-      DECLARE @tmpID bigint
-      DECLARE @maxInsertedID bigint
-  
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAnkreuzfloskeln');
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerAnkreuzfloskeln);
-          IF (@tmpID IS NULL)
-            BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAnkreuzfloskeln', @tmpID);
-        END;    
-      IF (@maxInsertedID > @tmpID)
-        BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAnkreuzfloskeln';
-    END;
-END;
-
-GO
-
-
 CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerFHRFaecher ON SchuelerFHRFaecher INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
@@ -7625,25 +7261,25 @@ END;
 GO
 
 
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerAbitur ON SchuelerAbitur INSTEAD OF INSERT AS
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerAnkreuzfloskeln ON SchuelerAnkreuzfloskeln INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
   
   SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-  INSERT INTO SchuelerAbitur
+  INSERT INTO SchuelerAnkreuzfloskeln
     SELECT * FROM inserted WHERE ID >= 0;
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAbitur');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAnkreuzfloskeln');
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerAbitur);
+      SET @tmpID = (SELECT max(ID) FROM SchuelerAnkreuzfloskeln);
       IF (@tmpID IS NULL)
         BEGIN
           SET @tmpID = 0;
         END;
       SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbitur', @tmpID);
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAnkreuzfloskeln', @tmpID);
       SET NOCOUNT OFF;
     END;
   
@@ -7651,7 +7287,7 @@ BEGIN
     BEGIN  
       SELECT * INTO #tmp FROM inserted WHERE ID < 0;
       UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
-      INSERT INTO SchuelerAbitur
+      INSERT INTO SchuelerAnkreuzfloskeln
         SELECT * FROM #tmp;
       DROP TABLE #tmp;
     END;
@@ -7661,14 +7297,14 @@ BEGIN
     BEGIN
       SET @tmpID = @maxInsertedID;
 	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAbitur';
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAnkreuzfloskeln';
   SET NOCOUNT OFF;
 END;
 
 GO
 
 
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerAbitur ON SchuelerAbitur AFTER UPDATE AS
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerAnkreuzfloskeln ON SchuelerAnkreuzfloskeln AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
     BEGIN
@@ -7676,21 +7312,381 @@ BEGIN
       DECLARE @maxInsertedID bigint
   
       SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAbitur');
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAnkreuzfloskeln');
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerAbitur);
+          SET @tmpID = (SELECT max(ID) FROM SchuelerAnkreuzfloskeln);
           IF (@tmpID IS NULL)
             BEGIN
               SET @tmpID = 0;
             END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbitur', @tmpID);
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAnkreuzfloskeln', @tmpID);
         END;    
       IF (@maxInsertedID > @tmpID)
         BEGIN
           SET @tmpID = @maxInsertedID;
 	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAbitur';
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAnkreuzfloskeln';
+    END;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerLernabschnittsdaten ON SchuelerLernabschnittsdaten INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+  
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  INSERT INTO SchuelerLernabschnittsdaten
+    SELECT * FROM inserted WHERE ID >= 0;
+    
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerLernabschnittsdaten');
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM SchuelerLernabschnittsdaten);
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0;
+        END;
+      SET NOCOUNT ON;
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLernabschnittsdaten', @tmpID);
+      SET NOCOUNT OFF;
+    END;
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      INSERT INTO SchuelerLernabschnittsdaten
+        SELECT * FROM #tmp;
+      DROP TABLE #tmp;
+    END;
+  
+  SET NOCOUNT ON;
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID;
+	END;
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerLernabschnittsdaten';
+  SET NOCOUNT OFF;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerLernabschnittsdaten ON SchuelerLernabschnittsdaten AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+  
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerLernabschnittsdaten');
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM SchuelerLernabschnittsdaten);
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0;
+            END;
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLernabschnittsdaten', @tmpID);
+        END;    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID;
+	      END;
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerLernabschnittsdaten';
+    END;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerAbgaenge ON SchuelerAbgaenge INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+  
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  INSERT INTO SchuelerAbgaenge
+    SELECT * FROM inserted WHERE ID >= 0;
+    
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAbgaenge');
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM SchuelerAbgaenge);
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0;
+        END;
+      SET NOCOUNT ON;
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbgaenge', @tmpID);
+      SET NOCOUNT OFF;
+    END;
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      INSERT INTO SchuelerAbgaenge
+        SELECT * FROM #tmp;
+      DROP TABLE #tmp;
+    END;
+  
+  SET NOCOUNT ON;
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID;
+	END;
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAbgaenge';
+  SET NOCOUNT OFF;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerAbgaenge ON SchuelerAbgaenge AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+  
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAbgaenge');
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM SchuelerAbgaenge);
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0;
+            END;
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbgaenge', @tmpID);
+        END;    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID;
+	      END;
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAbgaenge';
+    END;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerBKFaecher ON SchuelerBKFaecher INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+  
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  INSERT INTO SchuelerBKFaecher
+    SELECT * FROM inserted WHERE ID >= 0;
+    
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerBKFaecher');
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM SchuelerBKFaecher);
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0;
+        END;
+      SET NOCOUNT ON;
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerBKFaecher', @tmpID);
+      SET NOCOUNT OFF;
+    END;
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      INSERT INTO SchuelerBKFaecher
+        SELECT * FROM #tmp;
+      DROP TABLE #tmp;
+    END;
+  
+  SET NOCOUNT ON;
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID;
+	END;
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerBKFaecher';
+  SET NOCOUNT OFF;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerBKFaecher ON SchuelerBKFaecher AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+  
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerBKFaecher');
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM SchuelerBKFaecher);
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0;
+            END;
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerBKFaecher', @tmpID);
+        END;    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID;
+	      END;
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerBKFaecher';
+    END;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerTelefone ON SchuelerTelefone INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+  
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  INSERT INTO SchuelerTelefone
+    SELECT * FROM inserted WHERE ID >= 0;
+    
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerTelefone');
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM SchuelerTelefone);
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0;
+        END;
+      SET NOCOUNT ON;
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerTelefone', @tmpID);
+      SET NOCOUNT OFF;
+    END;
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      INSERT INTO SchuelerTelefone
+        SELECT * FROM #tmp;
+      DROP TABLE #tmp;
+    END;
+  
+  SET NOCOUNT ON;
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID;
+	END;
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerTelefone';
+  SET NOCOUNT OFF;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerTelefone ON SchuelerTelefone AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+  
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerTelefone');
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM SchuelerTelefone);
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0;
+            END;
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerTelefone', @tmpID);
+        END;    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID;
+	      END;
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerTelefone';
+    END;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerErzAdr ON SchuelerErzAdr INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+  
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  INSERT INTO SchuelerErzAdr
+    SELECT * FROM inserted WHERE ID >= 0;
+    
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerErzAdr');
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM SchuelerErzAdr);
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0;
+        END;
+      SET NOCOUNT ON;
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerErzAdr', @tmpID);
+      SET NOCOUNT OFF;
+    END;
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      INSERT INTO SchuelerErzAdr
+        SELECT * FROM #tmp;
+      DROP TABLE #tmp;
+    END;
+  
+  SET NOCOUNT ON;
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID;
+	END;
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerErzAdr';
+  SET NOCOUNT OFF;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerErzAdr ON SchuelerErzAdr AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+  
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerErzAdr');
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM SchuelerErzAdr);
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0;
+            END;
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerErzAdr', @tmpID);
+        END;    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID;
+	      END;
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerErzAdr';
     END;
 END;
 
@@ -7841,25 +7837,25 @@ END;
 GO
 
 
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerErzFunktion ON SchuelerErzFunktion INSTEAD OF INSERT AS
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerAbitur ON SchuelerAbitur INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
   
   SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-  INSERT INTO SchuelerErzFunktion
+  INSERT INTO SchuelerAbitur
     SELECT * FROM inserted WHERE ID >= 0;
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerErzFunktion');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAbitur');
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerErzFunktion);
+      SET @tmpID = (SELECT max(ID) FROM SchuelerAbitur);
       IF (@tmpID IS NULL)
         BEGIN
           SET @tmpID = 0;
         END;
       SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerErzFunktion', @tmpID);
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbitur', @tmpID);
       SET NOCOUNT OFF;
     END;
   
@@ -7867,7 +7863,7 @@ BEGIN
     BEGIN  
       SELECT * INTO #tmp FROM inserted WHERE ID < 0;
       UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
-      INSERT INTO SchuelerErzFunktion
+      INSERT INTO SchuelerAbitur
         SELECT * FROM #tmp;
       DROP TABLE #tmp;
     END;
@@ -7877,14 +7873,14 @@ BEGIN
     BEGIN
       SET @tmpID = @maxInsertedID;
 	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerErzFunktion';
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAbitur';
   SET NOCOUNT OFF;
 END;
 
 GO
 
 
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerErzFunktion ON SchuelerErzFunktion AFTER UPDATE AS
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerAbitur ON SchuelerAbitur AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
     BEGIN
@@ -7892,46 +7888,46 @@ BEGIN
       DECLARE @maxInsertedID bigint
   
       SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerErzFunktion');
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAbitur');
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerErzFunktion);
+          SET @tmpID = (SELECT max(ID) FROM SchuelerAbitur);
           IF (@tmpID IS NULL)
             BEGIN
               SET @tmpID = 0;
             END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerErzFunktion', @tmpID);
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbitur', @tmpID);
         END;    
       IF (@maxInsertedID > @tmpID)
         BEGIN
           SET @tmpID = @maxInsertedID;
 	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerErzFunktion';
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAbitur';
     END;
 END;
 
 GO
 
 
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerLeistungsdaten ON SchuelerLeistungsdaten INSTEAD OF INSERT AS
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerFehlstunden ON SchuelerFehlstunden INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
   
   SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-  INSERT INTO SchuelerLeistungsdaten
+  INSERT INTO SchuelerFehlstunden
     SELECT * FROM inserted WHERE ID >= 0;
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerLeistungsdaten');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerFehlstunden');
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerLeistungsdaten);
+      SET @tmpID = (SELECT max(ID) FROM SchuelerFehlstunden);
       IF (@tmpID IS NULL)
         BEGIN
           SET @tmpID = 0;
         END;
       SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLeistungsdaten', @tmpID);
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFehlstunden', @tmpID);
       SET NOCOUNT OFF;
     END;
   
@@ -7939,7 +7935,7 @@ BEGIN
     BEGIN  
       SELECT * INTO #tmp FROM inserted WHERE ID < 0;
       UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
-      INSERT INTO SchuelerLeistungsdaten
+      INSERT INTO SchuelerFehlstunden
         SELECT * FROM #tmp;
       DROP TABLE #tmp;
     END;
@@ -7949,14 +7945,14 @@ BEGIN
     BEGIN
       SET @tmpID = @maxInsertedID;
 	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerLeistungsdaten';
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerFehlstunden';
   SET NOCOUNT OFF;
 END;
 
 GO
 
 
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerLeistungsdaten ON SchuelerLeistungsdaten AFTER UPDATE AS
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerFehlstunden ON SchuelerFehlstunden AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
     BEGIN
@@ -7964,21 +7960,21 @@ BEGIN
       DECLARE @maxInsertedID bigint
   
       SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerLeistungsdaten');
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerFehlstunden');
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerLeistungsdaten);
+          SET @tmpID = (SELECT max(ID) FROM SchuelerFehlstunden);
           IF (@tmpID IS NULL)
             BEGIN
               SET @tmpID = 0;
             END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLeistungsdaten', @tmpID);
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFehlstunden', @tmpID);
         END;    
       IF (@maxInsertedID > @tmpID)
         BEGIN
           SET @tmpID = @maxInsertedID;
 	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerLeistungsdaten';
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerFehlstunden';
     END;
 END;
 
@@ -8057,25 +8053,25 @@ END;
 GO
 
 
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerFehlstunden ON SchuelerFehlstunden INSTEAD OF INSERT AS
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerLeistungsdaten ON SchuelerLeistungsdaten INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
   
   SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-  INSERT INTO SchuelerFehlstunden
+  INSERT INTO SchuelerLeistungsdaten
     SELECT * FROM inserted WHERE ID >= 0;
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerFehlstunden');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerLeistungsdaten');
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerFehlstunden);
+      SET @tmpID = (SELECT max(ID) FROM SchuelerLeistungsdaten);
       IF (@tmpID IS NULL)
         BEGIN
           SET @tmpID = 0;
         END;
       SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFehlstunden', @tmpID);
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLeistungsdaten', @tmpID);
       SET NOCOUNT OFF;
     END;
   
@@ -8083,7 +8079,7 @@ BEGIN
     BEGIN  
       SELECT * INTO #tmp FROM inserted WHERE ID < 0;
       UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
-      INSERT INTO SchuelerFehlstunden
+      INSERT INTO SchuelerLeistungsdaten
         SELECT * FROM #tmp;
       DROP TABLE #tmp;
     END;
@@ -8093,14 +8089,14 @@ BEGIN
     BEGIN
       SET @tmpID = @maxInsertedID;
 	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerFehlstunden';
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerLeistungsdaten';
   SET NOCOUNT OFF;
 END;
 
 GO
 
 
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerFehlstunden ON SchuelerFehlstunden AFTER UPDATE AS
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerLeistungsdaten ON SchuelerLeistungsdaten AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
     BEGIN
@@ -8108,21 +8104,93 @@ BEGIN
       DECLARE @maxInsertedID bigint
   
       SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerFehlstunden');
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerLeistungsdaten');
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerFehlstunden);
+          SET @tmpID = (SELECT max(ID) FROM SchuelerLeistungsdaten);
           IF (@tmpID IS NULL)
             BEGIN
               SET @tmpID = 0;
             END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFehlstunden', @tmpID);
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLeistungsdaten', @tmpID);
         END;    
       IF (@maxInsertedID > @tmpID)
         BEGIN
           SET @tmpID = @maxInsertedID;
 	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerFehlstunden';
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerLeistungsdaten';
+    END;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerErzFunktion ON SchuelerErzFunktion INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+  
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  INSERT INTO SchuelerErzFunktion
+    SELECT * FROM inserted WHERE ID >= 0;
+    
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerErzFunktion');
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM SchuelerErzFunktion);
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0;
+        END;
+      SET NOCOUNT ON;
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerErzFunktion', @tmpID);
+      SET NOCOUNT OFF;
+    END;
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      INSERT INTO SchuelerErzFunktion
+        SELECT * FROM #tmp;
+      DROP TABLE #tmp;
+    END;
+  
+  SET NOCOUNT ON;
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID;
+	END;
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerErzFunktion';
+  SET NOCOUNT OFF;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerErzFunktion ON SchuelerErzFunktion AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+  
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerErzFunktion');
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM SchuelerErzFunktion);
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0;
+            END;
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerErzFunktion', @tmpID);
+        END;    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID;
+	      END;
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerErzFunktion';
     END;
 END;
 
