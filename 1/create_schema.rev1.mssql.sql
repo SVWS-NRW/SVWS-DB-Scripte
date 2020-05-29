@@ -1900,74 +1900,6 @@ CREATE TABLE K_Lehrer (
 );
 
 
-CREATE TABLE LehrerFunktionen (
-  Lehrer_ID bigint NOT NULL, 
-  Jahr int NOT NULL, 
-  Abschnitt int NOT NULL, 
-  Funktion_ID bigint NOT NULL, 
-  SchulNrEigner int,
-  CONSTRAINT PK_LehrerFunktionen PRIMARY KEY (Abschnitt, Funktion_ID, Jahr, Lehrer_ID),
-  CONSTRAINT LehrerFunktionen_Funktion_FK FOREIGN KEY (Funktion_ID) REFERENCES K_Schulfunktionen(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT LehrerFunktionen_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE EigeneSchule_Abteilungen (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Bezeichnung nvarchar(50) NOT NULL, 
-  AbteilungsLeiter nvarchar(10), 
-  Sichtbar nvarchar(1) DEFAULT '+', 
-  SchulNrEigner int, 
-  Raum nvarchar(20), 
-  Email nvarchar(100), 
-  Durchwahl nvarchar(20), 
-  Sortierung int,
-  CONSTRAINT PK_EigeneSchule_Abteilungen PRIMARY KEY (ID),
-  CONSTRAINT EigeneSchule_Abteilungen_Leiter_FK FOREIGN KEY (AbteilungsLeiter) REFERENCES K_Lehrer(Kuerzel) ON UPDATE CASCADE ON DELETE SET NULL
-);
-
-
-CREATE TABLE LehrerEntlastung (
-  Lehrer_ID bigint NOT NULL, 
-  EntlastungsgrundKrz nvarchar(10), 
-  EntlastungStd float, 
-  Jahr int, 
-  Abschnitt int, 
-  SchulNrEigner int,
-  CONSTRAINT PK_LehrerEntlastung PRIMARY KEY (Abschnitt, EntlastungsgrundKrz, Jahr, Lehrer_ID),
-  CONSTRAINT LehrerEntlastung_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE LehrerAbschnittsdaten (
-  Lehrer_ID bigint NOT NULL, 
-  Jahr int NOT NULL, 
-  Abschnitt int NOT NULL, 
-  Rechtsverhaeltnis nvarchar(1), 
-  Beschaeftigungsart nvarchar(2), 
-  Einsatzstatus nvarchar(1), 
-  PflichtstdSoll float, 
-  UnterrichtsStd float, 
-  MehrleistungStd float, 
-  EntlastungStd float, 
-  AnrechnungStd float, 
-  RestStd float, 
-  SchulNrEigner int,
-  CONSTRAINT PK_LehrerAbschnittsdaten PRIMARY KEY (Abschnitt, Jahr, Lehrer_ID),
-  CONSTRAINT LehrerAbschnitte_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE LehrerLehramt (
-  Lehrer_ID bigint NOT NULL, 
-  LehramtKrz nvarchar(10), 
-  LehramtAnerkennungKrz nvarchar(10), 
-  SchulNrEigner int,
-  CONSTRAINT PK_LehrerLehramt PRIMARY KEY (LehramtKrz, Lehrer_ID),
-  CONSTRAINT LehrerLehramt_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
 CREATE TABLE LehrerAnrechnung (
   Lehrer_ID bigint NOT NULL, 
   AnrechnungsgrundKrz nvarchar(10), 
@@ -1992,6 +1924,53 @@ CREATE TABLE LehrerMehrleistung (
 );
 
 
+CREATE TABLE EigeneSchule_Abteilungen (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Bezeichnung nvarchar(50) NOT NULL, 
+  AbteilungsLeiter nvarchar(10), 
+  Sichtbar nvarchar(1) DEFAULT '+', 
+  SchulNrEigner int, 
+  Raum nvarchar(20), 
+  Email nvarchar(100), 
+  Durchwahl nvarchar(20), 
+  Sortierung int,
+  CONSTRAINT PK_EigeneSchule_Abteilungen PRIMARY KEY (ID),
+  CONSTRAINT EigeneSchule_Abteilungen_Leiter_FK FOREIGN KEY (AbteilungsLeiter) REFERENCES K_Lehrer(Kuerzel) ON UPDATE CASCADE ON DELETE SET NULL
+);
+
+
+CREATE TABLE Lehrer_IMEI (
+  ID bigint NOT NULL, 
+  Lehrer_ID bigint NOT NULL, 
+  SchulNrEigner int NOT NULL, 
+  IMEI nvarchar(20),
+  CONSTRAINT PK_Lehrer_IMEI PRIMARY KEY (ID),
+  CONSTRAINT Lehrer_IMEI_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE LehrerLehramt (
+  Lehrer_ID bigint NOT NULL, 
+  LehramtKrz nvarchar(10), 
+  LehramtAnerkennungKrz nvarchar(10), 
+  SchulNrEigner int,
+  CONSTRAINT PK_LehrerLehramt PRIMARY KEY (LehramtKrz, Lehrer_ID),
+  CONSTRAINT LehrerLehramt_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE LehrerEntlastung (
+  Lehrer_ID bigint NOT NULL, 
+  EntlastungsgrundKrz nvarchar(10), 
+  EntlastungStd float, 
+  Jahr int, 
+  Abschnitt int, 
+  SchulNrEigner int,
+  CONSTRAINT PK_LehrerEntlastung PRIMARY KEY (Abschnitt, EntlastungsgrundKrz, Jahr, Lehrer_ID),
+  CONSTRAINT LehrerEntlastung_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
 CREATE TABLE KursLehrer (
   Kurs_ID bigint NOT NULL, 
   Lehrer_ID bigint NOT NULL, 
@@ -2003,13 +1982,34 @@ CREATE TABLE KursLehrer (
 );
 
 
-CREATE TABLE Lehrer_IMEI (
-  ID bigint NOT NULL, 
+CREATE TABLE LehrerAbschnittsdaten (
   Lehrer_ID bigint NOT NULL, 
-  SchulNrEigner int NOT NULL, 
-  IMEI nvarchar(20),
-  CONSTRAINT PK_Lehrer_IMEI PRIMARY KEY (ID),
-  CONSTRAINT Lehrer_IMEI_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE
+  Jahr int NOT NULL, 
+  Abschnitt int NOT NULL, 
+  Rechtsverhaeltnis nvarchar(1), 
+  Beschaeftigungsart nvarchar(2), 
+  Einsatzstatus nvarchar(1), 
+  PflichtstdSoll float, 
+  UnterrichtsStd float, 
+  MehrleistungStd float, 
+  EntlastungStd float, 
+  AnrechnungStd float, 
+  RestStd float, 
+  SchulNrEigner int,
+  CONSTRAINT PK_LehrerAbschnittsdaten PRIMARY KEY (Abschnitt, Jahr, Lehrer_ID),
+  CONSTRAINT LehrerAbschnitte_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE LehrerFunktionen (
+  Lehrer_ID bigint NOT NULL, 
+  Jahr int NOT NULL, 
+  Abschnitt int NOT NULL, 
+  Funktion_ID bigint NOT NULL, 
+  SchulNrEigner int,
+  CONSTRAINT PK_LehrerFunktionen PRIMARY KEY (Abschnitt, Funktion_ID, Jahr, Lehrer_ID),
+  CONSTRAINT LehrerFunktionen_Funktion_FK FOREIGN KEY (Funktion_ID) REFERENCES K_Schulfunktionen(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT LehrerFunktionen_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -2286,6 +2286,18 @@ CREATE TABLE Versetzung (
 );
 
 
+CREATE TABLE EigeneSchule_Abt_Kl (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Abteilung_ID bigint NOT NULL, 
+  Klasse nvarchar(15) NOT NULL, 
+  Sichtbar nvarchar(1) DEFAULT '+', 
+  SchulNrEigner int,
+  CONSTRAINT PK_EigeneSchule_Abt_Kl PRIMARY KEY (ID),
+  CONSTRAINT EigeneSchuleAbtKl_Abteilung_FK FOREIGN KEY (Abteilung_ID) REFERENCES EigeneSchule_Abteilungen(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT EigeneSchuleAbtKl_Klasse_FK FOREIGN KEY (Klasse) REFERENCES Versetzung(Klasse) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
 CREATE TABLE Schueler (
   ID bigint DEFAULT -1 NOT NULL, 
   GU_ID nvarchar(40), 
@@ -2461,350 +2473,21 @@ CREATE TABLE Schueler (
 );
 
 
-CREATE TABLE EigeneSchule_Abt_Kl (
+CREATE TABLE SchuelerVermerke (
   ID bigint DEFAULT -1 NOT NULL, 
-  Abteilung_ID bigint NOT NULL, 
-  Klasse nvarchar(15) NOT NULL, 
-  Sichtbar nvarchar(1) DEFAULT '+', 
-  SchulNrEigner int,
-  CONSTRAINT PK_EigeneSchule_Abt_Kl PRIMARY KEY (ID),
-  CONSTRAINT EigeneSchuleAbtKl_Abteilung_FK FOREIGN KEY (Abteilung_ID) REFERENCES EigeneSchule_Abteilungen(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT EigeneSchuleAbtKl_Klasse_FK FOREIGN KEY (Klasse) REFERENCES Versetzung(Klasse) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE SchuelerBKAbschluss (
   Schueler_ID bigint NOT NULL, 
-  Zulassung nchar(1), 
-  Bestanden nchar(1), 
-  Zeugnis nchar(1), 
-  ZertifikatBK nchar(1), 
-  ZulassungErwBK nchar(1), 
-  BestandenErwBK nchar(1), 
-  ZulassungBA nchar(1), 
-  BestandenBA nchar(1), 
-  PraktPrfNote nvarchar(2), 
-  NoteKolloquium nvarchar(2), 
-  ThemaAbschlussarbeit nvarchar(max), 
+  VermerkArt_ID bigint, 
+  Datum date, 
+  Bemerkung nvarchar(max), 
   SchulNrEigner int, 
-  BAP_Vorhanden nvarchar(1), 
-  NoteFachpraxis nvarchar(2), 
-  FachPraktAnteilAusr nvarchar(1), 
-  Jahr int, 
-  Abschnitt int,
-  CONSTRAINT PK_SchuelerBKAbschluss PRIMARY KEY (Schueler_ID),
-  CONSTRAINT SchuelerBKAbschl_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+  AngelegtVon nvarchar(20), 
+  GeaendertVon nvarchar(20),
+  CONSTRAINT PK_SchuelerVermerke PRIMARY KEY (ID),
+  CONSTRAINT SchuelerVermerke_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerVermerke_VermerkArt_FK FOREIGN KEY (VermerkArt_ID) REFERENCES K_Vermerkart(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-
-CREATE TABLE SchuelerFoerderempfehlungen (
-  GU_ID nvarchar(40) NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  SchulNrEigner int NOT NULL, 
-  DatumAngelegt date DEFAULT CURRENT_TIMESTAMP NOT NULL, 
-  Klasse nvarchar(15), 
-  Jahr int, 
-  Abschnitt int, 
-  Fach_ID bigint, 
-  Lehrer_ID bigint, 
-  DatumAenderungSchild datetime2, 
-  DatumAenderungSchildWeb datetime2, 
-  Kurs nvarchar(20), 
-  Inhaltl_Prozessbez_Komp nvarchar(max), 
-  Methodische_Komp nvarchar(max), 
-  Lern_Arbeitsverhalten nvarchar(max), 
-  Massn_Inhaltl_Prozessbez_Komp nvarchar(max), 
-  Massn_Methodische_Komp nvarchar(max), 
-  Massn_Lern_Arbeitsverhalten nvarchar(max), 
-  Verantwortlichkeit_Eltern nvarchar(max), 
-  Verantwortlichkeit_Schueler nvarchar(max), 
-  Zeitrahmen_von_Datum date, 
-  Zeitrahmen_bis_Datum date, 
-  Ueberpruefung_Datum date, 
-  Naechstes_Beratungsgespraech date, 
-  Leistung_ID bigint, 
-  Kurs_ID bigint, 
-  EingabeFertig nvarchar(1) DEFAULT '-', 
-  Faecher nvarchar(255), 
-  Abgeschlossen nvarchar(1) DEFAULT '-',
-  CONSTRAINT PK_SchuelerFoerderempfehlungen PRIMARY KEY (GU_ID),
-  CONSTRAINT SchuelerFE_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE SchuelerAnkreuzfloskeln (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  SchulNrEigner int NOT NULL, 
-  Jahr int NOT NULL, 
-  Abschnitt int NOT NULL, 
-  Floskel_ID bigint NOT NULL, 
-  Stufe1 nvarchar(1) DEFAULT '-', 
-  Stufe2 nvarchar(1) DEFAULT '-', 
-  Stufe3 nvarchar(1) DEFAULT '-', 
-  Stufe4 nvarchar(1) DEFAULT '-', 
-  Stufe5 nvarchar(1) DEFAULT '-',
-  CONSTRAINT PK_SchuelerAnkreuzfloskeln PRIMARY KEY (ID),
-  CONSTRAINT SchuelerAKF_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE SchuelerNUESDaten (
-  ID bigint NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  SchulNrEigner int NOT NULL, 
-  Jahr int NOT NULL, 
-  Abschnitt int NOT NULL, 
-  JahrgangIst nvarchar(2), 
-  HauptMerkmal nvarchar(20) NOT NULL, 
-  NebenMerkmal nvarchar(20),
-  CONSTRAINT PK_SchuelerNUESDaten PRIMARY KEY (ID),
-  CONSTRAINT SchuelerNUESDaten_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE SchuelerBKFaecher (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  Fach_ID bigint NOT NULL, 
-  FachKrz nvarchar(20), 
-  FachSchriftlich nchar(1), 
-  FachSchriftlichBA nchar(1), 
-  Vornote nvarchar(2), 
-  NoteSchriftlich nvarchar(2), 
-  MdlPruefung nchar(1), 
-  MdlPruefungFW nchar(1), 
-  NoteMuendlich nvarchar(2), 
-  NoteAbschluss nvarchar(2), 
-  NotePrfGesamt nvarchar(2), 
-  FSortierung int, 
-  SchulNrEigner int, 
-  Fachlehrer nvarchar(10), 
-  NoteAbschlussBA nvarchar(2), 
-  Kursart nvarchar(5), 
-  Jahr int, 
-  Abschnitt int,
-  CONSTRAINT PK_SchuelerBKFaecher PRIMARY KEY (ID),
-  CONSTRAINT SchuelerBKFaecher_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerBKFaecher_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE SchuelerAbitur (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  FA_Fach nvarchar(130), 
-  FA_Punkte int, 
-  FehlStd int, 
-  uFehlStd int, 
-  Latinum nvarchar(1) DEFAULT '-', 
-  KlLatinum nvarchar(1) DEFAULT '-', 
-  Graecum nvarchar(1) DEFAULT '-', 
-  Hebraicum nvarchar(1) DEFAULT '-', 
-  FranzBilingual nvarchar(1) DEFAULT '-', 
-  BesondereLernleistung nvarchar(1) DEFAULT '-', 
-  AnzRelLK smallint, 
-  AnzRelGK smallint, 
-  AnzRelOK smallint, 
-  AnzDefLK smallint, 
-  AnzDefGK smallint, 
-  Thema_PJK nvarchar(255), 
-  FS2_SekI_Manuell nvarchar(1) DEFAULT '-', 
-  Kurse_I int, 
-  Defizite_I int, 
-  LK_Defizite_I int, 
-  AnzahlKurse_0 int, 
-  Punktsumme_I int, 
-  Durchschnitt_I float, 
-  SummeGK smallint, 
-  SummeLK smallint, 
-  SummenOK smallint, 
-  Zugelassen nvarchar(1) DEFAULT '-', 
-  Jahr int, 
-  Abschnitt int, 
-  BLL_Art nvarchar(1) DEFAULT 'K', 
-  BLL_Punkte int, 
-  Thema_BLL nvarchar(255), 
-  Punktsumme_II int, 
-  Defizite_II int, 
-  LK_Defizite_II int, 
-  PruefungBestanden nvarchar(1) DEFAULT '-', 
-  Note nvarchar(3), 
-  GesamtPunktzahl smallint, 
-  Notensprung smallint, 
-  FehlendePunktzahl smallint, 
-  SchulNrEigner int,
-  CONSTRAINT PK_SchuelerAbitur PRIMARY KEY (ID),
-  CONSTRAINT SchuelerAbitur_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerAbitur_UC1 UNIQUE (Schueler_ID)
-);
-
-
-CREATE TABLE SchuelerListe_Inhalt (
-  Liste_ID bigint NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  SchulNrEigner int,
-  CONSTRAINT PK_SchuelerListe_Inhalt PRIMARY KEY (Liste_ID, Schueler_ID),
-  CONSTRAINT SchuelerListeInhalt_Liste_FK FOREIGN KEY (Liste_ID) REFERENCES SchuelerListe(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerListeInhalt_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE SchuelerAbiFaecher (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  Fach_ID bigint NOT NULL, 
-  FachKrz nvarchar(20), 
-  FSortierung int, 
-  Kurs_ID bigint, 
-  KursartAllg nvarchar(5), 
-  Fachlehrer nvarchar(10), 
-  AbiFach nvarchar(1), 
-  P11_1 nvarchar(2), 
-  S11_1 nvarchar(1) DEFAULT '-', 
-  P11_2 nvarchar(2), 
-  S11_2 nvarchar(1) DEFAULT '-', 
-  P_FA nvarchar(2), 
-  R_FA nvarchar(1) DEFAULT '-', 
-  W12_1 int, 
-  P12_1 nvarchar(2), 
-  H12_1 int, 
-  R12_1 nvarchar(1) DEFAULT '-', 
-  S12_1 nvarchar(1) DEFAULT '-', 
-  W12_2 int, 
-  P12_2 nvarchar(2), 
-  H12_2 int, 
-  R12_2 nvarchar(1) DEFAULT '-', 
-  S12_2 nvarchar(1) DEFAULT '-', 
-  W13_1 int, 
-  P13_1 nvarchar(2), 
-  H13_1 int, 
-  R13_1 nvarchar(1) DEFAULT '-', 
-  S13_1 nvarchar(1) DEFAULT '-', 
-  W13_2 int, 
-  P13_2 nvarchar(2), 
-  H13_2 int, 
-  R13_2 nvarchar(1) DEFAULT '-', 
-  S13_2 nvarchar(1) DEFAULT '-', 
-  Zulassung smallint, 
-  Durchschnitt float, 
-  AbiPruefErgebnis smallint, 
-  Zwischenstand smallint, 
-  MdlPflichtPruefung nvarchar(1) DEFAULT '-', 
-  MdlBestPruefung nvarchar(1) DEFAULT '-', 
-  MdlFreiwPruefung nvarchar(1) DEFAULT '-', 
-  MdlPruefErgebnis smallint, 
-  MdlPruefFolge smallint, 
-  AbiErgebnis smallint, 
-  SchulNrEigner int,
-  CONSTRAINT PK_SchuelerAbiFaecher PRIMARY KEY (ID),
-  CONSTRAINT SchuelerAbiFaecher_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerAbiFaecher_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE SchuelerFHR (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  FHRErreicht nvarchar(1) DEFAULT '-', 
-  Note nvarchar(3), 
-  GesamtPunktzahl smallint, 
-  SummeGK smallint, 
-  SummeLK smallint, 
-  SummenOK smallint, 
-  AnzRelLK smallint, 
-  AnzRelGK smallint, 
-  AnzRelOK smallint, 
-  AnzDefLK smallint, 
-  AnzDefGK smallint, 
-  AnzDefOK smallint, 
-  JSII_2_1 smallint, 
-  JSII_2_1_W smallint, 
-  JSII_2_2 smallint, 
-  JSII_2_2_W smallint, 
-  JSII_3_1 smallint, 
-  JSII_3_1_W smallint, 
-  JSII_3_2 smallint, 
-  JSII_3_2_W smallint, 
-  ASII_2_1 smallint, 
-  ASII_2_2 smallint, 
-  ASII_2_1_W smallint, 
-  ASII_2_2_W smallint, 
-  ASII_3_1 smallint, 
-  ASII_3_2 smallint, 
-  ASII_3_1_W smallint, 
-  ASII_3_2_W smallint, 
-  WSII_2_1 nvarchar(1), 
-  WSII_2_2 nvarchar(1), 
-  WSII_2_1_W nvarchar(1), 
-  WSII_2_2_W nvarchar(1), 
-  WSII_3_1 nvarchar(1), 
-  WSII_3_2 nvarchar(1), 
-  WSII_3_1_W nvarchar(1), 
-  WSII_3_2_W nvarchar(1), 
-  SchulNrEigner int,
-  CONSTRAINT PK_SchuelerFHR PRIMARY KEY (ID),
-  CONSTRAINT SchuelerFHR_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerFHR_UC1 UNIQUE (Schueler_ID)
-);
-
-
-CREATE TABLE SchuelerTelefone (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  TelefonArt_ID bigint, 
-  Telefonnummer nvarchar(20), 
-  Bemerkung nvarchar(50), 
-  Sortierung int DEFAULT 32000, 
-  SchulNrEigner int, 
-  Gesperrt nvarchar(1) DEFAULT '-',
-  CONSTRAINT PK_SchuelerTelefone PRIMARY KEY (ID),
-  CONSTRAINT SchuelerTelefone_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerTelefone_Telefonart_FK FOREIGN KEY (TelefonArt_ID) REFERENCES K_TelefonArt(ID) ON UPDATE CASCADE ON DELETE SET NULL
-);
-
-CREATE INDEX SchuelerTelefone_IDX1 ON SchuelerTelefone(Schueler_ID);
-
-
-CREATE TABLE SchuelerMerkmale (
-  ID bigint NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  Kurztext nvarchar(10), 
-  SchulNrEigner int, 
-  DatumVon date, 
-  DatumBis date,
-  CONSTRAINT PK_SchuelerMerkmale PRIMARY KEY (Schueler_ID),
-  CONSTRAINT SchuelerMerkmale_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE SchuelerAbgaenge (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  BemerkungIntern nvarchar(30), 
-  AbgangsSchulform nvarchar(2), 
-  AbgangsBeschreibung nvarchar(200), 
-  OrganisationsformKrz nvarchar(1), 
-  AbgangsSchule nvarchar(100), 
-  AbgangsSchuleAnschr nvarchar(100), 
-  AbgangsSchulNr nvarchar(6), 
-  LSJahrgang nvarchar(2), 
-  LSEntlassArt nvarchar(2), 
-  LSSchulformSIM nvarchar(3), 
-  LSSchulEntlassDatum date, 
-  LSVersetzung nvarchar(2), 
-  LSSGL nvarchar(5), 
-  LSFachklKennung nvarchar(10), 
-  LSFachklSIM nvarchar(5), 
-  FuerSIMExport nvarchar(1) DEFAULT '-', 
-  LSBeginnDatum date, 
-  LSBeginnJahrgang nvarchar(2), 
-  SchulNrEigner int,
-  CONSTRAINT PK_SchuelerAbgaenge PRIMARY KEY (ID),
-  CONSTRAINT SchuelerAbgaenge_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-CREATE INDEX SchuelerAbgaenge_IDX1 ON SchuelerAbgaenge(LSSchulEntlassDatum, Schueler_ID);
+CREATE INDEX SchuelerVermerke_IDX1 ON SchuelerVermerke(Schueler_ID);
 
 
 CREATE TABLE SchuelerDatenschutz (
@@ -2815,86 +2498,6 @@ CREATE TABLE SchuelerDatenschutz (
   CONSTRAINT PK_SchuelerDatenschutz PRIMARY KEY (Datenschutz_ID, Schueler_ID),
   CONSTRAINT SchuelerDatenschutz_K_Datenschutz_FK FOREIGN KEY (Datenschutz_ID) REFERENCES K_Datenschutz(ID) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT SchuelerDatenschutz_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE Schueler_AllgAdr (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  Adresse_ID bigint NOT NULL, 
-  Vertragsart_ID bigint, 
-  Vertragsbeginn date, 
-  Vertragsende date, 
-  Ausbilder nvarchar(30), 
-  AllgAdrAnschreiben nvarchar(1) DEFAULT '-', 
-  Praktikum nvarchar(1) DEFAULT '-', 
-  Sortierung int, 
-  Ansprechpartner_ID bigint, 
-  Betreuungslehrer_ID bigint, 
-  SchulNrEigner int,
-  CONSTRAINT PK_Schueler_AllgAdr PRIMARY KEY (ID),
-  CONSTRAINT SchuelerAllgAdr_Adresse_FK FOREIGN KEY (Adresse_ID) REFERENCES K_AllgAdresse(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerAllgAdr_Ansprech_FK FOREIGN KEY (Ansprechpartner_ID) REFERENCES AllgAdrAnsprechpartner(ID) ON UPDATE CASCADE ON DELETE SET NULL,
-  CONSTRAINT SchuelerAllgAdr_Beschaeftigungsart_FK FOREIGN KEY (Vertragsart_ID) REFERENCES K_BeschaeftigungsArt(ID) ON UPDATE CASCADE ON DELETE SET NULL,
-  CONSTRAINT SchuelerAllgAdr_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-CREATE INDEX Schueler_AllgAdr_IDX1 ON Schueler_AllgAdr(Schueler_ID);
-
-
-CREATE TABLE SchuelerFHRFaecher (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  Fach_ID bigint NOT NULL, 
-  KursartAllg nvarchar(5), 
-  FachKrz nvarchar(20), 
-  PSII_2_1 nvarchar(2), 
-  HSII_2_1 int, 
-  RSII_2_1 nvarchar(1) DEFAULT '-', 
-  PSII_2_2 nvarchar(2), 
-  HSII_2_2 int, 
-  RSII_2_2 nvarchar(1) DEFAULT '-', 
-  PSII_2_1_W nvarchar(2), 
-  HSII_2_1_W int, 
-  RSII_2_1_W nvarchar(1) DEFAULT '-', 
-  PSII_2_2_W nvarchar(2), 
-  HSII_2_2_W int, 
-  RSII_2_2_W nvarchar(1) DEFAULT '-', 
-  PSII_3_1 nvarchar(2), 
-  HSII_3_1 int, 
-  RSII_3_1 nvarchar(1) DEFAULT '-', 
-  PSII_3_2 nvarchar(2), 
-  HSII_3_2 int, 
-  RSII_3_2 nvarchar(1) DEFAULT '-', 
-  PSII_3_1_W nvarchar(2), 
-  HSII_3_1_W int, 
-  RSII_3_1_W nvarchar(1) DEFAULT '-', 
-  PSII_3_2_W nvarchar(2), 
-  HSII_3_2_W int, 
-  RSII_3_2_W nvarchar(1) DEFAULT '-', 
-  KSII_2_1 nvarchar(5), 
-  KSII_2_2 nvarchar(5), 
-  KSII_2_1_W nvarchar(5), 
-  KSII_2_2_W nvarchar(5), 
-  KSII_3_1 nvarchar(5), 
-  KSII_3_2 nvarchar(5), 
-  KSII_3_1_W nvarchar(5), 
-  KSII_3_2_W nvarchar(5), 
-  FSortierung int, 
-  SchulNrEigner int,
-  CONSTRAINT PK_SchuelerFHRFaecher PRIMARY KEY (ID),
-  CONSTRAINT SchuelerFHRFaecher_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerFHRFaecher_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE SchuelerFotos (
-  Schueler_ID bigint NOT NULL, 
-  Foto varbinary(max), 
-  FotoBase64 nvarchar(max), 
-  SchulNrEigner int,
-  CONSTRAINT PK_SchuelerFotos PRIMARY KEY (Schueler_ID),
-  CONSTRAINT SchuelerFotos_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -2934,15 +2537,6 @@ CREATE TABLE SchuelerErzAdr (
 );
 
 CREATE INDEX SchuelerErzAdr_IDX1 ON SchuelerErzAdr(Schueler_ID);
-
-
-CREATE TABLE Kurs_Schueler (
-  Kurs_ID bigint NOT NULL, 
-  Schueler_ID bigint NOT NULL,
-  CONSTRAINT PK_Kurs_Schueler PRIMARY KEY (Kurs_ID, Schueler_ID),
-  CONSTRAINT KursSchueler_Kurse_FK FOREIGN KEY (Kurs_ID) REFERENCES Kurse(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT KursSchueler_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
 
 
 CREATE TABLE SchuelerKAoADaten (
@@ -3040,21 +2634,13 @@ CREATE TABLE SchuelerLernabschnittsdaten (
 );
 
 
-CREATE TABLE SchuelerVermerke (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  VermerkArt_ID bigint, 
-  Datum date, 
-  Bemerkung nvarchar(max), 
-  SchulNrEigner int, 
-  AngelegtVon nvarchar(20), 
-  GeaendertVon nvarchar(20),
-  CONSTRAINT PK_SchuelerVermerke PRIMARY KEY (ID),
-  CONSTRAINT SchuelerVermerke_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerVermerke_VermerkArt_FK FOREIGN KEY (VermerkArt_ID) REFERENCES K_Vermerkart(ID) ON UPDATE CASCADE ON DELETE CASCADE
+CREATE TABLE Kurs_Schueler (
+  Kurs_ID bigint NOT NULL, 
+  Schueler_ID bigint NOT NULL,
+  CONSTRAINT PK_Kurs_Schueler PRIMARY KEY (Kurs_ID, Schueler_ID),
+  CONSTRAINT KursSchueler_Kurse_FK FOREIGN KEY (Kurs_ID) REFERENCES Kurse(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT KursSchueler_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
-
-CREATE INDEX SchuelerVermerke_IDX1 ON SchuelerVermerke(Schueler_ID);
 
 
 CREATE TABLE SchuelerSprachenfolge (
@@ -3075,16 +2661,417 @@ CREATE TABLE SchuelerSprachenfolge (
 );
 
 
-CREATE TABLE SchuelerErzFunktion (
+CREATE TABLE SchuelerAbitur (
   ID bigint DEFAULT -1 NOT NULL, 
-  Erzieher_ID bigint NOT NULL, 
-  Funktion_ID bigint NOT NULL, 
-  Person smallint, 
-  Klasse nvarchar(10), 
+  Schueler_ID bigint NOT NULL, 
+  FA_Fach nvarchar(130), 
+  FA_Punkte int, 
+  FehlStd int, 
+  uFehlStd int, 
+  Latinum nvarchar(1) DEFAULT '-', 
+  KlLatinum nvarchar(1) DEFAULT '-', 
+  Graecum nvarchar(1) DEFAULT '-', 
+  Hebraicum nvarchar(1) DEFAULT '-', 
+  FranzBilingual nvarchar(1) DEFAULT '-', 
+  BesondereLernleistung nvarchar(1) DEFAULT '-', 
+  AnzRelLK smallint, 
+  AnzRelGK smallint, 
+  AnzRelOK smallint, 
+  AnzDefLK smallint, 
+  AnzDefGK smallint, 
+  Thema_PJK nvarchar(255), 
+  FS2_SekI_Manuell nvarchar(1) DEFAULT '-', 
+  Kurse_I int, 
+  Defizite_I int, 
+  LK_Defizite_I int, 
+  AnzahlKurse_0 int, 
+  Punktsumme_I int, 
+  Durchschnitt_I float, 
+  SummeGK smallint, 
+  SummeLK smallint, 
+  SummenOK smallint, 
+  Zugelassen nvarchar(1) DEFAULT '-', 
+  Jahr int, 
+  Abschnitt int, 
+  BLL_Art nvarchar(1) DEFAULT 'K', 
+  BLL_Punkte int, 
+  Thema_BLL nvarchar(255), 
+  Punktsumme_II int, 
+  Defizite_II int, 
+  LK_Defizite_II int, 
+  PruefungBestanden nvarchar(1) DEFAULT '-', 
+  Note nvarchar(3), 
+  GesamtPunktzahl smallint, 
+  Notensprung smallint, 
+  FehlendePunktzahl smallint, 
   SchulNrEigner int,
-  CONSTRAINT PK_SchuelerErzFunktion PRIMARY KEY (ID),
-  CONSTRAINT SchuelerErzFunktion_Erzieher_FK FOREIGN KEY (Erzieher_ID) REFERENCES SchuelerErzAdr(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerErzFunktion_Funktion_FK FOREIGN KEY (Funktion_ID) REFERENCES K_ErzieherFunktion(ID) ON UPDATE CASCADE ON DELETE CASCADE
+  CONSTRAINT PK_SchuelerAbitur PRIMARY KEY (ID),
+  CONSTRAINT SchuelerAbitur_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerAbitur_UC1 UNIQUE (Schueler_ID)
+);
+
+
+CREATE TABLE SchuelerListe_Inhalt (
+  Liste_ID bigint NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  SchulNrEigner int,
+  CONSTRAINT PK_SchuelerListe_Inhalt PRIMARY KEY (Liste_ID, Schueler_ID),
+  CONSTRAINT SchuelerListeInhalt_Liste_FK FOREIGN KEY (Liste_ID) REFERENCES SchuelerListe(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerListeInhalt_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE SchuelerBKFaecher (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  Fach_ID bigint NOT NULL, 
+  FachKrz nvarchar(20), 
+  FachSchriftlich nchar(1), 
+  FachSchriftlichBA nchar(1), 
+  Vornote nvarchar(2), 
+  NoteSchriftlich nvarchar(2), 
+  MdlPruefung nchar(1), 
+  MdlPruefungFW nchar(1), 
+  NoteMuendlich nvarchar(2), 
+  NoteAbschluss nvarchar(2), 
+  NotePrfGesamt nvarchar(2), 
+  FSortierung int, 
+  SchulNrEigner int, 
+  Fachlehrer nvarchar(10), 
+  NoteAbschlussBA nvarchar(2), 
+  Kursart nvarchar(5), 
+  Jahr int, 
+  Abschnitt int,
+  CONSTRAINT PK_SchuelerBKFaecher PRIMARY KEY (ID),
+  CONSTRAINT SchuelerBKFaecher_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerBKFaecher_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE SchuelerMerkmale (
+  ID bigint NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  Kurztext nvarchar(10), 
+  SchulNrEigner int, 
+  DatumVon date, 
+  DatumBis date,
+  CONSTRAINT PK_SchuelerMerkmale PRIMARY KEY (Schueler_ID),
+  CONSTRAINT SchuelerMerkmale_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE SchuelerAbgaenge (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  BemerkungIntern nvarchar(30), 
+  AbgangsSchulform nvarchar(2), 
+  AbgangsBeschreibung nvarchar(200), 
+  OrganisationsformKrz nvarchar(1), 
+  AbgangsSchule nvarchar(100), 
+  AbgangsSchuleAnschr nvarchar(100), 
+  AbgangsSchulNr nvarchar(6), 
+  LSJahrgang nvarchar(2), 
+  LSEntlassArt nvarchar(2), 
+  LSSchulformSIM nvarchar(3), 
+  LSSchulEntlassDatum date, 
+  LSVersetzung nvarchar(2), 
+  LSSGL nvarchar(5), 
+  LSFachklKennung nvarchar(10), 
+  LSFachklSIM nvarchar(5), 
+  FuerSIMExport nvarchar(1) DEFAULT '-', 
+  LSBeginnDatum date, 
+  LSBeginnJahrgang nvarchar(2), 
+  SchulNrEigner int,
+  CONSTRAINT PK_SchuelerAbgaenge PRIMARY KEY (ID),
+  CONSTRAINT SchuelerAbgaenge_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE INDEX SchuelerAbgaenge_IDX1 ON SchuelerAbgaenge(LSSchulEntlassDatum, Schueler_ID);
+
+
+CREATE TABLE SchuelerTelefone (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  TelefonArt_ID bigint, 
+  Telefonnummer nvarchar(20), 
+  Bemerkung nvarchar(50), 
+  Sortierung int DEFAULT 32000, 
+  SchulNrEigner int, 
+  Gesperrt nvarchar(1) DEFAULT '-',
+  CONSTRAINT PK_SchuelerTelefone PRIMARY KEY (ID),
+  CONSTRAINT SchuelerTelefone_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerTelefone_Telefonart_FK FOREIGN KEY (TelefonArt_ID) REFERENCES K_TelefonArt(ID) ON UPDATE CASCADE ON DELETE SET NULL
+);
+
+CREATE INDEX SchuelerTelefone_IDX1 ON SchuelerTelefone(Schueler_ID);
+
+
+CREATE TABLE SchuelerAnkreuzfloskeln (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  SchulNrEigner int NOT NULL, 
+  Jahr int NOT NULL, 
+  Abschnitt int NOT NULL, 
+  Floskel_ID bigint NOT NULL, 
+  Stufe1 nvarchar(1) DEFAULT '-', 
+  Stufe2 nvarchar(1) DEFAULT '-', 
+  Stufe3 nvarchar(1) DEFAULT '-', 
+  Stufe4 nvarchar(1) DEFAULT '-', 
+  Stufe5 nvarchar(1) DEFAULT '-',
+  CONSTRAINT PK_SchuelerAnkreuzfloskeln PRIMARY KEY (ID),
+  CONSTRAINT SchuelerAKF_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE SchuelerFHRFaecher (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  Fach_ID bigint NOT NULL, 
+  KursartAllg nvarchar(5), 
+  FachKrz nvarchar(20), 
+  PSII_2_1 nvarchar(2), 
+  HSII_2_1 int, 
+  RSII_2_1 nvarchar(1) DEFAULT '-', 
+  PSII_2_2 nvarchar(2), 
+  HSII_2_2 int, 
+  RSII_2_2 nvarchar(1) DEFAULT '-', 
+  PSII_2_1_W nvarchar(2), 
+  HSII_2_1_W int, 
+  RSII_2_1_W nvarchar(1) DEFAULT '-', 
+  PSII_2_2_W nvarchar(2), 
+  HSII_2_2_W int, 
+  RSII_2_2_W nvarchar(1) DEFAULT '-', 
+  PSII_3_1 nvarchar(2), 
+  HSII_3_1 int, 
+  RSII_3_1 nvarchar(1) DEFAULT '-', 
+  PSII_3_2 nvarchar(2), 
+  HSII_3_2 int, 
+  RSII_3_2 nvarchar(1) DEFAULT '-', 
+  PSII_3_1_W nvarchar(2), 
+  HSII_3_1_W int, 
+  RSII_3_1_W nvarchar(1) DEFAULT '-', 
+  PSII_3_2_W nvarchar(2), 
+  HSII_3_2_W int, 
+  RSII_3_2_W nvarchar(1) DEFAULT '-', 
+  KSII_2_1 nvarchar(5), 
+  KSII_2_2 nvarchar(5), 
+  KSII_2_1_W nvarchar(5), 
+  KSII_2_2_W nvarchar(5), 
+  KSII_3_1 nvarchar(5), 
+  KSII_3_2 nvarchar(5), 
+  KSII_3_1_W nvarchar(5), 
+  KSII_3_2_W nvarchar(5), 
+  FSortierung int, 
+  SchulNrEigner int,
+  CONSTRAINT PK_SchuelerFHRFaecher PRIMARY KEY (ID),
+  CONSTRAINT SchuelerFHRFaecher_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerFHRFaecher_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE SchuelerFHR (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  FHRErreicht nvarchar(1) DEFAULT '-', 
+  Note nvarchar(3), 
+  GesamtPunktzahl smallint, 
+  SummeGK smallint, 
+  SummeLK smallint, 
+  SummenOK smallint, 
+  AnzRelLK smallint, 
+  AnzRelGK smallint, 
+  AnzRelOK smallint, 
+  AnzDefLK smallint, 
+  AnzDefGK smallint, 
+  AnzDefOK smallint, 
+  JSII_2_1 smallint, 
+  JSII_2_1_W smallint, 
+  JSII_2_2 smallint, 
+  JSII_2_2_W smallint, 
+  JSII_3_1 smallint, 
+  JSII_3_1_W smallint, 
+  JSII_3_2 smallint, 
+  JSII_3_2_W smallint, 
+  ASII_2_1 smallint, 
+  ASII_2_2 smallint, 
+  ASII_2_1_W smallint, 
+  ASII_2_2_W smallint, 
+  ASII_3_1 smallint, 
+  ASII_3_2 smallint, 
+  ASII_3_1_W smallint, 
+  ASII_3_2_W smallint, 
+  WSII_2_1 nvarchar(1), 
+  WSII_2_2 nvarchar(1), 
+  WSII_2_1_W nvarchar(1), 
+  WSII_2_2_W nvarchar(1), 
+  WSII_3_1 nvarchar(1), 
+  WSII_3_2 nvarchar(1), 
+  WSII_3_1_W nvarchar(1), 
+  WSII_3_2_W nvarchar(1), 
+  SchulNrEigner int,
+  CONSTRAINT PK_SchuelerFHR PRIMARY KEY (ID),
+  CONSTRAINT SchuelerFHR_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerFHR_UC1 UNIQUE (Schueler_ID)
+);
+
+
+CREATE TABLE Schueler_AllgAdr (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  Adresse_ID bigint NOT NULL, 
+  Vertragsart_ID bigint, 
+  Vertragsbeginn date, 
+  Vertragsende date, 
+  Ausbilder nvarchar(30), 
+  AllgAdrAnschreiben nvarchar(1) DEFAULT '-', 
+  Praktikum nvarchar(1) DEFAULT '-', 
+  Sortierung int, 
+  Ansprechpartner_ID bigint, 
+  Betreuungslehrer_ID bigint, 
+  SchulNrEigner int,
+  CONSTRAINT PK_Schueler_AllgAdr PRIMARY KEY (ID),
+  CONSTRAINT SchuelerAllgAdr_Adresse_FK FOREIGN KEY (Adresse_ID) REFERENCES K_AllgAdresse(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerAllgAdr_Ansprech_FK FOREIGN KEY (Ansprechpartner_ID) REFERENCES AllgAdrAnsprechpartner(ID) ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT SchuelerAllgAdr_Beschaeftigungsart_FK FOREIGN KEY (Vertragsart_ID) REFERENCES K_BeschaeftigungsArt(ID) ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT SchuelerAllgAdr_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE INDEX Schueler_AllgAdr_IDX1 ON Schueler_AllgAdr(Schueler_ID);
+
+
+CREATE TABLE SchuelerFotos (
+  Schueler_ID bigint NOT NULL, 
+  Foto varbinary(max), 
+  FotoBase64 nvarchar(max), 
+  SchulNrEigner int,
+  CONSTRAINT PK_SchuelerFotos PRIMARY KEY (Schueler_ID),
+  CONSTRAINT SchuelerFotos_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE SchuelerNUESDaten (
+  ID bigint NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  SchulNrEigner int NOT NULL, 
+  Jahr int NOT NULL, 
+  Abschnitt int NOT NULL, 
+  JahrgangIst nvarchar(2), 
+  HauptMerkmal nvarchar(20) NOT NULL, 
+  NebenMerkmal nvarchar(20),
+  CONSTRAINT PK_SchuelerNUESDaten PRIMARY KEY (ID),
+  CONSTRAINT SchuelerNUESDaten_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE SchuelerFoerderempfehlungen (
+  GU_ID nvarchar(40) NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  SchulNrEigner int NOT NULL, 
+  DatumAngelegt date DEFAULT CURRENT_TIMESTAMP NOT NULL, 
+  Klasse nvarchar(15), 
+  Jahr int, 
+  Abschnitt int, 
+  Fach_ID bigint, 
+  Lehrer_ID bigint, 
+  DatumAenderungSchild datetime2, 
+  DatumAenderungSchildWeb datetime2, 
+  Kurs nvarchar(20), 
+  Inhaltl_Prozessbez_Komp nvarchar(max), 
+  Methodische_Komp nvarchar(max), 
+  Lern_Arbeitsverhalten nvarchar(max), 
+  Massn_Inhaltl_Prozessbez_Komp nvarchar(max), 
+  Massn_Methodische_Komp nvarchar(max), 
+  Massn_Lern_Arbeitsverhalten nvarchar(max), 
+  Verantwortlichkeit_Eltern nvarchar(max), 
+  Verantwortlichkeit_Schueler nvarchar(max), 
+  Zeitrahmen_von_Datum date, 
+  Zeitrahmen_bis_Datum date, 
+  Ueberpruefung_Datum date, 
+  Naechstes_Beratungsgespraech date, 
+  Leistung_ID bigint, 
+  Kurs_ID bigint, 
+  EingabeFertig nvarchar(1) DEFAULT '-', 
+  Faecher nvarchar(255), 
+  Abgeschlossen nvarchar(1) DEFAULT '-',
+  CONSTRAINT PK_SchuelerFoerderempfehlungen PRIMARY KEY (GU_ID),
+  CONSTRAINT SchuelerFE_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE SchuelerAbiFaecher (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  Fach_ID bigint NOT NULL, 
+  FachKrz nvarchar(20), 
+  FSortierung int, 
+  Kurs_ID bigint, 
+  KursartAllg nvarchar(5), 
+  Fachlehrer nvarchar(10), 
+  AbiFach nvarchar(1), 
+  P11_1 nvarchar(2), 
+  S11_1 nvarchar(1) DEFAULT '-', 
+  P11_2 nvarchar(2), 
+  S11_2 nvarchar(1) DEFAULT '-', 
+  P_FA nvarchar(2), 
+  R_FA nvarchar(1) DEFAULT '-', 
+  W12_1 int, 
+  P12_1 nvarchar(2), 
+  H12_1 int, 
+  R12_1 nvarchar(1) DEFAULT '-', 
+  S12_1 nvarchar(1) DEFAULT '-', 
+  W12_2 int, 
+  P12_2 nvarchar(2), 
+  H12_2 int, 
+  R12_2 nvarchar(1) DEFAULT '-', 
+  S12_2 nvarchar(1) DEFAULT '-', 
+  W13_1 int, 
+  P13_1 nvarchar(2), 
+  H13_1 int, 
+  R13_1 nvarchar(1) DEFAULT '-', 
+  S13_1 nvarchar(1) DEFAULT '-', 
+  W13_2 int, 
+  P13_2 nvarchar(2), 
+  H13_2 int, 
+  R13_2 nvarchar(1) DEFAULT '-', 
+  S13_2 nvarchar(1) DEFAULT '-', 
+  Zulassung smallint, 
+  Durchschnitt float, 
+  AbiPruefErgebnis smallint, 
+  Zwischenstand smallint, 
+  MdlPflichtPruefung nvarchar(1) DEFAULT '-', 
+  MdlBestPruefung nvarchar(1) DEFAULT '-', 
+  MdlFreiwPruefung nvarchar(1) DEFAULT '-', 
+  MdlPruefErgebnis smallint, 
+  MdlPruefFolge smallint, 
+  AbiErgebnis smallint, 
+  SchulNrEigner int,
+  CONSTRAINT PK_SchuelerAbiFaecher PRIMARY KEY (ID),
+  CONSTRAINT SchuelerAbiFaecher_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerAbiFaecher_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE SchuelerBKAbschluss (
+  Schueler_ID bigint NOT NULL, 
+  Zulassung nchar(1), 
+  Bestanden nchar(1), 
+  Zeugnis nchar(1), 
+  ZertifikatBK nchar(1), 
+  ZulassungErwBK nchar(1), 
+  BestandenErwBK nchar(1), 
+  ZulassungBA nchar(1), 
+  BestandenBA nchar(1), 
+  PraktPrfNote nvarchar(2), 
+  NoteKolloquium nvarchar(2), 
+  ThemaAbschlussarbeit nvarchar(max), 
+  SchulNrEigner int, 
+  BAP_Vorhanden nvarchar(1), 
+  NoteFachpraxis nvarchar(2), 
+  FachPraktAnteilAusr nvarchar(1), 
+  Jahr int, 
+  Abschnitt int,
+  CONSTRAINT PK_SchuelerBKAbschluss PRIMARY KEY (Schueler_ID),
+  CONSTRAINT SchuelerBKAbschl_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -3134,13 +3121,16 @@ CREATE INDEX SchuelerLeistungsdaten_IDX2 ON SchuelerLeistungsdaten(Fach_ID);
 CREATE INDEX SchuelerLeistungsdaten_IDX3 ON SchuelerLeistungsdaten(Fachlehrer);
 
 
-CREATE TABLE SchuelerZuweisungen (
-  Abschnitt_ID bigint NOT NULL, 
-  Fach_ID bigint NOT NULL, 
-  Kursart nvarchar(5), 
+CREATE TABLE SchuelerErzFunktion (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Erzieher_ID bigint NOT NULL, 
+  Funktion_ID bigint NOT NULL, 
+  Person smallint, 
+  Klasse nvarchar(10), 
   SchulNrEigner int,
-  CONSTRAINT PK_SchuelerZuweisungen PRIMARY KEY (Abschnitt_ID, Fach_ID),
-  CONSTRAINT Zuweisungen_Abschnitt_FK FOREIGN KEY (Abschnitt_ID) REFERENCES SchuelerLernabschnittsdaten(ID) ON UPDATE CASCADE ON DELETE CASCADE
+  CONSTRAINT PK_SchuelerErzFunktion PRIMARY KEY (ID),
+  CONSTRAINT SchuelerErzFunktion_Erzieher_FK FOREIGN KEY (Erzieher_ID) REFERENCES SchuelerErzAdr(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerErzFunktion_Funktion_FK FOREIGN KEY (Funktion_ID) REFERENCES K_ErzieherFunktion(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -3172,6 +3162,16 @@ CREATE TABLE SchuelerFehlstunden (
   Lehrer_ID bigint,
   CONSTRAINT PK_SchuelerFehlstunden PRIMARY KEY (ID),
   CONSTRAINT SchuelerFehlstunden_Abschnitt_FK FOREIGN KEY (Abschnitt_ID) REFERENCES SchuelerLernabschnittsdaten(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE SchuelerZuweisungen (
+  Abschnitt_ID bigint NOT NULL, 
+  Fach_ID bigint NOT NULL, 
+  Kursart nvarchar(5), 
+  SchulNrEigner int,
+  CONSTRAINT PK_SchuelerZuweisungen PRIMARY KEY (Abschnitt_ID, Fach_ID),
+  CONSTRAINT Zuweisungen_Abschnitt_FK FOREIGN KEY (Abschnitt_ID) REFERENCES SchuelerLernabschnittsdaten(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -6649,78 +6649,6 @@ END;
 GO
 
 
-CREATE TRIGGER t_AutoIncrement_INSERT_Schueler ON Schueler INSTEAD OF INSERT AS
-BEGIN
-  DECLARE @tmpID bigint
-  DECLARE @maxInsertedID bigint
-  
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-  INSERT INTO Schueler
-    SELECT * FROM inserted WHERE ID >= 0;
-    
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'Schueler');
-  IF (@tmpID IS NULL)
-    BEGIN
-      SET @tmpID = (SELECT max(ID) FROM Schueler);
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Schueler', @tmpID);
-      SET NOCOUNT OFF;
-    END;
-  
-  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
-    BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
-      INSERT INTO Schueler
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
-  
-  SET NOCOUNT ON;
-  IF (@maxInsertedID > @tmpID)
-    BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'Schueler';
-  SET NOCOUNT OFF;
-END;
-
-GO
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_Schueler ON Schueler AFTER UPDATE AS
-BEGIN
-  if (UPDATE(ID))
-    BEGIN
-      DECLARE @tmpID bigint
-      DECLARE @maxInsertedID bigint
-  
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'Schueler');
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = (SELECT max(ID) FROM Schueler);
-          IF (@tmpID IS NULL)
-            BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Schueler', @tmpID);
-        END;    
-      IF (@maxInsertedID > @tmpID)
-        BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'Schueler';
-    END;
-END;
-
-GO
-
-
 CREATE TRIGGER t_AutoIncrement_INSERT_EigeneSchule_Abt_Kl ON EigeneSchule_Abt_Kl INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
@@ -6793,25 +6721,25 @@ END;
 GO
 
 
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerAnkreuzfloskeln ON SchuelerAnkreuzfloskeln INSTEAD OF INSERT AS
+CREATE TRIGGER t_AutoIncrement_INSERT_Schueler ON Schueler INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
   
   SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-  INSERT INTO SchuelerAnkreuzfloskeln
+  INSERT INTO Schueler
     SELECT * FROM inserted WHERE ID >= 0;
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAnkreuzfloskeln');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'Schueler');
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerAnkreuzfloskeln);
+      SET @tmpID = (SELECT max(ID) FROM Schueler);
       IF (@tmpID IS NULL)
         BEGIN
           SET @tmpID = 0;
         END;
       SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAnkreuzfloskeln', @tmpID);
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Schueler', @tmpID);
       SET NOCOUNT OFF;
     END;
   
@@ -6819,7 +6747,7 @@ BEGIN
     BEGIN  
       SELECT * INTO #tmp FROM inserted WHERE ID < 0;
       UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
-      INSERT INTO SchuelerAnkreuzfloskeln
+      INSERT INTO Schueler
         SELECT * FROM #tmp;
       DROP TABLE #tmp;
     END;
@@ -6829,14 +6757,14 @@ BEGIN
     BEGIN
       SET @tmpID = @maxInsertedID;
 	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAnkreuzfloskeln';
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'Schueler';
   SET NOCOUNT OFF;
 END;
 
 GO
 
 
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerAnkreuzfloskeln ON SchuelerAnkreuzfloskeln AFTER UPDATE AS
+CREATE TRIGGER t_AutoIncrement_UPDATE_Schueler ON Schueler AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
     BEGIN
@@ -6844,46 +6772,46 @@ BEGIN
       DECLARE @maxInsertedID bigint
   
       SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAnkreuzfloskeln');
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'Schueler');
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerAnkreuzfloskeln);
+          SET @tmpID = (SELECT max(ID) FROM Schueler);
           IF (@tmpID IS NULL)
             BEGIN
               SET @tmpID = 0;
             END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAnkreuzfloskeln', @tmpID);
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Schueler', @tmpID);
         END;    
       IF (@maxInsertedID > @tmpID)
         BEGIN
           SET @tmpID = @maxInsertedID;
 	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAnkreuzfloskeln';
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'Schueler';
     END;
 END;
 
 GO
 
 
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerBKFaecher ON SchuelerBKFaecher INSTEAD OF INSERT AS
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerVermerke ON SchuelerVermerke INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
   
   SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-  INSERT INTO SchuelerBKFaecher
+  INSERT INTO SchuelerVermerke
     SELECT * FROM inserted WHERE ID >= 0;
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerBKFaecher');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerVermerke');
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerBKFaecher);
+      SET @tmpID = (SELECT max(ID) FROM SchuelerVermerke);
       IF (@tmpID IS NULL)
         BEGIN
           SET @tmpID = 0;
         END;
       SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerBKFaecher', @tmpID);
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerVermerke', @tmpID);
       SET NOCOUNT OFF;
     END;
   
@@ -6891,7 +6819,7 @@ BEGIN
     BEGIN  
       SELECT * INTO #tmp FROM inserted WHERE ID < 0;
       UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
-      INSERT INTO SchuelerBKFaecher
+      INSERT INTO SchuelerVermerke
         SELECT * FROM #tmp;
       DROP TABLE #tmp;
     END;
@@ -6901,14 +6829,14 @@ BEGIN
     BEGIN
       SET @tmpID = @maxInsertedID;
 	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerBKFaecher';
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerVermerke';
   SET NOCOUNT OFF;
 END;
 
 GO
 
 
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerBKFaecher ON SchuelerBKFaecher AFTER UPDATE AS
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerVermerke ON SchuelerVermerke AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
     BEGIN
@@ -6916,525 +6844,21 @@ BEGIN
       DECLARE @maxInsertedID bigint
   
       SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerBKFaecher');
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerVermerke');
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerBKFaecher);
+          SET @tmpID = (SELECT max(ID) FROM SchuelerVermerke);
           IF (@tmpID IS NULL)
             BEGIN
               SET @tmpID = 0;
             END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerBKFaecher', @tmpID);
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerVermerke', @tmpID);
         END;    
       IF (@maxInsertedID > @tmpID)
         BEGIN
           SET @tmpID = @maxInsertedID;
 	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerBKFaecher';
-    END;
-END;
-
-GO
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerAbitur ON SchuelerAbitur INSTEAD OF INSERT AS
-BEGIN
-  DECLARE @tmpID bigint
-  DECLARE @maxInsertedID bigint
-  
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-  INSERT INTO SchuelerAbitur
-    SELECT * FROM inserted WHERE ID >= 0;
-    
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAbitur');
-  IF (@tmpID IS NULL)
-    BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerAbitur);
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbitur', @tmpID);
-      SET NOCOUNT OFF;
-    END;
-  
-  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
-    BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
-      INSERT INTO SchuelerAbitur
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
-  
-  SET NOCOUNT ON;
-  IF (@maxInsertedID > @tmpID)
-    BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAbitur';
-  SET NOCOUNT OFF;
-END;
-
-GO
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerAbitur ON SchuelerAbitur AFTER UPDATE AS
-BEGIN
-  if (UPDATE(ID))
-    BEGIN
-      DECLARE @tmpID bigint
-      DECLARE @maxInsertedID bigint
-  
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAbitur');
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerAbitur);
-          IF (@tmpID IS NULL)
-            BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbitur', @tmpID);
-        END;    
-      IF (@maxInsertedID > @tmpID)
-        BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAbitur';
-    END;
-END;
-
-GO
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerAbiFaecher ON SchuelerAbiFaecher INSTEAD OF INSERT AS
-BEGIN
-  DECLARE @tmpID bigint
-  DECLARE @maxInsertedID bigint
-  
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-  INSERT INTO SchuelerAbiFaecher
-    SELECT * FROM inserted WHERE ID >= 0;
-    
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAbiFaecher');
-  IF (@tmpID IS NULL)
-    BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerAbiFaecher);
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbiFaecher', @tmpID);
-      SET NOCOUNT OFF;
-    END;
-  
-  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
-    BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
-      INSERT INTO SchuelerAbiFaecher
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
-  
-  SET NOCOUNT ON;
-  IF (@maxInsertedID > @tmpID)
-    BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAbiFaecher';
-  SET NOCOUNT OFF;
-END;
-
-GO
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerAbiFaecher ON SchuelerAbiFaecher AFTER UPDATE AS
-BEGIN
-  if (UPDATE(ID))
-    BEGIN
-      DECLARE @tmpID bigint
-      DECLARE @maxInsertedID bigint
-  
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAbiFaecher');
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerAbiFaecher);
-          IF (@tmpID IS NULL)
-            BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbiFaecher', @tmpID);
-        END;    
-      IF (@maxInsertedID > @tmpID)
-        BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAbiFaecher';
-    END;
-END;
-
-GO
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerFHR ON SchuelerFHR INSTEAD OF INSERT AS
-BEGIN
-  DECLARE @tmpID bigint
-  DECLARE @maxInsertedID bigint
-  
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-  INSERT INTO SchuelerFHR
-    SELECT * FROM inserted WHERE ID >= 0;
-    
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerFHR');
-  IF (@tmpID IS NULL)
-    BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerFHR);
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFHR', @tmpID);
-      SET NOCOUNT OFF;
-    END;
-  
-  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
-    BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
-      INSERT INTO SchuelerFHR
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
-  
-  SET NOCOUNT ON;
-  IF (@maxInsertedID > @tmpID)
-    BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerFHR';
-  SET NOCOUNT OFF;
-END;
-
-GO
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerFHR ON SchuelerFHR AFTER UPDATE AS
-BEGIN
-  if (UPDATE(ID))
-    BEGIN
-      DECLARE @tmpID bigint
-      DECLARE @maxInsertedID bigint
-  
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerFHR');
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerFHR);
-          IF (@tmpID IS NULL)
-            BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFHR', @tmpID);
-        END;    
-      IF (@maxInsertedID > @tmpID)
-        BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerFHR';
-    END;
-END;
-
-GO
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerTelefone ON SchuelerTelefone INSTEAD OF INSERT AS
-BEGIN
-  DECLARE @tmpID bigint
-  DECLARE @maxInsertedID bigint
-  
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-  INSERT INTO SchuelerTelefone
-    SELECT * FROM inserted WHERE ID >= 0;
-    
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerTelefone');
-  IF (@tmpID IS NULL)
-    BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerTelefone);
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerTelefone', @tmpID);
-      SET NOCOUNT OFF;
-    END;
-  
-  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
-    BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
-      INSERT INTO SchuelerTelefone
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
-  
-  SET NOCOUNT ON;
-  IF (@maxInsertedID > @tmpID)
-    BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerTelefone';
-  SET NOCOUNT OFF;
-END;
-
-GO
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerTelefone ON SchuelerTelefone AFTER UPDATE AS
-BEGIN
-  if (UPDATE(ID))
-    BEGIN
-      DECLARE @tmpID bigint
-      DECLARE @maxInsertedID bigint
-  
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerTelefone');
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerTelefone);
-          IF (@tmpID IS NULL)
-            BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerTelefone', @tmpID);
-        END;    
-      IF (@maxInsertedID > @tmpID)
-        BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerTelefone';
-    END;
-END;
-
-GO
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerAbgaenge ON SchuelerAbgaenge INSTEAD OF INSERT AS
-BEGIN
-  DECLARE @tmpID bigint
-  DECLARE @maxInsertedID bigint
-  
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-  INSERT INTO SchuelerAbgaenge
-    SELECT * FROM inserted WHERE ID >= 0;
-    
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAbgaenge');
-  IF (@tmpID IS NULL)
-    BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerAbgaenge);
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbgaenge', @tmpID);
-      SET NOCOUNT OFF;
-    END;
-  
-  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
-    BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
-      INSERT INTO SchuelerAbgaenge
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
-  
-  SET NOCOUNT ON;
-  IF (@maxInsertedID > @tmpID)
-    BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAbgaenge';
-  SET NOCOUNT OFF;
-END;
-
-GO
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerAbgaenge ON SchuelerAbgaenge AFTER UPDATE AS
-BEGIN
-  if (UPDATE(ID))
-    BEGIN
-      DECLARE @tmpID bigint
-      DECLARE @maxInsertedID bigint
-  
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAbgaenge');
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerAbgaenge);
-          IF (@tmpID IS NULL)
-            BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbgaenge', @tmpID);
-        END;    
-      IF (@maxInsertedID > @tmpID)
-        BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAbgaenge';
-    END;
-END;
-
-GO
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_Schueler_AllgAdr ON Schueler_AllgAdr INSTEAD OF INSERT AS
-BEGIN
-  DECLARE @tmpID bigint
-  DECLARE @maxInsertedID bigint
-  
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-  INSERT INTO Schueler_AllgAdr
-    SELECT * FROM inserted WHERE ID >= 0;
-    
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'Schueler_AllgAdr');
-  IF (@tmpID IS NULL)
-    BEGIN
-      SET @tmpID = (SELECT max(ID) FROM Schueler_AllgAdr);
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Schueler_AllgAdr', @tmpID);
-      SET NOCOUNT OFF;
-    END;
-  
-  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
-    BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
-      INSERT INTO Schueler_AllgAdr
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
-  
-  SET NOCOUNT ON;
-  IF (@maxInsertedID > @tmpID)
-    BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'Schueler_AllgAdr';
-  SET NOCOUNT OFF;
-END;
-
-GO
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_Schueler_AllgAdr ON Schueler_AllgAdr AFTER UPDATE AS
-BEGIN
-  if (UPDATE(ID))
-    BEGIN
-      DECLARE @tmpID bigint
-      DECLARE @maxInsertedID bigint
-  
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'Schueler_AllgAdr');
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = (SELECT max(ID) FROM Schueler_AllgAdr);
-          IF (@tmpID IS NULL)
-            BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Schueler_AllgAdr', @tmpID);
-        END;    
-      IF (@maxInsertedID > @tmpID)
-        BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'Schueler_AllgAdr';
-    END;
-END;
-
-GO
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerFHRFaecher ON SchuelerFHRFaecher INSTEAD OF INSERT AS
-BEGIN
-  DECLARE @tmpID bigint
-  DECLARE @maxInsertedID bigint
-  
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-  INSERT INTO SchuelerFHRFaecher
-    SELECT * FROM inserted WHERE ID >= 0;
-    
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerFHRFaecher');
-  IF (@tmpID IS NULL)
-    BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerFHRFaecher);
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFHRFaecher', @tmpID);
-      SET NOCOUNT OFF;
-    END;
-  
-  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
-    BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
-      INSERT INTO SchuelerFHRFaecher
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
-  
-  SET NOCOUNT ON;
-  IF (@maxInsertedID > @tmpID)
-    BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerFHRFaecher';
-  SET NOCOUNT OFF;
-END;
-
-GO
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerFHRFaecher ON SchuelerFHRFaecher AFTER UPDATE AS
-BEGIN
-  if (UPDATE(ID))
-    BEGIN
-      DECLARE @tmpID bigint
-      DECLARE @maxInsertedID bigint
-  
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerFHRFaecher');
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerFHRFaecher);
-          IF (@tmpID IS NULL)
-            BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFHRFaecher', @tmpID);
-        END;    
-      IF (@maxInsertedID > @tmpID)
-        BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerFHRFaecher';
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerVermerke';
     END;
 END;
 
@@ -7657,78 +7081,6 @@ END;
 GO
 
 
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerVermerke ON SchuelerVermerke INSTEAD OF INSERT AS
-BEGIN
-  DECLARE @tmpID bigint
-  DECLARE @maxInsertedID bigint
-  
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-  INSERT INTO SchuelerVermerke
-    SELECT * FROM inserted WHERE ID >= 0;
-    
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerVermerke');
-  IF (@tmpID IS NULL)
-    BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerVermerke);
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerVermerke', @tmpID);
-      SET NOCOUNT OFF;
-    END;
-  
-  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
-    BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
-      INSERT INTO SchuelerVermerke
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
-  
-  SET NOCOUNT ON;
-  IF (@maxInsertedID > @tmpID)
-    BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerVermerke';
-  SET NOCOUNT OFF;
-END;
-
-GO
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerVermerke ON SchuelerVermerke AFTER UPDATE AS
-BEGIN
-  if (UPDATE(ID))
-    BEGIN
-      DECLARE @tmpID bigint
-      DECLARE @maxInsertedID bigint
-  
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerVermerke');
-      IF (@tmpID IS NULL)
-        BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerVermerke);
-          IF (@tmpID IS NULL)
-            BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerVermerke', @tmpID);
-        END;    
-      IF (@maxInsertedID > @tmpID)
-        BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerVermerke';
-    END;
-END;
-
-GO
-
-
 CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerSprachenfolge ON SchuelerSprachenfolge INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
@@ -7801,25 +7153,25 @@ END;
 GO
 
 
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerErzFunktion ON SchuelerErzFunktion INSTEAD OF INSERT AS
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerAbitur ON SchuelerAbitur INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
   
   SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-  INSERT INTO SchuelerErzFunktion
+  INSERT INTO SchuelerAbitur
     SELECT * FROM inserted WHERE ID >= 0;
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerErzFunktion');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAbitur');
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerErzFunktion);
+      SET @tmpID = (SELECT max(ID) FROM SchuelerAbitur);
       IF (@tmpID IS NULL)
         BEGIN
           SET @tmpID = 0;
         END;
       SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerErzFunktion', @tmpID);
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbitur', @tmpID);
       SET NOCOUNT OFF;
     END;
   
@@ -7827,7 +7179,7 @@ BEGIN
     BEGIN  
       SELECT * INTO #tmp FROM inserted WHERE ID < 0;
       UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
-      INSERT INTO SchuelerErzFunktion
+      INSERT INTO SchuelerAbitur
         SELECT * FROM #tmp;
       DROP TABLE #tmp;
     END;
@@ -7837,14 +7189,14 @@ BEGIN
     BEGIN
       SET @tmpID = @maxInsertedID;
 	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerErzFunktion';
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAbitur';
   SET NOCOUNT OFF;
 END;
 
 GO
 
 
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerErzFunktion ON SchuelerErzFunktion AFTER UPDATE AS
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerAbitur ON SchuelerAbitur AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
     BEGIN
@@ -7852,21 +7204,597 @@ BEGIN
       DECLARE @maxInsertedID bigint
   
       SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerErzFunktion');
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAbitur');
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerErzFunktion);
+          SET @tmpID = (SELECT max(ID) FROM SchuelerAbitur);
           IF (@tmpID IS NULL)
             BEGIN
               SET @tmpID = 0;
             END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerErzFunktion', @tmpID);
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbitur', @tmpID);
         END;    
       IF (@maxInsertedID > @tmpID)
         BEGIN
           SET @tmpID = @maxInsertedID;
 	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerErzFunktion';
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAbitur';
+    END;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerBKFaecher ON SchuelerBKFaecher INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+  
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  INSERT INTO SchuelerBKFaecher
+    SELECT * FROM inserted WHERE ID >= 0;
+    
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerBKFaecher');
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM SchuelerBKFaecher);
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0;
+        END;
+      SET NOCOUNT ON;
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerBKFaecher', @tmpID);
+      SET NOCOUNT OFF;
+    END;
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      INSERT INTO SchuelerBKFaecher
+        SELECT * FROM #tmp;
+      DROP TABLE #tmp;
+    END;
+  
+  SET NOCOUNT ON;
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID;
+	END;
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerBKFaecher';
+  SET NOCOUNT OFF;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerBKFaecher ON SchuelerBKFaecher AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+  
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerBKFaecher');
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM SchuelerBKFaecher);
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0;
+            END;
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerBKFaecher', @tmpID);
+        END;    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID;
+	      END;
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerBKFaecher';
+    END;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerAbgaenge ON SchuelerAbgaenge INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+  
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  INSERT INTO SchuelerAbgaenge
+    SELECT * FROM inserted WHERE ID >= 0;
+    
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAbgaenge');
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM SchuelerAbgaenge);
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0;
+        END;
+      SET NOCOUNT ON;
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbgaenge', @tmpID);
+      SET NOCOUNT OFF;
+    END;
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      INSERT INTO SchuelerAbgaenge
+        SELECT * FROM #tmp;
+      DROP TABLE #tmp;
+    END;
+  
+  SET NOCOUNT ON;
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID;
+	END;
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAbgaenge';
+  SET NOCOUNT OFF;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerAbgaenge ON SchuelerAbgaenge AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+  
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAbgaenge');
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM SchuelerAbgaenge);
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0;
+            END;
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbgaenge', @tmpID);
+        END;    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID;
+	      END;
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAbgaenge';
+    END;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerTelefone ON SchuelerTelefone INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+  
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  INSERT INTO SchuelerTelefone
+    SELECT * FROM inserted WHERE ID >= 0;
+    
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerTelefone');
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM SchuelerTelefone);
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0;
+        END;
+      SET NOCOUNT ON;
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerTelefone', @tmpID);
+      SET NOCOUNT OFF;
+    END;
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      INSERT INTO SchuelerTelefone
+        SELECT * FROM #tmp;
+      DROP TABLE #tmp;
+    END;
+  
+  SET NOCOUNT ON;
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID;
+	END;
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerTelefone';
+  SET NOCOUNT OFF;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerTelefone ON SchuelerTelefone AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+  
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerTelefone');
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM SchuelerTelefone);
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0;
+            END;
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerTelefone', @tmpID);
+        END;    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID;
+	      END;
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerTelefone';
+    END;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerAnkreuzfloskeln ON SchuelerAnkreuzfloskeln INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+  
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  INSERT INTO SchuelerAnkreuzfloskeln
+    SELECT * FROM inserted WHERE ID >= 0;
+    
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAnkreuzfloskeln');
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM SchuelerAnkreuzfloskeln);
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0;
+        END;
+      SET NOCOUNT ON;
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAnkreuzfloskeln', @tmpID);
+      SET NOCOUNT OFF;
+    END;
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      INSERT INTO SchuelerAnkreuzfloskeln
+        SELECT * FROM #tmp;
+      DROP TABLE #tmp;
+    END;
+  
+  SET NOCOUNT ON;
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID;
+	END;
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAnkreuzfloskeln';
+  SET NOCOUNT OFF;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerAnkreuzfloskeln ON SchuelerAnkreuzfloskeln AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+  
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAnkreuzfloskeln');
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM SchuelerAnkreuzfloskeln);
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0;
+            END;
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAnkreuzfloskeln', @tmpID);
+        END;    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID;
+	      END;
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAnkreuzfloskeln';
+    END;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerFHRFaecher ON SchuelerFHRFaecher INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+  
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  INSERT INTO SchuelerFHRFaecher
+    SELECT * FROM inserted WHERE ID >= 0;
+    
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerFHRFaecher');
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM SchuelerFHRFaecher);
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0;
+        END;
+      SET NOCOUNT ON;
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFHRFaecher', @tmpID);
+      SET NOCOUNT OFF;
+    END;
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      INSERT INTO SchuelerFHRFaecher
+        SELECT * FROM #tmp;
+      DROP TABLE #tmp;
+    END;
+  
+  SET NOCOUNT ON;
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID;
+	END;
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerFHRFaecher';
+  SET NOCOUNT OFF;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerFHRFaecher ON SchuelerFHRFaecher AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+  
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerFHRFaecher');
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM SchuelerFHRFaecher);
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0;
+            END;
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFHRFaecher', @tmpID);
+        END;    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID;
+	      END;
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerFHRFaecher';
+    END;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerFHR ON SchuelerFHR INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+  
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  INSERT INTO SchuelerFHR
+    SELECT * FROM inserted WHERE ID >= 0;
+    
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerFHR');
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM SchuelerFHR);
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0;
+        END;
+      SET NOCOUNT ON;
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFHR', @tmpID);
+      SET NOCOUNT OFF;
+    END;
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      INSERT INTO SchuelerFHR
+        SELECT * FROM #tmp;
+      DROP TABLE #tmp;
+    END;
+  
+  SET NOCOUNT ON;
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID;
+	END;
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerFHR';
+  SET NOCOUNT OFF;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerFHR ON SchuelerFHR AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+  
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerFHR');
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM SchuelerFHR);
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0;
+            END;
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFHR', @tmpID);
+        END;    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID;
+	      END;
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerFHR';
+    END;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_Schueler_AllgAdr ON Schueler_AllgAdr INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+  
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  INSERT INTO Schueler_AllgAdr
+    SELECT * FROM inserted WHERE ID >= 0;
+    
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'Schueler_AllgAdr');
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Schueler_AllgAdr);
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0;
+        END;
+      SET NOCOUNT ON;
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Schueler_AllgAdr', @tmpID);
+      SET NOCOUNT OFF;
+    END;
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      INSERT INTO Schueler_AllgAdr
+        SELECT * FROM #tmp;
+      DROP TABLE #tmp;
+    END;
+  
+  SET NOCOUNT ON;
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID;
+	END;
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'Schueler_AllgAdr';
+  SET NOCOUNT OFF;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_Schueler_AllgAdr ON Schueler_AllgAdr AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+  
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'Schueler_AllgAdr');
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Schueler_AllgAdr);
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0;
+            END;
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Schueler_AllgAdr', @tmpID);
+        END;    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID;
+	      END;
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'Schueler_AllgAdr';
+    END;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerAbiFaecher ON SchuelerAbiFaecher INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+  
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  INSERT INTO SchuelerAbiFaecher
+    SELECT * FROM inserted WHERE ID >= 0;
+    
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAbiFaecher');
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM SchuelerAbiFaecher);
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0;
+        END;
+      SET NOCOUNT ON;
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbiFaecher', @tmpID);
+      SET NOCOUNT OFF;
+    END;
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      INSERT INTO SchuelerAbiFaecher
+        SELECT * FROM #tmp;
+      DROP TABLE #tmp;
+    END;
+  
+  SET NOCOUNT ON;
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID;
+	END;
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAbiFaecher';
+  SET NOCOUNT OFF;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerAbiFaecher ON SchuelerAbiFaecher AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+  
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAbiFaecher');
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM SchuelerAbiFaecher);
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0;
+            END;
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbiFaecher', @tmpID);
+        END;    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID;
+	      END;
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAbiFaecher';
     END;
 END;
 
@@ -7939,6 +7867,78 @@ BEGIN
           SET @tmpID = @maxInsertedID;
 	      END;
       UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerLeistungsdaten';
+    END;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerErzFunktion ON SchuelerErzFunktion INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+  
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  INSERT INTO SchuelerErzFunktion
+    SELECT * FROM inserted WHERE ID >= 0;
+    
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerErzFunktion');
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM SchuelerErzFunktion);
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0;
+        END;
+      SET NOCOUNT ON;
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerErzFunktion', @tmpID);
+      SET NOCOUNT OFF;
+    END;
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      INSERT INTO SchuelerErzFunktion
+        SELECT * FROM #tmp;
+      DROP TABLE #tmp;
+    END;
+  
+  SET NOCOUNT ON;
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID;
+	END;
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerErzFunktion';
+  SET NOCOUNT OFF;
+END;
+
+GO
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerErzFunktion ON SchuelerErzFunktion AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+  
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerErzFunktion');
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM SchuelerErzFunktion);
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0;
+            END;
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerErzFunktion', @tmpID);
+        END;    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID;
+	      END;
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerErzFunktion';
     END;
 END;
 
