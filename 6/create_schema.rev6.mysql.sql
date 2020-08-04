@@ -98,7 +98,7 @@ CREATE TABLE EigeneSchule_Fachklassen (
   Ebene2Klartext varchar(255), 
   Ebene3Klartext varchar(255),
   CONSTRAINT PK_EigeneSchule_Fachklassen PRIMARY KEY (ID),
-  CONSTRAINT EigeneSchule_Fachklassen_UC1 UNIQUE (AP, BKIndexTyp, FKS)
+  CONSTRAINT EigeneSchule_Fachklassen_UC1 UNIQUE (FKS, AP, BKIndexTyp)
 );
 
 
@@ -267,7 +267,7 @@ CREATE TABLE EigeneSchule_Zertifikate (
   Fach varchar(100), 
   Formatvorlage varchar(255),
   CONSTRAINT PK_EigeneSchule_Zertifikate PRIMARY KEY (ID),
-  CONSTRAINT EigeneSchule_Zertifikate_UC1 UNIQUE (Kuerzel, SchulNrEigner)
+  CONSTRAINT EigeneSchule_Zertifikate_UC1 UNIQUE (SchulNrEigner, Kuerzel)
 );
 
 
@@ -347,7 +347,7 @@ CREATE TABLE ImpExp_EigeneImporte_Felder (
   DstKeyLookupInsert int, 
   DstKeyLookupNameCreateID int, 
   DstForceNumeric int,
-  CONSTRAINT PK_ImpExp_EigeneImporte_Felder PRIMARY KEY (Field_ID, Import_ID)
+  CONSTRAINT PK_ImpExp_EigeneImporte_Felder PRIMARY KEY (Import_ID, Field_ID)
 );
 
 
@@ -439,7 +439,7 @@ CREATE TABLE K42_JgBereiche (
   JG_Bereich int, 
   BlockungsID bigint NOT NULL, 
   Jahrgang varchar(2),
-  CONSTRAINT PK_K42_JgBereiche PRIMARY KEY (BlockungsID, JG_Bereich, Jahrgang)
+  CONSTRAINT PK_K42_JgBereiche PRIMARY KEY (BlockungsID, Jahrgang, JG_Bereich)
 );
 
 
@@ -814,7 +814,7 @@ CREATE TABLE K_Ort (
   Land varchar(2), 
   SchulNrEigner int,
   CONSTRAINT PK_K_Ort PRIMARY KEY (ID),
-  CONSTRAINT K_Ort_UC1 UNIQUE (Bezeichnung, PLZ)
+  CONSTRAINT K_Ort_UC1 UNIQUE (PLZ, Bezeichnung)
 );
 
 CREATE INDEX K_Ort_IDX1 ON K_Ort(PLZ);
@@ -1055,7 +1055,7 @@ CREATE TABLE Katalog_Pausenzeiten (
   Beginn time DEFAULT (CURRENT_TIME) NOT NULL, 
   Ende time DEFAULT (CURRENT_TIME) NOT NULL,
   CONSTRAINT PK_Katalog_Pausenzeiten PRIMARY KEY (ID),
-  CONSTRAINT Katalog_Pausenzeiten_UC1 UNIQUE (Beginn, Ende, Tag)
+  CONSTRAINT Katalog_Pausenzeiten_UC1 UNIQUE (Tag, Beginn, Ende)
 );
 
 
@@ -1076,7 +1076,7 @@ CREATE TABLE Katalog_Zeitraster (
   Beginn time DEFAULT (CURRENT_TIME) NOT NULL, 
   Ende time DEFAULT (CURRENT_TIME) NOT NULL,
   CONSTRAINT PK_Katalog_Zeitraster PRIMARY KEY (ID),
-  CONSTRAINT Katalog_Zeitraster_UC1 UNIQUE (Stunde, Tag)
+  CONSTRAINT Katalog_Zeitraster_UC1 UNIQUE (Tag, Stunde)
 );
 
 
@@ -1119,7 +1119,7 @@ CREATE TABLE Kurse (
   ZeugnisBez varchar(130), 
   Jahrgaenge varchar(50),
   CONSTRAINT PK_Kurse PRIMARY KEY (ID),
-  CONSTRAINT Kurse_UC1 UNIQUE (ASDJahrgang, Abschnitt, Fach_ID, Jahr, Jahrgaenge, KursartAllg, KurzBez, LehrerKrz, WochenStd)
+  CONSTRAINT Kurse_UC1 UNIQUE (Jahr, Abschnitt, KurzBez, ASDJahrgang, Fach_ID, KursartAllg, WochenStd, LehrerKrz, Jahrgaenge)
 );
 
 
@@ -1309,8 +1309,8 @@ CREATE TABLE LuPO_SchuelerFaecher (
   Aendern_Q1 int, 
   Aendern_Q2 int, 
   Aendern_Q3 int, 
-  Aendern_Q4 int, 
   MdlPruefErgebnis int, 
+  Aendern_Q4 int, 
   Markiert_Q1 int, 
   Markiert_Q2 int, 
   Markiert_Q3 int, 
@@ -1699,7 +1699,7 @@ CREATE TABLE Schildintern_PruefungsOrdnung (
   PO_MinJahrgang int DEFAULT 0 NOT NULL, 
   PO_MaxJahrgang int DEFAULT 20 NOT NULL, 
   PO_Jahrgaenge varchar(30) NOT NULL,
-  CONSTRAINT PK_Schildintern_PruefungsOrdnung PRIMARY KEY (PO_Krz, PO_SGL, PO_Schulform)
+  CONSTRAINT PK_Schildintern_PruefungsOrdnung PRIMARY KEY (PO_Krz, PO_Schulform, PO_SGL)
 );
 
 
@@ -1749,7 +1749,7 @@ CREATE TABLE Schildintern_TextExport (
   LookupFeldname varchar(100), 
   LookupSQLText text, 
   DBFormat varchar(10) DEFAULT 'ALLE' NOT NULL,
-  CONSTRAINT PK_Schildintern_TextExport PRIMARY KEY (AnzeigeText, DBFormat, DatenartKrz, Feldname)
+  CONSTRAINT PK_Schildintern_TextExport PRIMARY KEY (AnzeigeText, DatenartKrz, DBFormat, Feldname)
 );
 
 
@@ -1966,7 +1966,7 @@ CREATE TABLE Schulver_WeitereSF (
   SNR varchar(6) NOT NULL, 
   SGL varchar(3) DEFAULT '   ' NOT NULL, 
   FSP varchar(2) DEFAULT '  ' NOT NULL,
-  CONSTRAINT PK_Schulver_WeitereSF PRIMARY KEY (FSP, SGL, SNR)
+  CONSTRAINT PK_Schulver_WeitereSF PRIMARY KEY (SNR, SGL, FSP)
 );
 
 
@@ -2057,10 +2057,10 @@ CREATE TABLE Statkue_Fachklasse (
 
 CREATE TABLE Statkue_Foerderschwerpunkt (
   Beschreibung varchar(100), 
-  FSP varchar(2) NOT NULL, 
   Flag varchar(1) DEFAULT '1', 
-  SF varchar(2) NOT NULL, 
-  geaendert datetime,
+  FSP varchar(2) NOT NULL, 
+  geaendert datetime, 
+  SF varchar(2) NOT NULL,
   CONSTRAINT PK_Statkue_Foerderschwerpunkt PRIMARY KEY (FSP, SF)
 );
 
@@ -2346,50 +2346,6 @@ CREATE TABLE K_Lehrer (
 );
 
 
-CREATE TABLE LehrerMehrleistung (
-  Lehrer_ID bigint NOT NULL, 
-  MehrleistungsgrundKrz varchar(10) NOT NULL, 
-  MehrleistungStd float, 
-  Jahr int NOT NULL, 
-  Abschnitt int NOT NULL, 
-  SchulNrEigner int,
-  CONSTRAINT PK_LehrerMehrleistung PRIMARY KEY (Abschnitt, Jahr, Lehrer_ID, MehrleistungsgrundKrz),
-  CONSTRAINT LehrerMehrleistung_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE Lehrer_IMEI (
-  ID bigint NOT NULL, 
-  Lehrer_ID bigint NOT NULL, 
-  SchulNrEigner int NOT NULL, 
-  IMEI varchar(20),
-  CONSTRAINT PK_Lehrer_IMEI PRIMARY KEY (ID),
-  CONSTRAINT Lehrer_IMEI_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE LehrerLehramt (
-  Lehrer_ID bigint NOT NULL, 
-  LehramtKrz varchar(10), 
-  LehramtAnerkennungKrz varchar(10), 
-  SchulNrEigner int,
-  CONSTRAINT PK_LehrerLehramt PRIMARY KEY (LehramtKrz, Lehrer_ID),
-  CONSTRAINT LehrerLehramt_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE LehrerAnrechnung (
-  Lehrer_ID bigint NOT NULL, 
-  AnrechnungsgrundKrz varchar(10), 
-  AnrechnungStd float, 
-  Jahr int, 
-  Abschnitt int, 
-  SchulNrEigner int,
-  CONSTRAINT PK_LehrerAnrechnung PRIMARY KEY (Abschnitt, AnrechnungsgrundKrz, Jahr, Lehrer_ID),
-  CONSTRAINT LehrerAnrechnung_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
 CREATE TABLE EigeneSchule_Abteilungen (
   ID bigint DEFAULT -1 NOT NULL, 
   Bezeichnung varchar(50) NOT NULL, 
@@ -2402,6 +2358,48 @@ CREATE TABLE EigeneSchule_Abteilungen (
   Sortierung int,
   CONSTRAINT PK_EigeneSchule_Abteilungen PRIMARY KEY (ID),
   CONSTRAINT EigeneSchule_Abteilungen_Leiter_FK FOREIGN KEY (AbteilungsLeiter) REFERENCES K_Lehrer(Kuerzel) ON UPDATE CASCADE ON DELETE SET NULL
+);
+
+
+CREATE TABLE KursLehrer (
+  Kurs_ID bigint NOT NULL, 
+  Lehrer_ID bigint NOT NULL, 
+  Anteil float, 
+  SchulNrEigner int,
+  CONSTRAINT PK_KursLehrer PRIMARY KEY (Kurs_ID, Lehrer_ID),
+  CONSTRAINT KursLehrer_Kurs_FK FOREIGN KEY (Kurs_ID) REFERENCES Kurse(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT KursLehrer_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE LehrerAbschnittsdaten (
+  Lehrer_ID bigint NOT NULL, 
+  Jahr int NOT NULL, 
+  Abschnitt int NOT NULL, 
+  Rechtsverhaeltnis varchar(1), 
+  Beschaeftigungsart varchar(2), 
+  Einsatzstatus varchar(1), 
+  PflichtstdSoll float, 
+  UnterrichtsStd float, 
+  MehrleistungStd float, 
+  EntlastungStd float, 
+  AnrechnungStd float, 
+  RestStd float, 
+  SchulNrEigner int,
+  CONSTRAINT PK_LehrerAbschnittsdaten PRIMARY KEY (Abschnitt, Jahr, Lehrer_ID),
+  CONSTRAINT LehrerAbschnitte_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE LehrerAnrechnung (
+  Lehrer_ID bigint NOT NULL, 
+  AnrechnungsgrundKrz varchar(10), 
+  AnrechnungStd float, 
+  Jahr int, 
+  Abschnitt int, 
+  SchulNrEigner int,
+  CONSTRAINT PK_LehrerAnrechnung PRIMARY KEY (Abschnitt, AnrechnungsgrundKrz, Jahr, Lehrer_ID),
+  CONSTRAINT LehrerAnrechnung_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -2429,33 +2427,35 @@ CREATE TABLE LehrerFunktionen (
 );
 
 
-CREATE TABLE LehrerAbschnittsdaten (
+CREATE TABLE LehrerLehramt (
   Lehrer_ID bigint NOT NULL, 
-  Jahr int NOT NULL, 
-  Abschnitt int NOT NULL, 
-  Rechtsverhaeltnis varchar(1), 
-  Beschaeftigungsart varchar(2), 
-  Einsatzstatus varchar(1), 
-  PflichtstdSoll float, 
-  UnterrichtsStd float, 
-  MehrleistungStd float, 
-  EntlastungStd float, 
-  AnrechnungStd float, 
-  RestStd float, 
+  LehramtKrz varchar(10), 
+  LehramtAnerkennungKrz varchar(10), 
   SchulNrEigner int,
-  CONSTRAINT PK_LehrerAbschnittsdaten PRIMARY KEY (Abschnitt, Jahr, Lehrer_ID),
-  CONSTRAINT LehrerAbschnitte_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE
+  CONSTRAINT PK_LehrerLehramt PRIMARY KEY (LehramtKrz, Lehrer_ID),
+  CONSTRAINT LehrerLehramt_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
-CREATE TABLE KursLehrer (
-  Kurs_ID bigint NOT NULL, 
+CREATE TABLE LehrerMehrleistung (
   Lehrer_ID bigint NOT NULL, 
-  Anteil float, 
+  MehrleistungsgrundKrz varchar(10) NOT NULL, 
+  MehrleistungStd float, 
+  Jahr int NOT NULL, 
+  Abschnitt int NOT NULL, 
   SchulNrEigner int,
-  CONSTRAINT PK_KursLehrer PRIMARY KEY (Kurs_ID, Lehrer_ID),
-  CONSTRAINT KursLehrer_Kurs_FK FOREIGN KEY (Kurs_ID) REFERENCES Kurse(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT KursLehrer_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE
+  CONSTRAINT PK_LehrerMehrleistung PRIMARY KEY (Abschnitt, Jahr, Lehrer_ID, MehrleistungsgrundKrz),
+  CONSTRAINT LehrerMehrleistung_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE Lehrer_IMEI (
+  ID bigint NOT NULL, 
+  Lehrer_ID bigint NOT NULL, 
+  SchulNrEigner int NOT NULL, 
+  IMEI varchar(20),
+  CONSTRAINT PK_Lehrer_IMEI PRIMARY KEY (ID),
+  CONSTRAINT Lehrer_IMEI_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -2576,7 +2576,7 @@ CREATE TABLE Statkue_ZulFaecher (
   Flag varchar(1) DEFAULT '1', 
   Sortierung int DEFAULT 0, 
   geaendert datetime,
-  CONSTRAINT PK_Statkue_ZulFaecher PRIMARY KEY (BG, Bezeichnung, FSP, Fach, Flag, Schulform)
+  CONSTRAINT PK_Statkue_ZulFaecher PRIMARY KEY (Bezeichnung, BG, Fach, Flag, FSP, Schulform)
 );
 
 
@@ -2613,7 +2613,7 @@ CREATE TABLE Statkue_ZulKuArt (
   JgBereich int DEFAULT 0 NOT NULL, 
   Flag varchar(1) DEFAULT '1' NOT NULL, 
   geaendert datetime,
-  CONSTRAINT PK_Statkue_ZulKuArt PRIMARY KEY (BG, Bezeichnung, FSP, Flag, JgBereich, Kursart, Kursart2, SF)
+  CONSTRAINT PK_Statkue_ZulKuArt PRIMARY KEY (Bezeichnung, BG, Flag, FSP, JgBereich, Kursart, Kursart2, SF)
 );
 
 
@@ -2635,7 +2635,7 @@ CREATE TABLE Stundenplan_Aufsichtsbereiche (
   Beschreibung varchar(1000) NOT NULL,
   CONSTRAINT PK_Stundenplan_Aufsichtsbereiche PRIMARY KEY (ID),
   CONSTRAINT Stundenplan_Aufsichtsbereiche_Stundenplan_FK FOREIGN KEY (Stundenplan_ID) REFERENCES Stundenplan(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT Stundenplan_Aufsichtsbereiche_UC1 UNIQUE (Kuerzel, Stundenplan_ID)
+  CONSTRAINT Stundenplan_Aufsichtsbereiche_UC1 UNIQUE (Stundenplan_ID, Kuerzel)
 );
 
 
@@ -2647,7 +2647,7 @@ CREATE TABLE Stundenplan_Pausenzeit (
   Ende time DEFAULT (CURRENT_TIME) NOT NULL,
   CONSTRAINT PK_Stundenplan_Pausenzeit PRIMARY KEY (ID),
   CONSTRAINT Stundenplan_Pausenzeit_Stundenplan_FK FOREIGN KEY (Stundenplan_ID) REFERENCES Stundenplan(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT Stundenplan_Pausenzeit_UC1 UNIQUE (Beginn, Ende, Stundenplan_ID, Tag)
+  CONSTRAINT Stundenplan_Pausenzeit_UC1 UNIQUE (Stundenplan_ID, Tag, Beginn, Ende)
 );
 
 
@@ -2659,7 +2659,7 @@ CREATE TABLE Stundenplan_Pausenaufsichten (
   CONSTRAINT PK_Stundenplan_Pausenaufsichten PRIMARY KEY (ID),
   CONSTRAINT Stundenplan_Pausenaufsichten_K_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT Stundenplan_Pausenaufsichten_Pausenzeit_FK FOREIGN KEY (Pausenzeit_ID) REFERENCES Stundenplan_Pausenzeit(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT Stundenplan_Pausenaufsichten_UC1 UNIQUE (Lehrer_ID, Pausenzeit_ID)
+  CONSTRAINT Stundenplan_Pausenaufsichten_UC1 UNIQUE (Pausenzeit_ID, Lehrer_ID)
 );
 
 
@@ -2668,9 +2668,9 @@ CREATE TABLE Stundenplan_PausenaufsichtenBereich (
   Pausenaufsicht_ID bigint NOT NULL, 
   Aufsichtsbereich_ID bigint NOT NULL,
   CONSTRAINT PK_Stundenplan_PausenaufsichtenBereich PRIMARY KEY (ID),
-  CONSTRAINT Stundenplan_PausenaufsichtenBereich_Aufsicht_FK FOREIGN KEY (Pausenaufsicht_ID) REFERENCES Stundenplan_Pausenaufsichten(ID) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT Stundenplan_PausenaufsichtenBereich_Aufsichtsbereiche_FK FOREIGN KEY (Aufsichtsbereich_ID) REFERENCES Stundenplan_Aufsichtsbereiche(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT Stundenplan_PausenaufsichtenBereich_UC1 UNIQUE (Aufsichtsbereich_ID, Pausenaufsicht_ID)
+  CONSTRAINT Stundenplan_PausenaufsichtenBereich_Aufsicht_FK FOREIGN KEY (Pausenaufsicht_ID) REFERENCES Stundenplan_Pausenaufsichten(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_PausenaufsichtenBereich_UC1 UNIQUE (Pausenaufsicht_ID, Aufsichtsbereich_ID)
 );
 
 
@@ -2682,7 +2682,7 @@ CREATE TABLE Stundenplan_Raeume (
   Groesse int DEFAULT 40 NOT NULL,
   CONSTRAINT PK_Stundenplan_Raeume PRIMARY KEY (ID),
   CONSTRAINT Stundenplan_Raeume_Stundenplan_FK FOREIGN KEY (Stundenplan_ID) REFERENCES Stundenplan(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT Stundenplan_Raeume_UC1 UNIQUE (Kuerzel, Stundenplan_ID)
+  CONSTRAINT Stundenplan_Raeume_UC1 UNIQUE (Stundenplan_ID, Kuerzel)
 );
 
 
@@ -2695,7 +2695,7 @@ CREATE TABLE Stundenplan_Zeitraster (
   Ende time DEFAULT (CURRENT_TIME) NOT NULL,
   CONSTRAINT PK_Stundenplan_Zeitraster PRIMARY KEY (ID),
   CONSTRAINT Stundenplan_Zeitraster_Stundenplan_FK FOREIGN KEY (Stundenplan_ID) REFERENCES Stundenplan(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT Stundenplan_Zeitraster_UC1 UNIQUE (Stunde, Stundenplan_ID, Tag)
+  CONSTRAINT Stundenplan_Zeitraster_UC1 UNIQUE (Stundenplan_ID, Tag, Stunde)
 );
 
 
@@ -2729,7 +2729,7 @@ CREATE TABLE Stundentafel_Faecher (
   CONSTRAINT PK_Stundentafel_Faecher PRIMARY KEY (ID),
   CONSTRAINT StundentafelFaecher_Faecher_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT StundentafelFaecher_Stdtafel_FK FOREIGN KEY (Stundentafel_ID) REFERENCES Stundentafel(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT Stundentafel_Faecher_UC1 UNIQUE (Fach_ID, Stundentafel_ID)
+  CONSTRAINT Stundentafel_Faecher_UC1 UNIQUE (Stundentafel_ID, Fach_ID)
 );
 
 
@@ -2778,7 +2778,7 @@ CREATE TABLE SVWS_Client_Konfiguration_Benutzer (
   AppName varchar(100) NOT NULL, 
   Schluessel varchar(255) NOT NULL, 
   Wert text NOT NULL,
-  CONSTRAINT PK_SVWS_Client_Konfiguration_Benutzer PRIMARY KEY (AppName, Benutzer_ID, Schluessel),
+  CONSTRAINT PK_SVWS_Client_Konfiguration_Benutzer PRIMARY KEY (Benutzer_ID, AppName, Schluessel),
   CONSTRAINT SVWSClientKonfigurationBenutzer_Users_FK FOREIGN KEY (Benutzer_ID) REFERENCES Users(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
@@ -2814,19 +2814,15 @@ CREATE TABLE Versetzung (
 );
 
 
-CREATE TABLE Stundenplan_Unterricht (
+CREATE TABLE EigeneSchule_Abt_Kl (
   ID bigint DEFAULT -1 NOT NULL, 
-  Zeitraster_ID bigint NOT NULL, 
-  Wochentyp int DEFAULT 0 NOT NULL, 
-  Klasse_ID bigint, 
-  Kurs_ID bigint, 
-  Fach_ID bigint NOT NULL,
-  CONSTRAINT PK_Stundenplan_Unterricht PRIMARY KEY (ID),
-  CONSTRAINT Stundenplan_Unterricht_EigeneSchule_Faecher_FK FOREIGN KEY (Kurs_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT Stundenplan_Unterricht_Kurse_FK FOREIGN KEY (Kurs_ID) REFERENCES Kurse(ID) ON UPDATE CASCADE ON DELETE SET NULL,
-  CONSTRAINT Stundenplan_Unterricht_Stundenplan_Zeitraster_FK FOREIGN KEY (Zeitraster_ID) REFERENCES Stundenplan_Zeitraster(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT Stundenplan_Unterricht_Versetzung_FK FOREIGN KEY (Klasse_ID) REFERENCES Versetzung(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT Stundenplan_Unterricht_UC1 UNIQUE (Klasse_ID, Kurs_ID, Zeitraster_ID)
+  Abteilung_ID bigint NOT NULL, 
+  Klasse varchar(15) NOT NULL, 
+  Sichtbar varchar(1) DEFAULT '+', 
+  SchulNrEigner int,
+  CONSTRAINT PK_EigeneSchule_Abt_Kl PRIMARY KEY (ID),
+  CONSTRAINT EigeneSchuleAbtKl_Abteilung_FK FOREIGN KEY (Abteilung_ID) REFERENCES EigeneSchule_Abteilungen(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT EigeneSchuleAbtKl_Klasse_FK FOREIGN KEY (Klasse) REFERENCES Versetzung(Klasse) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -2995,25 +2991,249 @@ CREATE TABLE Schueler (
   CONSTRAINT Schueler_Fahrschueler_FK FOREIGN KEY (Fahrschueler_ID) REFERENCES K_FahrschuelerArt(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT Schueler_Foerderschwerpunkt_FK FOREIGN KEY (Foerderschwerpunkt_ID) REFERENCES K_Foerderschwerpunkt(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT Schueler_Haltestelle_FK FOREIGN KEY (Haltestelle_ID) REFERENCES K_Haltestelle(ID) ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT Schueler_Versetzung_FK FOREIGN KEY (Klasse) REFERENCES Versetzung(Klasse) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT Schueler_Ort_PLZ_FK FOREIGN KEY (Ort_ID) REFERENCES K_Ort(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT Schueler_Ortsteil_FK FOREIGN KEY (Ortsteil_ID) REFERENCES K_Ortsteil(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT Schueler_Religion_FK FOREIGN KEY (Religion_ID) REFERENCES K_Religion(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT Schueler_Sportbefreiung_FK FOREIGN KEY (Sportbefreiung_ID) REFERENCES K_Sportbefreiung(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT Schueler_Statkue_Nationalitaeten_FK FOREIGN KEY (StaatKrz) REFERENCES Statkue_Nationalitaeten(Schluessel) ON UPDATE CASCADE ON DELETE SET NULL,
-  CONSTRAINT Schueler_Versetzung_FK FOREIGN KEY (Klasse) REFERENCES Versetzung(Klasse) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT Schueler_UC1 UNIQUE (GU_ID)
 );
 
 
-CREATE TABLE EigeneSchule_Abt_Kl (
+CREATE TABLE Stundenplan_Unterricht (
   ID bigint DEFAULT -1 NOT NULL, 
-  Abteilung_ID bigint NOT NULL, 
-  Klasse varchar(15) NOT NULL, 
-  Sichtbar varchar(1) DEFAULT '+', 
+  Zeitraster_ID bigint NOT NULL, 
+  Wochentyp int DEFAULT 0 NOT NULL, 
+  Klasse_ID bigint, 
+  Kurs_ID bigint, 
+  Fach_ID bigint NOT NULL,
+  CONSTRAINT PK_Stundenplan_Unterricht PRIMARY KEY (ID),
+  CONSTRAINT Stundenplan_Unterricht_Versetzung_FK FOREIGN KEY (Klasse_ID) REFERENCES Versetzung(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_Unterricht_EigeneSchule_Faecher_FK FOREIGN KEY (Kurs_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_Unterricht_Kurse_FK FOREIGN KEY (Kurs_ID) REFERENCES Kurse(ID) ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT Stundenplan_Unterricht_Stundenplan_Zeitraster_FK FOREIGN KEY (Zeitraster_ID) REFERENCES Stundenplan_Zeitraster(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_Unterricht_UC1 UNIQUE (Zeitraster_ID, Klasse_ID, Kurs_ID)
+);
+
+
+CREATE TABLE Kurs_Schueler (
+  Kurs_ID bigint NOT NULL, 
+  Schueler_ID bigint NOT NULL,
+  CONSTRAINT PK_Kurs_Schueler PRIMARY KEY (Kurs_ID, Schueler_ID),
+  CONSTRAINT KursSchueler_Kurse_FK FOREIGN KEY (Kurs_ID) REFERENCES Kurse(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT KursSchueler_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE SchuelerAbgaenge (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  BemerkungIntern varchar(30), 
+  AbgangsSchulform varchar(2), 
+  AbgangsBeschreibung varchar(200), 
+  OrganisationsformKrz varchar(1), 
+  AbgangsSchule varchar(100), 
+  AbgangsSchuleAnschr varchar(100), 
+  AbgangsSchulNr varchar(6), 
+  LSJahrgang varchar(2), 
+  LSEntlassArt varchar(2), 
+  LSSchulformSIM varchar(3), 
+  LSSchulEntlassDatum date, 
+  LSVersetzung varchar(2), 
+  LSSGL varchar(5), 
+  LSFachklKennung varchar(10), 
+  LSFachklSIM varchar(5), 
+  FuerSIMExport varchar(1) DEFAULT '-', 
+  LSBeginnDatum date, 
+  LSBeginnJahrgang varchar(2), 
   SchulNrEigner int,
-  CONSTRAINT PK_EigeneSchule_Abt_Kl PRIMARY KEY (ID),
-  CONSTRAINT EigeneSchuleAbtKl_Abteilung_FK FOREIGN KEY (Abteilung_ID) REFERENCES EigeneSchule_Abteilungen(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT EigeneSchuleAbtKl_Klasse_FK FOREIGN KEY (Klasse) REFERENCES Versetzung(Klasse) ON UPDATE CASCADE ON DELETE CASCADE
+  CONSTRAINT PK_SchuelerAbgaenge PRIMARY KEY (ID),
+  CONSTRAINT SchuelerAbgaenge_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE INDEX SchuelerAbgaenge_IDX1 ON SchuelerAbgaenge(Schueler_ID, LSSchulEntlassDatum);
+
+
+CREATE TABLE SchuelerAbiFaecher (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  Fach_ID bigint NOT NULL, 
+  FachKrz varchar(20), 
+  FSortierung int, 
+  Kurs_ID bigint, 
+  KursartAllg varchar(5), 
+  Fachlehrer varchar(10), 
+  AbiFach varchar(1), 
+  P11_1 varchar(2), 
+  S11_1 varchar(1) DEFAULT '-', 
+  P11_2 varchar(2), 
+  S11_2 varchar(1) DEFAULT '-', 
+  P_FA varchar(2), 
+  R_FA varchar(1) DEFAULT '-', 
+  W12_1 int, 
+  P12_1 varchar(2), 
+  H12_1 int, 
+  R12_1 varchar(1) DEFAULT '-', 
+  S12_1 varchar(1) DEFAULT '-', 
+  W12_2 int, 
+  P12_2 varchar(2), 
+  H12_2 int, 
+  R12_2 varchar(1) DEFAULT '-', 
+  S12_2 varchar(1) DEFAULT '-', 
+  W13_1 int, 
+  P13_1 varchar(2), 
+  H13_1 int, 
+  R13_1 varchar(1) DEFAULT '-', 
+  S13_1 varchar(1) DEFAULT '-', 
+  W13_2 int, 
+  P13_2 varchar(2), 
+  H13_2 int, 
+  R13_2 varchar(1) DEFAULT '-', 
+  S13_2 varchar(1) DEFAULT '-', 
+  Zulassung smallint, 
+  Durchschnitt float, 
+  AbiPruefErgebnis smallint, 
+  Zwischenstand smallint, 
+  MdlPflichtPruefung varchar(1) DEFAULT '-', 
+  MdlBestPruefung varchar(1) DEFAULT '-', 
+  MdlFreiwPruefung varchar(1) DEFAULT '-', 
+  MdlPruefErgebnis smallint, 
+  MdlPruefFolge smallint, 
+  AbiErgebnis smallint, 
+  SchulNrEigner int,
+  CONSTRAINT PK_SchuelerAbiFaecher PRIMARY KEY (ID),
+  CONSTRAINT SchuelerAbiFaecher_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerAbiFaecher_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE SchuelerAbitur (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  FA_Fach varchar(130), 
+  FA_Punkte int, 
+  FehlStd int, 
+  uFehlStd int, 
+  Latinum varchar(1) DEFAULT '-', 
+  KlLatinum varchar(1) DEFAULT '-', 
+  Graecum varchar(1) DEFAULT '-', 
+  Hebraicum varchar(1) DEFAULT '-', 
+  FranzBilingual varchar(1) DEFAULT '-', 
+  BesondereLernleistung varchar(1) DEFAULT '-', 
+  AnzRelLK smallint, 
+  AnzRelGK smallint, 
+  AnzRelOK smallint, 
+  AnzDefLK smallint, 
+  AnzDefGK smallint, 
+  Thema_PJK varchar(255), 
+  FS2_SekI_Manuell varchar(1) DEFAULT '-', 
+  Kurse_I int, 
+  Defizite_I int, 
+  LK_Defizite_I int, 
+  AnzahlKurse_0 int, 
+  Punktsumme_I int, 
+  Durchschnitt_I float, 
+  SummeGK smallint, 
+  SummeLK smallint, 
+  SummenOK smallint, 
+  Zugelassen varchar(1) DEFAULT '-', 
+  Jahr int, 
+  Abschnitt int, 
+  BLL_Art varchar(1) DEFAULT 'K', 
+  BLL_Punkte int, 
+  Thema_BLL varchar(255), 
+  Punktsumme_II int, 
+  Defizite_II int, 
+  LK_Defizite_II int, 
+  PruefungBestanden varchar(1) DEFAULT '-', 
+  Note varchar(3), 
+  GesamtPunktzahl smallint, 
+  Notensprung smallint, 
+  FehlendePunktzahl smallint, 
+  SchulNrEigner int,
+  CONSTRAINT PK_SchuelerAbitur PRIMARY KEY (ID),
+  CONSTRAINT SchuelerAbitur_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerAbitur_UC1 UNIQUE (Schueler_ID)
+);
+
+
+CREATE TABLE SchuelerAnkreuzfloskeln (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  SchulNrEigner int NOT NULL, 
+  Jahr int NOT NULL, 
+  Abschnitt int NOT NULL, 
+  Floskel_ID bigint NOT NULL, 
+  Stufe1 varchar(1) DEFAULT '-', 
+  Stufe2 varchar(1) DEFAULT '-', 
+  Stufe3 varchar(1) DEFAULT '-', 
+  Stufe4 varchar(1) DEFAULT '-', 
+  Stufe5 varchar(1) DEFAULT '-',
+  CONSTRAINT PK_SchuelerAnkreuzfloskeln PRIMARY KEY (ID),
+  CONSTRAINT SchuelerAKF_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE SchuelerBKAbschluss (
+  Schueler_ID bigint NOT NULL, 
+  Zulassung char(1), 
+  Bestanden char(1), 
+  Zeugnis char(1), 
+  ZertifikatBK char(1), 
+  ZulassungErwBK char(1), 
+  BestandenErwBK char(1), 
+  ZulassungBA char(1), 
+  BestandenBA char(1), 
+  PraktPrfNote varchar(2), 
+  NoteKolloquium varchar(2), 
+  ThemaAbschlussarbeit text, 
+  SchulNrEigner int, 
+  BAP_Vorhanden varchar(1), 
+  NoteFachpraxis varchar(2), 
+  FachPraktAnteilAusr varchar(1), 
+  Jahr int, 
+  Abschnitt int,
+  CONSTRAINT PK_SchuelerBKAbschluss PRIMARY KEY (Schueler_ID),
+  CONSTRAINT SchuelerBKAbschl_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE SchuelerBKFaecher (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  Fach_ID bigint NOT NULL, 
+  FachKrz varchar(20), 
+  FachSchriftlich char(1), 
+  FachSchriftlichBA char(1), 
+  Vornote varchar(2), 
+  NoteSchriftlich varchar(2), 
+  MdlPruefung char(1), 
+  MdlPruefungFW char(1), 
+  NoteMuendlich varchar(2), 
+  NoteAbschluss varchar(2), 
+  NotePrfGesamt varchar(2), 
+  FSortierung int, 
+  SchulNrEigner int, 
+  Fachlehrer varchar(10), 
+  NoteAbschlussBA varchar(2), 
+  Kursart varchar(5), 
+  Jahr int, 
+  Abschnitt int,
+  CONSTRAINT PK_SchuelerBKFaecher PRIMARY KEY (ID),
+  CONSTRAINT SchuelerBKFaecher_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerBKFaecher_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE SchuelerDatenschutz (
+  Schueler_ID bigint NOT NULL, 
+  Datenschutz_ID bigint NOT NULL, 
+  Status varchar(1) DEFAULT '-' NOT NULL, 
+  SchulNrEigner int NOT NULL,
+  CONSTRAINT PK_SchuelerDatenschutz PRIMARY KEY (Datenschutz_ID, Schueler_ID),
+  CONSTRAINT SchuelerDatenschutz_K_Datenschutz_FK FOREIGN KEY (Datenschutz_ID) REFERENCES K_Datenschutz(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerDatenschutz_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -3101,409 +3321,6 @@ CREATE TABLE SchuelerFHR (
 );
 
 
-CREATE TABLE SchuelerAnkreuzfloskeln (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  SchulNrEigner int NOT NULL, 
-  Jahr int NOT NULL, 
-  Abschnitt int NOT NULL, 
-  Floskel_ID bigint NOT NULL, 
-  Stufe1 varchar(1) DEFAULT '-', 
-  Stufe2 varchar(1) DEFAULT '-', 
-  Stufe3 varchar(1) DEFAULT '-', 
-  Stufe4 varchar(1) DEFAULT '-', 
-  Stufe5 varchar(1) DEFAULT '-',
-  CONSTRAINT PK_SchuelerAnkreuzfloskeln PRIMARY KEY (ID),
-  CONSTRAINT SchuelerAKF_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE SchuelerBKAbschluss (
-  Schueler_ID bigint NOT NULL, 
-  Zulassung char(1), 
-  Bestanden char(1), 
-  Zeugnis char(1), 
-  ZertifikatBK char(1), 
-  ZulassungErwBK char(1), 
-  BestandenErwBK char(1), 
-  ZulassungBA char(1), 
-  BestandenBA char(1), 
-  PraktPrfNote varchar(2), 
-  NoteKolloquium varchar(2), 
-  ThemaAbschlussarbeit text, 
-  SchulNrEigner int, 
-  BAP_Vorhanden varchar(1), 
-  NoteFachpraxis varchar(2), 
-  FachPraktAnteilAusr varchar(1), 
-  Jahr int, 
-  Abschnitt int,
-  CONSTRAINT PK_SchuelerBKAbschluss PRIMARY KEY (Schueler_ID),
-  CONSTRAINT SchuelerBKAbschl_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE SchuelerAbitur (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  FA_Fach varchar(130), 
-  FA_Punkte int, 
-  FehlStd int, 
-  uFehlStd int, 
-  Latinum varchar(1) DEFAULT '-', 
-  KlLatinum varchar(1) DEFAULT '-', 
-  Graecum varchar(1) DEFAULT '-', 
-  Hebraicum varchar(1) DEFAULT '-', 
-  FranzBilingual varchar(1) DEFAULT '-', 
-  BesondereLernleistung varchar(1) DEFAULT '-', 
-  AnzRelLK smallint, 
-  AnzRelGK smallint, 
-  AnzRelOK smallint, 
-  AnzDefLK smallint, 
-  AnzDefGK smallint, 
-  Thema_PJK varchar(255), 
-  FS2_SekI_Manuell varchar(1) DEFAULT '-', 
-  Kurse_I int, 
-  Defizite_I int, 
-  LK_Defizite_I int, 
-  AnzahlKurse_0 int, 
-  Punktsumme_I int, 
-  Durchschnitt_I float, 
-  SummeGK smallint, 
-  SummeLK smallint, 
-  SummenOK smallint, 
-  Zugelassen varchar(1) DEFAULT '-', 
-  Jahr int, 
-  Abschnitt int, 
-  BLL_Art varchar(1) DEFAULT 'K', 
-  BLL_Punkte int, 
-  Thema_BLL varchar(255), 
-  Punktsumme_II int, 
-  Defizite_II int, 
-  LK_Defizite_II int, 
-  PruefungBestanden varchar(1) DEFAULT '-', 
-  Note varchar(3), 
-  GesamtPunktzahl smallint, 
-  Notensprung smallint, 
-  FehlendePunktzahl smallint, 
-  SchulNrEigner int,
-  CONSTRAINT PK_SchuelerAbitur PRIMARY KEY (ID),
-  CONSTRAINT SchuelerAbitur_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerAbitur_UC1 UNIQUE (Schueler_ID)
-);
-
-
-CREATE TABLE SchuelerAbgaenge (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  BemerkungIntern varchar(30), 
-  AbgangsSchulform varchar(2), 
-  AbgangsBeschreibung varchar(200), 
-  OrganisationsformKrz varchar(1), 
-  AbgangsSchule varchar(100), 
-  AbgangsSchuleAnschr varchar(100), 
-  AbgangsSchulNr varchar(6), 
-  LSJahrgang varchar(2), 
-  LSEntlassArt varchar(2), 
-  LSSchulformSIM varchar(3), 
-  LSSchulEntlassDatum date, 
-  LSVersetzung varchar(2), 
-  LSSGL varchar(5), 
-  LSFachklKennung varchar(10), 
-  LSFachklSIM varchar(5), 
-  FuerSIMExport varchar(1) DEFAULT '-', 
-  LSBeginnDatum date, 
-  LSBeginnJahrgang varchar(2), 
-  SchulNrEigner int,
-  CONSTRAINT PK_SchuelerAbgaenge PRIMARY KEY (ID),
-  CONSTRAINT SchuelerAbgaenge_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-CREATE INDEX SchuelerAbgaenge_IDX1 ON SchuelerAbgaenge(LSSchulEntlassDatum, Schueler_ID);
-
-
-CREATE TABLE SchuelerSprachenfolge (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  Fach_ID bigint NOT NULL, 
-  JahrgangVon smallint, 
-  JahrgangBis smallint, 
-  Reihenfolge varchar(1), 
-  AbschnittVon smallint, 
-  AbschnittBis smallint, 
-  SchulNrEigner int, 
-  Referenzniveau varchar(5),
-  CONSTRAINT PK_SchuelerSprachenfolge PRIMARY KEY (ID),
-  CONSTRAINT SchuelerSprachenfolge_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerSprachenfolge_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerSprachenfolge_UC1 UNIQUE (Fach_ID, Schueler_ID)
-);
-
-
-CREATE TABLE SchuelerAbiFaecher (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  Fach_ID bigint NOT NULL, 
-  FachKrz varchar(20), 
-  FSortierung int, 
-  Kurs_ID bigint, 
-  KursartAllg varchar(5), 
-  Fachlehrer varchar(10), 
-  AbiFach varchar(1), 
-  P11_1 varchar(2), 
-  S11_1 varchar(1) DEFAULT '-', 
-  P11_2 varchar(2), 
-  S11_2 varchar(1) DEFAULT '-', 
-  P_FA varchar(2), 
-  R_FA varchar(1) DEFAULT '-', 
-  W12_1 int, 
-  P12_1 varchar(2), 
-  H12_1 int, 
-  R12_1 varchar(1) DEFAULT '-', 
-  S12_1 varchar(1) DEFAULT '-', 
-  W12_2 int, 
-  P12_2 varchar(2), 
-  H12_2 int, 
-  R12_2 varchar(1) DEFAULT '-', 
-  S12_2 varchar(1) DEFAULT '-', 
-  W13_1 int, 
-  P13_1 varchar(2), 
-  H13_1 int, 
-  R13_1 varchar(1) DEFAULT '-', 
-  S13_1 varchar(1) DEFAULT '-', 
-  W13_2 int, 
-  P13_2 varchar(2), 
-  H13_2 int, 
-  R13_2 varchar(1) DEFAULT '-', 
-  S13_2 varchar(1) DEFAULT '-', 
-  Zulassung smallint, 
-  Durchschnitt float, 
-  AbiPruefErgebnis smallint, 
-  Zwischenstand smallint, 
-  MdlPflichtPruefung varchar(1) DEFAULT '-', 
-  MdlBestPruefung varchar(1) DEFAULT '-', 
-  MdlFreiwPruefung varchar(1) DEFAULT '-', 
-  MdlPruefErgebnis smallint, 
-  MdlPruefFolge smallint, 
-  AbiErgebnis smallint, 
-  SchulNrEigner int,
-  CONSTRAINT PK_SchuelerAbiFaecher PRIMARY KEY (ID),
-  CONSTRAINT SchuelerAbiFaecher_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerAbiFaecher_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE Stundenplan_UnterrichtRaum (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Unterricht_ID bigint NOT NULL, 
-  Raum_ID bigint NOT NULL,
-  CONSTRAINT PK_Stundenplan_UnterrichtRaum PRIMARY KEY (ID),
-  CONSTRAINT Stundenplan_UnterrichtRaum_Raeume_FK FOREIGN KEY (Raum_ID) REFERENCES Stundenplan_Raeume(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT Stundenplan_UnterrichtRaum_Unterricht_FK FOREIGN KEY (Unterricht_ID) REFERENCES Stundenplan_Unterricht(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT Stundenplan_UnterrichtRaum_UC1 UNIQUE (Raum_ID, Unterricht_ID)
-);
-
-
-CREATE TABLE SchuelerBKFaecher (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  Fach_ID bigint NOT NULL, 
-  FachKrz varchar(20), 
-  FachSchriftlich char(1), 
-  FachSchriftlichBA char(1), 
-  Vornote varchar(2), 
-  NoteSchriftlich varchar(2), 
-  MdlPruefung char(1), 
-  MdlPruefungFW char(1), 
-  NoteMuendlich varchar(2), 
-  NoteAbschluss varchar(2), 
-  NotePrfGesamt varchar(2), 
-  FSortierung int, 
-  SchulNrEigner int, 
-  Fachlehrer varchar(10), 
-  NoteAbschlussBA varchar(2), 
-  Kursart varchar(5), 
-  Jahr int, 
-  Abschnitt int,
-  CONSTRAINT PK_SchuelerBKFaecher PRIMARY KEY (ID),
-  CONSTRAINT SchuelerBKFaecher_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerBKFaecher_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE SchuelerTelefone (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  TelefonArt_ID bigint, 
-  Telefonnummer varchar(20), 
-  Bemerkung varchar(50), 
-  Sortierung int DEFAULT 32000, 
-  SchulNrEigner int, 
-  Gesperrt varchar(1) DEFAULT '-',
-  CONSTRAINT PK_SchuelerTelefone PRIMARY KEY (ID),
-  CONSTRAINT SchuelerTelefone_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerTelefone_Telefonart_FK FOREIGN KEY (TelefonArt_ID) REFERENCES K_TelefonArt(ID) ON UPDATE CASCADE ON DELETE SET NULL
-);
-
-CREATE INDEX SchuelerTelefone_IDX1 ON SchuelerTelefone(Schueler_ID);
-
-
-CREATE TABLE SchuelerKAoADaten (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  SchulNrEigner int NOT NULL, 
-  Jahr int NOT NULL, 
-  Abschnitt int NOT NULL, 
-  Jahrgang varchar(2), 
-  Kategorie varchar(10), 
-  Merkmal varchar(20), 
-  Zusatzmerkmal varchar(20), 
-  Anschlussoption varchar(10), 
-  Berufsfeld varchar(10), 
-  KategorieID bigint NOT NULL, 
-  MerkmalID bigint, 
-  ZusatzmerkmalID bigint, 
-  AnschlussoptionID bigint, 
-  BerufsfeldID bigint, 
-  Bemerkung varchar(255),
-  CONSTRAINT PK_SchuelerKAoADaten PRIMARY KEY (ID),
-  CONSTRAINT SchuelerKAoADaten_Anschlussoption_FK FOREIGN KEY (AnschlussoptionID) REFERENCES Schildintern_KAoA_Anschlussoption(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerKAoADaten_Berufsfeld_FK FOREIGN KEY (BerufsfeldID) REFERENCES Schildintern_KAoA_Berufsfeld(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerKAoADaten_Kategorie_FK FOREIGN KEY (KategorieID) REFERENCES Schildintern_KAoA_Kategorie(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerKAoADaten_Merkmal_FK FOREIGN KEY (MerkmalID) REFERENCES Schildintern_KAoA_Merkmal(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerKAoADaten_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerKAoADaten_Zusatzmerkmal_FK FOREIGN KEY (ZusatzmerkmalID) REFERENCES Schildintern_KAoA_Zusatzmerkmal(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE Schueler_AllgAdr (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  Adresse_ID bigint NOT NULL, 
-  Vertragsart_ID bigint, 
-  Vertragsbeginn date, 
-  Vertragsende date, 
-  Ausbilder varchar(30), 
-  AllgAdrAnschreiben varchar(1) DEFAULT '-', 
-  Praktikum varchar(1) DEFAULT '-', 
-  Sortierung int, 
-  Ansprechpartner_ID bigint, 
-  Betreuungslehrer_ID bigint, 
-  SchulNrEigner int,
-  CONSTRAINT PK_Schueler_AllgAdr PRIMARY KEY (ID),
-  CONSTRAINT SchuelerAllgAdr_Adresse_FK FOREIGN KEY (Adresse_ID) REFERENCES K_AllgAdresse(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerAllgAdr_Ansprech_FK FOREIGN KEY (Ansprechpartner_ID) REFERENCES AllgAdrAnsprechpartner(ID) ON UPDATE CASCADE ON DELETE SET NULL,
-  CONSTRAINT SchuelerAllgAdr_Beschaeftigungsart_FK FOREIGN KEY (Vertragsart_ID) REFERENCES K_BeschaeftigungsArt(ID) ON UPDATE CASCADE ON DELETE SET NULL,
-  CONSTRAINT SchuelerAllgAdr_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-CREATE INDEX Schueler_AllgAdr_IDX1 ON Schueler_AllgAdr(Schueler_ID);
-
-
-CREATE TABLE SchuelerFoerderempfehlungen (
-  GU_ID varchar(40) NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  SchulNrEigner int NOT NULL, 
-  DatumAngelegt date DEFAULT (CURRENT_DATE) NOT NULL, 
-  Klasse varchar(15), 
-  Jahr int, 
-  Abschnitt int, 
-  Fach_ID bigint, 
-  Lehrer_ID bigint, 
-  DatumAenderungSchild datetime, 
-  DatumAenderungSchildWeb datetime, 
-  Kurs varchar(20), 
-  Inhaltl_Prozessbez_Komp text, 
-  Methodische_Komp text, 
-  Lern_Arbeitsverhalten text, 
-  Massn_Inhaltl_Prozessbez_Komp text, 
-  Massn_Methodische_Komp text, 
-  Massn_Lern_Arbeitsverhalten text, 
-  Verantwortlichkeit_Eltern text, 
-  Verantwortlichkeit_Schueler text, 
-  Zeitrahmen_von_Datum date, 
-  Zeitrahmen_bis_Datum date, 
-  Ueberpruefung_Datum date, 
-  Naechstes_Beratungsgespraech date, 
-  Leistung_ID bigint, 
-  Kurs_ID bigint, 
-  EingabeFertig varchar(1) DEFAULT '-', 
-  Faecher varchar(255), 
-  Abgeschlossen varchar(1) DEFAULT '-',
-  CONSTRAINT PK_SchuelerFoerderempfehlungen PRIMARY KEY (GU_ID),
-  CONSTRAINT SchuelerFE_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE Stundenplan_UnterrichtLehrer (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Unterricht_ID bigint NOT NULL, 
-  Lehrer_ID bigint NOT NULL,
-  CONSTRAINT PK_Stundenplan_UnterrichtLehrer PRIMARY KEY (ID),
-  CONSTRAINT Stundenplan_UnterrichtLehrer_K_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT Stundenplan_UnterrichtLehrer_Unterricht_FK FOREIGN KEY (Unterricht_ID) REFERENCES Stundenplan_Unterricht(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT Stundenplan_UnterrichtLehrer_UC1 UNIQUE (Lehrer_ID, Unterricht_ID)
-);
-
-
-CREATE TABLE SchuelerFotos (
-  Schueler_ID bigint NOT NULL, 
-  Foto longblob, 
-  FotoBase64 text, 
-  SchulNrEigner int,
-  CONSTRAINT PK_SchuelerFotos PRIMARY KEY (Schueler_ID),
-  CONSTRAINT SchuelerFotos_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE SchuelerVermerke (
-  ID bigint DEFAULT -1 NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  VermerkArt_ID bigint, 
-  Datum date, 
-  Bemerkung text, 
-  SchulNrEigner int, 
-  AngelegtVon varchar(20), 
-  GeaendertVon varchar(20),
-  CONSTRAINT PK_SchuelerVermerke PRIMARY KEY (ID),
-  CONSTRAINT SchuelerVermerke_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerVermerke_VermerkArt_FK FOREIGN KEY (VermerkArt_ID) REFERENCES K_Vermerkart(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-CREATE INDEX SchuelerVermerke_IDX1 ON SchuelerVermerke(Schueler_ID);
-
-
-CREATE TABLE Kurs_Schueler (
-  Kurs_ID bigint NOT NULL, 
-  Schueler_ID bigint NOT NULL,
-  CONSTRAINT PK_Kurs_Schueler PRIMARY KEY (Kurs_ID, Schueler_ID),
-  CONSTRAINT KursSchueler_Kurse_FK FOREIGN KEY (Kurs_ID) REFERENCES Kurse(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT KursSchueler_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE SchuelerDatenschutz (
-  Schueler_ID bigint NOT NULL, 
-  Datenschutz_ID bigint NOT NULL, 
-  Status varchar(1) DEFAULT '-' NOT NULL, 
-  SchulNrEigner int NOT NULL,
-  CONSTRAINT PK_SchuelerDatenschutz PRIMARY KEY (Datenschutz_ID, Schueler_ID),
-  CONSTRAINT SchuelerDatenschutz_K_Datenschutz_FK FOREIGN KEY (Datenschutz_ID) REFERENCES K_Datenschutz(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerDatenschutz_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE SchuelerMerkmale (
-  ID bigint NOT NULL, 
-  Schueler_ID bigint NOT NULL, 
-  Kurztext varchar(10), 
-  SchulNrEigner int, 
-  DatumVon date, 
-  DatumBis date,
-  CONSTRAINT PK_SchuelerMerkmale PRIMARY KEY (Schueler_ID),
-  CONSTRAINT SchuelerMerkmale_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
 CREATE TABLE SchuelerFHRFaecher (
   ID bigint DEFAULT -1 NOT NULL, 
   Schueler_ID bigint NOT NULL, 
@@ -3547,6 +3364,79 @@ CREATE TABLE SchuelerFHRFaecher (
   CONSTRAINT PK_SchuelerFHRFaecher PRIMARY KEY (ID),
   CONSTRAINT SchuelerFHRFaecher_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT SchuelerFHRFaecher_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE SchuelerFoerderempfehlungen (
+  GU_ID varchar(40) NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  SchulNrEigner int NOT NULL, 
+  DatumAngelegt date DEFAULT (CURRENT_DATE) NOT NULL, 
+  Klasse varchar(15), 
+  Jahr int, 
+  Abschnitt int, 
+  Fach_ID bigint, 
+  Lehrer_ID bigint, 
+  DatumAenderungSchild datetime, 
+  DatumAenderungSchildWeb datetime, 
+  Kurs varchar(20), 
+  Inhaltl_Prozessbez_Komp text, 
+  Methodische_Komp text, 
+  Lern_Arbeitsverhalten text, 
+  Massn_Inhaltl_Prozessbez_Komp text, 
+  Massn_Methodische_Komp text, 
+  Massn_Lern_Arbeitsverhalten text, 
+  Verantwortlichkeit_Eltern text, 
+  Verantwortlichkeit_Schueler text, 
+  Zeitrahmen_von_Datum date, 
+  Zeitrahmen_bis_Datum date, 
+  Ueberpruefung_Datum date, 
+  Naechstes_Beratungsgespraech date, 
+  Leistung_ID bigint, 
+  Kurs_ID bigint, 
+  EingabeFertig varchar(1) DEFAULT '-', 
+  Faecher varchar(255), 
+  Abgeschlossen varchar(1) DEFAULT '-',
+  CONSTRAINT PK_SchuelerFoerderempfehlungen PRIMARY KEY (GU_ID),
+  CONSTRAINT SchuelerFE_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE SchuelerFotos (
+  Schueler_ID bigint NOT NULL, 
+  Foto longblob, 
+  FotoBase64 text, 
+  SchulNrEigner int,
+  CONSTRAINT PK_SchuelerFotos PRIMARY KEY (Schueler_ID),
+  CONSTRAINT SchuelerFotos_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE SchuelerKAoADaten (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  SchulNrEigner int NOT NULL, 
+  Jahr int NOT NULL, 
+  Abschnitt int NOT NULL, 
+  Jahrgang varchar(2), 
+  Kategorie varchar(10), 
+  Merkmal varchar(20), 
+  Zusatzmerkmal varchar(20), 
+  Anschlussoption varchar(10), 
+  Berufsfeld varchar(10), 
+  KategorieID bigint NOT NULL, 
+  MerkmalID bigint, 
+  ZusatzmerkmalID bigint, 
+  AnschlussoptionID bigint, 
+  BerufsfeldID bigint, 
+  Bemerkung varchar(255),
+  CONSTRAINT PK_SchuelerKAoADaten PRIMARY KEY (ID),
+  CONSTRAINT SchuelerKAoADaten_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerKAoADaten_Kategorie_FK FOREIGN KEY (KategorieID) REFERENCES Schildintern_KAoA_Kategorie(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerKAoADaten_Merkmal_FK FOREIGN KEY (MerkmalID) REFERENCES Schildintern_KAoA_Merkmal(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerKAoADaten_Zusatzmerkmal_FK FOREIGN KEY (ZusatzmerkmalID) REFERENCES Schildintern_KAoA_Zusatzmerkmal(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerKAoADaten_Anschlussoption_FK FOREIGN KEY (AnschlussoptionID) REFERENCES Schildintern_KAoA_Anschlussoption(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerKAoADaten_Berufsfeld_FK FOREIGN KEY (BerufsfeldID) REFERENCES Schildintern_KAoA_Berufsfeld(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -3623,7 +3513,7 @@ CREATE TABLE SchuelerLernabschnittsdaten (
   CONSTRAINT SchuelerLernabschnittsdaten_Foerderschwerpunkt_FK FOREIGN KEY (Foerderschwerpunkt_ID) REFERENCES K_Foerderschwerpunkt(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT SchuelerLernabschnittsdaten_Jahrgang_FK FOREIGN KEY (Jahrgang_ID) REFERENCES EigeneSchule_Jahrgaenge(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT SchuelerLernabschnittsdaten_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerLernabschnittsdaten_UC1 UNIQUE (Abschnitt, Bildungsgang, Jahr, Schueler_ID, WechselNr)
+  CONSTRAINT SchuelerLernabschnittsdaten_UC1 UNIQUE (Schueler_ID, Jahr, Abschnitt, Bildungsgang, WechselNr)
 );
 
 
@@ -3634,6 +3524,129 @@ CREATE TABLE SchuelerListe_Inhalt (
   CONSTRAINT PK_SchuelerListe_Inhalt PRIMARY KEY (Liste_ID, Schueler_ID),
   CONSTRAINT SchuelerListeInhalt_Liste_FK FOREIGN KEY (Liste_ID) REFERENCES SchuelerListe(ID) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT SchuelerListeInhalt_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE SchuelerMerkmale (
+  ID bigint NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  Kurztext varchar(10), 
+  SchulNrEigner int, 
+  DatumVon date, 
+  DatumBis date,
+  CONSTRAINT PK_SchuelerMerkmale PRIMARY KEY (Schueler_ID),
+  CONSTRAINT SchuelerMerkmale_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE SchuelerSprachenfolge (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  Fach_ID bigint NOT NULL, 
+  JahrgangVon smallint, 
+  JahrgangBis smallint, 
+  Reihenfolge varchar(1), 
+  AbschnittVon smallint, 
+  AbschnittBis smallint, 
+  SchulNrEigner int, 
+  Referenzniveau varchar(5),
+  CONSTRAINT PK_SchuelerSprachenfolge PRIMARY KEY (ID),
+  CONSTRAINT SchuelerSprachenfolge_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerSprachenfolge_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerSprachenfolge_UC1 UNIQUE (Schueler_ID, Fach_ID)
+);
+
+
+CREATE TABLE SchuelerTelefone (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  TelefonArt_ID bigint, 
+  Telefonnummer varchar(20), 
+  Bemerkung varchar(50), 
+  Sortierung int DEFAULT 32000, 
+  SchulNrEigner int, 
+  Gesperrt varchar(1) DEFAULT '-',
+  CONSTRAINT PK_SchuelerTelefone PRIMARY KEY (ID),
+  CONSTRAINT SchuelerTelefone_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerTelefone_Telefonart_FK FOREIGN KEY (TelefonArt_ID) REFERENCES K_TelefonArt(ID) ON UPDATE CASCADE ON DELETE SET NULL
+);
+
+CREATE INDEX SchuelerTelefone_IDX1 ON SchuelerTelefone(Schueler_ID);
+
+
+CREATE TABLE SchuelerVermerke (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  VermerkArt_ID bigint, 
+  Datum date, 
+  Bemerkung text, 
+  SchulNrEigner int, 
+  AngelegtVon varchar(20), 
+  GeaendertVon varchar(20),
+  CONSTRAINT PK_SchuelerVermerke PRIMARY KEY (ID),
+  CONSTRAINT SchuelerVermerke_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerVermerke_VermerkArt_FK FOREIGN KEY (VermerkArt_ID) REFERENCES K_Vermerkart(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE INDEX SchuelerVermerke_IDX1 ON SchuelerVermerke(Schueler_ID);
+
+
+CREATE TABLE Schueler_AllgAdr (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Schueler_ID bigint NOT NULL, 
+  Adresse_ID bigint NOT NULL, 
+  Vertragsart_ID bigint, 
+  Vertragsbeginn date, 
+  Vertragsende date, 
+  Ausbilder varchar(30), 
+  AllgAdrAnschreiben varchar(1) DEFAULT '-', 
+  Praktikum varchar(1) DEFAULT '-', 
+  Sortierung int, 
+  Ansprechpartner_ID bigint, 
+  Betreuungslehrer_ID bigint, 
+  SchulNrEigner int,
+  CONSTRAINT PK_Schueler_AllgAdr PRIMARY KEY (ID),
+  CONSTRAINT SchuelerAllgAdr_Adresse_FK FOREIGN KEY (Adresse_ID) REFERENCES K_AllgAdresse(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerAllgAdr_Ansprech_FK FOREIGN KEY (Ansprechpartner_ID) REFERENCES AllgAdrAnsprechpartner(ID) ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT SchuelerAllgAdr_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerAllgAdr_Beschaeftigungsart_FK FOREIGN KEY (Vertragsart_ID) REFERENCES K_BeschaeftigungsArt(ID) ON UPDATE CASCADE ON DELETE SET NULL
+);
+
+CREATE INDEX Schueler_AllgAdr_IDX1 ON Schueler_AllgAdr(Schueler_ID);
+
+
+CREATE TABLE Stundenplan_UnterrichtLehrer (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Unterricht_ID bigint NOT NULL, 
+  Lehrer_ID bigint NOT NULL,
+  CONSTRAINT PK_Stundenplan_UnterrichtLehrer PRIMARY KEY (ID),
+  CONSTRAINT Stundenplan_UnterrichtLehrer_K_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_UnterrichtLehrer_Unterricht_FK FOREIGN KEY (Unterricht_ID) REFERENCES Stundenplan_Unterricht(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_UnterrichtLehrer_UC1 UNIQUE (Unterricht_ID, Lehrer_ID)
+);
+
+
+CREATE TABLE Stundenplan_UnterrichtRaum (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Unterricht_ID bigint NOT NULL, 
+  Raum_ID bigint NOT NULL,
+  CONSTRAINT PK_Stundenplan_UnterrichtRaum PRIMARY KEY (ID),
+  CONSTRAINT Stundenplan_UnterrichtRaum_Raeume_FK FOREIGN KEY (Raum_ID) REFERENCES Stundenplan_Raeume(ID) ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT Stundenplan_UnterrichtRaum_Unterricht_FK FOREIGN KEY (Unterricht_ID) REFERENCES Stundenplan_Unterricht(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_UnterrichtRaum_UC1 UNIQUE (Unterricht_ID, Raum_ID)
+);
+
+
+CREATE TABLE SchuelerErzFunktion (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Erzieher_ID bigint NOT NULL, 
+  Funktion_ID bigint NOT NULL, 
+  Person smallint, 
+  Klasse varchar(10), 
+  SchulNrEigner int,
+  CONSTRAINT PK_SchuelerErzFunktion PRIMARY KEY (ID),
+  CONSTRAINT SchuelerErzFunktion_Erzieher_FK FOREIGN KEY (Erzieher_ID) REFERENCES SchuelerErzAdr(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerErzFunktion_Funktion_FK FOREIGN KEY (Funktion_ID) REFERENCES K_ErzieherFunktion(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -3653,26 +3666,18 @@ CREATE TABLE SchuelerFehlstunden (
 );
 
 
-CREATE TABLE SchuelerZuweisungen (
-  Abschnitt_ID bigint NOT NULL, 
-  Fach_ID bigint NOT NULL, 
-  Kursart varchar(5), 
-  SchulNrEigner int,
-  CONSTRAINT PK_SchuelerZuweisungen PRIMARY KEY (Abschnitt_ID, Fach_ID),
-  CONSTRAINT Zuweisungen_Abschnitt_FK FOREIGN KEY (Abschnitt_ID) REFERENCES SchuelerLernabschnittsdaten(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE SchuelerErzFunktion (
+CREATE TABLE SchuelerLD_PSFachBem (
   ID bigint DEFAULT -1 NOT NULL, 
-  Erzieher_ID bigint NOT NULL, 
-  Funktion_ID bigint NOT NULL, 
-  Person smallint, 
-  Klasse varchar(10), 
+  Abschnitt_ID bigint NOT NULL, 
+  ASV text, 
+  LELS text, 
+  ESF text, 
+  BemerkungFSP text, 
+  BemerkungVersetzung text, 
   SchulNrEigner int,
-  CONSTRAINT PK_SchuelerErzFunktion PRIMARY KEY (ID),
-  CONSTRAINT SchuelerErzFunktion_Erzieher_FK FOREIGN KEY (Erzieher_ID) REFERENCES SchuelerErzAdr(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerErzFunktion_Funktion_FK FOREIGN KEY (Funktion_ID) REFERENCES K_ErzieherFunktion(ID) ON UPDATE CASCADE ON DELETE CASCADE
+  CONSTRAINT PK_SchuelerLD_PSFachBem PRIMARY KEY (ID),
+  CONSTRAINT SchuelerLD_PSFachBem_Abschnitt_FK FOREIGN KEY (Abschnitt_ID) REFERENCES SchuelerLernabschnittsdaten(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerLD_PSFachBem_UC1 UNIQUE (Abschnitt_ID)
 );
 
 
@@ -3712,9 +3717,9 @@ CREATE TABLE SchuelerLeistungsdaten (
   CONSTRAINT PK_SchuelerLeistungsdaten PRIMARY KEY (ID),
   CONSTRAINT SchuelerLeistungsdaten_Abschnitt_FK FOREIGN KEY (Abschnitt_ID) REFERENCES SchuelerLernabschnittsdaten(ID) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT SchuelerLeistungsdaten_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerLeistungsdaten_Kurs_FK FOREIGN KEY (Kurs_ID) REFERENCES Kurse(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT SchuelerLeistungsdaten_Lehrer_FK FOREIGN KEY (Fachlehrer) REFERENCES K_Lehrer(Kuerzel) ON UPDATE CASCADE ON DELETE SET NULL,
-  CONSTRAINT SchuelerLeistungsdaten_UC2 UNIQUE (Abschnitt_ID, Fach_ID, Fachlehrer, Kurs_ID, Kursart)
+  CONSTRAINT SchuelerLeistungsdaten_Kurs_FK FOREIGN KEY (Kurs_ID) REFERENCES Kurse(ID) ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT SchuelerLeistungsdaten_UC2 UNIQUE (Abschnitt_ID, Fach_ID, Fachlehrer, Kursart, Kurs_ID)
 );
 
 CREATE INDEX SchuelerLeistungsdaten_IDX1 ON SchuelerLeistungsdaten(Kurs_ID);
@@ -3722,18 +3727,13 @@ CREATE INDEX SchuelerLeistungsdaten_IDX2 ON SchuelerLeistungsdaten(Fach_ID);
 CREATE INDEX SchuelerLeistungsdaten_IDX3 ON SchuelerLeistungsdaten(Fachlehrer);
 
 
-CREATE TABLE SchuelerLD_PSFachBem (
-  ID bigint DEFAULT -1 NOT NULL, 
+CREATE TABLE SchuelerZuweisungen (
   Abschnitt_ID bigint NOT NULL, 
-  ASV text, 
-  LELS text, 
-  ESF text, 
-  BemerkungFSP text, 
-  BemerkungVersetzung text, 
+  Fach_ID bigint NOT NULL, 
+  Kursart varchar(5), 
   SchulNrEigner int,
-  CONSTRAINT PK_SchuelerLD_PSFachBem PRIMARY KEY (ID),
-  CONSTRAINT SchuelerLD_PSFachBem_Abschnitt_FK FOREIGN KEY (Abschnitt_ID) REFERENCES SchuelerLernabschnittsdaten(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerLD_PSFachBem_UC1 UNIQUE (Abschnitt_ID)
+  CONSTRAINT PK_SchuelerZuweisungen PRIMARY KEY (Abschnitt_ID, Fach_ID),
+  CONSTRAINT Zuweisungen_Abschnitt_FK FOREIGN KEY (Abschnitt_ID) REFERENCES SchuelerLernabschnittsdaten(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -3752,6 +3752,9 @@ CREATE TABLE ZuordnungReportvorlagen (
   Zeugnisart varchar(5),
   CONSTRAINT PK_ZuordnungReportvorlagen PRIMARY KEY (ID)
 );
+
+
+
 delimiter $
 CREATE TRIGGER t_AutoIncrement_INSERT_EigeneSchule_Fachklassen
 BEFORE INSERT
@@ -6939,24 +6942,24 @@ delimiter ;
 
 
 delimiter $
-CREATE TRIGGER t_AutoIncrement_INSERT_Stundenplan_Unterricht
+CREATE TRIGGER t_AutoIncrement_INSERT_EigeneSchule_Abt_Kl
 BEFORE INSERT
-  ON Stundenplan_Unterricht FOR EACH ROW
+  ON EigeneSchule_Abt_Kl FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Stundenplan_Unterricht' INTO tmpID;
+  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abt_Kl' INTO tmpID;
   IF tmpID IS NULL THEN
-    SELECT max(ID) FROM Stundenplan_Unterricht INTO tmpID;
+    SELECT max(ID) FROM EigeneSchule_Abt_Kl INTO tmpID;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Stundenplan_Unterricht', tmpID);
+    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abt_Kl', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Stundenplan_Unterricht';
+    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Abt_Kl';
   END IF;
 END
 
@@ -6965,25 +6968,25 @@ delimiter ;
 
 
 delimiter $
-CREATE TRIGGER t_AutoIncrement_UPDATE_Stundenplan_Unterricht
+CREATE TRIGGER t_AutoIncrement_UPDATE_EigeneSchule_Abt_Kl
 BEFORE UPDATE
-  ON Stundenplan_Unterricht FOR EACH ROW
+  ON EigeneSchule_Abt_Kl FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Stundenplan_Unterricht' INTO tmpID;
+    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abt_Kl' INTO tmpID;
     IF tmpID IS NULL THEN
-      SELECT max(ID) FROM Stundenplan_Unterricht INTO tmpID;
+      SELECT max(ID) FROM EigeneSchule_Abt_Kl INTO tmpID;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Stundenplan_Unterricht', tmpID);
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abt_Kl', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Stundenplan_Unterricht';
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Abt_Kl';
     END IF;
   END IF;
 END
@@ -7047,24 +7050,24 @@ delimiter ;
 
 
 delimiter $
-CREATE TRIGGER t_AutoIncrement_INSERT_EigeneSchule_Abt_Kl
+CREATE TRIGGER t_AutoIncrement_INSERT_Stundenplan_Unterricht
 BEFORE INSERT
-  ON EigeneSchule_Abt_Kl FOR EACH ROW
+  ON Stundenplan_Unterricht FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abt_Kl' INTO tmpID;
+  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Stundenplan_Unterricht' INTO tmpID;
   IF tmpID IS NULL THEN
-    SELECT max(ID) FROM EigeneSchule_Abt_Kl INTO tmpID;
+    SELECT max(ID) FROM Stundenplan_Unterricht INTO tmpID;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abt_Kl', tmpID);
+    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Stundenplan_Unterricht', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Abt_Kl';
+    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Stundenplan_Unterricht';
   END IF;
 END
 
@@ -7073,25 +7076,295 @@ delimiter ;
 
 
 delimiter $
-CREATE TRIGGER t_AutoIncrement_UPDATE_EigeneSchule_Abt_Kl
+CREATE TRIGGER t_AutoIncrement_UPDATE_Stundenplan_Unterricht
 BEFORE UPDATE
-  ON EigeneSchule_Abt_Kl FOR EACH ROW
+  ON Stundenplan_Unterricht FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abt_Kl' INTO tmpID;
+    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Stundenplan_Unterricht' INTO tmpID;
     IF tmpID IS NULL THEN
-      SELECT max(ID) FROM EigeneSchule_Abt_Kl INTO tmpID;
+      SELECT max(ID) FROM Stundenplan_Unterricht INTO tmpID;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abt_Kl', tmpID);
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Stundenplan_Unterricht', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Abt_Kl';
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Stundenplan_Unterricht';
+    END IF;
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerAbgaenge
+BEFORE INSERT
+  ON SchuelerAbgaenge FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerAbgaenge' INTO tmpID;
+  IF tmpID IS NULL THEN
+    SELECT max(ID) FROM SchuelerAbgaenge INTO tmpID;
+    IF tmpID IS NULL THEN
+      SET tmpID = 0;
+    END IF;
+    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbgaenge', tmpID);
+  END IF;
+  IF NEW.ID < 0 THEN
+    SET NEW.ID = tmpID + 1;
+  END IF;
+  IF NEW.ID > tmpID THEN
+    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAbgaenge';
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerAbgaenge
+BEFORE UPDATE
+  ON SchuelerAbgaenge FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  IF (OLD.ID <> NEW.ID) THEN
+    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerAbgaenge' INTO tmpID;
+    IF tmpID IS NULL THEN
+      SELECT max(ID) FROM SchuelerAbgaenge INTO tmpID;
+      IF tmpID IS NULL THEN
+        SET tmpID = 0;
+      END IF;
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbgaenge', tmpID);
+    END IF;
+    IF NEW.ID < 0 THEN
+      SET NEW.ID = tmpID + 1;
+    END IF;
+    IF NEW.ID > tmpID THEN
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAbgaenge';
+    END IF;
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerAbiFaecher
+BEFORE INSERT
+  ON SchuelerAbiFaecher FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerAbiFaecher' INTO tmpID;
+  IF tmpID IS NULL THEN
+    SELECT max(ID) FROM SchuelerAbiFaecher INTO tmpID;
+    IF tmpID IS NULL THEN
+      SET tmpID = 0;
+    END IF;
+    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbiFaecher', tmpID);
+  END IF;
+  IF NEW.ID < 0 THEN
+    SET NEW.ID = tmpID + 1;
+  END IF;
+  IF NEW.ID > tmpID THEN
+    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAbiFaecher';
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerAbiFaecher
+BEFORE UPDATE
+  ON SchuelerAbiFaecher FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  IF (OLD.ID <> NEW.ID) THEN
+    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerAbiFaecher' INTO tmpID;
+    IF tmpID IS NULL THEN
+      SELECT max(ID) FROM SchuelerAbiFaecher INTO tmpID;
+      IF tmpID IS NULL THEN
+        SET tmpID = 0;
+      END IF;
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbiFaecher', tmpID);
+    END IF;
+    IF NEW.ID < 0 THEN
+      SET NEW.ID = tmpID + 1;
+    END IF;
+    IF NEW.ID > tmpID THEN
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAbiFaecher';
+    END IF;
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerAbitur
+BEFORE INSERT
+  ON SchuelerAbitur FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerAbitur' INTO tmpID;
+  IF tmpID IS NULL THEN
+    SELECT max(ID) FROM SchuelerAbitur INTO tmpID;
+    IF tmpID IS NULL THEN
+      SET tmpID = 0;
+    END IF;
+    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbitur', tmpID);
+  END IF;
+  IF NEW.ID < 0 THEN
+    SET NEW.ID = tmpID + 1;
+  END IF;
+  IF NEW.ID > tmpID THEN
+    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAbitur';
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerAbitur
+BEFORE UPDATE
+  ON SchuelerAbitur FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  IF (OLD.ID <> NEW.ID) THEN
+    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerAbitur' INTO tmpID;
+    IF tmpID IS NULL THEN
+      SELECT max(ID) FROM SchuelerAbitur INTO tmpID;
+      IF tmpID IS NULL THEN
+        SET tmpID = 0;
+      END IF;
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbitur', tmpID);
+    END IF;
+    IF NEW.ID < 0 THEN
+      SET NEW.ID = tmpID + 1;
+    END IF;
+    IF NEW.ID > tmpID THEN
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAbitur';
+    END IF;
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerAnkreuzfloskeln
+BEFORE INSERT
+  ON SchuelerAnkreuzfloskeln FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerAnkreuzfloskeln' INTO tmpID;
+  IF tmpID IS NULL THEN
+    SELECT max(ID) FROM SchuelerAnkreuzfloskeln INTO tmpID;
+    IF tmpID IS NULL THEN
+      SET tmpID = 0;
+    END IF;
+    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAnkreuzfloskeln', tmpID);
+  END IF;
+  IF NEW.ID < 0 THEN
+    SET NEW.ID = tmpID + 1;
+  END IF;
+  IF NEW.ID > tmpID THEN
+    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAnkreuzfloskeln';
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerAnkreuzfloskeln
+BEFORE UPDATE
+  ON SchuelerAnkreuzfloskeln FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  IF (OLD.ID <> NEW.ID) THEN
+    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerAnkreuzfloskeln' INTO tmpID;
+    IF tmpID IS NULL THEN
+      SELECT max(ID) FROM SchuelerAnkreuzfloskeln INTO tmpID;
+      IF tmpID IS NULL THEN
+        SET tmpID = 0;
+      END IF;
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAnkreuzfloskeln', tmpID);
+    END IF;
+    IF NEW.ID < 0 THEN
+      SET NEW.ID = tmpID + 1;
+    END IF;
+    IF NEW.ID > tmpID THEN
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAnkreuzfloskeln';
+    END IF;
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerBKFaecher
+BEFORE INSERT
+  ON SchuelerBKFaecher FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerBKFaecher' INTO tmpID;
+  IF tmpID IS NULL THEN
+    SELECT max(ID) FROM SchuelerBKFaecher INTO tmpID;
+    IF tmpID IS NULL THEN
+      SET tmpID = 0;
+    END IF;
+    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerBKFaecher', tmpID);
+  END IF;
+  IF NEW.ID < 0 THEN
+    SET NEW.ID = tmpID + 1;
+  END IF;
+  IF NEW.ID > tmpID THEN
+    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerBKFaecher';
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerBKFaecher
+BEFORE UPDATE
+  ON SchuelerBKFaecher FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  IF (OLD.ID <> NEW.ID) THEN
+    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerBKFaecher' INTO tmpID;
+    IF tmpID IS NULL THEN
+      SELECT max(ID) FROM SchuelerBKFaecher INTO tmpID;
+      IF tmpID IS NULL THEN
+        SET tmpID = 0;
+      END IF;
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerBKFaecher', tmpID);
+    END IF;
+    IF NEW.ID < 0 THEN
+      SET NEW.ID = tmpID + 1;
+    END IF;
+    IF NEW.ID > tmpID THEN
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerBKFaecher';
     END IF;
   END IF;
 END
@@ -7209,24 +7482,24 @@ delimiter ;
 
 
 delimiter $
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerAnkreuzfloskeln
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerFHRFaecher
 BEFORE INSERT
-  ON SchuelerAnkreuzfloskeln FOR EACH ROW
+  ON SchuelerFHRFaecher FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerAnkreuzfloskeln' INTO tmpID;
+  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerFHRFaecher' INTO tmpID;
   IF tmpID IS NULL THEN
-    SELECT max(ID) FROM SchuelerAnkreuzfloskeln INTO tmpID;
+    SELECT max(ID) FROM SchuelerFHRFaecher INTO tmpID;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAnkreuzfloskeln', tmpID);
+    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFHRFaecher', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAnkreuzfloskeln';
+    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerFHRFaecher';
   END IF;
 END
 
@@ -7235,25 +7508,25 @@ delimiter ;
 
 
 delimiter $
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerAnkreuzfloskeln
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerFHRFaecher
 BEFORE UPDATE
-  ON SchuelerAnkreuzfloskeln FOR EACH ROW
+  ON SchuelerFHRFaecher FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerAnkreuzfloskeln' INTO tmpID;
+    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerFHRFaecher' INTO tmpID;
     IF tmpID IS NULL THEN
-      SELECT max(ID) FROM SchuelerAnkreuzfloskeln INTO tmpID;
+      SELECT max(ID) FROM SchuelerFHRFaecher INTO tmpID;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAnkreuzfloskeln', tmpID);
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFHRFaecher', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAnkreuzfloskeln';
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerFHRFaecher';
     END IF;
   END IF;
 END
@@ -7263,24 +7536,24 @@ delimiter ;
 
 
 delimiter $
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerAbitur
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerKAoADaten
 BEFORE INSERT
-  ON SchuelerAbitur FOR EACH ROW
+  ON SchuelerKAoADaten FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerAbitur' INTO tmpID;
+  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerKAoADaten' INTO tmpID;
   IF tmpID IS NULL THEN
-    SELECT max(ID) FROM SchuelerAbitur INTO tmpID;
+    SELECT max(ID) FROM SchuelerKAoADaten INTO tmpID;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbitur', tmpID);
+    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerKAoADaten', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAbitur';
+    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerKAoADaten';
   END IF;
 END
 
@@ -7289,25 +7562,25 @@ delimiter ;
 
 
 delimiter $
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerAbitur
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerKAoADaten
 BEFORE UPDATE
-  ON SchuelerAbitur FOR EACH ROW
+  ON SchuelerKAoADaten FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerAbitur' INTO tmpID;
+    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerKAoADaten' INTO tmpID;
     IF tmpID IS NULL THEN
-      SELECT max(ID) FROM SchuelerAbitur INTO tmpID;
+      SELECT max(ID) FROM SchuelerKAoADaten INTO tmpID;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbitur', tmpID);
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerKAoADaten', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAbitur';
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerKAoADaten';
     END IF;
   END IF;
 END
@@ -7317,24 +7590,24 @@ delimiter ;
 
 
 delimiter $
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerAbgaenge
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerLernabschnittsdaten
 BEFORE INSERT
-  ON SchuelerAbgaenge FOR EACH ROW
+  ON SchuelerLernabschnittsdaten FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerAbgaenge' INTO tmpID;
+  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerLernabschnittsdaten' INTO tmpID;
   IF tmpID IS NULL THEN
-    SELECT max(ID) FROM SchuelerAbgaenge INTO tmpID;
+    SELECT max(ID) FROM SchuelerLernabschnittsdaten INTO tmpID;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbgaenge', tmpID);
+    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLernabschnittsdaten', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAbgaenge';
+    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerLernabschnittsdaten';
   END IF;
 END
 
@@ -7343,25 +7616,25 @@ delimiter ;
 
 
 delimiter $
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerAbgaenge
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerLernabschnittsdaten
 BEFORE UPDATE
-  ON SchuelerAbgaenge FOR EACH ROW
+  ON SchuelerLernabschnittsdaten FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerAbgaenge' INTO tmpID;
+    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerLernabschnittsdaten' INTO tmpID;
     IF tmpID IS NULL THEN
-      SELECT max(ID) FROM SchuelerAbgaenge INTO tmpID;
+      SELECT max(ID) FROM SchuelerLernabschnittsdaten INTO tmpID;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbgaenge', tmpID);
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLernabschnittsdaten', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAbgaenge';
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerLernabschnittsdaten';
     END IF;
   END IF;
 END
@@ -7425,168 +7698,6 @@ delimiter ;
 
 
 delimiter $
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerAbiFaecher
-BEFORE INSERT
-  ON SchuelerAbiFaecher FOR EACH ROW
-BEGIN
-  DECLARE tmpID bigint;
-  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerAbiFaecher' INTO tmpID;
-  IF tmpID IS NULL THEN
-    SELECT max(ID) FROM SchuelerAbiFaecher INTO tmpID;
-    IF tmpID IS NULL THEN
-      SET tmpID = 0;
-    END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbiFaecher', tmpID);
-  END IF;
-  IF NEW.ID < 0 THEN
-    SET NEW.ID = tmpID + 1;
-  END IF;
-  IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAbiFaecher';
-  END IF;
-END
-
-$
-delimiter ;
-
-
-delimiter $
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerAbiFaecher
-BEFORE UPDATE
-  ON SchuelerAbiFaecher FOR EACH ROW
-BEGIN
-  DECLARE tmpID bigint;
-  IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerAbiFaecher' INTO tmpID;
-    IF tmpID IS NULL THEN
-      SELECT max(ID) FROM SchuelerAbiFaecher INTO tmpID;
-      IF tmpID IS NULL THEN
-        SET tmpID = 0;
-      END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbiFaecher', tmpID);
-    END IF;
-    IF NEW.ID < 0 THEN
-      SET NEW.ID = tmpID + 1;
-    END IF;
-    IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAbiFaecher';
-    END IF;
-  END IF;
-END
-
-$
-delimiter ;
-
-
-delimiter $
-CREATE TRIGGER t_AutoIncrement_INSERT_Stundenplan_UnterrichtRaum
-BEFORE INSERT
-  ON Stundenplan_UnterrichtRaum FOR EACH ROW
-BEGIN
-  DECLARE tmpID bigint;
-  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Stundenplan_UnterrichtRaum' INTO tmpID;
-  IF tmpID IS NULL THEN
-    SELECT max(ID) FROM Stundenplan_UnterrichtRaum INTO tmpID;
-    IF tmpID IS NULL THEN
-      SET tmpID = 0;
-    END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Stundenplan_UnterrichtRaum', tmpID);
-  END IF;
-  IF NEW.ID < 0 THEN
-    SET NEW.ID = tmpID + 1;
-  END IF;
-  IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Stundenplan_UnterrichtRaum';
-  END IF;
-END
-
-$
-delimiter ;
-
-
-delimiter $
-CREATE TRIGGER t_AutoIncrement_UPDATE_Stundenplan_UnterrichtRaum
-BEFORE UPDATE
-  ON Stundenplan_UnterrichtRaum FOR EACH ROW
-BEGIN
-  DECLARE tmpID bigint;
-  IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Stundenplan_UnterrichtRaum' INTO tmpID;
-    IF tmpID IS NULL THEN
-      SELECT max(ID) FROM Stundenplan_UnterrichtRaum INTO tmpID;
-      IF tmpID IS NULL THEN
-        SET tmpID = 0;
-      END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Stundenplan_UnterrichtRaum', tmpID);
-    END IF;
-    IF NEW.ID < 0 THEN
-      SET NEW.ID = tmpID + 1;
-    END IF;
-    IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Stundenplan_UnterrichtRaum';
-    END IF;
-  END IF;
-END
-
-$
-delimiter ;
-
-
-delimiter $
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerBKFaecher
-BEFORE INSERT
-  ON SchuelerBKFaecher FOR EACH ROW
-BEGIN
-  DECLARE tmpID bigint;
-  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerBKFaecher' INTO tmpID;
-  IF tmpID IS NULL THEN
-    SELECT max(ID) FROM SchuelerBKFaecher INTO tmpID;
-    IF tmpID IS NULL THEN
-      SET tmpID = 0;
-    END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerBKFaecher', tmpID);
-  END IF;
-  IF NEW.ID < 0 THEN
-    SET NEW.ID = tmpID + 1;
-  END IF;
-  IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerBKFaecher';
-  END IF;
-END
-
-$
-delimiter ;
-
-
-delimiter $
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerBKFaecher
-BEFORE UPDATE
-  ON SchuelerBKFaecher FOR EACH ROW
-BEGIN
-  DECLARE tmpID bigint;
-  IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerBKFaecher' INTO tmpID;
-    IF tmpID IS NULL THEN
-      SELECT max(ID) FROM SchuelerBKFaecher INTO tmpID;
-      IF tmpID IS NULL THEN
-        SET tmpID = 0;
-      END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerBKFaecher', tmpID);
-    END IF;
-    IF NEW.ID < 0 THEN
-      SET NEW.ID = tmpID + 1;
-    END IF;
-    IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerBKFaecher';
-    END IF;
-  END IF;
-END
-
-$
-delimiter ;
-
-
-delimiter $
 CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerTelefone
 BEFORE INSERT
   ON SchuelerTelefone FOR EACH ROW
@@ -7641,24 +7752,24 @@ delimiter ;
 
 
 delimiter $
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerKAoADaten
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerVermerke
 BEFORE INSERT
-  ON SchuelerKAoADaten FOR EACH ROW
+  ON SchuelerVermerke FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerKAoADaten' INTO tmpID;
+  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerVermerke' INTO tmpID;
   IF tmpID IS NULL THEN
-    SELECT max(ID) FROM SchuelerKAoADaten INTO tmpID;
+    SELECT max(ID) FROM SchuelerVermerke INTO tmpID;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerKAoADaten', tmpID);
+    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerVermerke', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerKAoADaten';
+    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerVermerke';
   END IF;
 END
 
@@ -7667,25 +7778,25 @@ delimiter ;
 
 
 delimiter $
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerKAoADaten
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerVermerke
 BEFORE UPDATE
-  ON SchuelerKAoADaten FOR EACH ROW
+  ON SchuelerVermerke FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerKAoADaten' INTO tmpID;
+    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerVermerke' INTO tmpID;
     IF tmpID IS NULL THEN
-      SELECT max(ID) FROM SchuelerKAoADaten INTO tmpID;
+      SELECT max(ID) FROM SchuelerVermerke INTO tmpID;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerKAoADaten', tmpID);
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerVermerke', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerKAoADaten';
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerVermerke';
     END IF;
   END IF;
 END
@@ -7803,24 +7914,24 @@ delimiter ;
 
 
 delimiter $
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerVermerke
+CREATE TRIGGER t_AutoIncrement_INSERT_Stundenplan_UnterrichtRaum
 BEFORE INSERT
-  ON SchuelerVermerke FOR EACH ROW
+  ON Stundenplan_UnterrichtRaum FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerVermerke' INTO tmpID;
+  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Stundenplan_UnterrichtRaum' INTO tmpID;
   IF tmpID IS NULL THEN
-    SELECT max(ID) FROM SchuelerVermerke INTO tmpID;
+    SELECT max(ID) FROM Stundenplan_UnterrichtRaum INTO tmpID;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerVermerke', tmpID);
+    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Stundenplan_UnterrichtRaum', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerVermerke';
+    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Stundenplan_UnterrichtRaum';
   END IF;
 END
 
@@ -7829,187 +7940,25 @@ delimiter ;
 
 
 delimiter $
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerVermerke
+CREATE TRIGGER t_AutoIncrement_UPDATE_Stundenplan_UnterrichtRaum
 BEFORE UPDATE
-  ON SchuelerVermerke FOR EACH ROW
+  ON Stundenplan_UnterrichtRaum FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerVermerke' INTO tmpID;
+    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Stundenplan_UnterrichtRaum' INTO tmpID;
     IF tmpID IS NULL THEN
-      SELECT max(ID) FROM SchuelerVermerke INTO tmpID;
+      SELECT max(ID) FROM Stundenplan_UnterrichtRaum INTO tmpID;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerVermerke', tmpID);
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Stundenplan_UnterrichtRaum', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerVermerke';
-    END IF;
-  END IF;
-END
-
-$
-delimiter ;
-
-
-delimiter $
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerFHRFaecher
-BEFORE INSERT
-  ON SchuelerFHRFaecher FOR EACH ROW
-BEGIN
-  DECLARE tmpID bigint;
-  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerFHRFaecher' INTO tmpID;
-  IF tmpID IS NULL THEN
-    SELECT max(ID) FROM SchuelerFHRFaecher INTO tmpID;
-    IF tmpID IS NULL THEN
-      SET tmpID = 0;
-    END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFHRFaecher', tmpID);
-  END IF;
-  IF NEW.ID < 0 THEN
-    SET NEW.ID = tmpID + 1;
-  END IF;
-  IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerFHRFaecher';
-  END IF;
-END
-
-$
-delimiter ;
-
-
-delimiter $
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerFHRFaecher
-BEFORE UPDATE
-  ON SchuelerFHRFaecher FOR EACH ROW
-BEGIN
-  DECLARE tmpID bigint;
-  IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerFHRFaecher' INTO tmpID;
-    IF tmpID IS NULL THEN
-      SELECT max(ID) FROM SchuelerFHRFaecher INTO tmpID;
-      IF tmpID IS NULL THEN
-        SET tmpID = 0;
-      END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFHRFaecher', tmpID);
-    END IF;
-    IF NEW.ID < 0 THEN
-      SET NEW.ID = tmpID + 1;
-    END IF;
-    IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerFHRFaecher';
-    END IF;
-  END IF;
-END
-
-$
-delimiter ;
-
-
-delimiter $
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerLernabschnittsdaten
-BEFORE INSERT
-  ON SchuelerLernabschnittsdaten FOR EACH ROW
-BEGIN
-  DECLARE tmpID bigint;
-  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerLernabschnittsdaten' INTO tmpID;
-  IF tmpID IS NULL THEN
-    SELECT max(ID) FROM SchuelerLernabschnittsdaten INTO tmpID;
-    IF tmpID IS NULL THEN
-      SET tmpID = 0;
-    END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLernabschnittsdaten', tmpID);
-  END IF;
-  IF NEW.ID < 0 THEN
-    SET NEW.ID = tmpID + 1;
-  END IF;
-  IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerLernabschnittsdaten';
-  END IF;
-END
-
-$
-delimiter ;
-
-
-delimiter $
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerLernabschnittsdaten
-BEFORE UPDATE
-  ON SchuelerLernabschnittsdaten FOR EACH ROW
-BEGIN
-  DECLARE tmpID bigint;
-  IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerLernabschnittsdaten' INTO tmpID;
-    IF tmpID IS NULL THEN
-      SELECT max(ID) FROM SchuelerLernabschnittsdaten INTO tmpID;
-      IF tmpID IS NULL THEN
-        SET tmpID = 0;
-      END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLernabschnittsdaten', tmpID);
-    END IF;
-    IF NEW.ID < 0 THEN
-      SET NEW.ID = tmpID + 1;
-    END IF;
-    IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerLernabschnittsdaten';
-    END IF;
-  END IF;
-END
-
-$
-delimiter ;
-
-
-delimiter $
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerFehlstunden
-BEFORE INSERT
-  ON SchuelerFehlstunden FOR EACH ROW
-BEGIN
-  DECLARE tmpID bigint;
-  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerFehlstunden' INTO tmpID;
-  IF tmpID IS NULL THEN
-    SELECT max(ID) FROM SchuelerFehlstunden INTO tmpID;
-    IF tmpID IS NULL THEN
-      SET tmpID = 0;
-    END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFehlstunden', tmpID);
-  END IF;
-  IF NEW.ID < 0 THEN
-    SET NEW.ID = tmpID + 1;
-  END IF;
-  IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerFehlstunden';
-  END IF;
-END
-
-$
-delimiter ;
-
-
-delimiter $
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerFehlstunden
-BEFORE UPDATE
-  ON SchuelerFehlstunden FOR EACH ROW
-BEGIN
-  DECLARE tmpID bigint;
-  IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerFehlstunden' INTO tmpID;
-    IF tmpID IS NULL THEN
-      SELECT max(ID) FROM SchuelerFehlstunden INTO tmpID;
-      IF tmpID IS NULL THEN
-        SET tmpID = 0;
-      END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFehlstunden', tmpID);
-    END IF;
-    IF NEW.ID < 0 THEN
-      SET NEW.ID = tmpID + 1;
-    END IF;
-    IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerFehlstunden';
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Stundenplan_UnterrichtRaum';
     END IF;
   END IF;
 END
@@ -8073,24 +8022,24 @@ delimiter ;
 
 
 delimiter $
-CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerLeistungsdaten
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerFehlstunden
 BEFORE INSERT
-  ON SchuelerLeistungsdaten FOR EACH ROW
+  ON SchuelerFehlstunden FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerLeistungsdaten' INTO tmpID;
+  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerFehlstunden' INTO tmpID;
   IF tmpID IS NULL THEN
-    SELECT max(ID) FROM SchuelerLeistungsdaten INTO tmpID;
+    SELECT max(ID) FROM SchuelerFehlstunden INTO tmpID;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLeistungsdaten', tmpID);
+    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFehlstunden', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerLeistungsdaten';
+    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerFehlstunden';
   END IF;
 END
 
@@ -8099,85 +8048,29 @@ delimiter ;
 
 
 delimiter $
-CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerLeistungsdaten
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerFehlstunden
 BEFORE UPDATE
-  ON SchuelerLeistungsdaten FOR EACH ROW
+  ON SchuelerFehlstunden FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerLeistungsdaten' INTO tmpID;
+    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerFehlstunden' INTO tmpID;
     IF tmpID IS NULL THEN
-      SELECT max(ID) FROM SchuelerLeistungsdaten INTO tmpID;
+      SELECT max(ID) FROM SchuelerFehlstunden INTO tmpID;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLeistungsdaten', tmpID);
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFehlstunden', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerLeistungsdaten';
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerFehlstunden';
     END IF;
   END IF;
 END
 
-$
-delimiter ;
-
-
-delimiter $
-CREATE TRIGGER t_DELETE_SCHUELERLEISTUNGSDATEN_KURS_SCHUELER
-AFTER DELETE
-	ON SchuelerLeistungsdaten FOR EACH ROW
-BEGIN
-    DECLARE schuelerID INTEGER;
-    IF OLD.Kurs_ID IS NOT NULL THEN
-		SET schuelerID := (SELECT Schueler.id FROM SchuelerLernabschnittsdaten JOIN Schueler ON SchuelerLernabschnittsdaten.ID = OLD.Abschnitt_ID AND SchuelerLernabschnittsdaten.Schueler_ID = Schueler.ID);
-        DELETE FROM Kurs_Schueler WHERE Kurs_Schueler.Kurs_ID = OLD.Kurs_ID AND Kurs_Schueler.SCHUELER_ID = schuelerID;
-    END IF;
-END
-$
-delimiter ;
-
-
-delimiter $
-CREATE TRIGGER t_INSERT_SCHUELERLEISTUNGSDATEN_KURS_SCHUELER
-AFTER INSERT
-	ON SchuelerLeistungsdaten FOR EACH ROW
-BEGIN
-    DECLARE schuelerID INTEGER;
-    IF NEW.Kurs_ID IS NOT NULL THEN
-		SET schuelerID := (SELECT Schueler.id FROM SchuelerLernabschnittsdaten JOIN Schueler ON SchuelerLernabschnittsdaten.ID = NEW.Abschnitt_ID AND SchuelerLernabschnittsdaten.Schueler_ID = Schueler.ID);
-        INSERT INTO Kurs_Schueler(Kurs_ID, Schueler_ID) VALUES (NEW.Kurs_ID, schuelerID);
-    END IF;
-END
-$
-delimiter ;
-
-
-delimiter $
-CREATE TRIGGER t_UPDATE_SCHUELERLEISTUNGSDATEN_KURS_SCHUELER
-AFTER UPDATE
-	ON SchuelerLeistungsdaten FOR EACH ROW
-BEGIN
-    DECLARE alteSchuelerID, neueSchuelerID INTEGER;
-    IF NEW.Kurs_ID IS NOT NULL AND OLD.Kurs_ID IS NOT NULL AND OLD.Kurs_ID <> NEW.Kurs_ID THEN
-		SET alteSchuelerID := (SELECT Schueler.id FROM SchuelerLernabschnittsdaten JOIN Schueler ON SchuelerLernabschnittsdaten.ID = OLD.Abschnitt_ID AND SchuelerLernabschnittsdaten.Schueler_ID = Schueler.ID);
-        IF OLD.Abschnitt_ID <> NEW.Abschnitt_ID THEN
-			SET neueSchuelerID := (SELECT Schueler.id FROM SchuelerLernabschnittsdaten JOIN Schueler ON SchuelerLernabschnittsdaten.ID = NEW.Abschnitt_ID AND SchuelerLernabschnittsdaten.Schueler_ID = Schueler.ID);
-		ELSE
-            SET neueSchuelerID := alteSchuelerID;
-        END IF;
-        UPDATE Kurs_Schueler SET Kurs_Schueler.Kurs_ID = NEW.Kurs_ID, Kurs_Schueler.Schueler_ID = neueSchuelerID WHERE Kurs_Schueler.Kurs_ID = OLD.Kurs_ID AND Kurs_Schueler.SCHUELER_ID = alteSchuelerID;
-    ELSEIF NEW.Kurs_ID IS NULL THEN
-        SET alteSchuelerID := (SELECT Schueler.id FROM SchuelerLernabschnittsdaten JOIN Schueler ON SchuelerLernabschnittsdaten.ID = OLD.Abschnitt_ID AND SchuelerLernabschnittsdaten.Schueler_ID = Schueler.ID);
-        DELETE FROM Kurs_Schueler WHERE Kurs_Schueler.Kurs_ID = OLD.Kurs_ID AND Kurs_Schueler.SCHUELER_ID = alteSchuelerID;        
-    ELSEIF OLD.Kurs_ID IS NULL THEN
-		SET neueSchuelerID := (SELECT Schueler.id FROM SchuelerLernabschnittsdaten JOIN Schueler ON SchuelerLernabschnittsdaten.ID = NEW.Abschnitt_ID AND SchuelerLernabschnittsdaten.Schueler_ID = Schueler.ID);
-        INSERT INTO Kurs_Schueler(Kurs_ID, Schueler_ID) VALUES (NEW.Kurs_ID, neueSchuelerID);
-    END IF;
-END
 $
 delimiter ;
 
@@ -8228,6 +8121,116 @@ BEGIN
     END IF;
     IF NEW.ID > tmpID THEN
       UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerLD_PSFachBem';
+    END IF;
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_INSERT_SCHUELERLEISTUNGSDATEN_KURS_SCHUELER
+AFTER INSERT
+	ON SchuelerLeistungsdaten FOR EACH ROW
+BEGIN
+    DECLARE schuelerID INTEGER;
+    IF NEW.Kurs_ID IS NOT NULL THEN
+		SET schuelerID := (SELECT Schueler.id FROM SchuelerLernabschnittsdaten JOIN Schueler ON SchuelerLernabschnittsdaten.ID = NEW.Abschnitt_ID AND SchuelerLernabschnittsdaten.Schueler_ID = Schueler.ID);
+        INSERT INTO Kurs_Schueler(Kurs_ID, Schueler_ID) VALUES (NEW.Kurs_ID, schuelerID);
+    END IF;
+END
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_UPDATE_SCHUELERLEISTUNGSDATEN_KURS_SCHUELER
+AFTER UPDATE
+	ON SchuelerLeistungsdaten FOR EACH ROW
+BEGIN
+    DECLARE alteSchuelerID, neueSchuelerID INTEGER;
+    IF NEW.Kurs_ID IS NOT NULL AND OLD.Kurs_ID IS NOT NULL AND OLD.Kurs_ID <> NEW.Kurs_ID THEN
+		SET alteSchuelerID := (SELECT Schueler.id FROM SchuelerLernabschnittsdaten JOIN Schueler ON SchuelerLernabschnittsdaten.ID = OLD.Abschnitt_ID AND SchuelerLernabschnittsdaten.Schueler_ID = Schueler.ID);
+        IF OLD.Abschnitt_ID <> NEW.Abschnitt_ID THEN
+			SET neueSchuelerID := (SELECT Schueler.id FROM SchuelerLernabschnittsdaten JOIN Schueler ON SchuelerLernabschnittsdaten.ID = NEW.Abschnitt_ID AND SchuelerLernabschnittsdaten.Schueler_ID = Schueler.ID);
+		ELSE
+            SET neueSchuelerID := alteSchuelerID;
+        END IF;
+        UPDATE Kurs_Schueler SET Kurs_Schueler.Kurs_ID = NEW.Kurs_ID, Kurs_Schueler.Schueler_ID = neueSchuelerID WHERE Kurs_Schueler.Kurs_ID = OLD.Kurs_ID AND Kurs_Schueler.SCHUELER_ID = alteSchuelerID;
+    ELSEIF NEW.Kurs_ID IS NULL THEN
+        SET alteSchuelerID := (SELECT Schueler.id FROM SchuelerLernabschnittsdaten JOIN Schueler ON SchuelerLernabschnittsdaten.ID = OLD.Abschnitt_ID AND SchuelerLernabschnittsdaten.Schueler_ID = Schueler.ID);
+        DELETE FROM Kurs_Schueler WHERE Kurs_Schueler.Kurs_ID = OLD.Kurs_ID AND Kurs_Schueler.SCHUELER_ID = alteSchuelerID;        
+    ELSEIF OLD.Kurs_ID IS NULL THEN
+		SET neueSchuelerID := (SELECT Schueler.id FROM SchuelerLernabschnittsdaten JOIN Schueler ON SchuelerLernabschnittsdaten.ID = NEW.Abschnitt_ID AND SchuelerLernabschnittsdaten.Schueler_ID = Schueler.ID);
+        INSERT INTO Kurs_Schueler(Kurs_ID, Schueler_ID) VALUES (NEW.Kurs_ID, neueSchuelerID);
+    END IF;
+END
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_DELETE_SCHUELERLEISTUNGSDATEN_KURS_SCHUELER
+AFTER DELETE
+	ON SchuelerLeistungsdaten FOR EACH ROW
+BEGIN
+    DECLARE schuelerID INTEGER;
+    IF OLD.Kurs_ID IS NOT NULL THEN
+		SET schuelerID := (SELECT Schueler.id FROM SchuelerLernabschnittsdaten JOIN Schueler ON SchuelerLernabschnittsdaten.ID = OLD.Abschnitt_ID AND SchuelerLernabschnittsdaten.Schueler_ID = Schueler.ID);
+        DELETE FROM Kurs_Schueler WHERE Kurs_Schueler.Kurs_ID = OLD.Kurs_ID AND Kurs_Schueler.SCHUELER_ID = schuelerID;
+    END IF;
+END
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerLeistungsdaten
+BEFORE INSERT
+  ON SchuelerLeistungsdaten FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerLeistungsdaten' INTO tmpID;
+  IF tmpID IS NULL THEN
+    SELECT max(ID) FROM SchuelerLeistungsdaten INTO tmpID;
+    IF tmpID IS NULL THEN
+      SET tmpID = 0;
+    END IF;
+    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLeistungsdaten', tmpID);
+  END IF;
+  IF NEW.ID < 0 THEN
+    SET NEW.ID = tmpID + 1;
+  END IF;
+  IF NEW.ID > tmpID THEN
+    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerLeistungsdaten';
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerLeistungsdaten
+BEFORE UPDATE
+  ON SchuelerLeistungsdaten FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  IF (OLD.ID <> NEW.ID) THEN
+    SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerLeistungsdaten' INTO tmpID;
+    IF tmpID IS NULL THEN
+      SELECT max(ID) FROM SchuelerLeistungsdaten INTO tmpID;
+      IF tmpID IS NULL THEN
+        SET tmpID = 0;
+      END IF;
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLeistungsdaten', tmpID);
+    END IF;
+    IF NEW.ID < 0 THEN
+      SET NEW.ID = tmpID + 1;
+    END IF;
+    IF NEW.ID > tmpID THEN
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerLeistungsdaten';
     END IF;
   END IF;
 END
@@ -8291,15 +8294,16 @@ delimiter ;
 
 
 
-DELETE FROM Kurs_Schueler;
-
+DELETE FROM Kurs_Schueler
+null
+null
+null
 UPDATE 
   SchuelerLeistungsdaten a 
 SET 
   Kurs_ID = NULL 
 WHERE
-  (SELECT Jahr,Abschnitt FROM Kurse WHERE ID = a.Kurs_ID) <> (SELECT Jahr,Abschnitt FROM SchuelerLernabschnittsdaten WHERE ID = a.Abschnitt_ID);
-
+  (SELECT Jahr,Abschnitt FROM Kurse WHERE ID = a.Kurs_ID) <> (SELECT Jahr,Abschnitt FROM SchuelerLernabschnittsdaten WHERE ID = a.Abschnitt_ID)
 INSERT INTO Kurs_Schueler
 SELECT DISTINCT
   Kurse.ID AS Kurs_ID,
@@ -8307,7 +8311,7 @@ SELECT DISTINCT
 FROM 
   Kurse JOIN SchuelerLeistungsdaten ON Kurse.ID = SchuelerLeistungsdaten.Kurs_ID
         JOIN SchuelerLernabschnittsdaten ON SchuelerLeistungsdaten.Abschnitt_ID = SchuelerLernabschnittsdaten.ID
-        JOIN Schueler ON SchuelerLernabschnittsdaten.Schueler_ID = Schueler.ID;
+        JOIN Schueler ON SchuelerLernabschnittsdaten.Schueler_ID = Schueler.ID
 
 INSERT INTO SVWS_DB_Version(Revision) VALUES (6);
 
