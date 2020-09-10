@@ -105,6 +105,7 @@ DROP TABLE IF EXISTS Schildintern_PrfSemAbschl;
 DROP TABLE IF EXISTS Schildintern_Laender;
 DROP TABLE IF EXISTS Schildintern_KursartenZuordnung;
 DROP TABLE IF EXISTS Schildintern_K_Schulnote;
+DROP TABLE IF EXISTS Schildintern_KAoA_SBO_Ebene4;
 DROP TABLE IF EXISTS Schildintern_KAoA_Zusatzmerkmal;
 DROP TABLE IF EXISTS Schildintern_KAoA_Merkmal;
 DROP TABLE IF EXISTS Schildintern_KAoA_Kategorie;

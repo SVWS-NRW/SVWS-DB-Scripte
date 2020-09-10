@@ -105,6 +105,7 @@ DROP TABLE Schildintern_PrfSemAbschl;
 DROP TABLE Schildintern_Laender;
 DROP TABLE Schildintern_KursartenZuordnung;
 DROP TABLE Schildintern_K_Schulnote;
+DROP TABLE Schildintern_KAoA_SBO_Ebene4;
 DROP TABLE Schildintern_KAoA_Zusatzmerkmal;
 DROP TABLE Schildintern_KAoA_Merkmal;
 DROP TABLE Schildintern_KAoA_Kategorie;
