@@ -122,7 +122,6 @@ DROP TABLE Schildintern_Berufsebene;
 DROP TABLE Schildintern_AbiturInfos;
 DROP TABLE Schild_Verwaltung;
 DROP TABLE SchildFilter;
-DROP TABLE Schild3_Settings;
 DROP TABLE SVWS_DB_Version;
 DROP TABLE SVWS_DB_AutoInkremente;
 DROP TABLE SVWS_Client_Konfiguration_Global;

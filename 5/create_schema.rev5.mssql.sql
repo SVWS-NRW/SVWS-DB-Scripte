@@ -1229,7 +1229,6 @@ CREATE TABLE LuPO_Schueler (
   DatumBeratung datetime2, 
   DatumRuecklauf datetime2, 
   SPP int DEFAULT 0 NOT NULL, 
-  Latein int DEFAULT 0 NOT NULL, 
   Sportattest int DEFAULT 0 NOT NULL, 
   Kommentar nvarchar(max), 
   PruefOrdnung nvarchar(20), 
@@ -1398,21 +1397,6 @@ CREATE TABLE SVWS_DB_Version (
 );
 
 
-CREATE TABLE Schild3_Settings (
-  ID bigint NOT NULL, 
-  Name nvarchar(32), 
-  SchulNrEigner int NOT NULL, 
-  Value_Float float, 
-  Value_Int int, 
-  Value_Str nvarchar(max),
-  CONSTRAINT PK_Schild3_Settings PRIMARY KEY (ID)
-);
-
-CREATE INDEX Schild3_Settings_IDX1 ON Schild3_Settings(Name, SchulNrEigner);
-CREATE INDEX Schild3_Settings_IDX2 ON Schild3_Settings(Name);
-CREATE INDEX Schild3_Settings_IDX3 ON Schild3_Settings(SchulNrEigner);
-
-
 CREATE TABLE SchildFilter (
   ID bigint DEFAULT -1 NOT NULL, 
   Art nvarchar(1), 
@@ -1436,13 +1420,9 @@ CREATE TABLE Schild_Verwaltung (
   Bescheinigung nvarchar(255), 
   Stammblatt nvarchar(255), 
   DatenGeprueft nvarchar(1) DEFAULT '-', 
-  FaecherUebernehmen nvarchar(1) DEFAULT '+', 
   Version nvarchar(10), 
   GU_ID nvarchar(40) NOT NULL, 
-  StatistikJahr int, 
   SchulNrEigner int NOT NULL, 
-  LD_Datentyp nvarchar(1), 
-  Version3 nvarchar(16), 
   DatumLoeschfristHinweisDeaktiviert datetime2, 
   DatumLoeschfristHinweisDeaktiviertUserID int, 
   DatumDatenGeloescht datetime2,
@@ -1473,7 +1453,8 @@ CREATE TABLE Schildintern_Berufsebene (
 CREATE TABLE Schildintern_DQR_Niveaus (
   Gliederung nvarchar(4) NOT NULL, 
   FKS nvarchar(8) NOT NULL, 
-  DQR_Niveau int NOT NULL
+  DQR_Niveau int NOT NULL,
+  CONSTRAINT PK_Schildintern_DQR_Niveaus PRIMARY KEY (Gliederung, FKS, DQR_Niveau)
 );
 
 
@@ -1851,7 +1832,8 @@ CREATE TABLE SchuelerReportvorlagen (
   User_ID bigint NOT NULL, 
   SchulNrEigner int, 
   Reportvorlage nvarchar(255), 
-  Schueler_IDs nvarchar(max)
+  Schueler_IDs nvarchar(max),
+  CONSTRAINT PK_SchuelerReportvorlagen PRIMARY KEY (User_ID, Reportvorlage)
 );
 
 

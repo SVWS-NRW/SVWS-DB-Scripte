@@ -132,7 +132,6 @@ DROP TABLE IF EXISTS Schildintern_Berufsebene;
 DROP TABLE IF EXISTS Schildintern_AbiturInfos;
 DROP TABLE IF EXISTS Schild_Verwaltung;
 DROP TABLE IF EXISTS SchildFilter;
-DROP TABLE IF EXISTS Schild3_Settings;
 DROP TABLE IF EXISTS SVWS_DB_Version;
 DROP TABLE IF EXISTS SVWS_DB_AutoInkremente;
 DROP TABLE IF EXISTS SVWS_Client_Konfiguration_Global;
