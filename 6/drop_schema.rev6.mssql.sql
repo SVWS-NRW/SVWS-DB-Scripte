@@ -113,7 +113,6 @@ DROP TABLE Schildintern_PruefungsOrdnung;
 DROP TABLE Schildintern_PruefOrd_Optionen;
 DROP TABLE Schildintern_PrfSemAbschl;
 DROP TABLE Schildintern_Laender;
-DROP TABLE Schildintern_KursartenZuordnung;
 DROP TABLE Schildintern_K_Schulnote;
 DROP TABLE Schildintern_KAoA_SBO_Ebene4;
 DROP TABLE Schildintern_KAoA_Zusatzmerkmal;

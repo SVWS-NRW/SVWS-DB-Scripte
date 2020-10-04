@@ -171,7 +171,6 @@ CREATE TABLE EigeneSchule_Jahrgaenge (
   Spaltentitel varchar(2), 
   SekStufe varchar(6), 
   SGL varchar(3), 
-  JahrgangNum smallint, 
   Restabschnitte int, 
   SchulNrEigner int, 
   Folgejahrgang_ID bigint,
@@ -1456,13 +1455,6 @@ CREATE TABLE Schildintern_K_Schulnote (
 );
 
 
-CREATE TABLE Schildintern_KursartenZuordnung (
-  KursartIndiv varchar(5) NOT NULL, 
-  KursartAllg varchar(5) NOT NULL,
-  CONSTRAINT PK_Schildintern_KursartenZuordnung PRIMARY KEY (KursartIndiv)
-);
-
-
 CREATE TABLE Schildintern_Laender (
   Kurztext varchar(2) NOT NULL, 
   Langtext varchar(40), 
@@ -2638,7 +2630,6 @@ CREATE TABLE Schueler (
   AbschlussDatum varchar(15), 
   Bemerkungen longtext, 
   BeginnBildungsgang date, 
-  Durchschnitt varchar(4), 
   OrgFormKrz varchar(1), 
   Klassenart varchar(2), 
   DurchschnittsNote varchar(4), 
@@ -2892,7 +2883,6 @@ CREATE TABLE SchuelerBKAbschluss (
   Schueler_ID bigint NOT NULL, 
   Zulassung char(1), 
   Bestanden char(1), 
-  Zeugnis char(1), 
   ZertifikatBK char(1), 
   ZulassungErwBK char(1), 
   BestandenErwBK char(1), 
@@ -2967,7 +2957,6 @@ CREATE TABLE SchuelerErzAdr (
   ErzPLZ varchar(10), 
   ErzOrtsteil_ID bigint, 
   ErzAnschreiben varchar(1) DEFAULT '+', 
-  ErzBemerkung varchar(255), 
   Sortierung int, 
   ErzEmail varchar(100), 
   ErzAdrZusatz varchar(50), 

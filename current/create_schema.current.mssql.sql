@@ -171,7 +171,6 @@ CREATE TABLE EigeneSchule_Jahrgaenge (
   Spaltentitel nvarchar(2), 
   SekStufe nvarchar(6), 
   SGL nvarchar(3), 
-  JahrgangNum smallint, 
   Restabschnitte int, 
   SchulNrEigner int, 
   Folgejahrgang_ID bigint,
@@ -1666,13 +1665,6 @@ CREATE TABLE Schildintern_K_Schulnote (
 );
 
 
-CREATE TABLE Schildintern_KursartenZuordnung (
-  KursartIndiv nvarchar(5) NOT NULL, 
-  KursartAllg nvarchar(5) NOT NULL,
-  CONSTRAINT PK_Schildintern_KursartenZuordnung PRIMARY KEY (KursartIndiv)
-);
-
-
 CREATE TABLE Schildintern_Laender (
   Kurztext nvarchar(2) NOT NULL, 
   Langtext nvarchar(40), 
@@ -2930,7 +2922,6 @@ CREATE TABLE Schueler (
   AbschlussDatum nvarchar(15), 
   Bemerkungen nvarchar(max), 
   BeginnBildungsgang date, 
-  Durchschnitt nvarchar(4), 
   OrgFormKrz nvarchar(1), 
   Klassenart nvarchar(2), 
   DurchschnittsNote nvarchar(4), 
@@ -3200,7 +3191,6 @@ CREATE TABLE SchuelerBKAbschluss (
   Schueler_ID bigint NOT NULL, 
   Zulassung nchar(1), 
   Bestanden nchar(1), 
-  Zeugnis nchar(1), 
   ZertifikatBK nchar(1), 
   ZulassungErwBK nchar(1), 
   BestandenErwBK nchar(1), 
@@ -3275,7 +3265,6 @@ CREATE TABLE SchuelerErzAdr (
   ErzPLZ nvarchar(10), 
   ErzOrtsteil_ID bigint, 
   ErzAnschreiben nvarchar(1) DEFAULT '+', 
-  ErzBemerkung nvarchar(255), 
   Sortierung int, 
   ErzEmail nvarchar(100), 
   ErzAdrZusatz nvarchar(50), 
@@ -10048,7 +10037,7 @@ FROM
         JOIN Schueler ON SchuelerLernabschnittsdaten.Schueler_ID = Schueler.ID;
 
 
-INSERT INTO SVWS_DB_Version(Revision) VALUES (de.nrw.schule.svws.db.schema.csv.Versionen@663c9e7a);
+INSERT INTO SVWS_DB_Version(Revision) VALUES (de.nrw.schule.svws.db.schema.csv.Versionen@7161d8d1);
 
 
 INSERT INTO Users (ID,US_Name,US_LoginName,US_UserGroups,US_Privileges) VALUES (1,'Administrator','Admin','1;2;3;4;5','$');
