@@ -1,0 +1,111 @@
+Name;Revision;Veraltet;NameTabelle;NameSpalte;NameTabelleReferenziert;NameSpalteReferenziert;OnUpdate;OnDelete
+Ansprechpartner_Adr_FK;;;AllgAdrAnsprechpartner;Adresse_ID;K_AllgAdresse;ID;NO ACTION;NO ACTION
+EigeneSchuleAbtKl_Abteilung_FK;;;EigeneSchule_Abt_Kl;Abteilung_ID;EigeneSchule_Abteilungen;ID;CASCADE;CASCADE
+EigeneSchuleAbtKl_Klasse_FK;;;EigeneSchule_Abt_Kl;Klasse;Versetzung;Klasse;CASCADE;CASCADE
+EigeneSchule_Abteilungen_Leiter_FK;;;EigeneSchule_Abteilungen;AbteilungsLeiter;K_Lehrer;Kuerzel;CASCADE;SET NULL
+EigeneSchule_FachTeilleistungen_Fach_FK;;;EigeneSchule_FachTeilleistungen;Fach_ID;EigeneSchule_Faecher;ID;CASCADE;CASCADE
+Fachklassen_Schwerpunkte_Fachkl_FK;;;Fachklassen_Schwerpunkte;Fachklasse_ID;EigeneSchule_Fachklassen;ID;CASCADE;CASCADE
+Fachklassen_Schwerpunkte_Schwerp_FK;;;Fachklassen_Schwerpunkte;Schwerpunkt_ID;K_Schwerpunkt;ID;CASCADE;CASCADE
+K_AllgAdresse_AdressArt_FK;;;K_AllgAdresse;AllgAdrAdressArt;K_Adressart;Bezeichnung;CASCADE;CASCADE
+K_AllgAdresse_Ort_FK;;;K_AllgAdresse;AllgAdrOrt_ID;K_Ort;ID;NO ACTION;NO ACTION
+K_Lehrer_Ort_FK;;;K_Lehrer;Ort_ID;K_Ort;ID;NO ACTION;NO ACTION
+K_Lehrer_Ortsteil_FK;;;K_Lehrer;Ortsteil_ID;K_Ortsteil;ID;NO ACTION;NO ACTION
+K_Lehrer_Statkue_Nationalitaeten_FK;2;;K_Lehrer;StaatKrz;Statkue_Nationalitaeten;Schluessel;NO ACTION;NO ACTION
+KursSchueler_Kurse_FK;;;Kurs_Schueler;Kurs_ID;Kurse;ID;CASCADE;CASCADE
+KursSchueler_Schueler_FK;;;Kurs_Schueler;Schueler_ID;Schueler;ID;CASCADE;CASCADE
+KursLehrer_Kurs_FK;;;KursLehrer;Kurs_ID;Kurse;ID;CASCADE;CASCADE
+KursLehrer_Lehrer_FK;;;KursLehrer;Lehrer_ID;K_Lehrer;ID;CASCADE;CASCADE
+Lehrer_IMEI_Lehrer_FK;;;Lehrer_IMEI;Lehrer_ID;K_Lehrer;ID;CASCADE;CASCADE
+LehrerAbschnitte_Lehrer_FK;;;LehrerAbschnittsdaten;Lehrer_ID;K_Lehrer;ID;CASCADE;CASCADE
+LehrerAnrechnung_Lehrer_FK;;;LehrerAnrechnung;Lehrer_ID;K_Lehrer;ID;CASCADE;CASCADE
+LehrerEntlastung_Lehrer_FK;;;LehrerEntlastung;Lehrer_ID;K_Lehrer;ID;CASCADE;CASCADE
+LehrerFunktionen_Funktion_FK;;;LehrerFunktionen;Funktion_ID;K_Schulfunktionen;ID;CASCADE;CASCADE
+LehrerFunktionen_Lehrer_FK;;;LehrerFunktionen;Lehrer_ID;K_Lehrer;ID;CASCADE;CASCADE
+LehrerLehramt_Lehrer_FK;;;LehrerLehramt;Lehrer_ID;K_Lehrer;ID;CASCADE;CASCADE
+LehrerMehrleistung_Lehrer_FK;;;LehrerMehrleistung;Lehrer_ID;K_Lehrer;ID;CASCADE;CASCADE
+Schildintern_KAoA_Merkmal_Kategorie_FK;;;Schildintern_KAoA_Merkmal;Kategorie_ID;Schildintern_KAoA_Kategorie;ID;NO ACTION;NO ACTION
+Schildintern_KAoA_Zusatzmerkmal_Merkmal_FK;;;Schildintern_KAoA_Zusatzmerkmal;Merkmal_ID;Schildintern_KAoA_Merkmal;ID;NO ACTION;NO ACTION
+Schildintern_KAoA_SBO_Ebene4_Zusatzmerkmall_FK;;;Schildintern_KAoA_SBO_Ebene4;Zusatzmerkmal_ID;Schildintern_KAoA_Zusatzmerkmal;ID;NO ACTION;NO ACTION
+Schueler_Einschulungsart_FK;;;Schueler;Einschulungsart_ID;K_EinschulungsArt;ID;CASCADE;SET NULL
+Schueler_Fahrschueler_FK;;;Schueler;Fahrschueler_ID;K_FahrschuelerArt;ID;CASCADE;SET NULL
+Schueler_Foerderschwerpunkt_FK;;;Schueler;Foerderschwerpunkt_ID;K_Foerderschwerpunkt;ID;CASCADE;SET NULL
+Schueler_Haltestelle_FK;;;Schueler;Haltestelle_ID;K_Haltestelle;ID;CASCADE;SET NULL
+Schueler_Versetzung_FK;;;Schueler;Klasse;Versetzung;Klasse;CASCADE;SET NULL
+Schueler_Ort_PLZ_FK;;;Schueler;Ort_ID;K_Ort;ID;CASCADE;SET NULL
+Schueler_Ortsteil_FK;;;Schueler;Ortsteil_ID;K_Ortsteil;ID;CASCADE;SET NULL
+Schueler_Religion_FK;;;Schueler;Religion_ID;K_Religion;ID;CASCADE;SET NULL
+Schueler_Sportbefreiung_FK;;;Schueler;Sportbefreiung_ID;K_Sportbefreiung;ID;CASCADE;SET NULL
+Schueler_Statkue_Nationalitaeten_FK;2;;Schueler;StaatKrz;Statkue_Nationalitaeten;Schluessel;NO ACTION;NO ACTION
+SchuelerAllgAdr_Adresse_FK;;;Schueler_AllgAdr;Adresse_ID;K_AllgAdresse;ID;CASCADE;CASCADE
+SchuelerAllgAdr_Ansprech_FK;;;Schueler_AllgAdr;Ansprechpartner_ID;AllgAdrAnsprechpartner;ID;CASCADE;SET NULL
+SchuelerAllgAdr_Schueler_FK;;;Schueler_AllgAdr;Schueler_ID;Schueler;ID;CASCADE;CASCADE
+SchuelerAllgAdr_Beschaeftigungsart_FK;;;Schueler_AllgAdr;Vertragsart_ID;K_BeschaeftigungsArt;ID;CASCADE;SET NULL
+SchuelerAbgaenge_Schueler_FK;;;SchuelerAbgaenge;Schueler_ID;Schueler;ID;CASCADE;CASCADE
+SchuelerAbiFaecher_Fach_FK;;;SchuelerAbiFaecher;Fach_ID;EigeneSchule_Faecher;ID;CASCADE;CASCADE
+SchuelerAbiFaecher_Schueler_FK;;;SchuelerAbiFaecher;Schueler_ID;Schueler;ID;CASCADE;CASCADE
+SchuelerAbitur_Schueler_FK;;;SchuelerAbitur;Schueler_ID;Schueler;ID;CASCADE;CASCADE
+SchuelerAKF_Schueler_FK;;;SchuelerAnkreuzfloskeln;Schueler_ID;Schueler;ID;CASCADE;CASCADE
+SchuelerBKAbschl_Schueler_FK;;;SchuelerBKAbschluss;Schueler_ID;Schueler;ID;CASCADE;CASCADE
+SchuelerBKFaecher_Fach_FK;;;SchuelerBKFaecher;Fach_ID;EigeneSchule_Faecher;ID;CASCADE;CASCADE
+SchuelerBKFaecher_Schueler_FK;;;SchuelerBKFaecher;Schueler_ID;Schueler;ID;CASCADE;CASCADE
+SchuelerDatenschutz_K_Datenschutz_FK;;;SchuelerDatenschutz;Datenschutz_ID;K_Datenschutz;ID;CASCADE;CASCADE
+SchuelerDatenschutz_Schueler_FK;;;SchuelerDatenschutz;Schueler_ID;Schueler;ID;CASCADE;CASCADE
+SchuelerEL_Art_FK;;;SchuelerEinzelleistungen;Art_ID;K_Einzelleistungen;ID;CASCADE;CASCADE
+SchuelerErzAdr_ErzieherArt_FK;;;SchuelerErzAdr;ErzieherArt_ID;K_ErzieherArt;ID;CASCADE;SET NULL
+SchuelerErzAdr_Ort_FK;;;SchuelerErzAdr;ErzOrt_ID;K_Ort;ID;NO ACTION;NO ACTION
+SchuelerErzAdr_Ortsteil_FK;;;SchuelerErzAdr;ErzOrtsteil_ID;K_Ortsteil;ID;NO ACTION;NO ACTION
+SchuelerErzAdr_Schueler_FK;;;SchuelerErzAdr;Schueler_ID;Schueler;ID;CASCADE;CASCADE
+SchuelerErzFunktion_Erzieher_FK;;;SchuelerErzFunktion;Erzieher_ID;SchuelerErzAdr;ID;CASCADE;CASCADE
+SchuelerErzFunktion_Funktion_FK;;;SchuelerErzFunktion;Funktion_ID;K_ErzieherFunktion;ID;CASCADE;CASCADE
+SchuelerFehlstunden_Abschnitt_FK;;;SchuelerFehlstunden;Abschnitt_ID;SchuelerLernabschnittsdaten;ID;CASCADE;CASCADE
+SchuelerFHR_Schueler_FK;;;SchuelerFHR;Schueler_ID;Schueler;ID;CASCADE;CASCADE
+SchuelerFHRFaecher_Fach_FK;;;SchuelerFHRFaecher;Fach_ID;EigeneSchule_Faecher;ID;CASCADE;CASCADE
+SchuelerFHRFaecher_Schueler_FK;;;SchuelerFHRFaecher;Schueler_ID;Schueler;ID;CASCADE;CASCADE
+SchuelerFE_Schueler_FK;;;SchuelerFoerderempfehlungen;Schueler_ID;Schueler;ID;CASCADE;CASCADE
+SchuelerFotos_Schueler_FK;;;SchuelerFotos;Schueler_ID;Schueler;ID;CASCADE;CASCADE
+SchuelerKAoADaten_Schueler_FK;;;SchuelerKAoADaten;Schueler_ID;Schueler;ID;CASCADE;CASCADE
+SchuelerKAoADaten_Kategorie_FK;;;SchuelerKAoADaten;KategorieID;Schildintern_KAoA_Kategorie;ID;NO ACTION;NO ACTION
+SchuelerKAoADaten_Merkmal_FK;;;SchuelerKAoADaten;MerkmalID;Schildintern_KAoA_Merkmal;ID;NO ACTION;NO ACTION
+SchuelerKAoADaten_Zusatzmerkmal_FK;;;SchuelerKAoADaten;ZusatzmerkmalID;Schildintern_KAoA_Zusatzmerkmal;ID;NO ACTION;NO ACTION
+SchuelerKAoADaten_Anschlussoption_FK;;;SchuelerKAoADaten;AnschlussoptionID;Schildintern_KAoA_Anschlussoption;ID;NO ACTION;NO ACTION
+SchuelerKAoADaten_Berufsfeld_FK;;;SchuelerKAoADaten;BerufsfeldID;Schildintern_KAoA_Berufsfeld;ID;NO ACTION;NO ACTION
+SchuelerKAoADaten_SBO_Ebene4_FK;;;SchuelerKAoADaten;SBO_Ebene4ID;Schildintern_KAoA_SBO_Ebene4;ID;NO ACTION;NO ACTION
+SchuelerLD_PSFachBem_Abschnitt_FK;;;SchuelerLD_PSFachBem;Abschnitt_ID;SchuelerLernabschnittsdaten;ID;CASCADE;CASCADE
+SchuelerLeistungsdaten_Abschnitt_FK;;;SchuelerLeistungsdaten;Abschnitt_ID;SchuelerLernabschnittsdaten;ID;CASCADE;CASCADE
+SchuelerLeistungsdaten_Fach_FK;;;SchuelerLeistungsdaten;Fach_ID;EigeneSchule_Faecher;ID;CASCADE;CASCADE
+SchuelerLeistungsdaten_Lehrer_FK;2;;SchuelerLeistungsdaten;Fachlehrer;K_Lehrer;Kuerzel;CASCADE;SET NULL
+SchuelerLeistungsdaten_Kurs_FK;;;SchuelerLeistungsdaten;Kurs_ID;Kurse;ID;CASCADE;SET NULL
+SchuelerLernabschnittsdaten_Fachklasse_FK;;;SchuelerLernabschnittsdaten;Fachklasse_ID;EigeneSchule_Fachklassen;ID;CASCADE;SET NULL
+SchuelerLernabschnittsdaten_Foerderschwerpunkt_FK;;;SchuelerLernabschnittsdaten;Foerderschwerpunkt_ID;K_Foerderschwerpunkt;ID;NO ACTION;NO ACTION
+SchuelerLernabschnittsdaten_Jahrgang_FK;2;;SchuelerLernabschnittsdaten;Jahrgang_ID;EigeneSchule_Jahrgaenge;ID;CASCADE;SET NULL
+SchuelerLernabschnittsdaten_Schueler_FK;;;SchuelerLernabschnittsdaten;Schueler_ID;Schueler;ID;CASCADE;CASCADE
+SchuelerListeInhalt_Liste_FK;;;SchuelerListe_Inhalt;Liste_ID;SchuelerListe;ID;CASCADE;CASCADE
+SchuelerListeInhalt_Schueler_FK;;;SchuelerListe_Inhalt;Schueler_ID;Schueler;ID;CASCADE;CASCADE
+SchuelerMerkmale_Schueler_FK;;;SchuelerMerkmale;Schueler_ID;Schueler;ID;CASCADE;CASCADE
+SchuelerSprachenfolge_Fach_FK;;;SchuelerSprachenfolge;Fach_ID;EigeneSchule_Faecher;ID;CASCADE;CASCADE
+SchuelerSprachenfolge_Schueler_FK;;;SchuelerSprachenfolge;Schueler_ID;Schueler;ID;CASCADE;CASCADE
+SchuelerTelefone_Schueler_FK;;;SchuelerTelefone;Schueler_ID;Schueler;ID;CASCADE;CASCADE
+SchuelerTelefone_Telefonart_FK;;;SchuelerTelefone;TelefonArt_ID;K_TelefonArt;ID;CASCADE;SET NULL
+SchuelerVermerke_Schueler_FK;;;SchuelerVermerke;Schueler_ID;Schueler;ID;CASCADE;CASCADE
+SchuelerVermerke_VermerkArt_FK;;;SchuelerVermerke;VermerkArt_ID;K_Vermerkart;ID;CASCADE;CASCADE
+Zuweisungen_Abschnitt_FK;;;SchuelerZuweisungen;Abschnitt_ID;SchuelerLernabschnittsdaten;ID;CASCADE;CASCADE
+Stundenplan_Aufsichtsbereiche_Stundenplan_FK;;;Stundenplan_Aufsichtsbereiche;Stundenplan_ID;Stundenplan;ID;CASCADE;CASCADE
+Stundenplan_Pausenaufsichten_K_Lehrer_FK;;;Stundenplan_Pausenaufsichten;Lehrer_ID;K_Lehrer;ID;CASCADE;CASCADE
+Stundenplan_Pausenaufsichten_Pausenzeit_FK;;;Stundenplan_Pausenaufsichten;Pausenzeit_ID;Stundenplan_Pausenzeit;ID;CASCADE;CASCADE
+Stundenplan_PausenaufsichtenBereich_Aufsichtsbereiche_FK;;;Stundenplan_PausenaufsichtenBereich;Aufsichtsbereich_ID;Stundenplan_Aufsichtsbereiche;ID;NO ACTION;NO ACTION
+Stundenplan_PausenaufsichtenBereich_Aufsicht_FK;;;Stundenplan_PausenaufsichtenBereich;Pausenaufsicht_ID;Stundenplan_Pausenaufsichten;ID;CASCADE;CASCADE
+Stundenplan_Pausenzeit_Stundenplan_FK;;;Stundenplan_Pausenzeit;Stundenplan_ID;Stundenplan;ID;CASCADE;CASCADE
+Stundenplan_Raeume_Stundenplan_FK;;;Stundenplan_Raeume;Stundenplan_ID;Stundenplan;ID;CASCADE;CASCADE
+Stundenplan_Unterricht_Versetzung_FK;;;Stundenplan_Unterricht;Klasse_ID;Versetzung;ID;CASCADE;CASCADE
+Stundenplan_Unterricht_EigeneSchule_Faecher_FK;;;Stundenplan_Unterricht;Kurs_ID;EigeneSchule_Faecher;ID;CASCADE;CASCADE
+Stundenplan_Unterricht_Kurse_FK;;;Stundenplan_Unterricht;Kurs_ID;Kurse;ID;CASCADE;SET NULL
+Stundenplan_Unterricht_Stundenplan_Zeitraster_FK;;;Stundenplan_Unterricht;Zeitraster_ID;Stundenplan_Zeitraster;ID;CASCADE;CASCADE
+Stundenplan_UnterrichtLehrer_K_Lehrer_FK;;;Stundenplan_UnterrichtLehrer;Lehrer_ID;K_Lehrer;ID;CASCADE;CASCADE
+Stundenplan_UnterrichtLehrer_Unterricht_FK;;;Stundenplan_UnterrichtLehrer;Unterricht_ID;Stundenplan_Unterricht;ID;CASCADE;CASCADE
+Stundenplan_UnterrichtRaum_Raeume_FK;;;Stundenplan_UnterrichtRaum;Raum_ID;Stundenplan_Raeume;ID;NO ACTION;NO ACTION
+Stundenplan_UnterrichtRaum_Unterricht_FK;;;Stundenplan_UnterrichtRaum;Unterricht_ID;Stundenplan_Unterricht;ID;CASCADE;CASCADE
+Stundenplan_Zeitraster_Stundenplan_FK;;;Stundenplan_Zeitraster;Stundenplan_ID;Stundenplan;ID;CASCADE;CASCADE
+StundentafelFaecher_Faecher_FK;;;Stundentafel_Faecher;Fach_ID;EigeneSchule_Faecher;ID;CASCADE;CASCADE
+StundentafelFaecher_Stdtafel_FK;;;Stundentafel_Faecher;Stundentafel_ID;Stundentafel;ID;CASCADE;CASCADE
+SVWSClientKonfigurationBenutzer_Users_FK;;;SVWS_Client_Konfiguration_Benutzer;Benutzer_ID;Users;ID;CASCADE;CASCADE
+Versetzung_Lehrer_FK;;;Versetzung;KlassenlehrerKrz;K_Lehrer;Kuerzel;NO ACTION;NO ACTION

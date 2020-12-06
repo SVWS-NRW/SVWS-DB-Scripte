@@ -10,7 +10,7 @@ CREATE TABLE EigeneSchule (
   Bezeichnung1 varchar(50), 
   Bezeichnung2 varchar(50), 
   Bezeichnung3 varchar(50), 
-  Strasse varchar(50), 
+  Strasse varchar(55), 
   PLZ varchar(10), 
   Ort varchar(50), 
   Telefon varchar(20), 
@@ -21,7 +21,6 @@ CREATE TABLE EigeneSchule (
   SchuljahrAbschnitt smallint, 
   AnzahlAbschnitte smallint DEFAULT 2, 
   Fremdsprachen varchar(1) DEFAULT '+', 
-  UpdateSprachenfolge varchar(1) DEFAULT '+', 
   JVAZeigen varchar(1) DEFAULT '-', 
   RefPaedagogikZeigen varchar(1) DEFAULT '-', 
   AnzJGS_Jahr smallint DEFAULT 1, 
@@ -49,28 +48,17 @@ CREATE TABLE EigeneSchule (
   SchulLogo longblob, 
   SchulLogoBase64 text, 
   SchulNrEigner int, 
-  SchulleiterName varchar(50), 
-  SchulleiterVorname varchar(30), 
+  SchulleiterName varchar(120), 
+  SchulleiterVorname varchar(80), 
   SchulleiterAmtsbez varchar(30), 
   SchulleiterGeschlecht int, 
-  StvSchulleiterName varchar(50), 
-  StvSchulleiterVorname varchar(30), 
+  StvSchulleiterName varchar(120), 
+  StvSchulleiterVorname varchar(80), 
   StvSchulleiterAmtsbez varchar(30), 
   StvSchulleiterGeschlecht int, 
   Einstellungen text, 
-  Fehlstundenmodell_PrS1 varchar(1) DEFAULT 'G', 
-  Fehlstundenmodell_S2 varchar(1) DEFAULT 'F', 
-  Tendenznoten_S1 varchar(1) DEFAULT '-', 
-  WebKL_Modus varchar(1) DEFAULT 'A', 
-  WebMahnungenGesperrt varchar(1) DEFAULT '-', 
-  WebNotenGesperrt varchar(1) DEFAULT '-', 
-  LogoFormat varchar(3), 
-  SchILDweb_Config text, 
-  WebTeilLeistungenAnlegen varchar(1) DEFAULT '-', 
-  WebInfoMail varchar(1) DEFAULT '-', 
   WebAdresse varchar(100), 
   Land varchar(50), 
-  Einstellungen2 text, 
   SchulleiterTitel varchar(10), 
   StvSchulleiterTitel varchar(10),
   CONSTRAINT PK_EigeneSchule PRIMARY KEY (ID)
@@ -239,7 +227,7 @@ CREATE TABLE EigeneSchule_Teilstandorte (
   AdrMerkmal varchar(1) NOT NULL, 
   PLZ varchar(10), 
   Ort varchar(50), 
-  Strasse varchar(50), 
+  Strasse varchar(55), 
   HausNr varchar(10), 
   Bemerkung varchar(50), 
   Kuerzel varchar(30),
@@ -367,283 +355,6 @@ CREATE TABLE ImpExp_EigeneImporte_Tabellen (
   DstDefaultFieldValue varchar(10), 
   GU_ID_Field varchar(50),
   CONSTRAINT PK_ImpExp_EigeneImporte_Tabellen PRIMARY KEY (Import_ID, TableName)
-);
-
-
-CREATE TABLE K42_Blockgruppen (
-  IDNr bigint NOT NULL, 
-  BlockungsID bigint NOT NULL, 
-  Bezeichnung varchar(255), 
-  Jahrgang varchar(16), 
-  Semester int, 
-  Schienenzahl int, 
-  Erstexport varchar(1) DEFAULT '+', 
-  MahnungsExport varchar(1) DEFAULT '-', 
-  KoppIDMaske varchar(32),
-  CONSTRAINT PK_K42_Blockgruppen PRIMARY KEY (IDNr)
-);
-
-
-CREATE TABLE K42_Blockungen (
-  ID bigint NOT NULL, 
-  Bezeichnung varchar(128), 
-  Schuljahr int, 
-  Abschnitt int, 
-  Angelegt datetime, 
-  LetzteBearbeitung datetime, 
-  Jahrgang varchar(64),
-  CONSTRAINT PK_K42_Blockungen PRIMARY KEY (ID)
-);
-
-
-CREATE TABLE K42_Faecher (
-  IDNr bigint NOT NULL, 
-  BlockungsID bigint NOT NULL, 
-  FachKrz varchar(20), 
-  Bezeichnung varchar(64), 
-  StatistikKrz varchar(5), 
-  Sortierung int, 
-  Fachgruppe_ID bigint, 
-  IstSprache varchar(1) DEFAULT '-',
-  CONSTRAINT PK_K42_Faecher PRIMARY KEY (IDNr)
-);
-
-
-CREATE TABLE K42_Jahrgaenge (
-  ID bigint NOT NULL, 
-  BlockungsID bigint NOT NULL, 
-  InternKrz varchar(20), 
-  ASDJahrgang varchar(2), 
-  ASDBezeichnung varchar(200), 
-  SGL varchar(3), 
-  SGLText varchar(100),
-  CONSTRAINT PK_K42_Jahrgaenge PRIMARY KEY (ID)
-);
-
-
-CREATE TABLE K42_JgBereiche (
-  JG_Bereich int, 
-  BlockungsID bigint NOT NULL, 
-  Jahrgang varchar(2),
-  CONSTRAINT PK_K42_JgBereiche PRIMARY KEY (BlockungsID, Jahrgang, JG_Bereich)
-);
-
-
-CREATE TABLE K42_KlausurTermine (
-  TerminNr int, 
-  BlockungsID bigint NOT NULL, 
-  BlockgruppenID bigint, 
-  Bezeichnung varchar(128), 
-  IstAbiturTermin varchar(1) DEFAULT '-',
-  CONSTRAINT PK_K42_KlausurTermine PRIMARY KEY (BlockgruppenID, BlockungsID, TerminNr)
-);
-
-
-CREATE TABLE K42_Klausurschienen (
-  ID bigint NOT NULL, 
-  IdNr bigint, 
-  BlockungsID bigint NOT NULL, 
-  Bezeichnung varchar(64), 
-  Klausurdatum datetime, 
-  VonStd int, 
-  BisStd int, 
-  NurSchriftlich varchar(1) DEFAULT '+', 
-  BlockgruppenID bigint, 
-  TerminNr int,
-  CONSTRAINT PK_K42_Klausurschienen PRIMARY KEY (ID)
-);
-
-
-CREATE TABLE K42_KursSchienen (
-  ID int DEFAULT -1 NOT NULL, 
-  KursID int NOT NULL, 
-  SchienenID int, 
-  Fixiert int, 
-  Tag int, 
-  TerminNr int, 
-  BlockungsID int,
-  CONSTRAINT PK_K42_KursSchienen PRIMARY KEY (ID)
-);
-
-
-CREATE TABLE K42_KursTeilnehmer (
-  ID int DEFAULT -1 NOT NULL, 
-  KursID int NOT NULL, 
-  SchuelerID int, 
-  Fixiert int, 
-  Tag int, 
-  TerminNr int, 
-  BlockungsID int,
-  CONSTRAINT PK_K42_KursTeilnehmer PRIMARY KEY (ID)
-);
-
-
-CREATE TABLE K42_Kurse (
-  ID bigint NOT NULL, 
-  IDNr bigint NOT NULL, 
-  BlockungsID bigint NOT NULL, 
-  BlockgruppenID bigint, 
-  Typ int, 
-  SchienenID bigint, 
-  Bezeichnung varchar(128), 
-  Fach varchar(20), 
-  Stunden int, 
-  Lehrer varchar(10), 
-  Jahrgang varchar(64), 
-  Kursart varchar(5), 
-  Semester int, 
-  Schienenzahl int, 
-  Blocken varchar(1) DEFAULT '+', 
-  Sperrung longblob, 
-  Parallelkurse int, 
-  KursNr int, 
-  MaxProSchiene int, 
-  Fixiert varchar(1) DEFAULT '-', 
-  KursPosition int, 
-  Kursraum varchar(10), 
-  Koopkurs varchar(1) DEFAULT '-', 
-  MaxGroesse int, 
-  FixGroesse varchar(1) DEFAULT '-', 
-  Klausurdatum datetime, 
-  KlAnfangStd int, 
-  KlEndStd int, 
-  KlausurBetroffene int, 
-  KlAufsicht longblob, 
-  KlRaum int, 
-  KlBemerkung varchar(255), 
-  WoStdKL int, 
-  WoStdZK int, 
-  Zusatzkraft varchar(10), 
-  UnterrichtsNr varchar(32), 
-  Klassen varchar(64), 
-  StundenPlan longblob, 
-  TerminNr int, 
-  KursPlanRaum int,
-  CONSTRAINT PK_K42_Kurse PRIMARY KEY (ID)
-);
-
-
-CREATE TABLE K42_Lehrer (
-  ID bigint NOT NULL, 
-  BlockungsID bigint NOT NULL, 
-  Kuerzel varchar(10), 
-  Name varchar(64), 
-  Vorname varchar(64), 
-  Passwort varchar(128), 
-  Geschlecht varchar(1), 
-  AmtsBez varchar(16), 
-  Email varchar(128),
-  CONSTRAINT PK_K42_Lehrer PRIMARY KEY (ID)
-);
-
-
-CREATE TABLE K42_Schienen (
-  ID bigint NOT NULL, 
-  IDNr bigint, 
-  BlockungsID bigint NOT NULL, 
-  BlockgruppenID bigint, 
-  Bezeichnung varchar(128), 
-  Umwaehlerzahl int, 
-  KopplungsID varchar(32), 
-  Sortierung int, 
-  Stundenraster longblob,
-  CONSTRAINT PK_K42_Schienen PRIMARY KEY (ID)
-);
-
-
-CREATE TABLE K42_SchienenKurse (
-  ID int DEFAULT -1 NOT NULL, 
-  SchienenID int NOT NULL, 
-  KursID int, 
-  Fixiert int, 
-  Tag int, 
-  TerminNr int, 
-  BlockungsID int,
-  CONSTRAINT PK_K42_SchienenKurse PRIMARY KEY (ID)
-);
-
-
-CREATE TABLE K42_Schueler (
-  IDNr bigint NOT NULL, 
-  BlockungsID bigint NOT NULL, 
-  Status int NOT NULL, 
-  Geschlecht int, 
-  Jahrgang varchar(32), 
-  Klasse varchar(10), 
-  Name varchar(128), 
-  Vorname varchar(128), 
-  CollCount int, 
-  GebDat datetime, 
-  SchulNr int, 
-  DB_IDNr bigint, 
-  ExterneID varchar(30), 
-  Tutor varchar(16), 
-  PruefOrd varchar(32), 
-  Email varchar(128), 
-  KoopDBIDNr bigint, 
-  VersNr int, 
-  Bemerkung varchar(1024),
-  CONSTRAINT PK_K42_Schueler PRIMARY KEY (IDNr)
-);
-
-
-CREATE TABLE K42_SchuelerFaecher (
-  ID bigint NOT NULL, 
-  Schueler_ID bigint, 
-  BlockungsID int NOT NULL, 
-  Fach_ID bigint, 
-  KursartInd varchar(5), 
-  Fixiert varchar(1) DEFAULT '-', 
-  FehlStd int, 
-  Unentsch int, 
-  Koop varchar(1) DEFAULT '-', 
-  Anzahl int, 
-  Zensur varchar(2), 
-  Mdl varchar(255), 
-  Schr varchar(255), 
-  Mahnung varchar(1) DEFAULT '-', 
-  KoopSchule int, 
-  KursBez varchar(32), 
-  Fehl varchar(16), 
-  UFehl varchar(16), 
-  LeistungsID bigint, 
-  KursartAllg varchar(5), 
-  VersNr int,
-  CONSTRAINT PK_K42_SchuelerFaecher PRIMARY KEY (ID)
-);
-
-
-CREATE TABLE K42_Versetzungstabelle (
-  IDNr int NOT NULL, 
-  BlockungsID bigint NOT NULL, 
-  Klasse varchar(6), 
-  JG varchar(20), 
-  FolgeKl varchar(6), 
-  VorgKl varchar(6), 
-  FolgeJg varchar(20), 
-  VorgJg varchar(20), 
-  OrgForm varchar(2), 
-  KlLehrer varchar(6), 
-  StvKlLehrer varchar(6), 
-  SLBNR int, 
-  ASDSCHGL varchar(6), 
-  Jahrgangs_ID varchar(9),
-  CONSTRAINT PK_K42_Versetzungstabelle PRIMARY KEY (IDNr)
-);
-
-
-CREATE TABLE K42_ZulKursarten (
-  ID bigint NOT NULL, 
-  BlockungsID bigint NOT NULL, 
-  Sortierung int, 
-  KursartInd varchar(5), 
-  Bezeichnung varchar(255), 
-  SF varchar(2), 
-  JgBereich int, 
-  IsVisible varchar(1) DEFAULT '+', 
-  Schriftlich varchar(1) DEFAULT '-', 
-  KursartAllg varchar(5),
-  CONSTRAINT PK_K42_ZulKursarten PRIMARY KEY (ID)
 );
 
 
@@ -815,7 +526,7 @@ CREATE TABLE K_Kindergarten (
   Bezeichnung varchar(50), 
   PLZ varchar(10), 
   Ort varchar(30), 
-  Strasse varchar(40), 
+  Strasse varchar(55), 
   Tel varchar(20), 
   Email varchar(40), 
   Bemerkung varchar(50), 
@@ -848,7 +559,7 @@ CREATE TABLE K_AllgAdresse (
   AllgAdrAdressArt varchar(30) NOT NULL, 
   AllgAdrName1 varchar(50), 
   AllgAdrName2 varchar(50), 
-  AllgAdrStrasse varchar(50), 
+  AllgAdrStrasse varchar(55), 
   AllgAdrOrt_ID bigint, 
   AllgAdrPLZ varchar(10), 
   AllgAdrTelefon1 varchar(20), 
@@ -879,8 +590,8 @@ CREATE TABLE K_AllgAdresse (
 CREATE TABLE AllgAdrAnsprechpartner (
   ID bigint DEFAULT -1 NOT NULL, 
   Adresse_ID bigint, 
-  Name varchar(60), 
-  Vorname varchar(60), 
+  Name varchar(120), 
+  Vorname varchar(80), 
   Anrede varchar(10), 
   Telefon varchar(20), 
   Email varchar(100), 
@@ -926,11 +637,11 @@ CREATE TABLE K_Religion (
 CREATE TABLE K_Schule (
   ID bigint DEFAULT -1 NOT NULL, 
   SchulNr varchar(6) NOT NULL, 
-  Name varchar(100), 
+  Name varchar(120), 
   SchulformNr varchar(3), 
   SchulformKrz varchar(3), 
   SchulformBez varchar(50), 
-  Strasse varchar(50), 
+  Strasse varchar(55), 
   PLZ varchar(10), 
   Ort varchar(50), 
   Telefon varchar(20), 
@@ -1272,7 +983,7 @@ CREATE TABLE LuPO_Schueler (
   Kommentar text, 
   PruefOrdnung varchar(20), 
   Email varchar(100), 
-  Beratungslehrer varchar(50), 
+  Beratungslehrer varchar(120), 
   AnzK_E1 int, 
   AnzK_E2 int, 
   AnzK_Q1 int, 
@@ -1389,11 +1100,11 @@ CREATE TABLE Personengruppen_Personen (
   Person_ID bigint, 
   PersonNr int, 
   PersonArt varchar(1), 
-  PersonName varchar(50) NOT NULL, 
-  PersonVorname varchar(30), 
+  PersonName varchar(120) NOT NULL, 
+  PersonVorname varchar(80), 
   PersonPLZ varchar(10), 
   PersonOrt varchar(50), 
-  PersonStrasse varchar(50), 
+  PersonStrasse varchar(55), 
   PersonTelefon varchar(20), 
   PersonMobil varchar(20), 
   PersonEmail varchar(100), 
@@ -1431,7 +1142,8 @@ CREATE TABLE SVWS_DB_AutoInkremente (
 
 
 CREATE TABLE SVWS_DB_Version (
-  Revision int DEFAULT 0 NOT NULL,
+  Revision int DEFAULT 0 NOT NULL, 
+  IsTainted int DEFAULT 0 NOT NULL,
   CONSTRAINT PK_SVWS_DB_Version PRIMARY KEY (Revision)
 );
 
@@ -1612,7 +1324,8 @@ CREATE TABLE Schildintern_KAoA_Merkmal (
   Kategorie_ID bigint NOT NULL, 
   M_Beschreibung varchar(255), 
   M_Option varchar(25), 
-  M_Kategorie varchar(10),
+  M_Kategorie varchar(10), 
+  BK_Anlagen varchar(255),
   CONSTRAINT PK_Schildintern_KAoA_Merkmal PRIMARY KEY (ID),
   CONSTRAINT Schildintern_KAoA_Merkmal_Kategorie_FK FOREIGN KEY (Kategorie_ID) REFERENCES Schildintern_KAoA_Kategorie(ID)
 );
@@ -1841,7 +1554,7 @@ CREATE TABLE SchuelerGSDaten (
   Durchschnittsnote_Einfach float, 
   Durchschnittsnote_Gewichtet float, 
   Anrede_Klassenlehrer varchar(10), 
-  Nachname_Klassenlehrer varchar(50), 
+  Nachname_Klassenlehrer varchar(120), 
   GS_Klasse varchar(10), 
   Bemerkungen text, 
   Geschwisterkind varchar(1) DEFAULT '-',
@@ -2295,8 +2008,8 @@ CREATE TABLE K_Lehrer (
   GU_ID varchar(40), 
   Kuerzel varchar(10) NOT NULL, 
   LIDKrz varchar(4), 
-  Nachname varchar(30) NOT NULL, 
-  Vorname varchar(20), 
+  Nachname varchar(120) NOT NULL, 
+  Vorname varchar(80), 
   PersonTyp varchar(20) DEFAULT 'LEHRKRAFT', 
   SchulNrEigner int, 
   Sortierung int DEFAULT 32000, 
@@ -2304,7 +2017,7 @@ CREATE TABLE K_Lehrer (
   Aenderbar varchar(1) DEFAULT '+', 
   FuerExport varchar(1) DEFAULT '+', 
   Statistik varchar(1) DEFAULT '+', 
-  Strasse varchar(50), 
+  Strasse varchar(55), 
   Ort_ID bigint, 
   PLZ varchar(10), 
   Ortsteil_ID bigint, 
@@ -2841,15 +2554,15 @@ CREATE TABLE EigeneSchule_Abt_Kl (
 
 CREATE TABLE Schueler (
   ID bigint DEFAULT -1 NOT NULL, 
-  GU_ID varchar(40), 
+  GU_ID varchar(40) NOT NULL, 
   SrcID int, 
   IDext varchar(30), 
   Status int, 
-  Name varchar(60), 
-  Vorname varchar(60), 
+  Name varchar(120), 
+  Vorname varchar(80), 
   Zusatz varchar(255), 
-  Geburtsname varchar(60), 
-  Strasse varchar(50), 
+  Geburtsname varchar(120), 
+  Strasse varchar(55), 
   Ort_ID bigint, 
   PLZ varchar(10), 
   OrtAbk varchar(50), 
@@ -2967,7 +2680,7 @@ CREATE TABLE Schueler (
   Duplikat varchar(1) DEFAULT '-', 
   EinschulungsartASD varchar(2), 
   HausNr varchar(10), 
-  Strassenname varchar(50), 
+  Strassenname varchar(55), 
   SchulNrEigner int, 
   BilingualerZweig varchar(1), 
   DurchschnittsnoteFHR varchar(4), 
@@ -3254,13 +2967,13 @@ CREATE TABLE SchuelerErzAdr (
   ErzieherArt_ID bigint, 
   Anrede1 varchar(20), 
   Titel1 varchar(10), 
-  Name1 varchar(50), 
-  Vorname1 varchar(50), 
+  Name1 varchar(120), 
+  Vorname1 varchar(80), 
   Anrede2 varchar(20), 
   Titel2 varchar(10), 
-  Name2 varchar(50), 
-  Vorname2 varchar(50), 
-  ErzStrasse varchar(50), 
+  Name2 varchar(120), 
+  Vorname2 varchar(80), 
+  ErzStrasse varchar(55), 
   ErzOrt_ID bigint, 
   ErzPLZ varchar(10), 
   ErzOrtsteil_ID bigint, 
@@ -4395,276 +4108,6 @@ CREATE TRIGGER t_AutoIncrement_UPDATE_EigeneSchule_Zertifikate_5 AFTER UPDATE ON
 BEGIN
   -- Update der ID in der Tabelle EigeneSchule_Zertifikate erfolgt durch den Autoinkrement-Trigger 2, daher hier auch kein +1, sondern nur den Max-Wert schreiben
   INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Zertifikate',  coalesce((SELECT max(ID) FROM EigeneSchule_Zertifikate), 0));
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_K42_KursSchienen_1 AFTER INSERT ON K42_KursSchienen FOR EACH ROW
-	WHEN NEW.ID >= 0 AND 
-	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_KursSchienen') IS NOT NULL AND 
-	  NEW.ID > (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_KursSchienen')
-BEGIN
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle = 'K42_KursSchienen';
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_K42_KursSchienen_2 AFTER INSERT ON K42_KursSchienen FOR EACH ROW
-	WHEN NEW.ID < 0 AND
-	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_KursSchienen') IS NOT NULL
-BEGIN
-  UPDATE K42_KursSchienen SET ID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_KursSchienen') + 1 WHERE ID = NEW.ID;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = MaxID + 1 WHERE NameTabelle = 'K42_KursSchienen';
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_K42_KursSchienen_3 AFTER INSERT ON K42_KursSchienen FOR EACH ROW
-	WHEN NEW.ID >= 0 AND 
-	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_KursSchienen') IS NULL AND
-	  NEW.ID < coalesce((SELECT max(ID) FROM K42_KursSchienen), 0)
-BEGIN
-  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K42_KursSchienen', coalesce((SELECT max(ID) FROM K42_KursSchienen), 0));
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_K42_KursSchienen_4 AFTER INSERT ON K42_KursSchienen FOR EACH ROW
-	WHEN NEW.ID >= 0 AND 
-	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_KursSchienen') IS NULL AND
-	  NEW.ID >= coalesce((SELECT max(ID) FROM K42_KursSchienen), 0)
-BEGIN
-  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K42_KursSchienen',  NEW.ID);
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_K42_KursSchienen_5 AFTER INSERT ON K42_KursSchienen FOR EACH ROW
-	WHEN NEW.ID < 0 AND
-	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_KursSchienen') IS NULL
-BEGIN
-  UPDATE K42_KursSchienen SET ID = coalesce((SELECT max(ID) FROM K42_KursSchienen), 0) + 1 WHERE ID = NEW.ID;
-  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K42_KursSchienen',  coalesce((SELECT max(ID) FROM K42_KursSchienen), 0) + 1);
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_K42_KursSchienen_1 AFTER UPDATE ON K42_KursSchienen FOR EACH ROW
-	WHEN NEW.ID >= 0 AND 
-	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_KursSchienen') IS NOT NULL AND 
-	  NEW.ID > (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_KursSchienen')
-BEGIN
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle = 'K42_KursSchienen';
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_K42_KursSchienen_2 AFTER UPDATE ON K42_KursSchienen FOR EACH ROW
-	WHEN NEW.ID < 0 AND
-	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_KursSchienen') IS NOT NULL
-BEGIN
-  UPDATE K42_KursSchienen SET ID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_KursSchienen') + 1 WHERE ID = NEW.ID;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = MaxID + 1 WHERE NameTabelle = 'K42_KursSchienen';
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_K42_KursSchienen_3 AFTER UPDATE ON K42_KursSchienen FOR EACH ROW
-	WHEN NEW.ID >= 0 AND 
-	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_KursSchienen') IS NULL AND
-	  NEW.ID < coalesce((SELECT max(ID) FROM K42_KursSchienen), 0)
-BEGIN
-  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K42_KursSchienen', coalesce((SELECT max(ID) FROM K42_KursSchienen), 0));
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_K42_KursSchienen_4 AFTER UPDATE ON K42_KursSchienen FOR EACH ROW
-	WHEN NEW.ID >= 0 AND 
-	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_KursSchienen') IS NULL AND
-	  NEW.ID >= coalesce((SELECT max(ID) FROM K42_KursSchienen), 0)
-BEGIN
-  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K42_KursSchienen',  NEW.ID);
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_K42_KursSchienen_5 AFTER UPDATE ON K42_KursSchienen FOR EACH ROW
-	WHEN NEW.ID < 0 AND
-	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_KursSchienen') IS NULL
-BEGIN
-  -- Update der ID in der Tabelle K42_KursSchienen erfolgt durch den Autoinkrement-Trigger 2, daher hier auch kein +1, sondern nur den Max-Wert schreiben
-  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K42_KursSchienen',  coalesce((SELECT max(ID) FROM K42_KursSchienen), 0));
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_K42_KursTeilnehmer_1 AFTER INSERT ON K42_KursTeilnehmer FOR EACH ROW
-	WHEN NEW.ID >= 0 AND 
-	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_KursTeilnehmer') IS NOT NULL AND 
-	  NEW.ID > (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_KursTeilnehmer')
-BEGIN
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle = 'K42_KursTeilnehmer';
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_K42_KursTeilnehmer_2 AFTER INSERT ON K42_KursTeilnehmer FOR EACH ROW
-	WHEN NEW.ID < 0 AND
-	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_KursTeilnehmer') IS NOT NULL
-BEGIN
-  UPDATE K42_KursTeilnehmer SET ID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_KursTeilnehmer') + 1 WHERE ID = NEW.ID;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = MaxID + 1 WHERE NameTabelle = 'K42_KursTeilnehmer';
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_K42_KursTeilnehmer_3 AFTER INSERT ON K42_KursTeilnehmer FOR EACH ROW
-	WHEN NEW.ID >= 0 AND 
-	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_KursTeilnehmer') IS NULL AND
-	  NEW.ID < coalesce((SELECT max(ID) FROM K42_KursTeilnehmer), 0)
-BEGIN
-  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K42_KursTeilnehmer', coalesce((SELECT max(ID) FROM K42_KursTeilnehmer), 0));
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_K42_KursTeilnehmer_4 AFTER INSERT ON K42_KursTeilnehmer FOR EACH ROW
-	WHEN NEW.ID >= 0 AND 
-	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_KursTeilnehmer') IS NULL AND
-	  NEW.ID >= coalesce((SELECT max(ID) FROM K42_KursTeilnehmer), 0)
-BEGIN
-  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K42_KursTeilnehmer',  NEW.ID);
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_K42_KursTeilnehmer_5 AFTER INSERT ON K42_KursTeilnehmer FOR EACH ROW
-	WHEN NEW.ID < 0 AND
-	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_KursTeilnehmer') IS NULL
-BEGIN
-  UPDATE K42_KursTeilnehmer SET ID = coalesce((SELECT max(ID) FROM K42_KursTeilnehmer), 0) + 1 WHERE ID = NEW.ID;
-  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K42_KursTeilnehmer',  coalesce((SELECT max(ID) FROM K42_KursTeilnehmer), 0) + 1);
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_K42_KursTeilnehmer_1 AFTER UPDATE ON K42_KursTeilnehmer FOR EACH ROW
-	WHEN NEW.ID >= 0 AND 
-	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_KursTeilnehmer') IS NOT NULL AND 
-	  NEW.ID > (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_KursTeilnehmer')
-BEGIN
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle = 'K42_KursTeilnehmer';
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_K42_KursTeilnehmer_2 AFTER UPDATE ON K42_KursTeilnehmer FOR EACH ROW
-	WHEN NEW.ID < 0 AND
-	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_KursTeilnehmer') IS NOT NULL
-BEGIN
-  UPDATE K42_KursTeilnehmer SET ID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_KursTeilnehmer') + 1 WHERE ID = NEW.ID;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = MaxID + 1 WHERE NameTabelle = 'K42_KursTeilnehmer';
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_K42_KursTeilnehmer_3 AFTER UPDATE ON K42_KursTeilnehmer FOR EACH ROW
-	WHEN NEW.ID >= 0 AND 
-	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_KursTeilnehmer') IS NULL AND
-	  NEW.ID < coalesce((SELECT max(ID) FROM K42_KursTeilnehmer), 0)
-BEGIN
-  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K42_KursTeilnehmer', coalesce((SELECT max(ID) FROM K42_KursTeilnehmer), 0));
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_K42_KursTeilnehmer_4 AFTER UPDATE ON K42_KursTeilnehmer FOR EACH ROW
-	WHEN NEW.ID >= 0 AND 
-	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_KursTeilnehmer') IS NULL AND
-	  NEW.ID >= coalesce((SELECT max(ID) FROM K42_KursTeilnehmer), 0)
-BEGIN
-  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K42_KursTeilnehmer',  NEW.ID);
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_K42_KursTeilnehmer_5 AFTER UPDATE ON K42_KursTeilnehmer FOR EACH ROW
-	WHEN NEW.ID < 0 AND
-	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_KursTeilnehmer') IS NULL
-BEGIN
-  -- Update der ID in der Tabelle K42_KursTeilnehmer erfolgt durch den Autoinkrement-Trigger 2, daher hier auch kein +1, sondern nur den Max-Wert schreiben
-  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K42_KursTeilnehmer',  coalesce((SELECT max(ID) FROM K42_KursTeilnehmer), 0));
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_K42_SchienenKurse_1 AFTER INSERT ON K42_SchienenKurse FOR EACH ROW
-	WHEN NEW.ID >= 0 AND 
-	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_SchienenKurse') IS NOT NULL AND 
-	  NEW.ID > (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_SchienenKurse')
-BEGIN
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle = 'K42_SchienenKurse';
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_K42_SchienenKurse_2 AFTER INSERT ON K42_SchienenKurse FOR EACH ROW
-	WHEN NEW.ID < 0 AND
-	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_SchienenKurse') IS NOT NULL
-BEGIN
-  UPDATE K42_SchienenKurse SET ID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_SchienenKurse') + 1 WHERE ID = NEW.ID;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = MaxID + 1 WHERE NameTabelle = 'K42_SchienenKurse';
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_K42_SchienenKurse_3 AFTER INSERT ON K42_SchienenKurse FOR EACH ROW
-	WHEN NEW.ID >= 0 AND 
-	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_SchienenKurse') IS NULL AND
-	  NEW.ID < coalesce((SELECT max(ID) FROM K42_SchienenKurse), 0)
-BEGIN
-  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K42_SchienenKurse', coalesce((SELECT max(ID) FROM K42_SchienenKurse), 0));
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_K42_SchienenKurse_4 AFTER INSERT ON K42_SchienenKurse FOR EACH ROW
-	WHEN NEW.ID >= 0 AND 
-	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_SchienenKurse') IS NULL AND
-	  NEW.ID >= coalesce((SELECT max(ID) FROM K42_SchienenKurse), 0)
-BEGIN
-  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K42_SchienenKurse',  NEW.ID);
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_INSERT_K42_SchienenKurse_5 AFTER INSERT ON K42_SchienenKurse FOR EACH ROW
-	WHEN NEW.ID < 0 AND
-	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_SchienenKurse') IS NULL
-BEGIN
-  UPDATE K42_SchienenKurse SET ID = coalesce((SELECT max(ID) FROM K42_SchienenKurse), 0) + 1 WHERE ID = NEW.ID;
-  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K42_SchienenKurse',  coalesce((SELECT max(ID) FROM K42_SchienenKurse), 0) + 1);
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_K42_SchienenKurse_1 AFTER UPDATE ON K42_SchienenKurse FOR EACH ROW
-	WHEN NEW.ID >= 0 AND 
-	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_SchienenKurse') IS NOT NULL AND 
-	  NEW.ID > (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_SchienenKurse')
-BEGIN
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle = 'K42_SchienenKurse';
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_K42_SchienenKurse_2 AFTER UPDATE ON K42_SchienenKurse FOR EACH ROW
-	WHEN NEW.ID < 0 AND
-	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_SchienenKurse') IS NOT NULL
-BEGIN
-  UPDATE K42_SchienenKurse SET ID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_SchienenKurse') + 1 WHERE ID = NEW.ID;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = MaxID + 1 WHERE NameTabelle = 'K42_SchienenKurse';
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_K42_SchienenKurse_3 AFTER UPDATE ON K42_SchienenKurse FOR EACH ROW
-	WHEN NEW.ID >= 0 AND 
-	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_SchienenKurse') IS NULL AND
-	  NEW.ID < coalesce((SELECT max(ID) FROM K42_SchienenKurse), 0)
-BEGIN
-  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K42_SchienenKurse', coalesce((SELECT max(ID) FROM K42_SchienenKurse), 0));
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_K42_SchienenKurse_4 AFTER UPDATE ON K42_SchienenKurse FOR EACH ROW
-	WHEN NEW.ID >= 0 AND 
-	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_SchienenKurse') IS NULL AND
-	  NEW.ID >= coalesce((SELECT max(ID) FROM K42_SchienenKurse), 0)
-BEGIN
-  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K42_SchienenKurse',  NEW.ID);
-END;
-
-
-CREATE TRIGGER t_AutoIncrement_UPDATE_K42_SchienenKurse_5 AFTER UPDATE ON K42_SchienenKurse FOR EACH ROW
-	WHEN NEW.ID < 0 AND
-	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K42_SchienenKurse') IS NULL
-BEGIN
-  -- Update der ID in der Tabelle K42_SchienenKurse erfolgt durch den Autoinkrement-Trigger 2, daher hier auch kein +1, sondern nur den Max-Wert schreiben
-  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K42_SchienenKurse',  coalesce((SELECT max(ID) FROM K42_SchienenKurse), 0));
 END;
 
 
@@ -11638,7 +11081,7 @@ FROM
         JOIN Schueler ON SchuelerLernabschnittsdaten.Schueler_ID = Schueler.ID;
 
 
-INSERT INTO SVWS_DB_Version(Revision) VALUES (de.nrw.schule.svws.db.schema.csv.Versionen@7161d8d1);
+INSERT INTO SVWS_DB_Version(Revision) VALUES (3);
 
 
 INSERT INTO Users (ID,US_Name,US_LoginName,US_UserGroups,US_Privileges) VALUES (1,'Administrator','Admin','1;2;3;4;5','$');

@@ -1,0 +1,115 @@
+"SF";"OrgForm";"FSP";"Beschreibung";"Flag";"geaendert"
+BK;A;**;Teilzeitunterricht ohne Blockunterricht (Normalklasse) TZ-Berufsschule;"1";
+BK;C;**;Teilzeitunterricht ohne Blockunterricht (Bezirksfachklasse) TZ-Berufsschule;"1";
+BK;I;**;Teilzeitunterricht ohne Blockunterricht (Landesfachklasse) TZ-Berufsschule;"1";
+BK;B;**;Blockunterricht z.Zt. im Unterricht (Normalklasse) im dualen System;"1";
+BK;D;**;Blockunterricht z.Zt. im Unterricht (Bezirksfachklasse) im dualen System;"1";
+BK;O;**;Blockunterricht z.Zt. im Unterricht (Landesfachklasse) im dualen System;"1";
+BK;E;**;Blockunterricht z.Zt. nicht im Unterricht (Normalklasse) im dualen System;"1";
+BK;F;**;Blockunterricht z.Zt. nicht im Unterricht (Bezirksfachklasse) im dualen System;"1";
+BK;P;**;Blockunterricht z.Zt. nicht im Unterricht (Landesfachklasse) im dualen System;"1";
+BK;G;**;Block- und Teilzeitunterr. z.Zt. im Block- oder TZ-Unterricht (Normalklasse) im dualen System;"1";
+BK;H;**;Block- und Teilzeitunterr. z.Zt. im Block- oder TZ-Unterricht (Bezirksfachklasse) im dualen System;"1";
+BK;U;**;Block- und Teilzeitunterr. z.Zt. im Block- oder TZ-Unterricht (Landesfachklasse) im dualen System;"1";
+BK;V;**;Vollzeitunterricht;"1";
+BK;T;**;Teilzeitunterricht (außerhalb der TZ-Berufsschule);"1";
+SB;A;**;Teilzeitunterricht ohne Blockunterricht (Normalklasse) TZ-Berufsschule;"1";
+SB;C;**;Teilzeitunterricht ohne Blockunterricht (Bezirksfachklasse) TZ-Berufsschule;"1";
+SB;I;**;Teilzeitunterricht ohne Blockunterricht (Landesfachklasse) TZ-Berufsschule;"1";
+SB;B;**;Blockunterricht z.Zt. im Unterricht (Normalklasse) im dualen System;"1";
+SB;D;**;Blockunterricht z.Zt. im Unterricht (Bezirksfachklasse) im dualen System;"1";
+SB;O;**;Blockunterricht z.Zt. im Unterricht (Landesfachklasse) im dualen System;"1";
+SB;E;**;Blockunterricht z.Zt. nicht im Unterricht (Normalklasse) im dualen System;"1";
+SB;F;**;Blockunterricht z.Zt. nicht im Unterricht (Bezirksfachklasse) im dualen System;"1";
+SB;P;**;Blockunterricht z.Zt. nicht im Unterricht (Landesfachklasse) im dualen System;"1";
+SB;G;**;Block- und Teilzeitunterr. z.Zt. im Block- oder TZ-Unterricht (Normalklasse) im dualen System;"1";
+SB;H;**;Block- und Teilzeitunterr. z.Zt. im Block- oder TZ-Unterricht (Bezirksfachklasse) im dualen System;"1";
+SB;U;**;Block- und Teilzeitunterr. z.Zt. im Block- oder TZ-Unterricht (Landesfachklasse) im dualen System;"1";
+SB;V;**;Vollzeitunterricht;"1";
+SB;T;**;Teilzeitunterricht (außerhalb der TZ-Berufsschule);"1";
+G;"1";**;Halbtagsunterricht;"1";
+H;"1";**;Halbtagsunterricht;"1";
+V;"1";**;Halbtagsunterricht;"1";
+R;"1";**;Halbtagsunterricht;"1";
+GE;"1";**;Halbtagsunterricht;"1";
+GY;"1";**;Halbtagsunterricht;"1";
+S;"1";**;Halbtagsunterricht;"1";
+SG;"1";**;Halbtagsunterricht;"1";
+SR;"1";**;Halbtagsunterricht;"1";
+FW;"1";**;Halbtagsunterricht;"1";
+G;"2";**;Teilnahme am gebundenen Ganztag;"1";"2011-06-09 07:22:39"
+H;"2";**;Teilnahme am gebundenen Ganztag;"1";"2011-06-08 06:31:55"
+V;"2";**;Teilnahme am gebundenen Ganztag;"1";"2011-06-08 08:12:38"
+R;"2";**;Teilnahme am gebundenen Ganztag;"1";"2011-06-08 06:33:36"
+GE;"2";**;Teilnahme am gebundenen Ganztag;"1";"2011-06-08 06:35:57"
+GY;"2";**;Teilnahme am gebundenen Ganztag;"1";"2011-06-08 06:36:39"
+S;"2";**;Teilnahme am gebundenen Ganztag;"1";"2011-06-08 06:42:37"
+SG;"2";**;Ganztagsunterricht;"1";"2008-12-10 11:56:21"
+SR;"2";**;Ganztagsunterricht;"1";"2008-12-10 11:56:24"
+FW;"2";**;Teilnahme am gebundenen Ganztag;"1";"2011-06-08 06:38:04"
+WB;V;**;Vollbeleger;"1";
+WB;T;**;Teilbeleger;"1";
+S;*;**;Nicht zuordbar (Früherziehung für Hör- und Sehgeschädigte, Ambulante Maßnahmen);"1";
+S;"1";BL;Halbtagsunterricht;"1";
+S;"2";BL;Teilnahme am gebundenen Ganztag;"1";"2011-06-08 06:42:41"
+S;*;BL;Nicht zuordbar (Früherziehung für Hör- und Sehgeschädigte, Ambulante Maßnahmen);"1";
+S;"1";EZ;Halbtagsunterricht;"1";
+S;"2";EZ;Teilnahme am gebundenen Ganztag;"1";"2011-06-08 06:42:50"
+S;"1";GB;Halbtagsunterricht;"1";
+S;"2";GB;Teilnahme am gebundenen Ganztag;"1";"2011-06-08 06:42:53"
+S;"1";GH;Halbtagsunterricht;"1";
+S;"2";GH;Teilnahme am gebundenen Ganztag;"1";"2011-06-08 06:42:56"
+S;"1";KB;Halbtagsunterricht;"1";
+S;"2";KB;Teilnahme am gebundenen Ganztag;"1";"2011-06-08 06:43:00"
+S;"1";KR;Halbtagsunterricht;"1";
+S;"2";KR;Teilnahme am gebundenen Ganztag;"1";"2011-06-08 06:43:03"
+S;"1";LB;Halbtagsunterricht;"1";
+S;"2";LB;Teilnahme am gebundenen Ganztag;"1";"2011-06-08 06:43:06"
+S;"1";SB;Halbtagsunterricht;"1";
+S;"2";SB;Teilnahme am gebundenen Ganztag;"1";"2011-06-08 06:43:10"
+S;"1";SG;Halbtagsunterricht;"1";
+S;"2";SG;Teilnahme am gebundenen Ganztag;"1";"2011-06-08 06:43:16"
+S;"1";SH;Halbtagsunterricht;"1";
+S;"2";SH;Teilnahme am gebundenen Ganztag;"1";"2011-06-08 06:43:20"
+S;*;SH;Nicht zuordbar (Früherziehung für Hör- und Sehgeschädigte, Ambulante Maßnahmen);"1";
+S;*;SG;Nicht zuordbar (Früherziehung für Hör- und Sehgeschädigte, Ambulante Maßnahmen);"1";
+S;*;GH;Nicht zuordbar (Früherziehung für Hör- und Sehgeschädigte, Ambulante Maßnahmen);"1";
+S;"1";SE;Halbtagsunterricht;"1";"2005-05-13 07:04:19"
+S;"2";SE;Teilnahme am gebundenen Ganztag;"1";"2011-06-08 06:43:27"
+S;*;SE;Nicht zuordbar (Früherziehung für Hör- und Sehgeschädigte, Ambulante Maßnahmen);"1";"2005-05-13 07:04:35"
+S;"1";HK;Halbtagsunterricht;"1";"2005-05-13 07:04:50"
+S;"2";HK;Teilnahme am gebundenen Ganztag;"1";"2011-06-08 06:43:38"
+S;*;HK;Nicht zuordbar (Früherziehung für Hör- und Sehgeschädigte, Ambulante Maßnahmen);"1";"2005-05-13 07:04:58"
+H;"3";**;"Teilnahme am erweiterten Ganztag
+Nicht im Realschulzweig von Verbundschulen";"1";"2011-06-08 06:32:40"
+R;"3";**;Teilnahme am erweiterten Ganztag;"1";"2011-06-08 06:34:29"
+S;"3";**;Teilnahme am erweiterten Ganztag;"1";"2011-06-08 06:44:01"
+S;"3";EZ;Teilnahme am erweiterten Ganztag;"1";"2011-06-08 06:44:07"
+S;"3";LB;Teilnahme am erweiterten Ganztag;"1";"2011-06-08 06:44:13"
+S;"3";GB;Teilnahme am erweiterten Ganztag;"1";"2011-06-08 06:44:23"
+S;"3";SB;Teilnahme am erweiterten Ganztag;"1";"2011-06-08 06:44:28"
+S;"3";SG;Teilnahme am erweiterten Ganztag;"1";"2011-06-08 06:44:34"
+S;"3";SH;Teilnahme am erweiterten Ganztag;"1";"2011-06-08 06:44:39"
+S;"3";GH;Teilnahme am erweiterten Ganztag;"1";"2011-06-08 06:44:43"
+S;"3";KB;Teilnahme am erweiterten Ganztag;"1";"2011-06-08 06:45:21"
+FW;"3";**;Teilnahme am erweiterten Ganztag;"1";"2011-06-08 06:38:16"
+BK;K;**;Ganztagsunterricht (Normalklasse) im dualen System;"1";"2010-03-18 10:32:33"
+SB;K;**;Ganztagsunterricht (Normalklasse) im dualen System;"1";"2010-03-18 10:33:12"
+BK;L;**;Ganztagsunterricht (Bezirksfachklasse) im dualen System;"1";"2010-03-18 10:33:34"
+SB;L;**;Ganztagsunterricht (Bezirksfachklasse) im dualen System;"1";"2010-03-18 10:33:55"
+BK;M;**;Ganztagsunterricht (Landesfachklasse) im dualen System;"1";"2010-03-18 10:34:19"
+SB;M;**;Ganztagsunterricht (Landesfachklasse) im dualen System;"1";"2010-03-18 10:34:42"
+G;"4";**;Teilnahme am offenen Ganztag;"1";"2011-06-08 06:30:33"
+FW;"4";**;Teilnahme am offenen Ganztag;"1";"2011-06-08 06:40:52"
+S;"4";**;Teilnahme am offenen Ganztag;"1";"2011-06-08 07:05:54"
+S;"4";EZ;Teilnahme am offenen Ganztag;"1";"2011-06-08 07:06:03"
+S;"4";LB;Teilnahme am offenen Ganztag;"1";"2011-06-08 07:06:11"
+S;"4";GB;Teilnahme am offenen Ganztag;"1";"2011-06-08 07:06:18"
+S;"4";SB;Teilnahme am offenen Ganztag;"1";"2011-06-08 07:06:25"
+S;"4";SG;Teilnahme am offenen Ganztag;"1";"2011-06-08 07:06:32"
+S;"4";SH;Teilnahme am offenen Ganztag;"1";"2011-06-08 07:06:38"
+S;"4";GH;Teilnahme am offenen Ganztag;"1";"2011-06-08 07:06:45"
+S;"4";KB;Teilnahme am offenen Ganztag;"1";"2011-06-08 07:06:54"
+GM;"1";**;Halbtagsunterricht;"1";"2011-06-08 07:09:31"
+GM;"2";**;Teilnahme am gebundenen Ganztag;"1";"2011-06-08 07:09:37"
+V;"4";**;Teilnahme am offenen Ganztag;"1";"2013-05-15 15:55:16"

@@ -1,0 +1,17 @@
+ID;GueltigAb;GueltigBis;BF_Kuerzel;BF_Beschreibung
+1;2020-08-01 01:00:00;;BAV;Bau, Architektur, Vermessung
+2;2020-08-01 01:00:00;;D;Dienstleistung
+3;2020-08-01 01:00:00;;EL;Elektro
+4;2020-08-01 01:00:00;;G;Gesundheit
+5;2020-08-01 01:00:00;;GESGE;Gesellschafts-,Geisteswissenschaften
+6;2020-08-01 01:00:00;;ITC;IT, Computer
+7;2020-08-01 01:00:00;;KKG;Kunst, Kultur, Gestaltung
+8;2020-08-01 01:00:00;;LANAUM;Landwirtschaft, Natur, Umwelt
+9;2020-08-01 01:00:00;;M;Metall, Maschinenbau
+10;2020-08-01 01:00:00;;ME;Medien
+11;2020-08-01 01:00:00;;N;Naturwissenschaft
+12;2020-08-01 01:00:00;;PRFE;Produktion, Fertigung
+13;2020-08-01 01:00:00;;SP;Soziales, Pädagogik
+14;2020-08-01 01:00:00;;TEC;Technik, Technologiefelder
+15;2020-08-01 01:00:00;;VL;Verkehr, Logistik
+16;2020-08-01 01:00:00;;WIVE;Wirtschaft, Verwaltung

@@ -1,0 +1,209 @@
+Name;Revision;Veraltet;Migration;JavaKlasse;JavaPackage;JavaKommentar
+AllgAdrAnsprechpartner;0;-1;1;DTOAnsprechpartnerAllgemeineAdresse;schild.katalog;Ansprechpartner-Daten die einem Betrieb/Adresse in K_AllgAdresse zugeordnet werden können
+EigeneSchule;0;-1;1;DTOEigeneSchule;schild.schule;Tabelle in der die Daten der Schule verwaltet werden, diese Tabelle darf in einer Einzelinstallation nur eine Zeile haben
+EigeneSchule_Abt_Kl;0;-1;1;DTOAbteilungsKlassen;schild.schule;Tabelle ordnet den Abteilungen (EigeneSchule_Abteilungen) die zugehörigen Klassen zu
+EigeneSchule_Abteilungen;0;-1;1;DTOAbteilungen;schild.schule;Katalog der Abteilungen, denen dann ein Abteilungsleiter zugewiesen werden kann 
+EigeneSchule_Fachklassen;0;-1;1;DTOFachklassen;schild.berufskolleg;Berufskolleg: Tabelle der vorhandenen Fachklassen
+EigeneSchule_FachTeilleistungen;0;-1;1;DTOFachTeilleistungsarten;schild.faecher;Teilleistungsarten, die einem Fach über die Vorlagen zugewiesen sind damit diese automatisch über den Gruppenprozess eingetragen werden können
+EigeneSchule_Faecher;0;-1;1;DTOFach;schild.faecher;Tabelle der vorhandenen Unterrichtsfächer und deren Bezeichnungen/ Einstellungen
+EigeneSchule_Jahrgaenge;0;-1;1;DTOJahrgang;schild.schule;vorhandene Jahrgänge mit deren ASD-Zuordnungen
+EigeneSchule_KAoADaten;0;-1;1;DTOEigeneSchuleKAoADaten;schild.schule;TODO: Tabelle zur Eintragung, welche KAOA-Merkmale an der Schule genutzt wreden
+EigeneSchule_Kursart;0;-1;1;DTOKursarten;schild.katalog;vorhandene Kursarten die dem Schüler zugewiesen werden können in den Leistungsdaten / Kursen
+EigeneSchule_Merkmale;0;-1;1;DTOMerkmale;schild.schule;Katalog der Merkmale (Schule bearbeiten > Merkmale), die dem Schüler dann auf Individualdaten zugewiesen werden können (IT.NRW-Statistik)
+EigeneSchule_Schulformen;0;-1;1;DTOSchulformen;schild.schule;Liste der Schulgliederungen (SGL) Schule bearbeiten > Kann dann den Schülern unter Indv-Daten I zugeordnet werden (IT.NRW)
+EigeneSchule_Teilstandorte;0;-1;1;DTOTeilstandorte;schild.schule;Liste der Teilstandorte Schule bearbeiten > Teilstandorte > (It.NRW benutzt dieses Merkmal zu Bildung von Teilklassen in der sim.txt)
+EigeneSchule_Texte;0;-1;1;DTOSchultexte;schild.schule;Texte, die unter Schule bearbeiten erstellt werden und in Reports abgerufen werden können.
+EigeneSchule_Zertifikate;0;-1;1;DTOZertifikate;schild.berufskolleg;Liste von Zertifikaten, die angelegt werden können (nur BK)
+Fach_Gliederungen;0;-1;1;DTOFachgliederungen;schild.berufskolleg;Gliederungsspezifische Einstellungen zu den Unterrichtsfächern (nur BK)
+Fachklassen_Schwerpunkte;0;-1;1;DTOFachklassenSchwerpunkt;schild.berufskolleg;Schwerpunkte für Fachklassen (nur BK)
+Floskelgruppen;0;-1;1;DTOFloskelgruppen;schild.katalog;Liste der Floskelgruppen, diese Liste kann erweitert werden um Textbausteinen zu verwalten und die Anzeige in den Editoren zu steuern
+Floskeln;0;-1;1;DTOFloskeln;schild.katalog;Textbausteine, die in den Editoren angezeigt und ausgewählt werden können
+ImpExp_EigeneImporte;0;-1;0;DTOEigeneImporte;schild.impexp;"Importschemata, die im Programm ""Externimport.exe"" definiert werden"
+ImpExp_EigeneImporte_Felder;0;-1;0;DTOEigeneImporteFelder;schild.impexp;"Importschemata, die im Programm ""Externimport.exe"" definiert werden - Hier die Spaltendefinitionen"
+ImpExp_EigeneImporte_Tabellen;0;-1;0;DTOEigeneImporteTabellen;schild.impexp;"Importschemata, die im Programm ""Externimport.exe"" definiert werden - Hier die Tabellendefinitionen"
+K_Adressart;0;-1;1;DTOKatalogAdressart;schild.katalog;Katalog der Arten, die den weiteren Adressen/Betrieben zugeordnet werden können
+K_AllgAdresse;0;-1;1;DTOKatalogAllgemeineAdresse;schild.katalog;Katalog der weiteren Adressen und Betriebe
+K_Ankreuzdaten;0;-1;1;DTOAnkreuzdaten;schild.grundschule;Angaben zu den Ankreuzkompetenzen (Ankreutzzeugnisse GS / Kompetenz-Ausdrucke für Schüler zum Zeugnis)
+K_Ankreuzfloskeln;0;-1;1;DTOAnkreuzfloskeln;schild.grundschule;Einzelne Textbausteine, die den Fächer dann als Ankreuzkompetenzen zugewiesen werden können
+K_BeschaeftigungsArt;0;-1;1;DTOBeschaeftigungsart;schild.berufskolleg;Beschäftigungsarten, die bei weiteren Adressen und Betrieben dem Schüler zugeordnet werden können
+K_Datenschutz;0;-1;1;DTOKatalogDatenschutz;schild.katalog;Tabelle für die DSGVO Einwilligungsarten
+K_EinschulungsArt;0;-1;1;DTOEinschulungsart;schild.schueler;War urspünglich mal für alle Schulformen verfügbar, ist aber bei den allg.-bildenen Schulen durch die Statkue-Tabelle ersetzt worden. Bei WBKs und BKs wird sie aber noch verwendet (der Umstieg auf die Statkue-Tabelle führte da zu Protesten, weil die Schulen keine eigenen Einträge mehr machen konnten).
+K_Einzelleistungen;0;-1;1;DTOTeilleistungsarten;schild.schueler;Liste der Teilleistungsarten, die den Fächern in dne Leistungsdaten zugewiesen werden können
+K_EntlassGrund;0;-1;1;DTOEntlassarten;schild.schueler;Liste der Entlassgründe > Schulbesuch > Entlassung von eigener Schule (kann selbst definiert werden)
+K_ErzieherArt;0;-1;1;DTOErzieherart;schild.erzieher;Liste der Erzieherarten > Karteireiter Erzieher
+K_ErzieherFunktion;0;-1;1;DTOErzieherfunktion;schild.erzieher;Liste von möglichen Funktionen für Erzieher **** alt wird mittlerweile über Personengruppen geregelt ****
+K_FahrschuelerArt;0;-1;1;DTOFahrschuelerart;schild.katalog;Liste der Fahrschülerarten Individualdaten I - kann selbst definiert werden
+K_Foerderschwerpunkt;0;-1;1;DTOFoerderschwerpunkt;schild.schueler;Liste der Förderschwerpunkte mit interner Bezeichnung und ASD-Kürzel (IT.NRW)
+K_Haltestelle;0;-1;1;DTOHaltestellen;schild.katalog;Liste der Haltestellen Individualdaten I - kann selbst definiert werden
+K_Kindergarten;0;-1;1;DTOKindergarten;schild.grundschule;Liste aller Kindergärten für den Reiter Individualdaten II
+K_Lehrer;0;-1;1;DTOLehrer;schild.lehrer;Tabelle für die Datensätze der Lehrkräfte
+K_Ort;0;-1;1;DTOOrt;schild.katalog;Interner Ortskatalog
+K_Ortsteil;0;-1;1;DTOOrtsteil;schild.katalog;Interner Ortsteilkatalog
+K_Religion;0;-1;1;DTOKonfession;schild.katalog;Liste der verwendeten Konfessionen mit interner Bezeichnung und ASD-Kürzel (IT.NRW)
+K_Schule;0;-1;1;DTOSchuleNRW;schild.katalog;Interner Katalog der verwendeten Schulen für die Herkunft der Schüler (Reiter Schulbesuch)
+K_Schulfunktionen;0;-1;1;DTOSchulfunktion;schild.katalog;frei definierbarer Katalog für Schulfunktionen, die dann im Lehrerkatalog den Lehrern zugewiesen werden können
+K_Schwerpunkt;0;-1;1;DTOSchwerpunkt;schild.katalog;Schwerpunkte, die einem Schüler auf Individualdaten I zugeordnet werden können (z.B. RS und GY)
+K_Sportbefreiung;0;-1;1;DTOSportbefreiung;schild.schueler;Liste der Sportbefreiungen kann frei definiert werden 
+K_Staat;0;-1;1;DTOStaatsangehoerigkeit;schild.katalog;DEPRECATED: Liste der verwendeten Nationalitäten – Wird aus der Statkue gespeist
+K_TelefonArt;0;-1;1;DTOTelefonArt;schild.erzieher;Liste der intern verwendeten Telefonnummern-Bezeichnungen kann frei definiert werden
+K_Textdateien;0;-1;1;DTOTextDateien;schild.katalog;Katalog für TXT-Dateien, diese werden ab Schild3.0 intern verwaltet (z.B für Email-Texte)
+K_Verkehrssprachen;0;-1;1;DTOVerkehrssprache;schild.katalog;Liste der verwendeten Verkehrssprachen – wird aus der Statkue gespeist
+K_Vermerkart;0;-1;1;DTOVermerkArt;schild.katalog;Liste der verwendeten Vermerkarten – kann unter Schulverwaltung frei ergänzt werden
+K_Zertifikate;0;-1;1;DTOKatalogZertifikate;schild.berufskolleg;Liste der Zertifikate nur BK
+Katalog_Aufsichtsbereich;5;-1;0;DTOKatalogAufsichtsbereich;schild.katalog;Enthält eine aktuelle Liste von Aufsichtsbereichen, die an der Schule für Pausenzeiten vereinbart sind.
+Katalog_Pausenzeiten;5;-1;0;DTOKatalogPausenzeit;schild.stundenplan;Enthält die aktuellen Zeiten für die Pausenaufsichten.
+Katalog_Raeume;5;-1;0;DTOKatalogRaum;schild.katalog;Enthält eine aktuelle Liste von Räumen, die an der Schule verfügbar sind.
+Katalog_Zeitraster;5;-1;0;DTOKatalogZeitraster;schild.stundenplan;Enthält das aktuelle Zeitraster für Stundenpläne.
+Kompetenzen;0;-1;0;DTOBenutzerKompetenz;schild.benutzer;Rechte für die Benutzerverwaltung von Schild-NRW
+Kompetenzgruppen;0;-1;0;DTOBenutzerKompetenzGruppe;schild.benutzer;definierte Usergruppen, die wiederum die Kompetenzen enthält
+Kurs_Schueler;1;-1;0;DTOKursSchueler;schild.kurse;Tabelle mit KursSchueler-Zuordnungen wird ab Schild3.0 getriggert für performanteren Druck
+Kurse;0;-1;1;DTOKurs;schild.kurse;Tabelle der Kurse
+KursLehrer;0;-1;1;DTOKursLehrer;schild.kurse;Zusätzliche Lehrkräfte in den Kursen
+Lehrer_IMEI;0;-1;1;DTOLehrerIMEI;schild.schildapp;Lehrer zu IMEI Tabelle in der IMEI-Nummern von Endgeräten für den Zugang von SchildAPP hinterlegt werden können
+LehrerAbschnittsdaten;0;-1;1;DTOLehrerAbschnittsdaten;schild.lehrer;Lehrerdaten, die Abschnittsweise gespeichert werden
+LehrerAnrechnung;0;-1;1;DTOLehrerAnrechnungsstunde;schild.lehrer;Anrechnungsstunden für Lehrkräfte gültige ASD-Schlüssel
+LehrerEntlastung;0;-1;1;DTOLehrerEntlastungsstunde;schild.lehrer;Entlastungsstundenstunden für Lehrkräfte gültige ASD-Schlüssel
+LehrerFotos;0;-1;1;DTOLehrerFoto;schild.lehrer;Blobfelder für Lehrkräfte-Fotos
+LehrerFunktionen;0;-1;1;DTOLehrerFunktion;schild.lehrer;Lehrkräfte eingetragene Funktionen aus K_Schulfunktionen
+LehrerLehramt;0;-1;1;DTOLehrerLehramt;schild.lehrer;Lehrämter gültige Schlüssel zur Lehrkraft
+LehrerLehramtFachr;0;-1;1;DTOLehrerLehramtFachrichtung;schild.lehrer;Fachrichtung gültige Schlüssel zur Lehrkraft
+LehrerLehramtLehrbef;0;-1;1;DTOLehrerLehramtBefaehigung;schild.lehrer;Lehramt Lehrbefähigung gültige Schlüssel zur Lehrkraft
+LehrerMehrleistung;0;-1;1;DTOLehrerMehrleistung;schild.lehrer;gültige Schlüssel zur Lehrkraft für die Mehrleistungsstunden
+Logins;0;-1;1;DTOProtokollLogin;schild.benutzer;Tabelle zur Speicherung der LogIns mit Benutzernamen und Zeit für die Datenbank-User
+LuPO_Beratungslehrer;4;-1;0;DTOLupoBeratungslehrer;lupo;Lupo Liste der Beratungslehrer
+LuPO_Fachgruppen;4;-1;0;DTOLupoFachgruppen;lupo;Lupo Fachgruppen
+LuPO_FachgruppenFaecher;4;-1;0;DTOLupoFachgruppenFaecher;lupo;Lupo Fächer zu Fachgruppen
+LuPO_Faecher;4;-1;0;DTOLupoFaecher;lupo;Lupo Fächer
+LuPO_Jahrgangsdaten;4;-1;0;DTOLupoJahrgangsdaten;lupo;Lupo Daten zu den Jahrgängen
+LuPO_NichtMoeglAbiFachKombi;4;-1;0;DTOLupoNichtMoeglAbiFachKombi;lupo;Lupo nicht mögliche Abiturfach Kombinationen
+LuPO_Schueler;4;-1;0;DTOLupoSchueler;lupo;Lupo Schülerliste
+LuPO_SchuelerFaecher;4;-1;0;DTOLupoSchuelerFaecher;lupo;Lupo Fächer zum Schüler
+LuPO_SchuelerFehlermeldungen;4;-1;0;DTOLupoSchuelerFehlermeldungen;lupo;Lupo Fehlermeldungen bei einem Schüler
+NichtMoeglAbiFachKombi;0;-1;1;DTOFaeherNichtMoeglicheKombination;schild.gost;Nicht mögliche Abiturfach-Kombinationen unter Fächer der Oberstufe bearbeiten
+Personengruppen;0;-1;1;DTOPersonengruppen;schild.personengruppen;Katalog der definierten Personengruppen
+Personengruppen_Personen;0;-1;1;DTOPersonengruppenPersonen;schild.personengruppen;Zuordnung von Personen zur den Einträgen in der Tabelle Personengruppen
+PrfSemAbschl;0;-1;1;DTOVersetzungsvermerk;schild.katalog;gültige Versetzungsvermerke mit ASD-Schlüsseln
+Schild_Verwaltung;0;-1;1;DTOSchildVerwaltung;schild;Verwaltung von Versionsnummern, Datum, teilweise veraltet oder nie verwendet
+SchildFilter;0;-1;1;DTOSchildAuswahlFilter;schild;Gespeicherte Filter aus Filter I
+Schildintern_AbiturInfos;0;-1;0;DTOInternAbiturInfos;schild.intern;Abfragen für die Algorithmen der alten Abitur-Prüfungsordnungen (ausgelaufen???)
+Schildintern_Berufsebene;0;-1;0;DTOInternBerufsebene;schild.intern;Berufsebenen für die Fachklassen an BK – Zeugnisdruck
+Schildintern_Datenart;0;-1;0;DTOInternDatenart;schild.intern;Wird beim Export in Text/Excel-Dateien verwendet. Definiert die für den Export zur Verfügung stehenden Datenarten
+Schildintern_DQR_Niveaus;0;-1;0;DTOInternDQRNiveaus;schild.intern;DQR Referenzniveaus für Fachklassen am BK (Zeugnisdruck)
+Schildintern_Fachgruppen;0;-1;0;DTOInternFachgruppen;schild.intern;Fächergruppen Schulformbezogen für Eintragungen bei den Unterrichtsfächern
+Schildintern_FaecherSortierung;0;-1;0;DTOInternFaecherSortierung;schild.intern;Wird in diversen Algorithmen verwendet, um zu ermitteln, zu welcher Fachgruppe ein Fach (ASD-Bezeichnung) gehört.
+Schildintern_FilterFehlendeEintraege;0;-1;0;DTOInternFilterFehlendeEintraege;schild.intern;Liste mit Feldern, die für den Filter auf fehlende Einträge verwendet werden können
+Schildintern_FilterFeldListe;0;-1;0;DTOInternFilterFeldListe;schild.intern;"Wird im ""Attributsfilter"" verwendet (für die Ja/Nein-Auswahl)"
+Schildintern_HSchStatus;0;-1;0;DTOInternSchuelerStatus;schild.intern;Liste der möglichen Schüler Status-Werte
+Schildintern_K_Schulnote;0;-1;0;DTOInternSchulnote;schild.intern;Liste der möglichen Noteneinträge in den Leistungsdaten
+Schildintern_KAoA_Anschlussoption;0;-1;0;DTOKAoAAnschlussoption;schild.intern;KAOA-Defaultdaten werden vom MSB geliefert
+Schildintern_KAoA_Berufsfeld;0;-1;0;DTOKAoABerufsfeld;schild.intern;KAOA-Defaultdaten werden vom MSB geliefert
+Schildintern_KAoA_Kategorie;0;-1;0;DTOKAoAKategorie;schild.intern;KAOA-Defaultdaten werden vom MSB geliefert
+Schildintern_KAoA_Merkmal;0;-1;0;DTOKAoAMerkmal;schild.intern;KAOA-Defaultdaten werden vom MSB geliefert
+Schildintern_KAoA_Zusatzmerkmal;0;-1;0;DTOKAoAZusatzmerkmal;schild.intern;KAOA-Defaultdaten werden vom MSB geliefert
+Schildintern_KAoA_SBO_Ebene4;0;-1;0;DTOKAoASBOEB4;schild.intern;KAOA-Defaultdaten werden vom MSB geliefert
+Schildintern_Laender;0;-1;0;DTOInternLaender;schild.intern;Liste der Bundesländer
+Schildintern_PrfSemAbschl;0;-1;0;DTOInternPrfSemesterAbschluss;schild.intern;Liste der Versetzungsvermerke Schulformbezogen ??? (doppelt zur Schild-Tabelle)
+Schildintern_PruefOrd_Optionen;0;-1;0;DTOInternPruefungsOrdnungOptionen;schild.intern;Eintragungen der möglichen Abschlüsse und deren Texte für Schildintern_PruefungsOrdnung
+Schildintern_PruefungsOrdnung;0;-1;0;DTOInternPruefungsOrdnung;schild.intern;Auflistung der Prüfungsordnungen zu Schulformen und Jahrgängen
+Schildintern_SchuelerImpExp;0;-1;0;DTOInternSchuelerImportExport;schild.intern;"Wird in SchILD2.0 beim ""Katalog-Export"" und (""Datenaustausch>>Kataloge exportieren"") verwendet. Frage: Wird das in Zukunft noch benötigt?"
+Schildintern_SpezialFilterFelder;0;-1;0;DTOInternSpezialFilterFelder;schild.intern;Liefert die Felder, die im Filter II verfügbar sind
+Schildintern_TextExport;0;-1;0;DTOInternTextExport;schild.intern;Felder, die im Text-/Excel-Export zur Verfügung stehen
+Schildintern_VerfImportFelder;0;-1;0;DTOInternVerfImportFelder;schild.intern;"Stellt die verfügbaren Felder zur Verfügung, die beim ""Import aus Textdateien"" zur Verfügung stehen"
+Schildintern_VerfImportTabellen;0;-1;0;DTOInternVerfImportTabellen;schild.intern;"Stellt die verfügbaren Tabellen zur Verfügung, die beim ""Import aus Textdateien"" zur Verfügung stehen"
+Schildintern_Zusatzinfos;0;-1;0;DTOInternZusatzinfos;schild.intern;Enthält Angaben, welcher Jahrgang in welcher Gliederung der Abschlussjahrgang ist. Darüber wurde früher mal gesteuert, ob der BK-Abschluss-Reiter sichtbar war. Ist im Prinzip jetzt überflüssig, allerdings wird an einer Stelle im Programm noch der Inhalt geladen. Wenn man das rausnimmt, kann die Tabelle wegfallen.
+Schueler;0;-1;1;DTOSchueler;schild.schueler;Tabelle mit den Grundlegenden Schülerdaten
+Schueler_AllgAdr;0;-1;1;DTOSchuelerAllgemeineAdresse;schild.schueler;weitere Adressen und Betriebe zum Schüler
+SchuelerAbgaenge;0;-1;1;DTOSchuelerAbgaenge;schild.schueler;Liste der besuchten Schulen zum Schüler > Schulbesuch
+SchuelerAbiFaecher;0;-1;1;DTOSchuelerAbiturFach;schild.schueler.abitur;Abiturfächer zum Schüler
+SchuelerAbitur;0;-1;1;DTOSchuelerAbitur;schild.schueler.abitur;Abiturdaten zum Schüler
+SchuelerAnkreuzfloskeln;0;-1;1;DTOSchuelerAnkreuzfloskeln;schild.grundschule;Ankreuzfloskeln zum Schüler mit Jahr, Abschnitt und Floskel_ID
+SchuelerBKAbschluss;0;-1;1;DTOSchuelerBKAbschluss;schild.berufskolleg;BKAbschluss-Daten (BK) und ZP10 andere Schulformen mit ZP10 oder ZK
+SchuelerBKFaecher;0;-1;1;DTOSchuelerBKFach;schild.berufskolleg;Fächer zum Schüler in der Tabelle BKAbschluss
+SchuelerDatenschutz;0;-1;1;DTOSchuelerDatenschutz;schild.schueler;Tabelle für die zum Schüler zugeordneten DSGVO Merkmale
+SchuelerEinzelleistungen;0;-1;1;DTOSchuelerTeilleistung;schild.schueler;Teilleistungen zu Fach und Schüler
+SchuelerErzAdr;0;-1;1;DTOSchuelerErzieherAdresse;schild.erzieher;Erziehereinträge zum Schüler
+SchuelerErzFunktion;0;-1;1;DTOSchuelerErzieherFunktion;schild.erzieher;Erzieherfunktionen zu den Erziehereinträgen
+SchuelerFehlstunden;0;-1;1;DTOSchuelerFehlstunden;schild.schueler;Tagebezogene Fehlzeiten (wenn diese erfasst werden) zum SchülerLernabschnitt
+SchuelerFHR;0;-1;1;DTOSchuelerFHR;schild.schueler.fhr;Tabelle der FHR-Daten zum Schüler
+SchuelerFHRFaecher;0;-1;1;DTOSchuelerFHRFach;schild.schueler.fhr;Liste der Fächer zu SchuelerFHR
+SchuelerFoerderempfehlungen;0;-1;1;DTOSchuelerFoerderempfehlung;schild.schueler;Eingetragene Förderempfehlungen zum Schüler
+SchuelerFotos;0;-1;1;DTOSchuelerFoto;schild.schueler;Blobfelder für Fotos zum Schüler
+SchuelerGSDaten;0;-1;1;DTOSchuelerGrundschuldaten;schild.schueler;Daten und Zeugnisnoten der abgebenden Grundschule zum Schüler
+SchuelerKAoADaten;0;-1;1;DTOSchuelerKAoADaten;schild.schueler;Einträge beim Schüler zu den KAOA-Defaut-Werten
+SchuelerLD_PSFachBem;0;-1;1;DTOSchuelerPSFachBemerkungen;schild.schueler;Einträge bei den Lernabschnittsdaten ASV, AUE Zeugnisbemerkungen zum Schüler
+SchuelerLeistungsdaten;0;-1;1;DTOSchuelerLeistungsdaten;schild.schueler;Leistungsdaten (Fächer) zu Lernabschnitten und Schülern
+SchuelerLernabschnittsdaten;0;-1;1;DTOSchuelerLernabschnittsdaten;schild.schueler;Lernabschnitte zum Schüler
+SchuelerListe;0;-1;1;DTOSchuelerIndividuelleGruppe;schild;Liste mit allen angelegten individuellen Schülerlisten
+SchuelerListe_Inhalt;0;-1;1;DTOSchuelerIndividuelleGruppeSchueler;schild;Schüler zu den Einträgen in SchuelerListe
+SchuelerMerkmale;0;-1;1;DTOSchuelerMerkmale;schild.schueler;Einträge der Merkmale (Individualdaten II) zum Schüler
+SchuelerReportvorlagen;0;-1;1;DTOSchuelerReportvorlagen;schild;"Wird im Gruppenprozess ""Zugeordnete Zeugnisformulare drucken"" verwendet. Die Tabelle wird temporär mit den IDs der Schüler gefüllt, die im Gruppenprozess berücksichtigt werden müssen."
+SchuelerSprachenfolge;0;-1;1;DTOSchuelerSprachenfolge;schild.schueler;Einträge zur Sprachenfolge zum Schüler
+SchuelerTelefone;0;-1;1;DTOSchuelerTelefon;schild.erzieher;Telefonnummern zum Schüler
+SchuelerVermerke;0;-1;1;DTOSchuelerVermerke;schild.schueler;Vermerke zum Schüler
+SchuelerWiedervorlage;0;-1;1;DTOSchuelerWiedervorlage;schild;Einträge zur Wiedervorlage zum Schüler
+SchuelerZuweisungen;0;-1;1;DTOSchuelerZuweisung;schild.berufskolleg;Lernabscnittsbezogene Zuweisungen für Gesamt- und Sekundarschulen
+Schulver_DBS;0;-1;0;DTOSchulverDBS;schulver;IT.NRW Liste der Schulen mit Schulnummern und Adressen
+Schulver_Schulformen;0;-1;0;DTOSchulverSchulformen;schulver;IT.NRW Liste der Schulformen
+Schulver_Schultraeger;0;-1;0;DTOSchulverSchultraeger;schulver;IT.NRW Liste der Schulträger (wird in Schild-Zentral verwendet)
+Schulver_WeitereSF;0;-1;0;DTOSchulverWeitereSF;schulver;IT.NRW Liste der weiteren Schulformen (wird für die Schulstatistik verwendet)
+Statkue_Abgangsart;0;-1;0;DTOStatkueAbgangsart;statkue;Statkue von IT.NRW zulässige Abgangsarten von der Herkunftsschule
+Statkue_AllgMerkmale;0;-1;0;DTOStatkueAllgMerkmale;statkue;Statkue von IT.NRW zulässige Merkmale (Individualdaten II z.B. Betreuung)
+Statkue_AndereGrundschulen;0;-1;0;DTOStatkueAndereGrundschulen;statkue;Statkue von IT.NRW Schulnummernschlüssel für Schulen außerhalb NRW oder sonstige Herkunftsschulen
+Statkue_Bilingual;0;-1;0;DTOStatkueBilingual;statkue;Statkue von IT.NRW Schulformbezogene Fächer die Bilingual sein dürfen
+Statkue_Einschulungsart;0;-1;0;DTOStatkueEinschulungsart;statkue;Statkue von IT.NRW Schlüssel für Einschulungsarten (GS)
+Statkue_Fachklasse;0;-1;0;DTOStatkueFachklasse;statkue;Statkue von IT.NRW Fachklassenschlüssel BK SBK
+Statkue_Foerderschwerpunkt;0;-1;0;DTOStatkueFoerderschwerpunkt;statkue;Statkue von IT.NRW gültige Förderschwerpunkte
+Statkue_Gliederung;0;-1;0;DTOStatkueGliederung;statkue;Statkue von IT.NRW gültige Kürzel für Schulgliederungen SGL
+Statkue_Herkunftsart;0;-1;0;DTOStatkueHerkunftsart;statkue;Statkue von IT.NRW gülitige Schlüssel für Herkunftsarten
+Statkue_Herkunftsschulform;0;-1;0;DTOStatkueHerkunftsschulform;statkue;Statkue von IT.NRW gültige Schlüssel für Herkunftsschulformen
+Statkue_LehrerAbgang;0;-1;0;DTOStatkueLehrerAbgang;statkue;Statkue von IT.NRW  Lehrer Abgangasarten
+Statkue_LehrerAnrechnung;0;-1;0;DTOStatkueLehrerAnrechnung;statkue;Statkue von IT.NRW  AnrechnungsstundenSchlüssel
+Statkue_LehrerBeschaeftigungsart;0;-1;0;DTOStatkueLehrerBeschaeftigungsart;statkue;Statkue von IT.NRW  Lehrer Beschäftigungsarten
+Statkue_LehrerEinsatzstatus;0;-1;0;DTOStatkueLehrerEinsatzstatus;statkue;Statkue von IT.NRW  Lehrer Einsatzstatus gültige Schlüssel
+Statkue_LehrerFachrAnerkennung;0;-1;0;DTOStatkueLehrerFachrichtungAnerkennung;statkue;Statkue von IT.NRW  Fachrichtungs Anerkennung
+Statkue_LehrerFachrichtung;0;-1;0;DTOStatkueLehrerFachrichtung;statkue;Statkue von IT.NRW  Fachrichtung 
+Statkue_LehrerLehramt;0;-1;0;DTOStatkueLehrerLehramt;statkue;Statkue von IT.NRW  Lehramt
+Statkue_LehrerLehramtAnerkennung;0;-1;0;DTOStatkueLehrerLehramtAnerkennung;statkue;Statkue von IT.NRW  Lehramt Anerkennung
+Statkue_LehrerLehrbefaehigung;0;-1;0;DTOStatkueLehrerLehrbefaehigung;statkue;Statkue von IT.NRW  Lehrbefähigung
+Statkue_LehrerLehrbefAnerkennung;0;-1;0;DTOStatkueLehrerLehrbefaehigungAnerkennung;statkue;Statkue von IT.NRW  Lehrbefähigung Anerkennung
+Statkue_LehrerLeitung;0;-1;0;DTOStatkueLehrerLeitung;statkue;Statkue von IT.NRW 
+Statkue_LehrerMehrleistung;0;-1;0;DTOStatkueLehrerMehrleistung;statkue;Statkue von IT.NRW Schlüssel für die LehrerMehrleistuung
+Statkue_LehrerMinderleistung;0;-1;0;DTOStatkueLehrerMinderleistung;statkue;Statkue von IT.NRW Schlüssel für die LehrerMinderleistuung
+Statkue_LehrerRechtsverhaeltnis;0;-1;0;DTOStatkueLehrerRechtsverhaeltnis;statkue;Statkue von IT.NRW Schlüssel für die Lehrer Rechtsverhältnisse
+Statkue_LehrerZugang;0;-1;0;DTOStatkueLehrerZugang;statkue;Statkue von IT.NRW Zugangsarten
+Statkue_Nationalitaeten;0;-1;0;DTOStatkueNationalitaeten;statkue;Statkue von IT.NRW Liste der Nationalitäten und Länderschlüssel
+Statkue_Organisationsform;0;-1;0;DTOStatkueOrganisationsform;statkue;Statkue von IT.NRW Organisationsformen
+Statkue_PLZOrt;0;-1;0;DTOStatkuePLZOrt;statkue;Statkue von IT.NRW PLZ und zugehörige Orte
+Statkue_Reformpaedagogik;0;-1;0;DTOStatkueReformpaedagogik;statkue;Statkue von IT.NRW Eintragungen für Reformpädagogik ASDPC ***** könnte in Schild-NRW überflüssig sein ****
+Statkue_Religionen;0;-1;0;DTOStatkueReligion;statkue;Statkue von IT.NRW gültige Konfessionsschlüssel
+Statkue_SchuelerErsteSchulformSekI;0;-1;0;DTOStatkueSchuelerErsteSchulformSekI;statkue;Statkue von IT.NRW gültige Schulformen für die Sek1
+Statkue_SchuelerKindergartenbesuch;0;-1;0;DTOStatkueSchuelerKindergartenbesuch;statkue;Statkue von IT.NRW Angaben zur Dauer des Kindergartenbesuchs
+Statkue_SchuelerUebergangsempfehlung5Jg;0;-1;0;DTOStatkueSchuelerUebergangsempfehlung5Jg;statkue;Statkue von IT.NRW Schlüssel für die Schulformempfehlungen
+Statkue_SchuelerVerkehrssprache;0;-1;0;DTOStatkueSchuelerVerkehrssprache;statkue;Statkue von IT.NRW gültige Verkehrsprachen
+Statkue_Schulformen;0;-1;0;DTOStatkueSchulform;statkue;Statkue von IT.NRW gültige Schulformen und Schulformnummern
+Statkue_Strassen;0;-1;0;DTOStatkueStrassen;statkue;Statkue von IT.NRW gültiger Straßenkatalog
+Statkue_ZulFaecher;0;-1;0;DTOStatkueZulaessigesFach;statkue;Statkue von IT.NRW zulässgie Fächer auf Schulformen
+Statkue_ZulJahrgaenge;0;-1;0;DTOStatkueZulaessigerJahrgang;statkue;Statkue von IT.NRW Zulässige Statistikjahrgänge
+Statkue_ZulKlArt;0;-1;0;DTOStatkueZulaessigeKlassenart;statkue;Statkue von IT.NRW zulässige Klassenarten
+Statkue_ZulKuArt;0;-1;0;DTOStatkueZulaessigeKursart;statkue;Statkue von IT.NRW zulässige Krusarten
+Stundenplan;5;-1;0;DTOStundenplan;schild.stundenplan;Enthält die Grunddaten für einen Stundenplan, welcher anhand seiner ID eindeutig identifiziert werden kann. Hierzu zählen zum Einen das Schuljahr und der Abschnitt und zum Anderen der Beginn und das Ende der Gültigkeit des Stundenplans in dem Halbjahr
+Stundenplan_Aufsichtsbereiche;5;-1;0;DTOStundenplanAufsichtsbereich;schild.stundenplan;Enthält die Liste von Aufsichtsbereichen, welche im Stundenplan verwendet werden. Diese werden üblicherweise aus der Tabelle Katalog_Aufsichtsbereich übernommen und hier zwischengespeichert. Änderungen im Katalog werden nicht hierhin übernommen.
+Stundenplan_Pausenaufsichten;5;-1;0;DTOStundenplanPausenaufsichten;schild.stundenplan;Enthält die Zuordnung von Lehrern zu einem Pausenzeit-Eintrag. Über die Pausenzeit ist diese Zuordnung auch immer eindeutig einem Stundenplan zugeordnet.
+Stundenplan_PausenaufsichtenBereich;5;-1;0;DTOStundenplanPausenaufsichtenBereiche;schild.stundenplan;Enthält die Zuordnung der Aufsichtsbereiche zu den Pausenaufsichten bei einem Pausenzeit-Eintrag. Über die Pausenzeit ist diese Zuordnung auch immer eindeutig einem Stundenplan zugeordnet.
+Stundenplan_Pausenzeit;5;-1;0;DTOStundenplanPausenzeit;schild.stundenplan;Enthält die Pausenzeiten eines Stundenplan. Diese werden üblicherweise aus der Tabelle Katalog_Pausenzeiten übernommen und hier zwischengespeichert. Änderungen im Katalog werden nicht hierhin übernommen.
+Stundenplan_Raeume;5;-1;0;DTOStundenplanRaum;schild.stundenplan;Enthält die Liste von Räumen, welche im Stundenplan verwendet werden. Dieser wird üblicherweise aus der Tabelle Katalog_Raeume übernommen und hier zwischengespeichert. Änderungen im Katalog werden nicht hierhin übernommen.
+Stundenplan_Unterricht;5;-1;0;DTOStundenplanUnterricht;schild.stundenplan;Enthält die Zuordnung der Unterrichte (Klasse, Kurs, Fach) zu einem Zeitraster-Eintrag. Über das Zeitraster ist diese Zuordnung auch immer eindeutig einem Stundenplan zugeordnet. Die Zuordnung von Lehrern und Räumen erfolgt über die Tabellen Stundenplan_UnterrichtLehrer und Stundenplan_UnterrichtRaum
+Stundenplan_UnterrichtLehrer;5;-1;0;DTOStundenplanUnterrichtLehrer;schild.stundenplan;Enthält die Zuordnung der Lehrer zu den Unterrichten bei einem Zeitraster-Eintrag. Über das Zeitraster ist diese Zuordnung auch immer eindeutig einem Stundenplan zugeordnet.
+Stundenplan_UnterrichtRaum;5;-1;0;DTOStundenplanUnterrichtRaum;schild.stundenplan;Enthält die Zuordnung der Räume zu den Unterrichten bei einem Zeitraster-Eintrag. Über das Zeitraster ist diese Zuordnung auch immer eindeutig einem Stundenplan zugeordnet.
+Stundenplan_Zeitraster;5;-1;0;DTOStundenplanZeitraster;schild.stundenplan;Enthält das Zeitraster eines Stundenplan. Dieses wird üblicherweise aus der Tabelle Katalog_Zeitraster übernommen und hier zwischengespeichert. Änderungen im Katalog werden nicht hierhin übernommen.
+Stundentafel;0;-1;1;DTOStundentafel;schild.schule;Katalog der angelegten Stundentafeln zur Zuweisung von Fächern bei Schülern
+Stundentafel_Faecher;0;-1;1;DTOStundentafelFaecher;schild.schule;Fächereinträge zu den Stundentafeln
+SVWS_Client_Konfiguration_Benutzer;0;-1;-1;DTOClientKonfigurationBenutzer;svws.client;Tabelle für das Speichern von Client-Konfigurationen als Key-Value-Paare. Dabei werden über das Feld App unterschiedliche Client-Anwendungen unterstützt und über das Feld Benutzer eine Benutzerspezifische Speicherung.
+SVWS_Client_Konfiguration_Global;0;-1;-1;DTOClientKonfigurationGlobal;svws.client;Tabelle für das Speichern von Client-Konfigurationen als Key-Value-Paare. Dabei werden über das Feld App unterschiedliche Client-Anwendungen unterstützt. Die Konfigurationen in dieser Tabelle gelten global für den Client.
+SVWS_DB_AutoInkremente;0;-1;0;DTODBAutoInkremente;svws.db;Tabelle für das Zwischenspeichern der bisherigen Maximalwerte beim Einfügen, damit eine DBMS-unabhängige Auto-Inkrement-Funktion realisiert werden kann.
+SVWS_DB_Version;0;-1;0;DTODBVersion;svws.db;Diese Tabelle enthält die Versionsinformationen zu der SVWS-DB
+TextExportVorlagen;0;-1;1;DTOTextExportVorlagen;schild;gespeicherte Vorlagen für den Datenaustausch > Text-/Excel-Export
+Usergroups;0;-1;1;DTOUserGroups;schild.benutzer;Usergruppen mit Berechtigungen
+Users;0;-1;1;DTOUsers;schild.benutzer;Tabelle der Schild-User
+Versetzung;0;-1;1;DTOKlassen;schild.klassen;Tabelle für die Klassen-/Versetzungstabelle
+ZuordnungReportvorlagen;0;-1;1;DTOZuordnungReportvorlagen;schild;Zuordnungen von Reports für den Zeugnisdruck (automatisierter Druck)

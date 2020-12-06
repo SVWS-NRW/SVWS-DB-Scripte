@@ -1,0 +1,49 @@
+dbms;Revision;Veraltet;Reihenfolge;sqlPrepare;sqlFinalize;sqlUnprepare
+MARIA_DB;0;-1;0;"DROP SCHEMA IF EXISTS test;
+
+CREATE SCHEMA IF NOT EXISTS schild30
+  DEFAULT CHARACTER SET = 'utf8mb4'
+  DEFAULT COLLATE 'utf8mb4_bin';
+
+CREATE USER IF NOT EXISTS schildadmin IDENTIFIED BY 'USERPASSWORD';
+  
+GRANT ALL PRIVILEGES ON schild30.* TO schildadmin;
+GRANT GRANT OPTION ON schild30.* TO schildadmin;
+GRANT CREATE USER ON *.* TO schildadmin;
+
+USE schild30;";;"DROP USER IF EXISTS schildadmin;
+DROP SCHEMA IF EXISTS schild30;
+"
+MYSQL;0;-1;0;"DROP SCHEMA IF EXISTS test;
+
+CREATE SCHEMA IF NOT EXISTS schild30
+  DEFAULT CHARACTER SET = 'utf8mb4'
+  DEFAULT COLLATE 'utf8mb4_bin';
+
+CREATE USER IF NOT EXISTS schildadmin IDENTIFIED BY 'USERPASSWORD';
+  
+GRANT ALL PRIVILEGES ON schild30.* TO schildadmin;
+GRANT GRANT OPTION ON schild30.* TO schildadmin;
+GRANT CREATE USER ON *.* TO schildadmin;
+
+USE schild30;
+";;"DROP USER IF EXISTS schildadmin;
+DROP SCHEMA IF EXISTS schild30;
+"
+MSSQL;0;-1;0;"CREATE DATABASE schild30 COLLATE Latin1_General_100_BIN2_UTF8;
+USE schild30;
+
+CREATE LOGIN schildadmin WITH PASSWORD = 'USERPASSWORD';
+CREATE USER schildadmin FOR LOGIN schildadmin;
+GRANT ALL PRIVILEGES ON DATABASE::schild30 TO schildadmin WITH GRANT OPTION;
+GRANT CONTROL ON DATABASE::schild30 TO schildadmin WITH GRANT OPTION;
+
+USE schild30;";;"DROP DATABASE IF EXISTS schild30;
+DROP USER IF EXISTS schildadmin;
+DROP LOGIN schildadmin;
+"
+ALL;0;-1;0;;"INSERT INTO Users (ID,US_Name,US_LoginName,US_UserGroups,US_Privileges) VALUES (1,'Administrator','Admin','1;2;3;4;5','$');";
+ALL;0;-1;1;;"INSERT INTO Usergroups(UG_ID, UG_Bezeichnung, UG_Kompetenzen, UG_Nr, SchulNrEigner) VALUES
+(1, 'Administrator', '$', 1, 1),
+(2, 'Lehrer', '11;21;22;81;31;61', 3, 1),
+(3, 'Sekretariat', '11;12;13;14;21;81;82;83;31;32;33;34;91;92;93;94;95;61;62;71', 4, 1);";

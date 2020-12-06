@@ -1,0 +1,15 @@
+ID;Aufgabenfeld;FachgruppeKrz;Farbe;Bezeichnung
+1;1;D;14281213;Deutsch
+2;2;AL;12836349;Arbeitslehre
+3;2;FS;12836349;Fremdsprachen
+4;3;MS;10865916;Kunst oder Musik
+5;4;ME;10865916;Literatur, instrumental- oder vokalpraktischer Kurs
+6;5;GS;14610922;Gesellschaftswissenschaften
+7;5;PL;14610922;Philosophie
+8;6;RE;12379351;Religion
+9;7;M;15849925;Mathematik
+10;8;NW;14211288;Naturwissenschaften (Biologie, Chemie, Physik)
+11;8;WN;14922893;weiteres naturwissenschaftliches / technisches Fach
+12;9;SP;16777215;Sport
+13;10;VX;14211288;Vertiefungsfach
+14;11;PX;12566463;Projektkurs

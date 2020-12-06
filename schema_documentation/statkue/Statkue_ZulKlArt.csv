@@ -1,0 +1,71 @@
+KlArt;FSP;Bezeichnung;Schulform;geaendert
+1A;**;Klasse 10 Typ A;H;
+1B;**;Klasse 10 Typ B;H;
+RK;**;Regelklasse;G;
+RK;**;Regelklasse;S;
+AM;**;Frühförderung: SKG (Ambulante Maßnahmen für blinde, gehörlose, sehbeh. und schwerh. Kinder);S;
+PG;**;Frühförderung: SKG (Präsenzgruppe);S;
+**;**;Ohne Eintrag;WB;
+RK;**;Regelklasse;SR;
+RK;**;Regelklasse  (-Jahrgang SII);SG;
+RK;**;Regelklasse;FW;
+RK;LB;Regelklasse;S;
+RK;GB;Regelklasse;S;
+RK;KB;Regelklasse;S;
+PG;KB;Frühförderung: SKG (Präsenzgruppe);S;
+RK;EZ;Regelklasse;S;
+PG;EZ;Frühförderung: SKG (Präsenzgruppe);S;
+RK;GH;Regelklasse;S;
+PG;GH;Frühförderung: SKG (Präsenzgruppe);S;
+AM;GH;Frühförderung: SKG (Ambulante Maßnahmen);S;
+RK;SG;Regelklasse;S;
+PG;SG;Frühförderung: SKG (Präsenzgruppe);S;
+AM;SG;Frühförderung: SKG (Ambulante Maßnahmen);S;
+RK;SB;Regelklasse;S;
+PG;SB;Frühförderung: SKG (Präsenzgruppe);S;
+RK;BL;Regelklasse;S;
+PG;BL;Frühförderung: SKG (Präsenzgruppe);S;
+AM;BL;Frühförderung: SKG (Ambulante Maßnahmen);S;
+RK;SH;Regelklasse / Halbtagsunterricht;S;
+PG;SH;Frühförderung: SKG (Präsenzgruppe);S;
+RK;KR;Regelklasse / Halbtagsunterricht;S;
+RK;**;Regelklasse;H;
+RK;**;Regelklasse;V;
+RK;**;Regelklasse;R;
+RK;**;Regelklasse;GE;
+RK;**;Regelklasse;GY;
+1A;**;Klasse 10 Typ A;V;
+1B;**;Klasse 10 Typ B;V;
+AM;SH;Frühförderung: SKG (Ambulante Maßnahmen);S;
+RK;KR;Regelklasse;FW;
+RK;GB;Regelklasse;FW;
+RK;LB;Regelklasse;FW;
+RK;EZ;Regelklasse;FW;
+RK;**;Regelklasse;GM;2011-06-08 07:16:23
+RK;**;Regelklasse;SK;2012-06-06 12:08:11
+RK;**;Regelklasse;PS;2013-05-15 15:37:17
+1A;**;Klasse 10 Typ A (nur Hauptschule im Verbund);SK;2012-06-06 12:07:38
+1B;**;Klasse 10 Typ B (nur Hauptschule im Verbund);SK;2012-06-06 12:07:43
+AB;**;Klassen im Jahrgang 10 ohne Differenzierung in Typ A und Typ B (nur Bildungsgang Hauptschule);SK;2012-06-06 12:07:53
+SG;**;Deutschförderklasse  (gemäß Erlass 13-63 Nr. 3, Absatz 3.5.1);G;2017-01-24 14:41:11
+SG;**;Deutschförderklasse  (gemäß Erlass 13-63 Nr. 3, Absatz 3.5.1);H;2017-01-24 14:41:14
+SG;**;Deutschförderklasse  (gemäß Erlass 13-63 Nr. 3, Absatz 3.5.1);V;2017-01-24 14:41:48
+SG;**;Deutschförderklasse  (gemäß Erlass 13-63 Nr. 3, Absatz 3.5.1);R;2017-01-24 14:41:15
+SG;**;Deutschförderklasse  (gemäß Erlass 13-63 Nr. 3, Absatz 3.5.1);GE;2017-01-24 14:41:12
+SG;**;Deutschförderklasse  (gemäß Erlass 13-63 Nr. 3, Absatz 3.5.1);GY;2017-01-24 14:41:13
+SG;**;Deutschförderklasse  (gemäß Erlass 13-63 Nr. 3, Absatz 3.5.1);GM;2017-01-24 14:41:13
+SG;**;Deutschförderklasse  (gemäß Erlass 13-63 Nr. 3, Absatz 3.5.1);SK;2017-01-24 14:41:16
+SG;**;Deutschförderklasse  (gemäß Erlass 13-63 Nr. 3, Absatz 3.5.1);PS;2017-01-24 14:41:15
+AM;SE;Frühförderung: SKG (Ambulante Maßnahmen);S;2005-05-13 07:05:32
+PG;SE;Frühförderung: SKG (Präsenzgruppe);S;2005-05-13 07:05:43
+RK;SE;Regelklasse;S;2005-05-13 07:05:52
+AM;HK;Frühförderung: SKG (Ambulante Maßnahmen);S;2005-05-13 07:06:09
+PG;HK;Frühförderung: SKG (Präsenzgruppe);S;2005-05-13 07:06:19
+RK;HK;Regelklasse;S;2005-05-13 07:06:26
+1A;**;Klasse 10 Typ A (nur Hauptschule im Verbund);R;2008-08-04 09:35:21
+1B;**;Klasse 10 Typ B (nur Hauptschule im Verbund);R;2008-08-04 09:35:09
+AB;**;Klassen im Jahrgang 10 ohne Differenzierung in Typ A und Typ B;H;2009-04-01 10:40:56
+AB;**;Klassen im Jahrgang 10 ohne Differenzierung in Typ A und Typ B;V;2009-04-01 10:41:17
+AB;**;Klassen im Jahrgang 10 ohne Differenzierung in Typ A und Typ B (nur Bildungsgang Hauptschule);R;2009-04-01 10:42:40
+PK;**;Profilklasse (gemäß § 21 Abs. 3 APO-S I) (nur Bildungsgang GY);SK;2020-01-24 14:41:15
+PK;**;Profilklasse (gemäß § 21 Abs. 3 APO-S I) (nur Bildungsgang GY9);GE;2020-01-24 14:41:15
