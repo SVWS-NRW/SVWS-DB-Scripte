@@ -2012,6 +2012,56 @@ CREATE TABLE Statkue_Religionen (
 );
 
 
+CREATE TABLE Statkue_SVWS_Fachgruppen (
+  ID bigint NOT NULL, 
+  Aufgabenfeld int, 
+  SchildFgID bigint, 
+  FG_Bezeichnung varchar(80) NOT NULL, 
+  FG_Kuerzel varchar(10), 
+  FarbeR int, 
+  FarbeG int, 
+  FarbeB int,
+  CONSTRAINT PK_Statkue_SVWS_Fachgruppen PRIMARY KEY (ID)
+);
+
+
+CREATE TABLE Statkue_SVWS_FachgruppenSchulform (
+  FachgruppenID bigint NOT NULL, 
+  SchulformNr varchar(2) NOT NULL,
+  CONSTRAINT PK_Statkue_SVWS_FachgruppenSchulform PRIMARY KEY (FachgruppenID, SchulformNr)
+);
+
+
+CREATE TABLE Statkue_SVWS_ZulaessigeFaecherMapping (
+  Fach varchar(2) NOT NULL, 
+  Bezeichnung varchar(80) NOT NULL, 
+  FachkuerzelAtomar varchar(2) NOT NULL, 
+  Kurzbezeichnung varchar(80), 
+  AbJahrgang varchar(2), 
+  IstFremdsprache int NOT NULL, 
+  IstHKFS int NOT NULL, 
+  IstAusRegUFach int NOT NULL, 
+  IstErsatzPflichtFS int NOT NULL, 
+  IstKonfKoop int NOT NULL, 
+  NurSII int NOT NULL, 
+  ExportASD int NOT NULL,
+  CONSTRAINT PK_Statkue_SVWS_ZulaessigeFaecherMapping PRIMARY KEY (Fach)
+);
+
+
+CREATE TABLE Statkue_SVWS_ZulaessigeJahrgaenge (
+  ID bigint NOT NULL, 
+  Schulform varchar(2) NOT NULL, 
+  Jahrgang varchar(2) NOT NULL, 
+  Beschreibung varchar(80) NOT NULL, 
+  Beginn datetime, 
+  Ende datetime, 
+  geaendert datetime, 
+  Sortierung int DEFAULT 0,
+  CONSTRAINT PK_Statkue_SVWS_ZulaessigeJahrgaenge PRIMARY KEY (ID)
+);
+
+
 CREATE TABLE Statkue_SchuelerErsteSchulformSekI (
   ID bigint NOT NULL, 
   SF varchar(2), 
@@ -2083,15 +2133,16 @@ CREATE TABLE Statkue_Strassen (
 
 CREATE TABLE Statkue_ZulFaecher (
   Schulform varchar(2) NOT NULL, 
-  FSP varchar(2) NOT NULL, 
-  BG varchar(2) NOT NULL, 
+  FSP varchar(2), 
+  BG varchar(3), 
   Fach varchar(2) NOT NULL, 
   Bezeichnung varchar(80) NOT NULL, 
   KZ_Bereich int DEFAULT 0, 
   Flag varchar(1) DEFAULT '1', 
   Sortierung int DEFAULT 0, 
+  Sortierung2 int DEFAULT 0, 
   geaendert datetime,
-  CONSTRAINT PK_Statkue_ZulFaecher PRIMARY KEY (Bezeichnung, BG, Fach, Flag, FSP, Schulform)
+  CONSTRAINT PK_Statkue_ZulFaecher PRIMARY KEY (Bezeichnung, BG, Fach, Flag, Schulform)
 );
 
 
