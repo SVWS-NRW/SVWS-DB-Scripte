@@ -2273,6 +2273,19 @@ CREATE TABLE Statkue_SVWS_ZulaessigeJahrgaenge (
 );
 
 
+CREATE TABLE Statkue_SVWS_ZulaessigeKursartenMapping (
+  ID nvarchar(5) NOT NULL, 
+  Kuerzel nvarchar(5) NOT NULL, 
+  ASDNummer nvarchar(2) NOT NULL, 
+  Bezeichnung nvarchar(120) NOT NULL, 
+  KuerzelAllg nvarchar(5), 
+  BezeichnungAllg nvarchar(120), 
+  erlaubtGOSt int DEFAULT 0 NOT NULL, 
+  Bemerkungen nvarchar(120),
+  CONSTRAINT PK_Statkue_SVWS_ZulaessigeKursartenMapping PRIMARY KEY (ID)
+);
+
+
 CREATE TABLE Statkue_SchuelerErsteSchulformSekI (
   ID bigint NOT NULL, 
   SF nvarchar(2), 
@@ -2387,10 +2400,10 @@ CREATE TABLE Statkue_ZulKuArt (
   Kursart nvarchar(3) NOT NULL, 
   Kursart2 nvarchar(5) NOT NULL, 
   Bezeichnung nvarchar(120) NOT NULL, 
-  JgBereich int DEFAULT 0 NOT NULL, 
+  SGLBereich int DEFAULT 0 NOT NULL, 
   Flag nvarchar(1) DEFAULT '1' NOT NULL, 
   geaendert datetime2,
-  CONSTRAINT PK_Statkue_ZulKuArt PRIMARY KEY (Bezeichnung, BG, Flag, FSP, JgBereich, Kursart, Kursart2, SF)
+  CONSTRAINT PK_Statkue_ZulKuArt PRIMARY KEY (Bezeichnung, BG, Flag, FSP, SGLBereich, Kursart, Kursart2, SF)
 );
 
 
@@ -3222,7 +3235,6 @@ CREATE TABLE SchuelerLernabschnittsdaten (
   Schueler_ID bigint NOT NULL, 
   Jahr smallint NOT NULL, 
   Abschnitt smallint NOT NULL, 
-  Bildungsgang nvarchar(1) NOT NULL, 
   WechselNr smallint NOT NULL, 
   Jahrgang smallint, 
   Hochrechnung int, 
@@ -3290,7 +3302,7 @@ CREATE TABLE SchuelerLernabschnittsdaten (
   CONSTRAINT SchuelerLernabschnittsdaten_Foerderschwerpunkt_FK FOREIGN KEY (Foerderschwerpunkt_ID) REFERENCES K_Foerderschwerpunkt(ID),
   CONSTRAINT SchuelerLernabschnittsdaten_Jahrgang_FK FOREIGN KEY (Jahrgang_ID) REFERENCES EigeneSchule_Jahrgaenge(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT SchuelerLernabschnittsdaten_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerLernabschnittsdaten_UC1 UNIQUE (Schueler_ID, Jahr, Abschnitt, Bildungsgang, WechselNr)
+  CONSTRAINT SchuelerLernabschnittsdaten_UC1 UNIQUE (Schueler_ID, Jahr, Abschnitt, WechselNr)
 );
 
 

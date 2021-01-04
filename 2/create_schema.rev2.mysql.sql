@@ -2063,6 +2063,19 @@ CREATE TABLE Statkue_SVWS_ZulaessigeJahrgaenge (
 );
 
 
+CREATE TABLE Statkue_SVWS_ZulaessigeKursartenMapping (
+  ID varchar(5) NOT NULL, 
+  Kuerzel varchar(5) NOT NULL, 
+  ASDNummer varchar(2) NOT NULL, 
+  Bezeichnung varchar(120) NOT NULL, 
+  KuerzelAllg varchar(5), 
+  BezeichnungAllg varchar(120), 
+  erlaubtGOSt int DEFAULT 0 NOT NULL, 
+  Bemerkungen varchar(120),
+  CONSTRAINT PK_Statkue_SVWS_ZulaessigeKursartenMapping PRIMARY KEY (ID)
+);
+
+
 CREATE TABLE Statkue_SchuelerErsteSchulformSekI (
   ID bigint NOT NULL, 
   SF varchar(2), 
@@ -2177,10 +2190,10 @@ CREATE TABLE Statkue_ZulKuArt (
   Kursart varchar(3) NOT NULL, 
   Kursart2 varchar(5) NOT NULL, 
   Bezeichnung varchar(120) NOT NULL, 
-  JgBereich int DEFAULT 0 NOT NULL, 
+  SGLBereich int DEFAULT 0 NOT NULL, 
   Flag varchar(1) DEFAULT '1' NOT NULL, 
   geaendert datetime,
-  CONSTRAINT PK_Statkue_ZulKuArt PRIMARY KEY (Bezeichnung, BG, Flag, FSP, JgBereich, Kursart, Kursart2, SF)
+  CONSTRAINT PK_Statkue_ZulKuArt PRIMARY KEY (Bezeichnung, BG, Flag, FSP, SGLBereich, Kursart, Kursart2, SF)
 );
 
 
@@ -2914,7 +2927,6 @@ CREATE TABLE SchuelerLernabschnittsdaten (
   Schueler_ID bigint NOT NULL, 
   Jahr smallint NOT NULL, 
   Abschnitt smallint NOT NULL, 
-  Bildungsgang varchar(1) NOT NULL, 
   WechselNr smallint NOT NULL, 
   Jahrgang smallint, 
   Hochrechnung int, 
@@ -2982,7 +2994,7 @@ CREATE TABLE SchuelerLernabschnittsdaten (
   CONSTRAINT SchuelerLernabschnittsdaten_Foerderschwerpunkt_FK FOREIGN KEY (Foerderschwerpunkt_ID) REFERENCES K_Foerderschwerpunkt(ID),
   CONSTRAINT SchuelerLernabschnittsdaten_Jahrgang_FK FOREIGN KEY (Jahrgang_ID) REFERENCES EigeneSchule_Jahrgaenge(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT SchuelerLernabschnittsdaten_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerLernabschnittsdaten_UC1 UNIQUE (Schueler_ID, Jahr, Abschnitt, Bildungsgang, WechselNr)
+  CONSTRAINT SchuelerLernabschnittsdaten_UC1 UNIQUE (Schueler_ID, Jahr, Abschnitt, WechselNr)
 );
 
 

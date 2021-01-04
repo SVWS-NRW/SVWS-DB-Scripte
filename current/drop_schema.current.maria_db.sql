@@ -54,6 +54,7 @@ DROP TABLE IF EXISTS Statkue_SchuelerVerkehrssprache;
 DROP TABLE IF EXISTS Statkue_SchuelerUebergangsempfehlung5Jg;
 DROP TABLE IF EXISTS Statkue_SchuelerKindergartenbesuch;
 DROP TABLE IF EXISTS Statkue_SchuelerErsteSchulformSekI;
+DROP TABLE IF EXISTS Statkue_SVWS_ZulaessigeKursartenMapping;
 DROP TABLE IF EXISTS Statkue_SVWS_ZulaessigeJahrgaenge;
 DROP TABLE IF EXISTS Statkue_SVWS_ZulaessigeFaecherMapping;
 DROP TABLE IF EXISTS Statkue_SVWS_FachgruppenSchulform;

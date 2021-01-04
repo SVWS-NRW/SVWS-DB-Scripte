@@ -54,6 +54,7 @@ DROP TABLE Statkue_SchuelerVerkehrssprache;
 DROP TABLE Statkue_SchuelerUebergangsempfehlung5Jg;
 DROP TABLE Statkue_SchuelerKindergartenbesuch;
 DROP TABLE Statkue_SchuelerErsteSchulformSekI;
+DROP TABLE Statkue_SVWS_ZulaessigeKursartenMapping;
 DROP TABLE Statkue_SVWS_ZulaessigeJahrgaenge;
 DROP TABLE Statkue_SVWS_ZulaessigeFaecherMapping;
 DROP TABLE Statkue_SVWS_FachgruppenSchulform;
