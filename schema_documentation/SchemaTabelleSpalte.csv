@@ -10,9 +10,17 @@ AllgAdrAnsprechpartner;Abteilung;;;8;varchar;50;;0;;;ggf Abteilung des Ansprechp
 AllgAdrAnsprechpartner;SchulNrEigner;;;9;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
 AllgAdrAnsprechpartner;Titel;;;10;varchar;15;;0;;;Titel des Ansprechpartners im Betrieb
 AllgAdrAnsprechpartner;GU_ID;;;11;varchar;40;;0;;;GU_ID des Ansprechpartners im Betrieb
+Credentials;ID;;;1;bigint;;;1;;;ID des Datensatzes für die Account-Credentials
+Credentials;Benutzername;;;2;varchar;255;;1;;;Benutzername für den Credential-Datensatz
+Credentials;BenutzernamePseudonym;;;3;varchar;255;;0;;;Der pseudonymisierte Benutzername für den Credential-Datensatz
+Credentials;Initialkennwort;;;4;varchar;255;;0;;;Initialkennwort für den Credential-Datensatz
+Credentials;PashwordHash;;;5;varchar;255;;0;;;Passwordhash für den Credential-Datensatz
+Credentials;RSAPublicKey;;;6;text;;;0;;;RSAPublicKey für den Credential-Datensatz
+Credentials;RSAPrivateKey;;;7;text;;;0;;;RSAPrivateKey für den Credential-Datensatz
+Credentials;AES;;;8;text;;;0;;;AES-Schlüssel für den Credential-Datensatz
 EigeneSchule;ID;;;1;bigint;;;1;;;ID des Datensatzes der eigenen Schule
 EigeneSchule;SchulformNr;;;2;varchar;3;;0;;;Schulformnummer der eigenen Schule (Statkue IT.NRW)
-EigeneSchule;SchulformKrz;;;3;varchar;3;;0;;;Schulformkürzel der eigenen Schule (Statkue IT.NRW)
+EigeneSchule;SchulformKrz;;;3;varchar;3;;0;Schulform;SchulformKuerzelConverter;Schulformkürzel der eigenen Schule (Statkue IT.NRW)
 EigeneSchule;SchulformBez;;;4;varchar;50;;0;;;Bezeichnender Text der Schulform
 EigeneSchule;SchultraegerArt;;;5;varchar;2;;0;;;Art des Schulträgers
 EigeneSchule;SchultraegerNr;;;6;varchar;6;;0;;;Schulträgernummer aus dem Katalog der Schulver IT.NRW
@@ -217,6 +225,16 @@ EigeneSchule_Zertifikate;Kuerzel;;;3;varchar;20;;1;;;Kürzel des Zertifikats
 EigeneSchule_Zertifikate;Bezeichnung;;;4;varchar;100;;0;;;Bezeichnung des Zertifikats
 EigeneSchule_Zertifikate;Fach;;;5;varchar;100;;0;;;Fachbezeichnung für das Zertifikat
 EigeneSchule_Zertifikate;Formatvorlage;;;6;varchar;255;;0;;;Formatforlage für das Zertifikat
+ErzieherDatenschutz;ErzieherID;;;1;bigint;;;1;;;ErzieherID des Datenschutzeintrags
+ErzieherDatenschutz;DatenschutzID;;;2;bigint;;;1;;;DatenschutzID des Eintrags
+ErzieherDatenschutz;Status;;;3;int;;0;1;;Boolean01Converter;Status des Datenschutz-Eintrags (true/false)
+ErzieherLernplattform;ErzieherID;;;1;bigint;;;1;;;ErzieherID für den Lernplattform-Datensatz
+ErzieherLernplattform;LernplattformID;;;2;bigint;;;1;;;ID der Lernplattform
+ErzieherLernplattform;CredentialID;;;3;bigint;;;0;;;CredentialD für den Lernplattform-Datensatz
+ErzieherLernplattform;EinwilligungAbgefragt;;;4;int;;0;1;;Boolean01Converter;Einwilligung wurde abgefragt
+ErzieherLernplattform;EinwilligungNutzung;;;5;int;;0;1;;Boolean01Converter;Einwilligung zur Nutzung liegt vor
+ErzieherLernplattform;EinwilligungAudiokonferenz;;;6;int;;0;1;;Boolean01Converter;Einwilligung zur Audiokonferenz liegt vor
+ErzieherLernplattform;EinwilligungVideokonferenz;;;7;int;;0;1;;Boolean01Converter;Einwilligung zur Videokonferenz liegt vor
 Fach_Gliederungen;Fach_ID;;;1;bigint;;;1;;;ID für die gliederungsbezogenen Einstellungen zum Fach (BK)
 Fach_Gliederungen;Gliederung;;;2;varchar;3;;1;;;SGL für die gliederungsbezogenen Einstellungen zum Fach (BK)
 Fach_Gliederungen;SchulNrEigner;;;3;int;;;1;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
@@ -476,6 +494,7 @@ K_Lehrer;Antwort2;;;57;varchar;255;;0;;;DEPRECATED: wurde nie verwendet
 K_Lehrer;KennwortToolsAktuell;;;58;varchar;3;"-;5";0;;;DEPRECATED: wurde nie verwendet
 K_Lehrer;XNMPassword;;;59;varchar;255;;0;;;Passwort für das XNM-Tool 
 K_Lehrer;XNMPassword2;;;60;varchar;255;;0;;;zweites Passwort für das XNM-Tool 
+K_Lehrer;CredentialID;;;61;bigint;;;0;;;Die ID des Credential-Eintrags
 K_Ort;ID;;;1;bigint;;;1;;;ID des Ortes
 K_Ort;PLZ;;;2;varchar;10;;1;;;PLZ des Ortes
 K_Ort;Bezeichnung;;;3;varchar;50;;1;;;Bezeichnung des Ortes
@@ -655,6 +674,9 @@ LehrerEntlastung;EntlastungStd;;;3;float;;;0;;;Anzahl  für die Entlastungsstund
 LehrerEntlastung;Jahr;;;4;int;;;0;;;Schuljahr für die Entlastungsstunden (Minderleistung)
 LehrerEntlastung;Abschnitt;;;5;int;;;0;;;Abschnitt für die Entlastungsstunden (Minderleistung)
 LehrerEntlastung;SchulNrEigner;;;6;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
+LehrerDatenschutz;LehrerID;;;1;bigint;;;1;;;LehrerID des Datenschutzeintrags
+LehrerDatenschutz;DatenschutzID;;;2;bigint;;;1;;;DatenschutzID des Eintrags
+LehrerDatenschutz;Status;;;3;int;;0;1;;Boolean01Converter;Status des Datenschutz-Eintrags (true/false)
 LehrerFotos;Lehrer_ID;;;1;bigint;;;1;;;LehrerID zu der das Foto gehört
 LehrerFotos;Foto;;;2;longblob;;;0;;;Lehrerfoto im binär-Format
 LehrerFotos;FotoBase64;;;3;text;;;0;;;Lehrerfoto im Base64-Format
@@ -678,52 +700,48 @@ LehrerLehramtLehrbef;LehramtKrz;;;2;varchar;10;;0;;;Lehramtskürzel
 LehrerLehramtLehrbef;LehrbefKrz;;;3;varchar;10;;0;;;Kürzel der Lehrbefähigung
 LehrerLehramtLehrbef;LehrbefAnerkennungKrz;;;4;varchar;10;;0;;;Kürzel der LehrbefähigungsAnerkennung
 LehrerLehramtLehrbef;SchulNrEigner;;;5;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
+LehrerLernplattform;LehrerID;;;1;bigint;;;1;;;LehrerID für den Lernplattform-Datensatz
+LehrerLernplattform;LernplattformID;;;2;bigint;;;1;;;ID der Lernplattform
+LehrerLernplattform;CredentialID;;;3;bigint;;;0;;;CredentialD für den Lernplattform-Datensatz
+LehrerLernplattform;EinwilligungAbgefragt;;;4;int;;0;1;;Boolean01Converter;Einwilligung wurde abgefragt
+LehrerLernplattform;EinwilligungNutzung;;;5;int;;0;1;;Boolean01Converter;Einwilligung zur Nutzung liegt vor
+LehrerLernplattform;EinwilligungAudiokonferenz;;;6;int;;0;1;;Boolean01Converter;Einwilligung zur Audiokonferenz liegt vor
+LehrerLernplattform;EinwilligungVideokonferenz;;;7;int;;0;1;;Boolean01Converter;Einwilligung zur Videokonferenz liegt vor
 LehrerMehrleistung;Lehrer_ID;;;1;bigint;;;1;;;LehrerID die zu den Mehrarbeitsstunden gehört
 LehrerMehrleistung;MehrleistungsgrundKrz;;;2;varchar;10;;1;;;Mehrarbeitsstunden Kürzel
 LehrerMehrleistung;MehrleistungStd;;;3;float;;;0;;;Anzahl Mehrarbeitsstunden
 LehrerMehrleistung;Jahr;;;4;int;;;1;;;Schuljahr der Mehrarbeitsstunden
 LehrerMehrleistung;Abschnitt;;;5;int;;;1;;;Abschnitt der Mehrarbeitsstunden
 LehrerMehrleistung;SchulNrEigner;;;6;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
+Lernplattformen;ID;;;1;bigint;;;1;;;ID des Datensatzes für die verwendete Lernplattform
+Lernplattformen;Bezeichnung;;;2;varchar;255;;1;;;Bezeichnung der Lernplattform
+Lernplattformen;BenutzernameSuffixLehrer;;;3;varchar;255;;0;;;Suffix für den Benutzernamen bei den Lehrern
+Lernplattformen;BenutzernameSuffixErzieher;;;4;varchar;255;;0;;;Suffix für den Benutzernamen bei den Erziehern
+Lernplattformen;BenutzernameSuffixSchueler;;;5;varchar;255;;0;;;Suffix für den Benutzernamen bei den Schülern
+Lernplattformen;Konfiguration;;;6;text;;;0;;;Json-Objekt mit den Konfigurationseinstellungen der Accounterstellung für die Lernplattform
 Logins;LI_UserID;;;1;bigint;;;1;;;UserID des Logins
 Logins;LI_LoginTime;;;2;datetime;;;0;;;Login Zeit
 Logins;LI_LogoffTime;;;3;datetime;;;0;;;Logoff Zeit
 Logins;SchulNrEigner;;;4;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
 LuPO_Beratungslehrer;Abi_Jahrgang;;;1;int;;;1;;;LuPO Tabelle:  Schuljahr des Abiturs
 LuPO_Beratungslehrer;Lehrer_ID;;;2;bigint;;;1;;;LuPO Tabelle:  ID des Lehrerdatensatzes
-LuPO_Fachgruppen;ID;;;1;bigint;;;1;;;LuPO Tabelle:  ID des Fachgruppendatensatzes
-LuPO_Fachgruppen;Aufgabenfeld;;;2;int;;0;0;;;LuPO Tabelle:  Aufgabenfeld des Faches. Fächer einer Fachgruppe erhalten eine gemeinsame Ziffer
-LuPO_Fachgruppen;FachgruppeKrz;;;3;varchar;2;;0;;;LuPO Tabelle:  Fachgruppenkürzel z.B. FS für Fremdsprache, NW für Naturwissenschaft
-LuPO_Fachgruppen;Farbe;;;4;int;;16777215;0;;;LuPO Tabelle:  Farbgebung des Hintergrundes der Fachgruppe
-LuPO_Fachgruppen;Bezeichnung;;;5;varchar;100;;0;;;LuPO Tabelle:  Bezeichnung des Faches
-LuPO_FachgruppenFaecher;Fach;;;1;varchar;2;;1;;;LuPO Tabelle:  Internes Kürzel des Faches???
-LuPO_FachgruppenFaecher;Bezeichnung;;;2;varchar;80;;0;;;LuPO Tabelle:  Bezeichnung des Faches
-LuPO_FachgruppenFaecher;Fachgruppe_ID;;;3;bigint;;;0;;;LuPO Tabelle:  ID des Faches
 LuPO_Faecher;Abi_Jahrgang;;;1;int;;;1;;;LuPO Tabelle:  Schuljahr des Abiturs???
 LuPO_Faecher;Fach_ID;;;2;bigint;;;1;;;LuPO Tabelle:  ID des Faches der Fächertabelle
-LuPO_Faecher;ID;;;3;bigint;;0;1;;;LuPO Tabelle:  ID des Belegungsdatensatzes
-LuPO_Faecher;Bezeichnung;;;4;varchar;80;;0;;;LuPO Tabelle:  Bezeichnung des Faches
-LuPO_Faecher;StatistikKrz;;;5;varchar;2;;0;;;LuPO Tabelle:  ASD Kürzel des Faches
-LuPO_Faecher;Sortierung;;;6;int;;32000;1;;;LuPO Tabelle:  Sortierungsnummer des Belegungsdatensatzes
-LuPO_Faecher;IstSprache;;;7;int;;0;1;;Boolean01Converter;LuPO Tabelle:  Eintrag, ob das Fach ein Fremdsprachenfach ist J/N
-LuPO_Faecher;Unterichtssprache;;;8;varchar;1;D;1;;;LuPO Tabelle:  Eintrag eines Fremdsprachenkürzels, wenn das Fach in einer bilingualen Fremdsprache unterrichtet wird
-LuPO_Faecher;E1;;;9;int;;1;1;;Boolean01Converter;LuPO Tabelle:  Belegung des Faches in EF.1 J/N
-LuPO_Faecher;E2;;;10;int;;1;1;;Boolean01Converter;LuPO Tabelle:  Belegung des Faches in EF.2 J/N
-LuPO_Faecher;Q1;;;11;int;;1;1;;Boolean01Converter;LuPO Tabelle:  Belegung des Faches in Q1.1 J/N
-LuPO_Faecher;Q2;;;12;int;;1;1;;Boolean01Converter;LuPO Tabelle:  Belegung des Faches in Q1.2 J/N
-LuPO_Faecher;Q3;;;13;int;;1;1;;Boolean01Converter;LuPO Tabelle:  Belegung des Faches in Q2.1 J/N
-LuPO_Faecher;Q4;;;14;int;;1;1;;Boolean01Converter;LuPO Tabelle:  Belegung des Faches in Q2.2 J/N
-LuPO_Faecher;Abi_Moegl;;;15;int;;1;1;;Boolean01Converter;LuPO Tabelle:  Eintrag, ob das Fach als 3. oder 4. Abiturfach gewählt werden kann J/N
-LuPO_Faecher;LK_Moegl;;;16;int;;1;1;;Boolean01Converter;LuPO Tabelle:  Eintrag, ob das Fach als 1. oder 2. Abiturfach (LK) gewählt werden kann J/N
-LuPO_Faecher;AlsNeueFSInSII;;;17;int;;0;1;;Boolean01Converter;LuPO Tabelle:  Eintrag, ob das Fach auch in der SII als neueinsetzende Fremdsprache angewählt werden kann J/N
-LuPO_Faecher;Leitfach_1_ID;;;18;bigint;;;0;;;LuPO Tabelle:  1. Leitfach eines Projektfaches
-LuPO_Faecher;Leitfach_2_ID;;;19;bigint;;;0;;;LuPO Tabelle:  2. Leitfach eines Projektfaches
-LuPO_Faecher;E1_WStd;;;20;int;;;0;;;LuPO Tabelle:  Anzahl der Unterrichtsstunden in 45-minuten-Einheiten des Faches in der EF.1
-LuPO_Faecher;E2_WStd;;;21;int;;;0;;;LuPO Tabelle:  Anzahl der Unterrichtsstunden in 45-minuten-Einheiten des Faches in der EF.2
-LuPO_Faecher;E1_S_M;;;22;varchar;1;;0;;;LuPO Tabelle: Mündlich oder Schriftlich des Faches in der EF1
-LuPO_Faecher;E2_S_M;;;23;varchar;1;;0;;;LuPO Tabelle: Mündlich oder Schriftlich des Faches in der EF2
-LuPO_Faecher;Q_WStd;;;24;int;;;0;;;LuPO Tabelle:  Anzahl der Unterrichtsstunden in 45-minuten-Einheiten des Faches in der Qualifikationsphase
-LuPO_Faecher;E_ExportKursart;;;25;varchar;5;;0;;;LuPO Tabelle:  ???
-LuPO_Faecher;NurMuendlich;;;26;int;;0;1;;Boolean01Converter;LuPO Tabelle:  Fach kann nur mündlich belegt werden J/N
+LuPO_Faecher;E1;;;3;int;;1;1;;Boolean01Converter;LuPO Tabelle:  Belegung des Faches in EF.1 J/N
+LuPO_Faecher;E2;;;4;int;;1;1;;Boolean01Converter;LuPO Tabelle:  Belegung des Faches in EF.2 J/N
+LuPO_Faecher;Q1;;;5;int;;1;1;;Boolean01Converter;LuPO Tabelle:  Belegung des Faches in Q1.1 J/N
+LuPO_Faecher;Q2;;;6;int;;1;1;;Boolean01Converter;LuPO Tabelle:  Belegung des Faches in Q1.2 J/N
+LuPO_Faecher;Q3;;;7;int;;1;1;;Boolean01Converter;LuPO Tabelle:  Belegung des Faches in Q2.1 J/N
+LuPO_Faecher;Q4;;;8;int;;1;1;;Boolean01Converter;LuPO Tabelle:  Belegung des Faches in Q2.2 J/N
+LuPO_Faecher;Abi_Moegl;;;9;int;;1;1;;Boolean01Converter;LuPO Tabelle:  Eintrag, ob das Fach als 3. oder 4. Abiturfach gewählt werden kann J/N
+LuPO_Faecher;LK_Moegl;;;10;int;;1;1;;Boolean01Converter;LuPO Tabelle:  Eintrag, ob das Fach als 1. oder 2. Abiturfach (LK) gewählt werden kann J/N
+LuPO_Faecher;E1_WStd;;;11;int;;;0;;;LuPO Tabelle:  Anzahl der Unterrichtsstunden in 45-minuten-Einheiten des Faches in der EF.1
+LuPO_Faecher;E2_WStd;;;12;int;;;0;;;LuPO Tabelle:  Anzahl der Unterrichtsstunden in 45-minuten-Einheiten des Faches in der EF.2
+LuPO_Faecher;E1_S_M;;;13;varchar;1;;0;;;LuPO Tabelle: Mündlich oder Schriftlich des Faches in der EF1
+LuPO_Faecher;E2_S_M;;;14;varchar;1;;0;;;LuPO Tabelle: Mündlich oder Schriftlich des Faches in der EF2
+LuPO_Faecher;Q_WStd;;;15;int;;;0;;;LuPO Tabelle:  Anzahl der Unterrichtsstunden in 45-minuten-Einheiten des Faches in der Qualifikationsphase
+LuPO_Faecher;E_ExportKursart;;;16;varchar;5;;0;;;LuPO Tabelle:  ???
+LuPO_Faecher;NurMuendlich;;;17;int;;0;1;;Boolean01Converter;LuPO Tabelle:  Fach kann nur mündlich belegt werden J/N
 LuPO_Jahrgangsdaten;Abi_Jahrgang;;;1;int;;;1;;;LuPO Tabelle:  Schuljahr des Abiturs???
 LuPO_Jahrgangsdaten;ZK_Beginn_GE;;;2;varchar;2;Q3;0;;;LuPO Tabelle:  Halbjahr, in welchem ein Zusatzkurs beginnt
 LuPO_Jahrgangsdaten;ZK_Beginn_SW;;;3;varchar;2;Q3;0;;;LuPO Tabelle:  Halbjahr, in welchem ein Zusatzkurs endet
@@ -738,81 +756,39 @@ LuPO_NichtMoeglAbiFachKombi;Kursart2;;;6;varchar;5;;0;;;LuPO Tabelle:  Kursart d
 LuPO_NichtMoeglAbiFachKombi;Phase;;;7;varchar;10;-;1;;;LuPO Tabelle:  Gültigkeit der nicht möglichen Fächerkombination EF.1 bis Q2.2 oder Q1.1 bis Q2.2
 LuPO_NichtMoeglAbiFachKombi;Typ;;;8;varchar;1;-;1;;;LuPO Tabelle:  Nicht mögliche Fächerkombination oder Fächerprofil -/+
 LuPO_Schueler;Schueler_ID;;;1;bigint;;;1;;;LuPO Tabelle:  ID des Schülers in der Schülertabelle
-LuPO_Schueler;DatumBeratung;;;2;datetime;;;0;;;LuPO Tabelle:  Datum der Beratung
-LuPO_Schueler;DatumRuecklauf;;;3;datetime;;;0;;;LuPO Tabelle:  Datum der Abgabe der Fächerwahl
+LuPO_Schueler;DatumBeratung;;;2;datetime;;;0;;DatumConverter;LuPO Tabelle:  Datum der Beratung
+LuPO_Schueler;DatumRuecklauf;;;3;datetime;;;0;;DatumConverter;LuPO Tabelle:  Datum der Abgabe der Fächerwahl
 LuPO_Schueler;SPP;;;4;int;;0;1;;Boolean01Converter;LuPO Tabelle:  Teilnahme an einer sprachpraktischen Prüfung J/N
 LuPO_Schueler;Sportattest;;;5;int;;0;1;;Boolean01Converter;LuPO Tabelle:  Sportattes des Schülers vorhanden
 LuPO_Schueler;Kommentar;;;6;text;;;0;;;LuPO Tabelle:  Kommentar des Beratungslehrers zur Schülerwahl des Schülers
-LuPO_Schueler;PruefOrdnung;;;7;varchar;20;;0;;;LuPO Tabelle:  Prüfungsordnung des Schülers
-LuPO_Schueler;Email;;;8;varchar;100;;0;;;LuPO Tabelle:  E-Mail-Adresse des Schülers
-LuPO_Schueler;Beratungslehrer;;;9;varchar;120;;0;;;LuPO Tabelle:  Name des Beratungslehrers
-LuPO_Schueler;AnzK_E1;;;10;int;;;0;;;LuPO Tabelle:  Anzahl gewählter Kurse EF.1
-LuPO_Schueler;AnzK_E2;;;11;int;;;0;;;LuPO Tabelle:  Anzahl gewählter Kurse EF.2
-LuPO_Schueler;AnzK_Q1;;;12;int;;;0;;;LuPO Tabelle:  Anzahl gewählter Kurse Q1.1
-LuPO_Schueler;AnzK_Q2;;;13;int;;;0;;;LuPO Tabelle:  Anzahl gewählter Kurse Q1.2
-LuPO_Schueler;AnzK_Q3;;;14;int;;;0;;;LuPO Tabelle:  Anzahl gewählter Kurse Q2.1
-LuPO_Schueler;AnzK_Q4;;;15;int;;;0;;;LuPO Tabelle:  Anzahl gewählter Kurse Q2.2
-LuPO_Schueler;AnzS_E1;;;16;int;;;0;;;LuPO Tabelle:  Summe der Unterrichtsstunden der gewählten Kurse EF.1
-LuPO_Schueler;AnzS_E2;;;17;int;;;0;;;LuPO Tabelle:  Summe der Unterrichtsstunden der gewählten Kurse EF.2
-LuPO_Schueler;AnzS_Q1;;;18;int;;;0;;;LuPO Tabelle:  Summe der Unterrichtsstunden der gewählten Kurse Q1.1
-LuPO_Schueler;AnzS_Q2;;;19;int;;;0;;;LuPO Tabelle:  Summe der Unterrichtsstunden der gewählten Kurse Q1.2
-LuPO_Schueler;AnzS_Q3;;;20;int;;;0;;;LuPO Tabelle:  Summe der Unterrichtsstunden der gewählten Kurse Q2.1
-LuPO_Schueler;AnzS_Q4;;;21;int;;;0;;;LuPO Tabelle:  Summe der Unterrichtsstunden der gewählten Kurse Q2.2
-LuPO_Schueler;AnzS_Summe;;;22;varchar;5;;0;;;LuPO Tabelle:  Jahresstundensumme aller Unterrichtsstunden aller einbringungsfähigen Kurse
-LuPO_Schueler;AnzK_Summe;;;23;varchar;5;;0;;;LuPO Tabelle:  Summe der Anzahl aller einbringungsfähigen Kurse
-LuPO_Schueler;PruefPhase;;;24;varchar;1;;0;;;LuPO Tabelle:  Halbjahr, in dem sich der Schüler befindet???
-LuPO_Schueler;Zeitstempel;;;25;datetime;;;0;;;LuPO Tabelle:  Zeitstempel der letzten Bearbeitung
-LuPO_Schueler;Gliederung;;;26;varchar;3;;0;;;LuPO Tabelle:  Gliederung G8 oder G9
-LuPO_Schueler;Konfession;;;27;varchar;2;;0;;;LuPO Tabelle:  Konfession des Schülers
-LuPO_Schueler;Zulassung;;;28;varchar;1;;0;;;LuPO Tabelle:  Azum Abitur zugelassen J/N
-LuPO_Schueler;BLL_Art;;;29;varchar;1;;0;;;LuPO Tabelle:  besondere Lernleistung J/N
-LuPO_Schueler;BLL_Punkte;;;30;int;;;0;;;LuPO Tabelle:  Note der besonderen Lernleistung in Punkten
-LuPO_Schueler;FS2_SekI_Manuell;;;31;int;;0;1;;Boolean01Converter;LuPO Tabelle:  Zwei Fremdsprchen in SI belegt wurde manuell geprüft J/N
-LuPO_SchuelerFaecher;ID;;;1;bigint;;;1;;;LuPO Tabelle:  ID des belegten Fachs
-LuPO_SchuelerFaecher;Schueler_ID;;;2;bigint;;;1;;;LuPO Tabelle:  ID des Schülers in der Schuelertabelle
-LuPO_SchuelerFaecher;Fach_ID;;;3;bigint;;;1;;;LuPO Tabelle:  ID des Faches in der Fächertabelle
-LuPO_SchuelerFaecher;Kursart_E1;;;4;varchar;5;;0;;;LuPO Tabelle:  Kursart des belegten Faches in EF.1
-LuPO_SchuelerFaecher;Punkte_E1;;;5;varchar;2;;0;;;LuPO Tabelle:  Notenpunkte des belegten faches in EF.1
-LuPO_SchuelerFaecher;Konflikt_E1;;;6;int;;0;1;;Boolean01Converter;LuPO Tabelle:  Fachwahlkonflikt in EF.1 vorhanden J/N
-LuPO_SchuelerFaecher;Kursart_E2;;;7;varchar;5;;0;;;LuPO Tabelle:  Kursart des belegten Faches in EF.2
-LuPO_SchuelerFaecher;Punkte_E2;;;8;varchar;2;;0;;;LuPO Tabelle:  Notenpunkte des belegten faches in EF.2
-LuPO_SchuelerFaecher;Konflikt_E2;;;9;int;;0;1;;Boolean01Converter;LuPO Tabelle:  Fachwahlkonflikt in EF.2 vorhanden J/N
-LuPO_SchuelerFaecher;Kursart_Q1;;;10;varchar;5;;0;;;LuPO Tabelle:  Kursart des belegten Faches in Q1.1
-LuPO_SchuelerFaecher;Punkte_Q1;;;11;varchar;2;;0;;;LuPO Tabelle:  Notenpunkte des belegten faches in Q1.1
-LuPO_SchuelerFaecher;Konflikt_Q1;;;12;int;;0;1;;Boolean01Converter;LuPO Tabelle:  Fachwahlkonflikt in Q1.1 vorhanden J/N
-LuPO_SchuelerFaecher;Kursart_Q2;;;13;varchar;5;;0;;;LuPO Tabelle:  Kursart des belegten Faches in Q1.2
-LuPO_SchuelerFaecher;Punkte_Q2;;;14;varchar;2;;0;;;LuPO Tabelle:  Notenpunkte des belegten faches in Q1.2
-LuPO_SchuelerFaecher;Konflikt_Q2;;;15;int;;0;1;;Boolean01Converter;LuPO Tabelle:  Fachwahlkonflikt in Q1.2 vorhanden J/N
-LuPO_SchuelerFaecher;Kursart_Q3;;;16;varchar;5;;0;;;LuPO Tabelle:  Kursart des belegten Faches in Q2.1
-LuPO_SchuelerFaecher;Punkte_Q3;;;17;varchar;2;;0;;;LuPO Tabelle:  Notenpunkte des belegten faches in Q2.1
-LuPO_SchuelerFaecher;Konflikt_Q3;;;18;int;;0;1;;Boolean01Converter;LuPO Tabelle:  Fachwahlkonflikt in Q2.1 vorhanden J/N
-LuPO_SchuelerFaecher;Kursart_Q4;;;19;varchar;5;;0;;;LuPO Tabelle:  Kursart des belegten Faches in Q2.2
-LuPO_SchuelerFaecher;Punkte_Q4;;;20;varchar;2;;0;;;LuPO Tabelle:  Notenpunkte des belegten faches in Q2.2
-LuPO_SchuelerFaecher;Konflikt_Q4;;;21;int;;0;1;;Boolean01Converter;LuPO Tabelle:  Fachwahlkonflikt in Q2.2 vorhanden J/N
-LuPO_SchuelerFaecher;AbiturFach;;;22;int;;;0;;;LuPO Tabelle:  Abiturfach 1 bis 4
-LuPO_SchuelerFaecher;Konflikt_AF;;;23;int;;0;1;;Boolean01Converter;LuPO Tabelle:  Abiturfach Konflikt vorhanden J/N
-LuPO_SchuelerFaecher;Bemerkungen;;;24;varchar;50;;0;;;LuPO Tabelle:  Fachbemerkungen des belegten fachs
-LuPO_SchuelerFaecher;Fachgruppe;;;25;varchar;5;;0;;;LuPO Tabelle:  Fachgruppe des belegten Fachs
-LuPO_SchuelerFaecher;Aufgabenfeld;;;26;int;;0;1;;;LuPO Tabelle:  Aufgabenfeld des belegten Fachs
-LuPO_SchuelerFaecher;Aendern_E1;;;27;int;;;0;;Boolean01Converter;LuPO Tabelle:  Fachwahl änderbar EF.1 J/N
-LuPO_SchuelerFaecher;Aendern_E2;;;28;int;;;0;;Boolean01Converter;LuPO Tabelle:  Fachwahl änderbar EF.2 J/N
-LuPO_SchuelerFaecher;Aendern_Q1;;;29;int;;;0;;Boolean01Converter;LuPO Tabelle:  Fachwahl änderbar Q1.1 J/N
-LuPO_SchuelerFaecher;Aendern_Q2;;;30;int;;;0;;Boolean01Converter;LuPO Tabelle:  Fachwahl änderbar Q1.2 J/N
-LuPO_SchuelerFaecher;Aendern_Q3;;;31;int;;;0;;Boolean01Converter;LuPO Tabelle:  Fachwahl änderbar Q2.1 J/N
-LuPO_SchuelerFaecher;Aendern_Q4;;;32;int;;;0;;Boolean01Converter;LuPO Tabelle:  Fachwahl änderbar Q2.2 J/N
-LuPO_SchuelerFaecher;MdlPruefErgebnis;;;32;int;;;0;;;LuPO Tabelle:  Ergebnis der mündlichen Prüfung des belegten fachs
-LuPO_SchuelerFaecher;Markiert_Q1;;;33;int;;;0;;Boolean01Converter;LuPO Tabelle:  Belegtes Fach in Q1.1 für die Abitureinbringung markiert
-LuPO_SchuelerFaecher;Markiert_Q2;;;34;int;;;0;;Boolean01Converter;LuPO Tabelle:  Belegtes Fach in Q1.1 für die Abitureinbringung markiert
-LuPO_SchuelerFaecher;Markiert_Q3;;;35;int;;;0;;Boolean01Converter;LuPO Tabelle:  Belegtes Fach in Q2.1 für die Abitureinbringung markiert
-LuPO_SchuelerFaecher;Markiert_Q4;;;36;int;;;0;;Boolean01Converter;LuPO Tabelle:  Belegtes Fach in Q2.2 für die Abitureinbringung markiert
-LuPO_SchuelerFaecher;AbiPruefErgebnis;;;37;int;;;0;;;LuPO Tabelle:  Abiturergebnis des belegten Faches
-LuPO_SchuelerFaecher;MdlPflichtPruefung;;;38;varchar;1;;0;;;LuPO Tabelle:  Ergebnis der mündlichen Prüfung bei 1. bis 3. Fach
-LuPO_SchuelerFehlermeldungen;ID;;;1;bigint;;;1;;;LuPO Tabelle:  ID der Fehlermeldung
-LuPO_SchuelerFehlermeldungen;Schueler_ID;;;2;bigint;;;1;;;LuPO Tabelle:  Schüler ID der Schülertabelle
-LuPO_SchuelerFehlermeldungen;Fehlercode;;;3;varchar;20;;0;;;LuPO Tabelle:  Kürzel des Fehlers
-LuPO_SchuelerFehlermeldungen;Fehlertext;;;4;varchar;800;;0;;;LuPO Tabelle:  Fehlertext
-LuPO_SchuelerFehlermeldungen;Fehlergruppe;;;5;varchar;2;;0;;;LuPO Tabelle:  Fehlergruppe
-LuPO_SchuelerFehlermeldungen;Sortierung;;;6;int;;;0;;;LuPO Tabelle:  Sortierung der Fehler
+LuPO_Schueler;Beratungslehrer;;;7;varchar;120;;0;;;LuPO Tabelle:  Name des Beratungslehrers
+LuPO_Schueler;PruefPhase;;;8;varchar;1;;0;;;LuPO Tabelle:  Halbjahr, in dem sich der Schüler befindet???
+LuPO_Schueler;BLL_Art;;;9;varchar;1;;0;;;LuPO Tabelle:  besondere Lernleistung J/N
+LuPO_Schueler;BLL_Punkte;;;10;int;;;0;;;LuPO Tabelle:  Note der besonderen Lernleistung in Punkten
+LuPO_Schueler;FS2_SekI_Manuell;;;11;int;;0;1;;Boolean01Converter;LuPO Tabelle:  Zwei Fremdsprchen in SI belegt wurde manuell geprüft J/N
+LuPO_SchuelerFaecher;Schueler_ID;;;1;bigint;;;1;;;LuPO Tabelle:  ID des Schülers in der Schuelertabelle
+LuPO_SchuelerFaecher;Fach_ID;;;2;bigint;;;1;;;LuPO Tabelle:  ID des Faches in der Fächertabelle
+LuPO_SchuelerFaecher;Kursart_E1;;;3;varchar;5;;0;;;LuPO Tabelle:  Kursart des belegten Faches in EF.1
+LuPO_SchuelerFaecher;Punkte_E1;;;4;varchar;2;;0;;;LuPO Tabelle:  Notenpunkte des belegten faches in EF.1
+LuPO_SchuelerFaecher;Kursart_E2;;;5;varchar;5;;0;;;LuPO Tabelle:  Kursart des belegten Faches in EF.2
+LuPO_SchuelerFaecher;Punkte_E2;;;6;varchar;2;;0;;;LuPO Tabelle:  Notenpunkte des belegten faches in EF.2
+LuPO_SchuelerFaecher;Kursart_Q1;;;7;varchar;5;;0;;;LuPO Tabelle:  Kursart des belegten Faches in Q1.1
+LuPO_SchuelerFaecher;Punkte_Q1;;;8;varchar;2;;0;;;LuPO Tabelle:  Notenpunkte des belegten faches in Q1.1
+LuPO_SchuelerFaecher;Kursart_Q2;;;9;varchar;5;;0;;;LuPO Tabelle:  Kursart des belegten Faches in Q1.2
+LuPO_SchuelerFaecher;Punkte_Q2;;;10;varchar;2;;0;;;LuPO Tabelle:  Notenpunkte des belegten faches in Q1.2
+LuPO_SchuelerFaecher;Kursart_Q3;;;11;varchar;5;;0;;;LuPO Tabelle:  Kursart des belegten Faches in Q2.1
+LuPO_SchuelerFaecher;Punkte_Q3;;;12;varchar;2;;0;;;LuPO Tabelle:  Notenpunkte des belegten faches in Q2.1
+LuPO_SchuelerFaecher;Kursart_Q4;;;13;varchar;5;;0;;;LuPO Tabelle:  Kursart des belegten Faches in Q2.2
+LuPO_SchuelerFaecher;Punkte_Q4;;;14;varchar;2;;0;;;LuPO Tabelle:  Notenpunkte des belegten faches in Q2.2
+LuPO_SchuelerFaecher;AbiturFach;;;15;int;;;0;;;LuPO Tabelle:  Abiturfach 1 bis 4
+LuPO_SchuelerFaecher;Bemerkungen;;;16;varchar;50;;0;;;LuPO Tabelle:  Fachbemerkungen des belegten fachs
+LuPO_SchuelerFaecher;MdlPruefErgebnis;;;17;int;;;0;;;LuPO Tabelle:  Ergebnis der mündlichen Prüfung des belegten fachs
+LuPO_SchuelerFaecher;Markiert_Q1;;;18;int;;;0;;Boolean01Converter;LuPO Tabelle:  Belegtes Fach in Q1.1 für die Abitureinbringung markiert
+LuPO_SchuelerFaecher;Markiert_Q2;;;19;int;;;0;;Boolean01Converter;LuPO Tabelle:  Belegtes Fach in Q1.1 für die Abitureinbringung markiert
+LuPO_SchuelerFaecher;Markiert_Q3;;;20;int;;;0;;Boolean01Converter;LuPO Tabelle:  Belegtes Fach in Q2.1 für die Abitureinbringung markiert
+LuPO_SchuelerFaecher;Markiert_Q4;;;21;int;;;0;;Boolean01Converter;LuPO Tabelle:  Belegtes Fach in Q2.2 für die Abitureinbringung markiert
+LuPO_SchuelerFaecher;AbiPruefErgebnis;;;22;int;;;0;;;LuPO Tabelle:  Abiturergebnis des belegten Faches
+LuPO_SchuelerFaecher;MdlPflichtPruefung;;;23;varchar;1;;0;;;LuPO Tabelle:  Ergebnis der mündlichen Prüfung bei 1. bis 3. Fach
 NichtMoeglAbiFachKombi;Fach1_ID;;;1;bigint;;;1;;;FACH1ID für eine nicht mögliche Kombination
 NichtMoeglAbiFachKombi;Fach2_ID;;;2;bigint;;;1;;;FACH2ID für eine nicht mögliche Kombination
 NichtMoeglAbiFachKombi;SchulNrEigner;;;3;int;;;1;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
@@ -821,7 +797,7 @@ NichtMoeglAbiFachKombi;Kursart2;;;5;varchar;5;;0;;;Kursart Fach2
 NichtMoeglAbiFachKombi;PK;;;6;varchar;30;;1;;;Primärschlüssel aus FachIDs und  Minuszeichen
 NichtMoeglAbiFachKombi;Sortierung;;;7;int;;;0;;;Sortierung der nicht möglichen Kombination
 NichtMoeglAbiFachKombi;Phase;;;8;varchar;10;;0;;;Über welche Jahrgangsstufen geht die Kombination nicht
-NichtMoeglAbiFachKombi;Typ;;;9;varchar;1;;0;;;Typ Ja Nein
+NichtMoeglAbiFachKombi;Typ;;;9;varchar;1;;0;;;Nicht mögliche Fächerkombination (-) oder Fächerprofil (+)
 Personengruppen;ID;;;1;bigint;;;1;;;ID der Personengruppe
 Personengruppen;SchulNrEigner;;;2;int;;;1;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
 Personengruppen;Gruppenname;;;3;varchar;100;;1;;;Gruppenname der Personengruppe
@@ -1042,6 +1018,13 @@ Schildintern_TextExport;ErgebnisWerte;;;6;varchar;100;;0;;;Schildintern Tabelle:
 Schildintern_TextExport;LookupFeldname;;;7;varchar;100;;0;;;Schildintern Tabelle: Excel_CSV_Export
 Schildintern_TextExport;LookupSQLText;;;8;text;;;0;;;Schildintern Tabelle: Excel_CSV_Export
 Schildintern_TextExport;DBFormat;;;9;varchar;10;ALLE;1;;;Schildintern Tabelle: Excel_CSV_Export
+Schildintern_UnicodeUmwandlung;ID;;;1;bigint;;;1;;;Schildintern Tabelle: ID für den Primärschlüssel der Tabelle UnicodeUmwandlung
+Schildintern_UnicodeUmwandlung;Unicodezeichen;;;2;varchar;2;;0;;;Schildintern Tabelle: Unicodezeichen das umgewandelt werden muss
+Schildintern_UnicodeUmwandlung;Ersatzzeichen;;;3;varchar;2;;0;;;Schildintern Tabelle: Erstazzeichen für das Unicodezeichen
+Schildintern_UnicodeUmwandlung;DecimalZeichen;;;4;varchar;20;;0;;;Schildintern Tabelle: Unicodezeichen in Dezimaldarstellung
+Schildintern_UnicodeUmwandlung;DecimalErsatzzeichen;;;5;varchar;20;;0;;;Schildintern Tabelle: Ersatzzeichen in Dezimaldarstellung (bei zwei Zeichen mit + getrennt)
+Schildintern_UnicodeUmwandlung;Hexzeichen;;;6;varchar;50;;0;;;Schildintern Tabelle: Hexdarstellung des Unicodezeichen das gewandelt werden muss
+Schildintern_UnicodeUmwandlung;HexErsatzzeichen;;;7;varchar;50;;0;;;Schildintern Tabelle: Hexdarstellung des Ersatzzeichens das gewandelt werden muss (bei zwei Zeichen mit + getrennt)
 Schildintern_VerfImportFelder;ID;;;1;bigint;;;1;;;Schildintern Tabelle: Notwendiges Tabelle für den WinSchildImport ??? DEPRECATED
 Schildintern_VerfImportFelder;TableDescription;;;2;varchar;50;;0;;;Schildintern Tabelle: für den WinSchildImport ??? DEPRECATED
 Schildintern_VerfImportFelder;FieldDescription;;;3;varchar;50;;0;;;Schildintern Tabelle: für den WinSchildImport ??? DEPRECATED
@@ -1150,10 +1133,10 @@ Schueler;JVA;;;75;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Ist Schü
 Schueler;RefPaed;;;76;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Teilnahme an Reformpädagogik
 Schueler;KeineAuskunft;;;77;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Keine Auskunft an Dritte Ja Nein
 Schueler;Lehrer;;;78;varchar;10;;0;;;Kürzel des Klassenlehrers
-Schueler;Beruf;;;79;varchar;100;;0;;;Berufsbezeichnung wenn der Schüle reinen hat
+Schueler;Beruf;;;79;varchar;100;;0;;;Berufsbezeichnung wenn der Schüler einen hat
 Schueler;AbschlussDatum;;;80;varchar;15;;0;;;Abschlussdatum
-Schueler;Bemerkungen;;;81;text;;;0;;;Text für Bemerkunge zum Schüler Memofeld
-Schueler;BeginnBildungsgang;;;82;date;;;0;;DatumConverter;Beginn des ildungsgangs BK
+Schueler;Bemerkungen;;;81;text;;;0;;;Text für Bemerkungen zum Schüler Memofeld
+Schueler;BeginnBildungsgang;;;82;date;;;0;;DatumConverter;Beginn des Bildungsgangs BK
 Schueler;OrgFormKrz;;;83;varchar;1;;0;;;Kürzel der Organisationsform IT.NRW
 Schueler;Klassenart;;;84;varchar;2;;0;;;Klassenart IT.NRW
 Schueler;DurchschnittsNote;;;85;varchar;4;;0;;;Speichert die Durchschnittsnote mit einer Nachkommastelle (aber als Textfeld) Wird primär am BK benutzt
@@ -1161,28 +1144,28 @@ Schueler;LSSGL;;;86;varchar;5;;0;;;letzte Schule Gliederung
 Schueler;LSSchulform;;;87;varchar;2;;0;;;letzte Schule Schulform
 Schueler;KonfDruck;;;88;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Konfession aufs Zeugnis für den Druck
 Schueler;DSN_Text;;;89;varchar;15;;0;;;Speichert die Durchschnittsnote im Klartext (also befriedigend bei einer Durchschnittsnote von z.B. 3.1)
-Schueler;Berufsabschluss;;;90;varchar;1;;0;;;Bezeichnung Berudabschluss
+Schueler;Berufsabschluss;;;90;varchar;1;;0;;;Bezeichnung Berufsabschluss
 Schueler;Schwerpunkt_ID;;;91;bigint;;;0;;;ID des Schwerpunkt (BK und RS)
 Schueler;LSSGL_SIM;;;92;varchar;3;;0;;;Letzte Schule Schulgiederung (wichtig wenn BK)
-Schueler;BerufsschulpflErf;;;93;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob die Berufschulpflicht erfüllt ist Ja Nein
-Schueler;StatusNSJ;;;94;int;;;0;;;Gibt an welcher Stauts für das kommende Schuljahr geplant ist (nur BK)
-Schueler;FachklasseNSJ_ID;;;95;bigint;;;0;;;Gibt an welche Fachklasse für das kommende Schuljahr geplant ist (nur BK)
+Schueler;BerufsschulpflErf;;;93;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob die Berufsschulpflicht erfüllt ist (Ja/Nein)
+Schueler;StatusNSJ;;;94;int;;;0;;;Gibt an, welcher Status für das kommende Schuljahr geplant ist (nur BK)
+Schueler;FachklasseNSJ_ID;;;95;bigint;;;0;;;Gibt an, welche Fachklasse für das kommende Schuljahr geplant ist (nur BK)
 Schueler;BuchKonto;;;96;float;;;0;;;DEPRECATED: SchildMedia
 Schueler;VerkehrsspracheFamilie;;;97;varchar;2;;0;;;Migrationshintergrund Verkehrssprache in der Familie
 Schueler;JahrZuzug;;;98;int;;;0;;;Migrationshintergrund Zuzugsjahr
 Schueler;DauerKindergartenbesuch;;;99;varchar;1;;0;;;Dauer des Kindergartenbesuchs
-Schueler;VerpflichtungSprachfoerderkurs;;;100;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Wurde zu einem Sprachförderkurs verpflichtet Ja Nein
-Schueler;TeilnahmeSprachfoerderkurs;;;101;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Teilnahme an einen Sprachförderkurs Ja Nein
-Schueler;SchulbuchgeldBefreit;;;102;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Vom Schulbuchgeld befreit Ja Nein
-Schueler;Autist;;;103;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob Autismuss vorliegt Ja Nein
+Schueler;VerpflichtungSprachfoerderkurs;;;100;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Wurde zu einem Sprachförderkurs verpflichtet (Ja/Nein)
+Schueler;TeilnahmeSprachfoerderkurs;;;101;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Teilnahme an einen Sprachförderkurs (Ja/Nein)
+Schueler;SchulbuchgeldBefreit;;;102;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Vom Schulbuchgeld befreit (Ja/Nein)
+Schueler;Autist;;;103;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob Autismuss vorliegt (Ja/Nein)
 Schueler;GeburtslandSchueler;;;104;varchar;10;;0;;;Migrationshintergrund Geburtsland des Schülers
 Schueler;GeburtslandVater;;;105;varchar;10;;0;;;Migrationshintergrund Geburtsland des Vaters
 Schueler;GeburtslandMutter;;;106;varchar;10;;0;;;Migrationshintergrund Geburtsland der Mutter
 Schueler;Uebergangsempfehlung_JG5;;;107;varchar;10;;0;;;Übergangsempfehlung für den Jahrgang 5
 Schueler;ErsteSchulform_SI;;;108;varchar;10;;0;;;Erste Schulform in der Sek1
-Schueler;JahrWechsel_SI;;;109;int;;;0;;;Jahr des Wechseln in die Sek1
-Schueler;JahrWechsel_SII;;;110;int;;;0;;;Jahr des Wechsels in die Sek2
-Schueler;Migrationshintergrund;;;111;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Migrationshintergrund vorhanden Ja Nein
+Schueler;JahrWechsel_SI;;;109;int;;;0;;;Jahr des Wechsels in die Sekundarstufe I
+Schueler;JahrWechsel_SII;;;110;int;;;0;;;Jahr des Wechsels in die Sekundarstufe II
+Schueler;Migrationshintergrund;;;111;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Migrationshintergrund vorhanden (Ja/Nein)
 Schueler;Foerderschwerpunkt2_ID;;;112;bigint;;;0;;;ID des zweiten Förderschwerpunktes
 Schueler;SortierungKlasse;;;113;int;;;0;;;DEPRECATED wenn auf IDs umgestellt wird. Sortierung der Klasse um Klassen auch ohne führende Null sortiert werden können
 Schueler;ExterneSchulNr;;;114;varchar;6;;0;;;Schulnummer von externen Koopschüern
@@ -1217,9 +1200,9 @@ Schueler;WechselBestaetigt;;;142;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConv
 Schueler;DauerBildungsgang;;;143;int;;;0;;;Dauer des Bildungsgangs am BK
 Schueler;AnmeldeDatum;;;144;date;;;0;;DatumConverter;Anmeldedatum des Schülers
 Schueler;MeisterBafoeg;;;145;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob ein Schüler MeisterBafög bezieht BK
-Schueler;OnlineAnmeldung;;;146;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Schüler hat sich Online angemeldet Ja Nein
+Schueler;OnlineAnmeldung;;;146;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Schüler hat sich Online angemeldet (Ja/Nein)
 Schueler;Dokumentenverzeichnis;;;147;varchar;255;;0;;;Pfad zum Dokumentenverzeichnis
-Schueler;Berufsqualifikation;;;148;varchar;100;;0;;;Karteireiter Schulbesuch Berufsausbildung vorhanden Ja/Nein
+Schueler;Berufsqualifikation;;;148;varchar;100;;0;;;Karteireiter Schulbesuch Berufsausbildung vorhanden (Ja/Nein)
 Schueler;HausNrZusatz;;;149;varchar;30;;0;;;Zusatz zur Hausnummer wenn Hausnummern getrennt gespeichert werden
 Schueler;ZieldifferentesLernen;;;150;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob der Schüler zieldifferent unterrichtet wird
 Schueler;ZusatzNachname;;;151;varchar;30;;0;;;Gibt ggf. den Zusatz zum Nachnamen an.
@@ -1227,9 +1210,11 @@ Schueler;EndeEingliederung;;;152;date;;;0;;DatumConverter;Ende der Eingliederung
 Schueler;SchulEmail;;;153;varchar;100;;0;;;schulische E-Mail-Adresse des Schülers
 Schueler;EndeAnschlussfoerderung;;;154;date;;;0;;DatumConverter;Ende der Anschlussförderung bei zugezogenen Schülern (Flüchtlingen)
 Schueler;MasernImpfnachweis;;;155;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an, ob ein Nachweis über die Masern-Impfung erbracht wurde
-Schueler;Lernstandsbericht;;;156;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob ein Schüler Sprachförderung erhält und somit Lernstandsberichte statt Zeugnisse
+Schueler;Lernstandsbericht;;;156;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob ein Schüler Sprachförderung in Deutsch (DAZ) erhält und somit Lernstandsberichte statt Zeugnisse
 Schueler;SprachfoerderungVon;;;157;date;;;0;;DatumConverter;Datum des Beginns der Sprachförderung
 Schueler;SprachfoerderungBis;;;158;date;;;0;;DatumConverter;Datum des Endes der Sprachförderung
+Schueler;EntlassungBemerkung;;;159;varchar;255;;0;;;Bemerkung bei Entlassung von der eigenen Schule
+Schueler;CredentialID;;;160;bigint;;;0;;;Die ID des Credential-Eintrags
 Schueler_AllgAdr;ID;;;1;bigint;;;1;;;ID des Betriebeeintrags beim Schüler
 Schueler_AllgAdr;Schueler_ID;;;2;bigint;;;1;;;SchülerID des Betriebeeintrags beim Schüler
 Schueler_AllgAdr;Adresse_ID;;;3;bigint;;;1;;;AdressID des Betriebeeintrags beim Schüler
@@ -1377,7 +1362,7 @@ SchuelerBKAbschluss;NoteKolloquium;;;10;varchar;2;;0;;;Note Kolloqium für den B
 SchuelerBKAbschluss;ThemaAbschlussarbeit;;;11;text;;;0;;;Thema Abschlussarbeit für den BKAbschlussReiter
 SchuelerBKAbschluss;SchulNrEigner;;;12;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
 SchuelerBKAbschluss;BAP_Vorhanden;;;13;varchar;1;;0;;;Berufsabschlussprüfung vorhanden für den BKAbschlussReiter
-SchuelerBKAbschluss;NoteFachpraxis;;;14;varchar;2;;0;;;Note der Pachpraxis für den BKAbschlussReiter
+SchuelerBKAbschluss;NoteFachpraxis;;;14;varchar;2;;0;;;Note der Fachpraxis für den BKAbschlussReiter
 SchuelerBKAbschluss;FachPraktAnteilAusr;;;15;varchar;1;;0;;BooleanPlusMinusConverter;Fachpraktische Anteile mindestens ausreichend für den BKAbschlussReiter
 SchuelerBKAbschluss;Jahr;;;16;int;;;0;;;Schuljahr für den BKAbschlussReiter
 SchuelerBKAbschluss;Abschnitt;;;17;int;;;0;;;Abschnitt  für den BKAbschlussReiter
@@ -1393,7 +1378,7 @@ SchuelerBKFaecher;MdlPruefung;;;9;char;1;;0;;BooleanPlusMinusConverter;Mündlich
 SchuelerBKFaecher;MdlPruefungFW;;;10;char;1;;0;;BooleanPlusMinusConverter;Freiwilliege mündliche Prüfung angesetzt Ja Nein  des Facheintrags für den BKAbschlussReiter
 SchuelerBKFaecher;NoteMuendlich;;;11;varchar;2;;0;;;Note mündliche Prüfung  des Facheintrags für den BKAbschlussReiter
 SchuelerBKFaecher;NoteAbschluss;;;12;varchar;2;;0;;;Abschlussnote  des Facheintrags für den BKAbschlussReiter
-SchuelerBKFaecher;NotePrfGesamt;;;13;varchar;2;;0;;;Gesamtprüfungsnote des Facheintrags für den BKAbschlussReiter
+SchuelerBKFaecher;NotePrfGesamt;;;13;varchar;2;;0;;;DEPRECATED: Wird seit Änderung der APO-BK nicht mehr genutzt. Gesamtprüfungsnote des Facheintrags für den BKAbschlussReiter
 SchuelerBKFaecher;FSortierung;;;14;int;;;0;;;Sortierung des Facheintrags für den BKAbschlussReiter
 SchuelerBKFaecher;SchulNrEigner;;;15;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
 SchuelerBKFaecher;Fachlehrer;;;16;varchar;10;;0;;;Lehrer  des Facheintrags für den BKAbschlussReiter
@@ -1439,6 +1424,7 @@ SchuelerErzAdr;ErzEmail2;;;23;varchar;100;;0;;;Email2 zum Erzieherdatensatz
 SchuelerErzAdr;Erz1ZusatzNachname;;;24;varchar;30;;0;;;Zusatznachname1 zum Erzieherdatensatz
 SchuelerErzAdr;Erz2ZusatzNachname;;;25;varchar;30;;0;;;Zusatznachname2 zum Erzieherdatensatz
 SchuelerErzAdr;Bemerkungen;;;26;text;;;0;;;Memofeld Bemerkungen zum Erzieherdatensatz
+SchuelerErzAdr;CredentialID;;;27;bigint;;;0;;;Die ID des Credential-Eintrags
 SchuelerErzFunktion;ID;;;1;bigint;;;1;;;DEPRECATED: ID der Eintrags (Es sollen bald nur noch Personengruppen genutzt werden)
 SchuelerErzFunktion;Erzieher_ID;;;2;bigint;;;1;;;DEPRECATED: ErzieherID der Erzieherfunktion (Es sollen bald nur noch Personengruppen genutzt werden)
 SchuelerErzFunktion;Funktion_ID;;;3;bigint;;;1;;;DEPRECATED: FunktionsID der Erzieherfunktion (Es sollen bald nur noch Personengruppen genutzt werden)
@@ -1608,11 +1594,12 @@ SchuelerKAoADaten;Bemerkung;;;19;varchar;255;;0;;;Bemerkung des KAOA-Eintrags be
 SchuelerLD_PSFachBem;ID;;;1;bigint;;;1;;;ID des Bemerkungseintrags
 SchuelerLD_PSFachBem;Abschnitt_ID;;;2;bigint;;;1;;;ID des Lernabschnittes
 SchuelerLD_PSFachBem;ASV;;;3;text;;;0;;;Text zum Arvbeits und Sozialverhalten
-SchuelerLD_PSFachBem;LELS;;;4;text;;;0;;;Text zur Lernentwicklung (GS) oder Außerunterrichtliches Engagement (andere)
-SchuelerLD_PSFachBem;ESF;;;5;text;;;0;;;"Text für die ""Empfehlung der Schulform"" beim Übergang von Primar- nach SekI"
-SchuelerLD_PSFachBem;BemerkungFSP;;;6;text;;;0;;;Text für Förderschwerpunktbemerkung
-SchuelerLD_PSFachBem;BemerkungVersetzung;;;7;text;;;0;;;Text für Verstungsentscheidung
-SchuelerLD_PSFachBem;SchulNrEigner;;;8;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
+SchuelerLD_PSFachBem;LELS;;;4;text;;;0;;;Text zur Lernentwicklung bei Grundschulen
+SchuelerLD_PSFachBem;AUE;;;5;text;;;0;;;Text zum Außerunterrichtlichen Engagement (früher in LELS integeriert, falls, die Schulform keine Grundschule ist)
+SchuelerLD_PSFachBem;ESF;;;6;text;;;0;;;"Text für die ""Empfehlung der Schulform"" beim Übergang von Primar- nach SekI"
+SchuelerLD_PSFachBem;BemerkungFSP;;;7;text;;;0;;;Text für Förderschwerpunktbemerkung
+SchuelerLD_PSFachBem;BemerkungVersetzung;;;8;text;;;0;;;Text für Verstungsentscheidung
+SchuelerLD_PSFachBem;SchulNrEigner;;;9;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
 SchuelerLeistungsdaten;ID;;;1;bigint;;;1;;;Eine eindeutige ID für die Leistungsdaten des Schülers
 SchuelerLeistungsdaten;Abschnitt_ID;;;2;bigint;;;1;;;Die eindeutige ID des zugehörigen Lernabschnittes – verweist auf den Lernabschnitt des Schülers
 SchuelerLeistungsdaten;Fach_ID;;;3;bigint;;;1;;;Die eindeutige ID des zugehörigen Faches – verweist auf das Fach
@@ -1649,69 +1636,75 @@ SchuelerLernabschnittsdaten;ID;;;1;bigint;;;1;;;Eine eindeutige ID für den Lern
 SchuelerLernabschnittsdaten;Schueler_ID;;;2;bigint;;;1;;;Die eindeutige ID des Schülers – verweist auf den Schülers
 SchuelerLernabschnittsdaten;Jahr;;;3;smallint;;;1;;;Schuljahr des Lernabschnitts
 SchuelerLernabschnittsdaten;Abschnitt;;;4;smallint;;;1;;;Abschnitt des Lernabschnitts
-SchuelerLernabschnittsdaten;Bildungsgang;;;5;varchar;1;;1;;;SGL des Lernabschnitts
-SchuelerLernabschnittsdaten;WechselNr;;;6;smallint;;;1;;;Wird für Wiederholungen im Laufenden Abschnitt genutzt
-SchuelerLernabschnittsdaten;Jahrgang;;;7;smallint;;;0;;;DEPRECATED: Jahrgang des Lernabschnitts
-SchuelerLernabschnittsdaten;Hochrechnung;;;8;int;;;0;;;Lernabscnitt ist Hochrechnung (nur noch BK)
-SchuelerLernabschnittsdaten;SemesterWertung;;;9;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Gewerteter Abschnitt Ja Nein
-SchuelerLernabschnittsdaten;PruefOrdnung;;;10;varchar;20;;0;;;Prüfungsordnung des Lernabschnitts
-SchuelerLernabschnittsdaten;Klasse;;;11;varchar;15;;0;;;Klasse des Lernabschnitts (Text hie rmuss ID rein)
-SchuelerLernabschnittsdaten;Verspaetet;;;12;smallint;;;0;;;ID des Nachprüfingsfaches
-SchuelerLernabschnittsdaten;NPV_Fach_ID;;;13;bigint;;;0;;;TODO: Note der Nachprüfung
-SchuelerLernabschnittsdaten;NPV_NoteKrz;;;14;varchar;2;;0;;;TODO: Datum der Nachprüfung
-SchuelerLernabschnittsdaten;NPV_Datum;;;15;date;;;0;;DatumConverter;TODO: BK: ID des Nachprüfungsfaches für den allgemein-bildenen Abschluss
-SchuelerLernabschnittsdaten;NPAA_Fach_ID;;;16;bigint;;;0;;;TODO: BK: Note des Nachprüfungsfaches für den allgemein-bildenen Abschluss
-SchuelerLernabschnittsdaten;NPAA_NoteKrz;;;17;varchar;2;;0;;;TODO: BK: Datum der Nachprüfung für den allgemein-bildenen Abschluss
-SchuelerLernabschnittsdaten;NPAA_Datum;;;18;date;;;0;;DatumConverter;TODO: BK: dito für berufs-qualifizierende Nachprüfung
-SchuelerLernabschnittsdaten;NPBQ_Fach_ID;;;19;bigint;;;0;;;TODO: BK: dito für berufs-qualifizierende Nachprüfung
-SchuelerLernabschnittsdaten;NPBQ_NoteKrz;;;20;varchar;2;;0;;;TODO: BK: dito für berufs-qualifizierende Nachprüfung
-SchuelerLernabschnittsdaten;NPBQ_Datum;;;21;date;;;0;;DatumConverter;TODO: ID des Nachprüfingsfaches
-SchuelerLernabschnittsdaten;VersetzungKrz;;;22;varchar;2;;0;;;Kürzel des Versetungsvermerk
-SchuelerLernabschnittsdaten;AbschlussArt;;;23;smallint;;;0;;;Art des Abschlusses
-SchuelerLernabschnittsdaten;AbschlIstPrognose;;;24;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob Abschluss Prognose ist (GE PS und SK)
-SchuelerLernabschnittsdaten;Konferenzdatum;;;25;date;;;0;;DatumConverter;Konferenzdatum
-SchuelerLernabschnittsdaten;ZeugnisDatum;;;26;date;;;0;;DatumConverter;Zeugnisdatum
-SchuelerLernabschnittsdaten;KlassenLehrer;;;27;varchar;10;;0;;;Klassenlehrer Krüzel (hie rmuss ID rein)
-SchuelerLernabschnittsdaten;ASDSchulgliederung;;;28;varchar;3;;0;;;ASD-Kürzlen SGL
-SchuelerLernabschnittsdaten;ASDJahrgang;;;29;varchar;2;;0;;;ASD-Jahrgang kann alles über ID geregelt werden
-SchuelerLernabschnittsdaten;Jahrgang_ID;;;30;bigint;;;0;;;ID des Jahrgangs der zum Report zugeordnet wird
-SchuelerLernabschnittsdaten;Fachklasse_ID;;;31;bigint;;;0;;;ID der Fachklasse (BK)
-SchuelerLernabschnittsdaten;Schwerpunkt_ID;;;32;bigint;;;0;;;ID des Schwerpunkts aus dem Katalog
-SchuelerLernabschnittsdaten;ZeugnisBem;;;33;text;;;0;;;Text für Zeugnisbemerkung
-SchuelerLernabschnittsdaten;Schwerbehinderung;;;34;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Schwerbehinderung Ja Nein
-SchuelerLernabschnittsdaten;Foerderschwerpunkt_ID;;;35;bigint;;;0;;;ID Hauptförderschwerpunkt
-SchuelerLernabschnittsdaten;OrgFormKrz;;;36;varchar;1;;0;;;Kürzel der Organisationsform
-SchuelerLernabschnittsdaten;RefPaed;;;37;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;TODO DEPRECATED: Reformpädagogik
-SchuelerLernabschnittsdaten;Klassenart;;;38;varchar;2;;0;;;Klassenart
-SchuelerLernabschnittsdaten;SumFehlStd;;;39;int;;;0;;;Summer der Fehlstunden
-SchuelerLernabschnittsdaten;SumFehlStdU;;;40;int;;;0;;;Summer der Fehlstunden unentschuldigt
-SchuelerLernabschnittsdaten;Wiederholung;;;41;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Lernabscnitt ist wiederholt Ja Nein
-SchuelerLernabschnittsdaten;Gesamtnote_GS;;;42;int;;;0;;;Lernbereichnote Gesellschaftswissenschaft oder Arbeitlehre HA10
-SchuelerLernabschnittsdaten;Gesamtnote_NW;;;43;int;;;0;;;Lernbereichnote Naturwissenschaft HA10
-SchuelerLernabschnittsdaten;Folgeklasse;;;44;varchar;15;;0;;;Folgeklasse KRZ
-SchuelerLernabschnittsdaten;Foerderschwerpunkt2_ID;;;45;bigint;;;0;;;Weiterer Förderschwerpunkt ID
-SchuelerLernabschnittsdaten;Abschluss;;;46;varchar;50;;0;;;allgemeinbildender Abschluss
-SchuelerLernabschnittsdaten;Abschluss_B;;;47;varchar;50;;0;;;berufsbezogener Abschnluss (BK)
-SchuelerLernabschnittsdaten;DSNote;;;48;varchar;4;;0;;;Durchschnittsnote im betreffenden Abschnitt Ist allerdings in der Programmoberfläche nicht verfügbar Der Inhalt wird durch die Prüfungsalgorithmen gefüllt es ist eine Ausgabe in Reports möglich
-SchuelerLernabschnittsdaten;AV_Leist;;;49;int;;;0;;;DEPRECATED: Kopfnote
-SchuelerLernabschnittsdaten;AV_Zuv;;;50;int;;;0;;;DEPRECATED: Kopfnote
-SchuelerLernabschnittsdaten;AV_Selbst;;;51;int;;;0;;;DEPRECATED: Kopfnote
-SchuelerLernabschnittsdaten;SV_Verant;;;52;int;;;0;;;DEPRECATED: Kopfnote
-SchuelerLernabschnittsdaten;SV_Konfl;;;53;int;;;0;;;DEPRECATED: Kopfnote
-SchuelerLernabschnittsdaten;SV_Koop;;;54;int;;;0;;;DEPRECATED: Kopfnote
-SchuelerLernabschnittsdaten;KN_Lehrer;;;55;varchar;10;;0;;;DEPRECATED: Kopfnote
-SchuelerLernabschnittsdaten;SchulNrEigner;;;56;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
-SchuelerLernabschnittsdaten;StvKlassenlehrer_ID;;;57;bigint;;;0;;;Stellvertretender Klassenlehrer Kürzel sollte ID sein
-SchuelerLernabschnittsdaten;MoeglNPFaecher;;;58;text;;;0;;;Auflistung der mögllichen Nachprüfungsfächer kommagetrennt
-SchuelerLernabschnittsdaten;Zertifikate;;;59;varchar;30;;0;;;DEPRECATED: Hier war mal geplant, Texte für Zertifikate einzugeben
-SchuelerLernabschnittsdaten;DatumFHR;;;60;date;;;0;;DatumConverter;Datum FHR
-SchuelerLernabschnittsdaten;PruefAlgoErgebnis;;;61;text;;;0;;;Text für die Ergebnisse der Abschlussberechnungen
-SchuelerLernabschnittsdaten;Zeugnisart;;;62;varchar;5;;0;;;Angabe der Zeugnbisart
-SchuelerLernabschnittsdaten;DatumVon;;;63;date;;;0;;DatumConverter;Beginn Lernabschnitt
-SchuelerLernabschnittsdaten;DatumBis;;;64;date;;;0;;DatumConverter;Ende Lernabschnitt
-SchuelerLernabschnittsdaten;FehlstundenGrenzwert;;;65;int;;;0;;;Grenzwert für Fehlstunden (BK Warnbriefe zur Entlassung)
-SchuelerLernabschnittsdaten;Sonderpaedagoge_ID;;;66;bigint;;;0;;;Hier kann die ID einer Lehrkraft eingetragen werden die dann die Schüler als Förderpädagige betreut und im Notenmodul hat
-SchuelerLernabschnittsdaten;FachPraktAnteilAusr;;;67;varchar;1;+;1;;BooleanPlusMinusDefaultPlusConverter;Enthält die Angabe ob die Fachpraktischen Anteile in Anlage B08 B09 B10 ausreichend sind für Versetzung (BK)
+SchuelerLernabschnittsdaten;WechselNr;;;5;smallint;;;1;;;Wird für Wiederholungen im Laufenden Abschnitt genutzt
+SchuelerLernabschnittsdaten;Jahrgang;;;6;smallint;;;0;;;DEPRECATED: Jahrgang des Lernabschnitts
+SchuelerLernabschnittsdaten;Hochrechnung;;;7;int;;;0;;;Lernabschnitt ist Hochrechnung (nur noch BK)
+SchuelerLernabschnittsdaten;SemesterWertung;;;8;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Gewerteter Abschnitt (Ja/Nein)
+SchuelerLernabschnittsdaten;PruefOrdnung;;;9;varchar;20;;0;;;Prüfungsordnung des Lernabschnitts
+SchuelerLernabschnittsdaten;Klasse;;;10;varchar;15;;0;;;Klasse des Lernabschnitts (Text hier - muss ID rein)
+SchuelerLernabschnittsdaten;Verspaetet;;;11;smallint;;;0;;;ID des Nachprüfungsfaches
+SchuelerLernabschnittsdaten;NPV_Fach_ID;;;12;bigint;;;0;;;TODO: Note der Nachprüfung
+SchuelerLernabschnittsdaten;NPV_NoteKrz;;;13;varchar;2;;0;;;TODO: Datum der Nachprüfung
+SchuelerLernabschnittsdaten;NPV_Datum;;;14;date;;;0;;DatumConverter;TODO: BK: ID des Nachprüfungsfaches für den allgemein-bildenen Abschluss
+SchuelerLernabschnittsdaten;NPAA_Fach_ID;;;15;bigint;;;0;;;TODO: BK: Note des Nachprüfungsfaches für den allgemein-bildenen Abschluss
+SchuelerLernabschnittsdaten;NPAA_NoteKrz;;;16;varchar;2;;0;;;TODO: BK: Datum der Nachprüfung für den allgemein-bildenen Abschluss
+SchuelerLernabschnittsdaten;NPAA_Datum;;;17;date;;;0;;DatumConverter;TODO: BK: dito für berufs-qualifizierende Nachprüfung
+SchuelerLernabschnittsdaten;NPBQ_Fach_ID;;;18;bigint;;;0;;;TODO: BK: dito für berufs-qualifizierende Nachprüfung
+SchuelerLernabschnittsdaten;NPBQ_NoteKrz;;;19;varchar;2;;0;;;TODO: BK: dito für berufs-qualifizierende Nachprüfung
+SchuelerLernabschnittsdaten;NPBQ_Datum;;;20;date;;;0;;DatumConverter;TODO: ID des Nachprüfungsfaches
+SchuelerLernabschnittsdaten;VersetzungKrz;;;21;varchar;2;;0;;;Kürzel des Versetungsvermerk
+SchuelerLernabschnittsdaten;AbschlussArt;;;22;smallint;;;0;;;Art des Abschlusses
+SchuelerLernabschnittsdaten;AbschlIstPrognose;;;23;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob Abschluss Prognose ist (GE, PS und SK)
+SchuelerLernabschnittsdaten;Konferenzdatum;;;24;date;;;0;;DatumConverter;Konferenzdatum
+SchuelerLernabschnittsdaten;ZeugnisDatum;;;25;date;;;0;;DatumConverter;Zeugnisdatum
+SchuelerLernabschnittsdaten;KlassenLehrer;;;26;varchar;10;;0;;;Klassenlehrer Kürzel (hier muss ID rein)
+SchuelerLernabschnittsdaten;ASDSchulgliederung;;;27;varchar;3;;0;;;ASD-Kürzel SGL
+SchuelerLernabschnittsdaten;ASDJahrgang;;;28;varchar;2;;0;;;ASD-Jahrgang kann alles über ID geregelt werden
+SchuelerLernabschnittsdaten;Jahrgang_ID;;;29;bigint;;;0;;;ID des Jahrgangs der zum Report zugeordnet wird
+SchuelerLernabschnittsdaten;Fachklasse_ID;;;30;bigint;;;0;;;ID der Fachklasse (BK)
+SchuelerLernabschnittsdaten;Schwerpunkt_ID;;;31;bigint;;;0;;;ID des Schwerpunkts aus dem Katalog
+SchuelerLernabschnittsdaten;ZeugnisBem;;;32;text;;;0;;;Text für Zeugnisbemerkung
+SchuelerLernabschnittsdaten;Schwerbehinderung;;;33;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Schwerbehinderung (Ja/Nein)
+SchuelerLernabschnittsdaten;Foerderschwerpunkt_ID;;;34;bigint;;;0;;;ID Hauptförderschwerpunkt
+SchuelerLernabschnittsdaten;OrgFormKrz;;;35;varchar;1;;0;;;Kürzel der Organisationsform
+SchuelerLernabschnittsdaten;RefPaed;;;36;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;TODO DEPRECATED: Reformpädagogik
+SchuelerLernabschnittsdaten;Klassenart;;;37;varchar;2;;0;;;Klassenart
+SchuelerLernabschnittsdaten;SumFehlStd;;;38;int;;;0;;;Summer der Fehlstunden
+SchuelerLernabschnittsdaten;SumFehlStdU;;;39;int;;;0;;;Summer der Fehlstunden unentschuldigt
+SchuelerLernabschnittsdaten;Wiederholung;;;40;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Lernabschnitt wurde wiederholt (Ja/Nein)
+SchuelerLernabschnittsdaten;Gesamtnote_GS;;;41;int;;;0;;NoteConverterFromInteger;Lernbereichnote Gesellschaftswissenschaft oder Arbeitlehre HA10
+SchuelerLernabschnittsdaten;Gesamtnote_NW;;;42;int;;;0;;NoteConverterFromInteger;Lernbereichnote Naturwissenschaft HA10
+SchuelerLernabschnittsdaten;Folgeklasse;;;43;varchar;15;;0;;;Folgeklasse KRZ
+SchuelerLernabschnittsdaten;Foerderschwerpunkt2_ID;;;44;bigint;;;0;;;Weiterer Förderschwerpunkt ID
+SchuelerLernabschnittsdaten;Abschluss;;;45;varchar;50;;0;;;allgemeinbildender Abschluss
+SchuelerLernabschnittsdaten;Abschluss_B;;;46;varchar;50;;0;;;berufsbezogener Abschnluss (BK)
+SchuelerLernabschnittsdaten;DSNote;;;47;varchar;4;;0;;;Durchschnittsnote im betreffenden Abschnitt Ist allerdings in der Programmoberfläche nicht verfügbar Der Inhalt wird durch die Prüfungsalgorithmen gefüllt es ist eine Ausgabe in Reports möglich
+SchuelerLernabschnittsdaten;AV_Leist;;;48;int;;;0;;;DEPRECATED: Kopfnote
+SchuelerLernabschnittsdaten;AV_Zuv;;;49;int;;;0;;;DEPRECATED: Kopfnote
+SchuelerLernabschnittsdaten;AV_Selbst;;;50;int;;;0;;;DEPRECATED: Kopfnote
+SchuelerLernabschnittsdaten;SV_Verant;;;51;int;;;0;;;DEPRECATED: Kopfnote
+SchuelerLernabschnittsdaten;SV_Konfl;;;52;int;;;0;;;DEPRECATED: Kopfnote
+SchuelerLernabschnittsdaten;SV_Koop;;;53;int;;;0;;;DEPRECATED: Kopfnote
+SchuelerLernabschnittsdaten;KN_Lehrer;;;54;varchar;10;;0;;;DEPRECATED: Kopfnote
+SchuelerLernabschnittsdaten;SchulNrEigner;;;55;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
+SchuelerLernabschnittsdaten;StvKlassenlehrer_ID;;;56;bigint;;;0;;;Stellvertretender Klassenlehrer Kürzel sollte ID sein
+SchuelerLernabschnittsdaten;MoeglNPFaecher;;;57;text;;;0;;;Auflistung der mögllichen Nachprüfungsfächer kommagetrennt
+SchuelerLernabschnittsdaten;Zertifikate;;;58;varchar;30;;0;;;DEPRECATED: Hier war mal geplant, Texte für Zertifikate einzugeben
+SchuelerLernabschnittsdaten;DatumFHR;;;59;date;;;0;;DatumConverter;Datum FHR
+SchuelerLernabschnittsdaten;PruefAlgoErgebnis;;;60;text;;;0;;;Text für die Ergebnisse der Abschlussberechnungen
+SchuelerLernabschnittsdaten;Zeugnisart;;;61;varchar;5;;0;;;Angabe der Zeugnisart
+SchuelerLernabschnittsdaten;DatumVon;;;62;date;;;0;;DatumConverter;Beginn Lernabschnitt
+SchuelerLernabschnittsdaten;DatumBis;;;63;date;;;0;;DatumConverter;Ende Lernabschnitt
+SchuelerLernabschnittsdaten;FehlstundenGrenzwert;;;64;int;;;0;;;Grenzwert für Fehlstunden (BK Warnbriefe zur Entlassung)
+SchuelerLernabschnittsdaten;Sonderpaedagoge_ID;;;65;bigint;;;0;;;Hier kann die ID einer Lehrkraft eingetragen werden die dann die Schüler als Förderpädagoge betreut und im Notenmodul hat
+SchuelerLernabschnittsdaten;FachPraktAnteilAusr;;;66;varchar;1;+;1;;BooleanPlusMinusDefaultPlusConverter;Enthält die Angabe, ob die Fachpraktischen Anteile in Anlage B08 B09 B10 ausreichend sind für Versetzung (BK)
+SchuelerLernplattform;SchuelerID;;;1;bigint;;;1;;;SchülerID für den Lernplattform-Datensatz
+SchuelerLernplattform;LernplattformID;;;2;bigint;;;1;;;ID der Lernplattform
+SchuelerLernplattform;CredentialID;;;3;bigint;;;0;;;CredentialD für den Lernplattform-Datensatz
+SchuelerLernplattform;EinwilligungAbgefragt;;;4;int;;0;1;;Boolean01Converter;Einwilligung wurde abgefragt
+SchuelerLernplattform;EinwilligungNutzung;;;5;int;;0;1;;Boolean01Converter;Einwilligung zur Nutzung liegt vor
+SchuelerLernplattform;EinwilligungAudiokonferenz;;;6;int;;0;1;;Boolean01Converter;Einwilligung zur Audiokonferenz liegt vor
+SchuelerLernplattform;EinwilligungVideokonferenz;;;7;int;;0;1;;Boolean01Converter;Einwilligung zur Videokonferenz liegt vor
 SchuelerListe;ID;;;1;bigint;;;1;;;ID der individuellen Schülerliste
 SchuelerListe;Bezeichnung;;;2;varchar;50;;1;;;Bezeichnung der individuellen Schülerliste
 SchuelerListe;Erzeuger;;;3;varchar;20;;0;;;UserID Erzeuger der individuellen Schülerliste
@@ -1771,6 +1764,10 @@ SchuelerZuweisungen;Abschnitt_ID;;;1;bigint;;;1;;;LernabschnittsID  der Zuweisun
 SchuelerZuweisungen;Fach_ID;;;2;bigint;;;1;;;FachID der Zuweisung
 SchuelerZuweisungen;Kursart;;;3;varchar;5;;0;;;Kursart der Zuweisung
 SchuelerZuweisungen;SchulNrEigner;;;4;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
+SchuleCredentials;Schulnummer;;;1;int;;;1;;;ID für den Credential-Datensatz einer Schule (also auch für den PublicKey der anderen Schulen)
+SchuleCredentials;RSAPublicKey;;;2;text;;;0;;;RSAPublicKey für den Credential-Datensatz einer Schule
+SchuleCredentials;RSAPrivateKey;;;3;text;;;0;;;RSAPrivateKey für den Credential-Datensatz der Schule falls es die eigene ist sonst NULL
+SchuleCredentials;AES;;;4;text;;;0;;;AES-Schlüssel für den Credential-Datensatz der Schule falls es die eigene ist sonst NULL
 Schulver_DBS;SchulNr;;;1;varchar;6;;1;;;Schulver Tabelle IT.NRW: Schulnummer der Schule
 Schulver_DBS;RegSchl;;;2;varchar;6;;0;;;Schulver Tabelle IT.NRW: Regionalschlüssel der Schule
 Schulver_DBS;KoRe;;;3;float;;;0;;;Schulver Tabelle IT.NRW: ???
@@ -1786,7 +1783,7 @@ Schulver_DBS;Telefon;;;12;varchar;12;;0;;;Schulver Tabelle IT.NRW: Telefonnummer
 Schulver_DBS;FaxVorw;;;13;varchar;6;;0;;;Schulver Tabelle IT.NRW: Faxvorwahl der Schule
 Schulver_DBS;Fax;;;14;varchar;15;;0;;;Schulver Tabelle IT.NRW: Faxnummer der Schule
 Schulver_DBS;ModemVorw;;;15;varchar;6;;0;;;Schulver Tabelle IT.NRW: Modemvorwahl der Schule
-Schulver_DBS;Modem;;;16;varchar;15;;0;;;Schulver Tabelle IT.NRW: Medem-telefonnummer der Schule
+Schulver_DBS;Modem;;;16;varchar;15;;0;;;Schulver Tabelle IT.NRW: Modem-Telefonnummer der Schule
 Schulver_DBS;SF;;;17;varchar;2;;0;;;Schulver Tabelle IT.NRW: Schulform der Schule
 Schulver_DBS;OeffPri;;;18;varchar;1;;0;;;Schulver Tabelle IT.NRW: ???
 Schulver_DBS;KurzBez;;;19;varchar;40;;0;;;Schulver Tabelle IT.NRW: Kurzbezeichnung der Schule
@@ -2083,15 +2080,80 @@ Statkue_Strassen;Ort;;;1;varchar;50;;1;;;Katalog von ITNRW Straßen: zugehörige
 Statkue_Strassen;RegSchl;;;2;varchar;8;;1;;;Katalog von ITNRW Straßen: zugehöriger Regionalschlüssel
 Statkue_Strassen;Strasse;;;3;varchar;75;;1;;;Katalog von ITNRW Straßen: Straßenname
 Statkue_Strassen;Stand;;;4;varchar;20;;0;;;Katalog von ITNRW Straßen: aktueller Stand
+Statkue_SVWS_BKAnlagen;BKAnlage;;;1;varchar;1;;1;;;Einstelliges Kürzel der BK-Anlage (A,B,C,D,E)
+Statkue_SVWS_BKAnlagen;Beschreibung;;;2;varchar;120;;1;;;Textuelle Beschreibung der BK-Anlage
+Statkue_SVWS_Fachgruppen;ID;;;1;bigint;;;1;;;ID in der von SVWS erstellten Tabelle mit Fachgruppen die zu SchildNRW und Lupo passen Mapping
+Statkue_SVWS_Fachgruppen;Fachbereich;;;2;int;;;0;;;Fachbereich (Nr) der Fachgruppe aus Lupo
+Statkue_SVWS_Fachgruppen;SchildFgID;;;3;bigint;;;0;;;Fachgruppen ID aus SchildNRW
+Statkue_SVWS_Fachgruppen;FG_Bezeichnung;;;4;varchar;80;;1;;;Bezeichnung der Fachgruppe
+Statkue_SVWS_Fachgruppen;FG_Kuerzel;;;5;varchar;10;;0;;;Kürzel der Fachgruppe
+Statkue_SVWS_Fachgruppen;Schulformen;;;6;varchar;255;;0;;;Gibt an in welchen Schulformen die Fachgruppe zulässig ist
+Statkue_SVWS_Fachgruppen;FarbeR;;;7;int;;;0;;;RotWert der Fachgruppenfarbe
+Statkue_SVWS_Fachgruppen;FarbeG;;;8;int;;;0;;;GrünWert der Fachgruppenfarbe
+Statkue_SVWS_Fachgruppen;FarbeB;;;9;int;;;0;;;BlauWert der Fachgruppenfarbe
+Statkue_SVWS_Fachgruppen;gueltigVon;;;10;int;;;0;;;Das Schuljahr, ab dem die Fachgruppe eingeführt wurde
+Statkue_SVWS_Fachgruppen;gueltigBis;;;11;int;;;0;;;Das Schuljahr, bis wann die Fachgruppe gültig ist
+Statkue_SVWS_Schulgliederungen;SGL;;;1;varchar;3;;1;;;Das dreistellige Kürzel der Schulgliederung bzw. des Bildungsganges
+Statkue_SVWS_Schulgliederungen;istBK;;;2;int;;0;1;;Boolean01Converter;Boolscher Wert ob es sich um eine Schulgliederung einer BK-Anlage handelt
+Statkue_SVWS_Schulgliederungen;Schulformen;;;3;varchar;120;;1;;;eine Komma-separierte Liste der Schulform-Kürzel, bei denen der Bildungsgang vorhanden ist
+Statkue_SVWS_Schulgliederungen;istAuslaufend;;;4;int;;0;1;;Boolean01Converter;Boolscher Wert ob es sich um eine auslaufende Schulgliederung handelt
+Statkue_SVWS_Schulgliederungen;istAusgelaufen;;;5;int;;0;1;;Boolean01Converter;Boolscher Wert ob die Schulgliederung bereits ausgelaufen ist
+Statkue_SVWS_Schulgliederungen;Beschreibung;;;6;varchar;120;;1;;;die textuelle Beschreibung der Schulgliederung
+Statkue_SVWS_Schulgliederungen;BKAnlage;;;7;varchar;1;;0;;;die Anlage bei einem Bildungsgang des Berufskollegs
+Statkue_SVWS_Schulgliederungen;BKTyp;;;8;varchar;2;;0;;;der Typ der Anlage bei einem Bildungsgang des Berufskollegs
+Statkue_SVWS_Schulgliederungen;BKIndex;;;9;varchar;10;;0;;;der Index in die Fachklassen-Tabelle einem Bildungsgang des Berufskollegs
+Statkue_SVWS_Schulgliederungen;istVZ;;;10;int;;0;0;;Boolean01Converter;Boolscher Wert ob ein Bildungsgang des Berufskollegs Vollzeit erfordert  
+Statkue_SVWS_Schulgliederungen;BKAbschlussBeruf;;;11;varchar;10;;0;;;der berufsbildende Abschluss bei einem Bildungsgang des Berufskollegs
+Statkue_SVWS_Schulgliederungen;BKAbschlussAllg;;;12;varchar;10;;0;;;del allgemeinbildende Abschluss bei einem Bildungsgang des Berufskollegs
+Statkue_SVWS_ZulaessigeFaecher;Fach;;;1;varchar;2;;1;;;Fachkürzel aus der Tabelle StatkueZulaessigeFaecher von ITNRW
+Statkue_SVWS_ZulaessigeFaecher;Bezeichnung;;;2;varchar;80;;1;;;Bezeichnung aus der Tabelle Faecher von ITNRW
+Statkue_SVWS_ZulaessigeFaecher;FachkuerzelAtomar;;;3;varchar;2;;1;;;atomarisiertes Fachkürzel
+Statkue_SVWS_ZulaessigeFaecher;Kurzbezeichnung;;;4;varchar;80;;0;;;kürzere Bezeichnung falls gewünscht
+Statkue_SVWS_ZulaessigeFaecher;Aufgabenfeld;;;5;int;;;0;;;das Aufgabenfeld, welchem das Fach zugeordnet ist (1, 2 oder 3) 
+Statkue_SVWS_ZulaessigeFaecher;Fachgruppe_ID;;;6;bigint;;;0;;;Die ID der zugeordneten Fachgruppe
+Statkue_SVWS_ZulaessigeFaecher;SchulformenUndGliederungen;;;7;varchar;255;;0;;;Gibt die Schulformen an in denen das Fach erlaubt ist (R,H,2020) gibt an dass ein Fach an R nur in H ab 2020 erlaubt ist
+Statkue_SVWS_ZulaessigeFaecher;SchulformenAusgelaufen;;;8;varchar;255;;0;;;Gibt an ab wann ein Fach in einer Schulform ausgelaufen ist (R,H,2020) gibt an in welcher SF und SQL ausgelaufen ist
+Statkue_SVWS_ZulaessigeFaecher;AusgelaufenInSchuljahr;;;9;varchar;255;;0;;;Gibt an ob ein Fach in Schuljahr komplett ausgelaufen ist
+Statkue_SVWS_ZulaessigeFaecher;AbJahrgang;;;10;varchar;2;;0;;;Jahrgang ab dem das Fach unterrichtet werden darf
+Statkue_SVWS_ZulaessigeFaecher;IstFremdsprache;;;11;int;;;1;;Boolean01Converter;Boolscher Wert ob es eine Fremdsprache ist
+Statkue_SVWS_ZulaessigeFaecher;IstHKFS;;;12;int;;;1;;Boolean01Converter;Boolscher Wert ob es eine HerkunftsFremdsprache ist
+Statkue_SVWS_ZulaessigeFaecher;IstAusRegUFach;;;13;int;;;1;;Boolean01Converter;Boolscher Wert ob es ein reguläres Unterrichtsfach ist
+Statkue_SVWS_ZulaessigeFaecher;IstErsatzPflichtFS;;;14;int;;;1;;Boolean01Converter;Boolscher Wert ob es eine Ersatzpflichfremdsprache ist
+Statkue_SVWS_ZulaessigeFaecher;IstKonfKoop;;;15;int;;;1;;Boolean01Converter;Boolscher Wert ob es eine Religionslehre im KOOP ist
+Statkue_SVWS_ZulaessigeFaecher;NurSII;;;16;int;;;1;;Boolean01Converter;Boolscher Wert ob das Fach nur in der SII unterrichtet werden darf
+Statkue_SVWS_ZulaessigeFaecher;ExportASD;;;17;int;;;1;;Boolean01Converter;Boolscher Wert ob das Fach für den ASDExport vorgesehen ist
+Statkue_SVWS_ZulaessigeFaecher;gueltigVon;;;18;int;;;0;;;Das Schuljahr, ab dem das Fach eingeführt wurde
+Statkue_SVWS_ZulaessigeFaecher;gueltigBis;;;19;int;;;0;;;Das Schuljahr, bis wann das Fach gültig ist
+Statkue_SVWS_ZulaessigeJahrgaenge;ID;;;1;bigint;;;1;;;ID des zulässigen Jahrgangs
+Statkue_SVWS_ZulaessigeJahrgaenge;Schulform;;;2;varchar;2;;1;;;Schulformnummer in der der Jahrgang zulässig ist (hier kann zwischen FW/Hibernia und S/Schule für Kranke unterschieden werden)
+Statkue_SVWS_ZulaessigeJahrgaenge;SchulformKuerzel;;;3;varchar;3;;2;;;SchulformKürzel in der der Jahrgang zulässig ist (hier kann nicht zwischen FW/Hibernia und S/Schule für Kranke unterschieden werden)
+Statkue_SVWS_ZulaessigeJahrgaenge;Jahrgang;;;4;varchar;2;;1;;;ASDKürzel das Jahrgangs
+Statkue_SVWS_ZulaessigeJahrgaenge;Beschreibung;;;5;varchar;80;;1;;;Beschreibung des Jahrgangs
+Statkue_SVWS_ZulaessigeJahrgaenge;Beginn;;;6;datetime;;;0;;;Datum ab wann der Eintrag gültig ist
+Statkue_SVWS_ZulaessigeJahrgaenge;Ende;;;7;datetime;;;0;;;Datum bis wann der Eintrag gültig ist
+Statkue_SVWS_ZulaessigeJahrgaenge;geaendert;;;8;datetime;;;0;;;Datum wann der Eintrag zuletzt geändert wurde
+Statkue_SVWS_ZulaessigeJahrgaenge;Sortierung;;;9;int;;0;0;;;Sortierungsnummer des zulässigen Jahrgangs
+Statkue_SVWS_ZulaessigeKursarten;ID;;;1;varchar;5;;1;;;Eine eindeutige ID die auch als Bezeichner in der Programmiersprache genutzt wird
+Statkue_SVWS_ZulaessigeKursarten;Kuerzel;;;2;varchar;5;;1;;;das in der Statistik verwendete Kürzel der Kursart ITNRW
+Statkue_SVWS_ZulaessigeKursarten;ASDNummer;;;3;varchar;2;;1;;;die Statistiknummer in der ASD von ITNRW
+Statkue_SVWS_ZulaessigeKursarten;Bezeichnung;;;4;varchar;120;;1;;;die Bezeichnung der Kursart in vereinfachter Form für die Anzeige im Client
+Statkue_SVWS_ZulaessigeKursarten;KuerzelAllg;;;5;varchar;5;;0;;;die allgemeine Kursart die nicht schülerspezifisch ist sonder die gesamte Gruppe betrifft
+Statkue_SVWS_ZulaessigeKursarten;BezeichnungAllg;;;6;varchar;120;;0;;;die allgemeine Bezeichnung zur allgemeinen Kursart
+Statkue_SVWS_ZulaessigeKursarten;erlaubtGOSt;;;7;int;;0;1;;Boolean01Converter;gibt an ob eine Kursart für die Abiturberechnung belegt werden darf
+Statkue_SVWS_ZulaessigeKursarten;Bemerkungen;;;8;varchar;120;;0;;;Bemerkungen zu Paragraphen in der BASS
+Statkue_SVWS_ZulaessigeKursarten;SchulformenUndGliederungen;;;5;varchar;255;;0;;;Gibt die Schulformen an in denen die Kursart erlaubt ist (R,H,2020) gibt an dass die Kursart an R nur in H ab 2020 erlaubt ist
+Statkue_SVWS_ZulaessigeKursarten;SchulformenAusgelaufen;;;6;varchar;255;;0;;;Gibt an ab wann die Kursart in einer Schulform ausgelaufen ist (R,H,2020) gibt an in welcher SF und SQL ausgelaufen ist
+Statkue_SVWS_ZulaessigeKursarten;AusgelaufenInSchuljahr;;;7;varchar;255;;0;;;Gibt an ob die Kursart in Schuljahr komplett ausgelaufen ist
 Statkue_ZulFaecher;Schulform;;;1;varchar;2;;1;;;Katalog von ITNRW  Schulform in der das zulässige FAch vorkommen darf
-Statkue_ZulFaecher;FSP;;;2;varchar;2;;1;;;Katalog von ITNRW  Förderschwerpunkt  in dem das zulässige FAch vorkommen darf
-Statkue_ZulFaecher;BG;;;3;varchar;2;;1;;;Katalog von ITNRW  ???
+Statkue_ZulFaecher;FSP;;;2;varchar;2;;0;;;Katalog von ITNRW  Förderschwerpunkt  in dem das zulässige FAch vorkommen darf
+Statkue_ZulFaecher;BG;;;3;varchar;3;;0;;;Katalog von ITNRW  ???
 Statkue_ZulFaecher;Fach;;;4;varchar;2;;1;;;Katalog von ITNRW  Fachkürzel
 Statkue_ZulFaecher;Bezeichnung;;;5;varchar;80;;1;;;Katalog von ITNRW  Klartext des Faches
-Statkue_ZulFaecher;KZ_Bereich;;;6;int;;0;0;;;Katalog von ITNRW  ???
-Statkue_ZulFaecher;Flag;;;7;varchar;1;1;0;;;Katalog von ITNRW  ???
-Statkue_ZulFaecher;Sortierung;;;8;int;;0;0;;;Katalog von ITNRW  Sortierung des FAches
-Statkue_ZulFaecher;geaendert;;;9;datetime;;;0;;;Katalog von ITNRW  Datum der letzten Änderung
+Statkue_ZulFaecher;KZ_Bereich;;;6;int;;0;0;;;Katalog von ITNRW  wird nur noch von IT.NRW aus technischen Gründen benötigt für Cllient irrelevant
+Statkue_ZulFaecher;Flag;;;7;varchar;1;1;0;;;Katalog von ITNRW  1 = zulässig für die Hauptzeilen in der UVD 2 = zulässig für die Folgezeilen in der UVD (Anmerkung: nur Fremdsprachen) 3 = nur für SchILD
+Statkue_ZulFaecher;Sortierung;;;8;int;;0;0;;;Katalog von ITNRW  Sortierung des Faches in ASDPC32 primär
+Statkue_ZulFaecher;Sortierung2;;;9;int;;0;0;;;Katalog von ITNRW  Sortierung2 des Faches in ASDPC32 sekundär
+Statkue_ZulFaecher;geaendert;;;10;datetime;;;0;;;Katalog von ITNRW  Datum der letzten Änderung
 Statkue_ZulJahrgaenge;ID;;;1;bigint;;;1;;;Katalog von ITNRW  ID des zulässigen Jahrgangs
 Statkue_ZulJahrgaenge;Schulform;;;2;varchar;2;;1;;;Katalog von ITNRW  Schulform  für den zulässigen Jahrgang
 Statkue_ZulJahrgaenge;SNR;;;3;varchar;6;;0;;;Katalog von ITNRW  ???
@@ -2107,12 +2169,12 @@ Statkue_ZulKlArt;Schulform;;;4;varchar;2;;1;;;Katalog von ITNRW Schulform der zu
 Statkue_ZulKlArt;geaendert;;;5;datetime;;;0;;;Katalog von ITNRW Änderungsdatum der zulässigen Klassenarten
 Statkue_ZulKuArt;SF;;;1;varchar;2;;1;;;Katalog von ITNRW Schulform der zulässigen Kursarten
 Statkue_ZulKuArt;FSP;;;2;varchar;2;;1;;;Katalog von ITNRW Förderschwerpunkt der zulässigen Kursarten
-Statkue_ZulKuArt;BG;;;3;varchar;2;;1;;;Katalog von ITNRW BG der zulässigen Kursarten
+Statkue_ZulKuArt;BG;;;3;varchar;3;;1;;;Katalog von ITNRW BG der zulässigen Kursarten
 Statkue_ZulKuArt;Kursart;;;4;varchar;3;;1;;;Katalog von ITNRW Kursartschlüssel der zulässigen Kursarten
 Statkue_ZulKuArt;Kursart2;;;5;varchar;5;;1;;;Katalog von ITNRW Kursartkurztext der zulässigen Kursarten
 Statkue_ZulKuArt;Bezeichnung;;;6;varchar;120;;1;;;Katalog von ITNRW Langtext der der zulässigen Kursarten
-Statkue_ZulKuArt;JgBereich;;;7;int;;0;1;;;Katalog von ITNRW Jahrgangsbereich der zulässigen Kursarten
-Statkue_ZulKuArt;Flag;;;8;varchar;1;1;1;;;Katalog von ITNRW Flag der zulässigen Klassenarten
+Statkue_ZulKuArt;SGLBereich;;;7;int;;0;1;;;Katalog von ITNRW Jahrgangsbereich der zulässigen Kursarten
+Statkue_ZulKuArt;Flag;;;8;varchar;1;1;1;;;Katalog von ITNRW: 1 = zulässig für Hauptzeilen in der UVD 2 = zulässig für Folgezeilen in der UVD 3 = gelöscht kann im Client auf 1 gefiltert sein
 Statkue_ZulKuArt;geaendert;;;9;datetime;;;0;;;Katalog von ITNRW Änderungsdatum der zulässigen Kursarten
 Stundenplan;ID;;;1;bigint;;;1;;;Die ID des Stundenplans
 Stundenplan;Schuljahr;;;2;int;;;1;;;Das Schuljahr, in dem der Stundenplan gültig ist

@@ -1,4 +1,5 @@
 Name;Revision;Veraltet;NameTabelle;NameSpalte
+Credentials_UC1;;;Credentials;Benutzername
 EigeneSchule_Fachklassen_UC1;;;EigeneSchule_Fachklassen;AP
 EigeneSchule_Fachklassen_UC1;;;EigeneSchule_Fachklassen;BKIndexTyp
 EigeneSchule_Fachklassen_UC1;;;EigeneSchule_Fachklassen;FKS
@@ -57,7 +58,6 @@ SchuelerLeistungsdaten_UC1;2;;SchuelerLeistungsdaten;Fachlehrer
 SchuelerLeistungsdaten_UC1;2;;SchuelerLeistungsdaten;Kurs_ID
 SchuelerLeistungsdaten_UC1;2;;SchuelerLeistungsdaten;Kursart
 SchuelerLernabschnittsdaten_UC1;;;SchuelerLernabschnittsdaten;Abschnitt
-SchuelerLernabschnittsdaten_UC1;;;SchuelerLernabschnittsdaten;Bildungsgang
 SchuelerLernabschnittsdaten_UC1;;;SchuelerLernabschnittsdaten;Jahr
 SchuelerLernabschnittsdaten_UC1;;;SchuelerLernabschnittsdaten;Schueler_ID
 SchuelerLernabschnittsdaten_UC1;;;SchuelerLernabschnittsdaten;WechselNr

@@ -1,11 +1,16 @@
 Revision;Veraltet;Reihenfolge;dbms;NameTabelle;Kommentar;UpdateOnly;sql
-1;;1;ALL;K_Lehrer;Korrektur für den Fremschluessel auf die Spalte StaatKrz der Tabelle K_Lehrer;1;UPDATE K_Lehrer SET StaatKrz = NULL WHERE StaatKrz NOT IN (SELECT Schluessel FROM Statkue_Nationalitaeten)
-1;;2;ALL;Schueler;Korrektur für den Fremschluessel auf die Spalte StaatKrz der Tabelle Schueler;1;UPDATE Schueler SET StaatKrz = NULL WHERE StaatKrz NOT IN (SELECT Schluessel FROM Statkue_Nationalitaeten)
-1;;3;ALL;SchuelerLeistungsdaten;Korrektur für den Fremschluessel auf die Spalte Fachlehrer der Tabelle SchuelerLeistungsdaten;1;UPDATE SchuelerLeistungsdaten SET Fachlehrer = NULL WHERE Fachlehrer NOT IN (SELECT Kuerzel FROM K_Lehrer)
-1;;4;ALL;SchuelerLernabschnittsdaten;Korrektur für den Fremschluessel auf die Spalte Jahrgang_ID der Tabelle Lernabschnittsdaten;1;UPDATE SchuelerLernabschnittsdaten SET Jahrgang_ID = NULL WHERE Jahrgang_ID NOT IN (SELECT ID FROM EigeneSchule_Jahrgaenge)
-1;;5;ALL;SchuelerLeistungsdaten;Fehlerbehebung bei einer fehlenden Kursart, Kursart raten und setzen auf PUK, falls die Kurs_ID nicht gesetzt ist;1;UPDATE SchuelerLeistungsdaten SET Kursart = 'PUK', KursartAllg = 'PUK' WHERE ((Kursart IS NULL) OR (Kursart = '')) AND (Kurs_ID IS NULL)  
-1;;6;ALL;SchuelerLeistungsdaten;Fehlerbehebung bei einer fehlenden Kursart, Kursart raten und setzen auf PUT, falls die Kurs_ID gesetzt ist;1;UPDATE SchuelerLeistungsdaten SET Kursart = 'PUT', KursartAllg = 'PUT' WHERE ((Kursart IS NULL) OR (Kursart = '')) AND (Kurs_ID IS NOT NULL)
-1;;7;MSSQL;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten;1;"DELETE FROM SchuelerLeistungsdaten 
+1;;1;ALL;EigeneSchule;Korrigiere das Feld SchulformKrz bei der Schulform PS;1;UPDATE EigeneSchule SET SchulformKrz = 'PS' WHERE SchulformNr = 13 AND SchulformKrz <> 'PS'
+1;;2;ALL;EigeneSchule;Korrigiere das Feld SchulformKrz bei der Schulform SK;1;UPDATE EigeneSchule SET SchulformKrz = 'SK' WHERE SchulformNr = 14 AND SchulformKrz <> 'SK'
+1;;3;ALL;EigeneSchule;Korrigiere das Feld SchulformKrz bei der Schulform GM;1;UPDATE EigeneSchule SET SchulformKrz = 'GM' WHERE SchulformNr = 16 AND SchulformKrz <> 'GM'
+1;;4;ALL;K_Lehrer;Korrektur für den Fremschluessel auf die Spalte StaatKrz der Tabelle K_Lehrer;1;UPDATE K_Lehrer SET StaatKrz = NULL WHERE StaatKrz NOT IN (SELECT Schluessel FROM Statkue_Nationalitaeten)
+1;;5;ALL;Schueler;Korrektur für den Fremschluessel auf die Spalte StaatKrz der Tabelle Schueler;1;UPDATE Schueler SET StaatKrz = NULL WHERE StaatKrz NOT IN (SELECT Schluessel FROM Statkue_Nationalitaeten)
+1;;6;ALL;SchuelerLeistungsdaten;Korrektur für den Fremschluessel auf die Spalte Fachlehrer der Tabelle SchuelerLeistungsdaten;1;UPDATE SchuelerLeistungsdaten SET Fachlehrer = NULL WHERE Fachlehrer NOT IN (SELECT Kuerzel FROM K_Lehrer)
+1;;7;ALL;SchuelerLernabschnittsdaten;Korrektur für den Fremschluessel auf die Spalte Jahrgang_ID der Tabelle Lernabschnittsdaten;1;UPDATE SchuelerLernabschnittsdaten SET Jahrgang_ID = NULL WHERE Jahrgang_ID NOT IN (SELECT ID FROM EigeneSchule_Jahrgaenge)
+1;;8;ALL;SchuelerLeistungsdaten;Fehlerbehebung bei einer fehlenden Kursart, Kursart raten und setzen auf PUK, falls die Kurs_ID nicht gesetzt ist;1;UPDATE SchuelerLeistungsdaten SET Kursart = 'PUK', KursartAllg = 'PUK' WHERE ((Kursart IS NULL) OR (Kursart = '')) AND (Kurs_ID IS NULL)  
+1;;9;ALL;SchuelerLeistungsdaten;Fehlerbehebung bei einer fehlenden Kursart, Kursart raten und setzen auf PUT, falls die Kurs_ID gesetzt ist;1;UPDATE SchuelerLeistungsdaten SET Kursart = 'PUT', KursartAllg = 'PUT' WHERE ((Kursart IS NULL) OR (Kursart = '')) AND (Kurs_ID IS NOT NULL)
+1;;10;ALL;SchuelerLD_PSFachBem;Kopieren der Daten im Feld LELS in das Feld AUE, falls die Schulform keine Grundschule ist.;1;UPDATE SchuelerLD_PSFachBem SET AUE = LELS WHERE ((SELECT count(*) FROM EigeneSchule WHERE SchulformKrz = 'G') = 0) AND LELS IS NOT NULL
+1;;11;ALL;SchuelerLD_PSFachBem;Löschen der Daten im Feld LELS, falls die Schulform keine Grundschule ist.;1;UPDATE SchuelerLD_PSFachBem SET LELS = NULL WHERE ((SELECT count(*) FROM EigeneSchule WHERE SchulformKrz = 'G') = 0) AND LELS IS NOT NULL
+1;;12;MSSQL;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten;1;"DELETE FROM SchuelerLeistungsdaten 
 WHERE ID IN (
   SELECT a.ID FROM SchuelerLeistungsdaten a 
     JOIN (SELECT max(ID) AS maxID, Abschnitt_ID, Fach_ID, Fachlehrer, Kurs_ID, Kursart FROM SchuelerLeistungsdaten GROUP BY Abschnitt_ID, Fach_ID, Fachlehrer, Kurs_ID, Kursart HAVING count(*) > 1) b
@@ -16,7 +21,7 @@ WHERE ID IN (
     	AND ((a.Kursart = b.Kursart) OR (a.Kursart IS NULL AND b.Kursart IS NULL)) 
     	AND a.ID <> b.maxID
 )"
-1;;7;SQLITE;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten;1;"DELETE FROM SchuelerLeistungsdaten 
+1;;12;SQLITE;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten;1;"DELETE FROM SchuelerLeistungsdaten 
 WHERE ID IN (
   SELECT a.ID FROM SchuelerLeistungsdaten a 
     JOIN (SELECT max(ID) AS maxID, Abschnitt_ID, Fach_ID, Fachlehrer, Kurs_ID, Kursart FROM SchuelerLeistungsdaten GROUP BY Abschnitt_ID, Fach_ID, Fachlehrer, Kurs_ID, Kursart HAVING count(*) > 1) b
@@ -27,9 +32,9 @@ WHERE ID IN (
     	AND ((a.Kursart = b.Kursart) OR (a.Kursart IS NULL AND b.Kursart IS NULL)) 
     	AND a.ID <> b.maxID
 )"
-1;;7;MARIA_DB;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (1);1;"CREATE TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_MaxID AS
+1;;12;MARIA_DB;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (1);1;"CREATE TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_MaxID AS
 SELECT max(ID) AS maxID, Abschnitt_ID, Fach_ID, Fachlehrer, Kurs_ID, Kursart FROM SchuelerLeistungsdaten GROUP BY Abschnitt_ID, Fach_ID, Fachlehrer, Kurs_ID, Kursart HAVING count(*) > 1"
-1;;8;MARIA_DB;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (2);1;"CREATE TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_DeleteIDs AS
+1;;13;MARIA_DB;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (2);1;"CREATE TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_DeleteIDs AS
   SELECT a.ID FROM SchuelerLeistungsdaten a 
     JOIN TMP_SchuelerLeistungsdaten_Duplikate_MaxID b
     ON a.Abschnitt_ID = b.Abschnitt_ID 
@@ -39,13 +44,13 @@ SELECT max(ID) AS maxID, Abschnitt_ID, Fach_ID, Fachlehrer, Kurs_ID, Kursart FRO
     	AND ((a.Kursart = b.Kursart) OR (a.Kursart IS NULL AND b.Kursart IS NULL)) 
     	AND a.ID <> b.maxID
 "
-1;;9;MARIA_DB;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (3);1;"DELETE FROM SchuelerLeistungsdaten 
+1;;14;MARIA_DB;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (3);1;"DELETE FROM SchuelerLeistungsdaten 
 WHERE ID IN (SELECT ID FROM TMP_SchuelerLeistungsdaten_Duplikate_DeleteIDs)"
-1;;10;MARIA_DB;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (4);1;DROP TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_DeleteIDs
-1;;11;MARIA_DB;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (5);1;DROP TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_MaxID
-1;;7;MYSQL;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (1);1;"CREATE TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_MaxID AS
+1;;15;MARIA_DB;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (4);1;DROP TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_DeleteIDs
+1;;16;MARIA_DB;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (5);1;DROP TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_MaxID
+1;;12;MYSQL;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (1);1;"CREATE TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_MaxID AS
 SELECT max(ID) AS maxID, Abschnitt_ID, Fach_ID, Fachlehrer, Kurs_ID, Kursart FROM SchuelerLeistungsdaten GROUP BY Abschnitt_ID, Fach_ID, Fachlehrer, Kurs_ID, Kursart HAVING count(*) > 1"
-1;;8;MYSQL;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (2);1;"CREATE TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_DeleteIDs AS
+1;;13;MYSQL;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (2);1;"CREATE TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_DeleteIDs AS
   SELECT a.ID FROM SchuelerLeistungsdaten a 
     JOIN TMP_SchuelerLeistungsdaten_Duplikate_MaxID b
     ON a.Abschnitt_ID = b.Abschnitt_ID 
@@ -55,10 +60,10 @@ SELECT max(ID) AS maxID, Abschnitt_ID, Fach_ID, Fachlehrer, Kurs_ID, Kursart FRO
     	AND ((a.Kursart = b.Kursart) OR (a.Kursart IS NULL AND b.Kursart IS NULL)) 
     	AND a.ID <> b.maxID
 "
-1;;9;MYSQL;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (3);1;"DELETE FROM SchuelerLeistungsdaten 
+1;;14;MYSQL;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (3);1;"DELETE FROM SchuelerLeistungsdaten 
 WHERE ID IN (SELECT ID FROM TMP_SchuelerLeistungsdaten_Duplikate_DeleteIDs)"
-1;;10;MYSQL;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (4);1;DROP TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_DeleteIDs
-1;;11;MYSQL;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (5);1;DROP TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_MaxID
+1;;15;MYSQL;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (4);1;DROP TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_DeleteIDs
+1;;16;MYSQL;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (5);1;DROP TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_MaxID
 2;;1;ALL;Kurs_Schueler;Initialisierung Kurs_Schueler: ggf. leeren;0;DELETE FROM Kurs_Schueler
 2;;2;MSSQL;Kurs_Schueler;Entfernen fehlerhafter Kurs-Einträge in den Leistungsdaten (Zuordnung zu Lernabschnitten);0;"UPDATE SchuelerLeistungsdaten SET Kurs_ID = NULL WHERE ID IN (
 SELECT DISTINCT

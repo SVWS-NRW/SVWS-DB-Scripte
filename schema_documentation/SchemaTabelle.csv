@@ -1,5 +1,6 @@
 Name;Revision;Veraltet;Migration;JavaKlasse;JavaPackage;JavaKommentar
 AllgAdrAnsprechpartner;0;-1;1;DTOAnsprechpartnerAllgemeineAdresse;schild.katalog;Ansprechpartner-Daten die einem Betrieb/Adresse in K_AllgAdresse zugeordnet werden können
+Credentials;0;-1;1;DTOCredentials;svws.auth;Daten für die Zugänge zu anderen Systemen (Lernplattformen) und später auch für SingleSignOn-Lösungen
 EigeneSchule;0;-1;1;DTOEigeneSchule;schild.schule;Tabelle in der die Daten der Schule verwaltet werden, diese Tabelle darf in einer Einzelinstallation nur eine Zeile haben
 EigeneSchule_Abt_Kl;0;-1;1;DTOAbteilungsKlassen;schild.schule;Tabelle ordnet den Abteilungen (EigeneSchule_Abteilungen) die zugehörigen Klassen zu
 EigeneSchule_Abteilungen;0;-1;1;DTOAbteilungen;schild.schule;Katalog der Abteilungen, denen dann ein Abteilungsleiter zugewiesen werden kann 
@@ -14,6 +15,8 @@ EigeneSchule_Schulformen;0;-1;1;DTOSchulformen;schild.schule;Liste der Schulglie
 EigeneSchule_Teilstandorte;0;-1;1;DTOTeilstandorte;schild.schule;Liste der Teilstandorte Schule bearbeiten > Teilstandorte > (It.NRW benutzt dieses Merkmal zu Bildung von Teilklassen in der sim.txt)
 EigeneSchule_Texte;0;-1;1;DTOSchultexte;schild.schule;Texte, die unter Schule bearbeiten erstellt werden und in Reports abgerufen werden können.
 EigeneSchule_Zertifikate;0;-1;1;DTOZertifikate;schild.berufskolleg;Liste von Zertifikaten, die angelegt werden können (nur BK)
+ErzieherLernplattform;0;-1;1;DTOErzieherLernplattform;schild.erzieher;Tabelle zur Speicherung der CredentialID und den Einwilligungen zu den Lernplattformen bei den Erziehern
+ErzieherDatenschutz;0;-1;1;DTOErzieherDatenschutz;schild.erzieher;Tabelle zur Speicherung der Einwilligungen zu Datenschutz bei den Erziehern
 Fach_Gliederungen;0;-1;1;DTOFachgliederungen;schild.berufskolleg;Gliederungsspezifische Einstellungen zu den Unterrichtsfächern (nur BK)
 Fachklassen_Schwerpunkte;0;-1;1;DTOFachklassenSchwerpunkt;schild.berufskolleg;Schwerpunkte für Fachklassen (nur BK)
 Floskelgruppen;0;-1;1;DTOFloskelgruppen;schild.katalog;Liste der Floskelgruppen, diese Liste kann erweitert werden um Textbausteinen zu verwalten und die Anzeige in den Editoren zu steuern
@@ -62,24 +65,24 @@ KursLehrer;0;-1;1;DTOKursLehrer;schild.kurse;Zusätzliche Lehrkräfte in den Kur
 Lehrer_IMEI;0;-1;1;DTOLehrerIMEI;schild.schildapp;Lehrer zu IMEI Tabelle in der IMEI-Nummern von Endgeräten für den Zugang von SchildAPP hinterlegt werden können
 LehrerAbschnittsdaten;0;-1;1;DTOLehrerAbschnittsdaten;schild.lehrer;Lehrerdaten, die Abschnittsweise gespeichert werden
 LehrerAnrechnung;0;-1;1;DTOLehrerAnrechnungsstunde;schild.lehrer;Anrechnungsstunden für Lehrkräfte gültige ASD-Schlüssel
+LehrerDatenschutz;0;-1;1;DTOLehrerDatenschutz;schild.lehrer;Einwilligungen Datenschutz für die Lehrer
 LehrerEntlastung;0;-1;1;DTOLehrerEntlastungsstunde;schild.lehrer;Entlastungsstundenstunden für Lehrkräfte gültige ASD-Schlüssel
 LehrerFotos;0;-1;1;DTOLehrerFoto;schild.lehrer;Blobfelder für Lehrkräfte-Fotos
 LehrerFunktionen;0;-1;1;DTOLehrerFunktion;schild.lehrer;Lehrkräfte eingetragene Funktionen aus K_Schulfunktionen
 LehrerLehramt;0;-1;1;DTOLehrerLehramt;schild.lehrer;Lehrämter gültige Schlüssel zur Lehrkraft
 LehrerLehramtFachr;0;-1;1;DTOLehrerLehramtFachrichtung;schild.lehrer;Fachrichtung gültige Schlüssel zur Lehrkraft
 LehrerLehramtLehrbef;0;-1;1;DTOLehrerLehramtBefaehigung;schild.lehrer;Lehramt Lehrbefähigung gültige Schlüssel zur Lehrkraft
+LehrerLernplattform;0;-1;1;DTOLehrerLernplattform;schild.lehrer;Tabelle zur Speicherung der CredentialID und den Einwilligungen zu den Lernplattformen
 LehrerMehrleistung;0;-1;1;DTOLehrerMehrleistung;schild.lehrer;gültige Schlüssel zur Lehrkraft für die Mehrleistungsstunden
+Lernplattformen;0;-1;1;DTOLernplattformen;svws.auth;Tabelle mit Lernplattformen die die Schule nutzt und zu denen Credentials existieren
 Logins;0;-1;1;DTOProtokollLogin;schild.benutzer;Tabelle zur Speicherung der LogIns mit Benutzernamen und Zeit für die Datenbank-User
 LuPO_Beratungslehrer;4;-1;0;DTOLupoBeratungslehrer;lupo;Lupo Liste der Beratungslehrer
-LuPO_Fachgruppen;4;-1;0;DTOLupoFachgruppen;lupo;Lupo Fachgruppen
-LuPO_FachgruppenFaecher;4;-1;0;DTOLupoFachgruppenFaecher;lupo;Lupo Fächer zu Fachgruppen
 LuPO_Faecher;4;-1;0;DTOLupoFaecher;lupo;Lupo Fächer
 LuPO_Jahrgangsdaten;4;-1;0;DTOLupoJahrgangsdaten;lupo;Lupo Daten zu den Jahrgängen
 LuPO_NichtMoeglAbiFachKombi;4;-1;0;DTOLupoNichtMoeglAbiFachKombi;lupo;Lupo nicht mögliche Abiturfach Kombinationen
 LuPO_Schueler;4;-1;0;DTOLupoSchueler;lupo;Lupo Schülerliste
 LuPO_SchuelerFaecher;4;-1;0;DTOLupoSchuelerFaecher;lupo;Lupo Fächer zum Schüler
-LuPO_SchuelerFehlermeldungen;4;-1;0;DTOLupoSchuelerFehlermeldungen;lupo;Lupo Fehlermeldungen bei einem Schüler
-NichtMoeglAbiFachKombi;0;-1;1;DTOFaeherNichtMoeglicheKombination;schild.gost;Nicht mögliche Abiturfach-Kombinationen unter Fächer der Oberstufe bearbeiten
+NichtMoeglAbiFachKombi;0;-1;1;DTOFaecherNichtMoeglicheKombination;schild.gost;Nicht mögliche Abiturfach-Kombinationen unter Fächer der Oberstufe bearbeiten
 Personengruppen;0;-1;1;DTOPersonengruppen;schild.personengruppen;Katalog der definierten Personengruppen
 Personengruppen_Personen;0;-1;1;DTOPersonengruppenPersonen;schild.personengruppen;Zuordnung von Personen zur den Einträgen in der Tabelle Personengruppen
 PrfSemAbschl;0;-1;1;DTOVersetzungsvermerk;schild.katalog;gültige Versetzungsvermerke mit ASD-Schlüsseln
@@ -108,6 +111,7 @@ Schildintern_PruefungsOrdnung;0;-1;0;DTOInternPruefungsOrdnung;schild.intern;Auf
 Schildintern_SchuelerImpExp;0;-1;0;DTOInternSchuelerImportExport;schild.intern;"Wird in SchILD2.0 beim ""Katalog-Export"" und (""Datenaustausch>>Kataloge exportieren"") verwendet. Frage: Wird das in Zukunft noch benötigt?"
 Schildintern_SpezialFilterFelder;0;-1;0;DTOInternSpezialFilterFelder;schild.intern;Liefert die Felder, die im Filter II verfügbar sind
 Schildintern_TextExport;0;-1;0;DTOInternTextExport;schild.intern;Felder, die im Text-/Excel-Export zur Verfügung stehen
+Schildintern_UnicodeUmwandlung;0;-1;0;DTOInternUnicodeUmwandllung;schild.intern;Liefert eine Tabelle mit der Unicodezeichen für Emailkonforme Namen umgewandelt werden können
 Schildintern_VerfImportFelder;0;-1;0;DTOInternVerfImportFelder;schild.intern;"Stellt die verfügbaren Felder zur Verfügung, die beim ""Import aus Textdateien"" zur Verfügung stehen"
 Schildintern_VerfImportTabellen;0;-1;0;DTOInternVerfImportTabellen;schild.intern;"Stellt die verfügbaren Tabellen zur Verfügung, die beim ""Import aus Textdateien"" zur Verfügung stehen"
 Schildintern_Zusatzinfos;0;-1;0;DTOInternZusatzinfos;schild.intern;Enthält Angaben, welcher Jahrgang in welcher Gliederung der Abschlussjahrgang ist. Darüber wurde früher mal gesteuert, ob der BK-Abschluss-Reiter sichtbar war. Ist im Prinzip jetzt überflüssig, allerdings wird an einer Stelle im Programm noch der Inhalt geladen. Wenn man das rausnimmt, kann die Tabelle wegfallen.
@@ -133,6 +137,7 @@ SchuelerKAoADaten;0;-1;1;DTOSchuelerKAoADaten;schild.schueler;Einträge beim Sch
 SchuelerLD_PSFachBem;0;-1;1;DTOSchuelerPSFachBemerkungen;schild.schueler;Einträge bei den Lernabschnittsdaten ASV, AUE Zeugnisbemerkungen zum Schüler
 SchuelerLeistungsdaten;0;-1;1;DTOSchuelerLeistungsdaten;schild.schueler;Leistungsdaten (Fächer) zu Lernabschnitten und Schülern
 SchuelerLernabschnittsdaten;0;-1;1;DTOSchuelerLernabschnittsdaten;schild.schueler;Lernabschnitte zum Schüler
+SchuelerLernplattform;0;-1;1;DTOSchuelerLernplattform;schild.schueler;Beziehung zu Schueler und CredentialID sowie die Speicherung von Einwilligungen bei den Lernplattformen
 SchuelerListe;0;-1;1;DTOSchuelerIndividuelleGruppe;schild;Liste mit allen angelegten individuellen Schülerlisten
 SchuelerListe_Inhalt;0;-1;1;DTOSchuelerIndividuelleGruppeSchueler;schild;Schüler zu den Einträgen in SchuelerListe
 SchuelerMerkmale;0;-1;1;DTOSchuelerMerkmale;schild.schueler;Einträge der Merkmale (Individualdaten II) zum Schüler
@@ -142,6 +147,7 @@ SchuelerTelefone;0;-1;1;DTOSchuelerTelefon;schild.erzieher;Telefonnummern zum Sc
 SchuelerVermerke;0;-1;1;DTOSchuelerVermerke;schild.schueler;Vermerke zum Schüler
 SchuelerWiedervorlage;0;-1;1;DTOSchuelerWiedervorlage;schild;Einträge zur Wiedervorlage zum Schüler
 SchuelerZuweisungen;0;-1;1;DTOSchuelerZuweisung;schild.berufskolleg;Lernabscnittsbezogene Zuweisungen für Gesamt- und Sekundarschulen
+SchuleCredentials;0;-1;1;DTOSchuleCredentials;svws.auth;Tabelle für die Zugangsdaten von Schulen (PublicKey) und den Keys der eingenene Schule
 Schulver_DBS;0;-1;0;DTOSchulverDBS;schulver;IT.NRW Liste der Schulen mit Schulnummern und Adressen
 Schulver_Schulformen;0;-1;0;DTOSchulverSchulformen;schulver;IT.NRW Liste der Schulformen
 Schulver_Schultraeger;0;-1;0;DTOSchulverSchultraeger;schulver;IT.NRW Liste der Schulträger (wird in Schild-Zentral verwendet)
@@ -182,6 +188,12 @@ Statkue_SchuelerUebergangsempfehlung5Jg;0;-1;0;DTOStatkueSchuelerUebergangsempfe
 Statkue_SchuelerVerkehrssprache;0;-1;0;DTOStatkueSchuelerVerkehrssprache;statkue;Statkue von IT.NRW gültige Verkehrsprachen
 Statkue_Schulformen;0;-1;0;DTOStatkueSchulform;statkue;Statkue von IT.NRW gültige Schulformen und Schulformnummern
 Statkue_Strassen;0;-1;0;DTOStatkueStrassen;statkue;Statkue von IT.NRW gültiger Straßenkatalog
+Statkue_SVWS_BKAnlagen;0;-1;0;DTOSVWSBKAnlagen;statkue;Statkue SVWS selbst generierte Informationen zu den BK Anlagen
+Statkue_SVWS_Fachgruppen;0;-1;0;DTOSVWSFachgruppen;statkue;Statkue SVWS selbst generierte Fachgruppen
+Statkue_SVWS_Schulgliederungen;0;-1;0;DTOSVWSSchulgliederungen;statkue;Statkue SVWS selbst generierte Tabelle für die Schulgliederungen
+Statkue_SVWS_ZulaessigeFaecher;0;-1;0;DTOSVWSZulaessigeFaecherMapping;statkue;Statkue SVWS selbst generierte Tabelle die das Mapping zu atomarisierten Felden zu den Fächern herstellt
+Statkue_SVWS_ZulaessigeJahrgaenge;0;-1;0;DTOSVWSZulaessigeJahrgaenge;statkue;Statkue SVWS von ITNRW generierte bereinigte Tabelle für Jahgänge
+Statkue_SVWS_ZulaessigeKursarten;0;-1;0;DTOSVWSZulaessigeKursartenMapping;statkue;Statkue SVWS selbst generierte Mappingtabelle um die Kursarten eindeutig darstellen zu können
 Statkue_ZulFaecher;0;-1;0;DTOStatkueZulaessigesFach;statkue;Statkue von IT.NRW zulässgie Fächer auf Schulformen
 Statkue_ZulJahrgaenge;0;-1;0;DTOStatkueZulaessigerJahrgang;statkue;Statkue von IT.NRW Zulässige Statistikjahrgänge
 Statkue_ZulKlArt;0;-1;0;DTOStatkueZulaessigeKlassenart;statkue;Statkue von IT.NRW zulässige Klassenarten

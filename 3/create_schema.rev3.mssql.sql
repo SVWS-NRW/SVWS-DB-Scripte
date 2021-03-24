@@ -1,3 +1,17 @@
+CREATE TABLE Credentials (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Benutzername nvarchar(255) NOT NULL, 
+  BenutzernamePseudonym nvarchar(255), 
+  Initialkennwort nvarchar(255), 
+  PashwordHash nvarchar(255), 
+  RSAPublicKey nvarchar(max), 
+  RSAPrivateKey nvarchar(max), 
+  AES nvarchar(max),
+  CONSTRAINT PK_Credentials PRIMARY KEY (ID),
+  CONSTRAINT Credentials_UC1 UNIQUE (Benutzername)
+);
+
+
 CREATE TABLE EigeneSchule (
   ID bigint NOT NULL, 
   SchulformNr nvarchar(3), 
@@ -846,6 +860,17 @@ CREATE TABLE LehrerLehramtLehrbef (
 );
 
 
+CREATE TABLE Lernplattformen (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Bezeichnung nvarchar(255) NOT NULL, 
+  BenutzernameSuffixLehrer nvarchar(255), 
+  BenutzernameSuffixErzieher nvarchar(255), 
+  BenutzernameSuffixSchueler nvarchar(255), 
+  Konfiguration nvarchar(max),
+  CONSTRAINT PK_Lernplattformen PRIMARY KEY (ID)
+);
+
+
 CREATE TABLE Logins (
   LI_UserID bigint NOT NULL, 
   LI_LoginTime datetime2, 
@@ -1268,6 +1293,18 @@ CREATE TABLE Schildintern_TextExport (
 );
 
 
+CREATE TABLE Schildintern_UnicodeUmwandlung (
+  ID bigint NOT NULL, 
+  Unicodezeichen nvarchar(2), 
+  Ersatzzeichen nvarchar(2), 
+  DecimalZeichen nvarchar(20), 
+  DecimalErsatzzeichen nvarchar(20), 
+  Hexzeichen nvarchar(50), 
+  HexErsatzzeichen nvarchar(50),
+  CONSTRAINT PK_Schildintern_UnicodeUmwandlung PRIMARY KEY (ID)
+);
+
+
 CREATE TABLE Schildintern_VerfImportFelder (
   ID bigint NOT NULL, 
   TableDescription nvarchar(50), 
@@ -1385,6 +1422,15 @@ CREATE TABLE SchuelerWiedervorlage (
   Typ nvarchar(1), 
   NichtLoeschen nvarchar(1) DEFAULT '-',
   CONSTRAINT PK_SchuelerWiedervorlage PRIMARY KEY (ID)
+);
+
+
+CREATE TABLE SchuleCredentials (
+  Schulnummer int NOT NULL, 
+  RSAPublicKey nvarchar(max), 
+  RSAPrivateKey nvarchar(max), 
+  AES nvarchar(max),
+  CONSTRAINT PK_SchuleCredentials PRIMARY KEY (Schulnummer)
 );
 
 
@@ -1853,8 +1899,10 @@ CREATE TABLE K_Lehrer (
   Antwort2 nvarchar(255), 
   KennwortToolsAktuell nvarchar(3) DEFAULT '-;5', 
   XNMPassword nvarchar(255), 
-  XNMPassword2 nvarchar(255),
+  XNMPassword2 nvarchar(255), 
+  CredentialID bigint,
   CONSTRAINT PK_K_Lehrer PRIMARY KEY (ID),
+  CONSTRAINT K_Lehrer_Credentials_FK FOREIGN KEY (CredentialID) REFERENCES Credentials(ID),
   CONSTRAINT K_Lehrer_Ort_FK FOREIGN KEY (Ort_ID) REFERENCES K_Ort(ID),
   CONSTRAINT K_Lehrer_Ortsteil_FK FOREIGN KEY (Ortsteil_ID) REFERENCES K_Ortsteil(ID),
   CONSTRAINT K_Lehrer_Statkue_Nationalitaeten_FK FOREIGN KEY (StaatKrz) REFERENCES Statkue_Nationalitaeten(Schluessel),
@@ -1919,6 +1967,16 @@ CREATE TABLE LehrerAnrechnung (
 );
 
 
+CREATE TABLE LehrerDatenschutz (
+  LehrerID bigint NOT NULL, 
+  DatenschutzID bigint NOT NULL, 
+  Status int DEFAULT 0 NOT NULL,
+  CONSTRAINT PK_LehrerDatenschutz PRIMARY KEY (LehrerID, DatenschutzID),
+  CONSTRAINT LehrerDatenschutz_Lehrer_FK FOREIGN KEY (LehrerID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT LehrerDatenschutz_Datenschutz_FK FOREIGN KEY (DatenschutzID) REFERENCES K_Datenschutz(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
 CREATE TABLE LehrerEntlastung (
   Lehrer_ID bigint NOT NULL, 
   EntlastungsgrundKrz nvarchar(10), 
@@ -1950,6 +2008,21 @@ CREATE TABLE LehrerLehramt (
   SchulNrEigner int,
   CONSTRAINT PK_LehrerLehramt PRIMARY KEY (LehramtKrz, Lehrer_ID),
   CONSTRAINT LehrerLehramt_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE LehrerLernplattform (
+  LehrerID bigint NOT NULL, 
+  LernplattformID bigint NOT NULL, 
+  CredentialID bigint, 
+  EinwilligungAbgefragt int DEFAULT 0 NOT NULL, 
+  EinwilligungNutzung int DEFAULT 0 NOT NULL, 
+  EinwilligungAudiokonferenz int DEFAULT 0 NOT NULL, 
+  EinwilligungVideokonferenz int DEFAULT 0 NOT NULL,
+  CONSTRAINT PK_LehrerLernplattform PRIMARY KEY (LehrerID, LernplattformID),
+  CONSTRAINT LehrerLernplattform_Lehrer_FK FOREIGN KEY (LehrerID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT LehrerLernplattform_Lernplattform_FK FOREIGN KEY (LernplattformID) REFERENCES Lernplattformen(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT LehrerLernplattform_Credential_FK FOREIGN KEY (CredentialID) REFERENCES Credentials(ID)
 );
 
 
@@ -2013,31 +2086,56 @@ CREATE TABLE Statkue_Religionen (
 );
 
 
+CREATE TABLE Statkue_SVWS_BKAnlagen (
+  BKAnlage nvarchar(1) NOT NULL, 
+  Beschreibung nvarchar(120) NOT NULL,
+  CONSTRAINT PK_Statkue_SVWS_BKAnlagen PRIMARY KEY (BKAnlage)
+);
+
+
 CREATE TABLE Statkue_SVWS_Fachgruppen (
   ID bigint NOT NULL, 
-  Aufgabenfeld int, 
+  Fachbereich int, 
   SchildFgID bigint, 
   FG_Bezeichnung nvarchar(80) NOT NULL, 
   FG_Kuerzel nvarchar(10), 
+  Schulformen nvarchar(255), 
   FarbeR int, 
   FarbeG int, 
-  FarbeB int,
+  FarbeB int, 
+  gueltigVon int, 
+  gueltigBis int,
   CONSTRAINT PK_Statkue_SVWS_Fachgruppen PRIMARY KEY (ID)
 );
 
 
-CREATE TABLE Statkue_SVWS_FachgruppenSchulform (
-  FachgruppenID bigint NOT NULL, 
-  SchulformNr nvarchar(2) NOT NULL,
-  CONSTRAINT PK_Statkue_SVWS_FachgruppenSchulform PRIMARY KEY (FachgruppenID, SchulformNr)
+CREATE TABLE Statkue_SVWS_Schulgliederungen (
+  SGL nvarchar(3) NOT NULL, 
+  istBK int DEFAULT 0 NOT NULL, 
+  Schulformen nvarchar(120) NOT NULL, 
+  istAuslaufend int DEFAULT 0 NOT NULL, 
+  istAusgelaufen int DEFAULT 0 NOT NULL, 
+  Beschreibung nvarchar(120) NOT NULL, 
+  BKAnlage nvarchar(1), 
+  BKTyp nvarchar(2), 
+  BKIndex nvarchar(10), 
+  istVZ int DEFAULT 0, 
+  BKAbschlussBeruf nvarchar(10), 
+  BKAbschlussAllg nvarchar(10),
+  CONSTRAINT PK_Statkue_SVWS_Schulgliederungen PRIMARY KEY (SGL)
 );
 
 
-CREATE TABLE Statkue_SVWS_ZulaessigeFaecherMapping (
+CREATE TABLE Statkue_SVWS_ZulaessigeFaecher (
   Fach nvarchar(2) NOT NULL, 
   Bezeichnung nvarchar(80) NOT NULL, 
   FachkuerzelAtomar nvarchar(2) NOT NULL, 
   Kurzbezeichnung nvarchar(80), 
+  Aufgabenfeld int, 
+  Fachgruppe_ID bigint, 
+  SchulformenUndGliederungen nvarchar(255), 
+  SchulformenAusgelaufen nvarchar(255), 
+  AusgelaufenInSchuljahr nvarchar(255), 
   AbJahrgang nvarchar(2), 
   IstFremdsprache int NOT NULL, 
   IstHKFS int NOT NULL, 
@@ -2045,14 +2143,17 @@ CREATE TABLE Statkue_SVWS_ZulaessigeFaecherMapping (
   IstErsatzPflichtFS int NOT NULL, 
   IstKonfKoop int NOT NULL, 
   NurSII int NOT NULL, 
-  ExportASD int NOT NULL,
-  CONSTRAINT PK_Statkue_SVWS_ZulaessigeFaecherMapping PRIMARY KEY (Fach)
+  ExportASD int NOT NULL, 
+  gueltigVon int, 
+  gueltigBis int,
+  CONSTRAINT PK_Statkue_SVWS_ZulaessigeFaecher PRIMARY KEY (Fach)
 );
 
 
 CREATE TABLE Statkue_SVWS_ZulaessigeJahrgaenge (
   ID bigint NOT NULL, 
   Schulform nvarchar(2) NOT NULL, 
+  SchulformKuerzel nvarchar(3) NOT NULL, 
   Jahrgang nvarchar(2) NOT NULL, 
   Beschreibung nvarchar(80) NOT NULL, 
   Beginn datetime2, 
@@ -2063,16 +2164,19 @@ CREATE TABLE Statkue_SVWS_ZulaessigeJahrgaenge (
 );
 
 
-CREATE TABLE Statkue_SVWS_ZulaessigeKursartenMapping (
+CREATE TABLE Statkue_SVWS_ZulaessigeKursarten (
   ID nvarchar(5) NOT NULL, 
   Kuerzel nvarchar(5) NOT NULL, 
   ASDNummer nvarchar(2) NOT NULL, 
   Bezeichnung nvarchar(120) NOT NULL, 
+  SchulformenUndGliederungen nvarchar(255), 
   KuerzelAllg nvarchar(5), 
   BezeichnungAllg nvarchar(120), 
+  SchulformenAusgelaufen nvarchar(255), 
   erlaubtGOSt int DEFAULT 0 NOT NULL, 
+  AusgelaufenInSchuljahr nvarchar(255), 
   Bemerkungen nvarchar(120),
-  CONSTRAINT PK_Statkue_SVWS_ZulaessigeKursartenMapping PRIMARY KEY (ID)
+  CONSTRAINT PK_Statkue_SVWS_ZulaessigeKursarten PRIMARY KEY (ID)
 );
 
 
@@ -2186,7 +2290,7 @@ CREATE TABLE Statkue_ZulKlArt (
 CREATE TABLE Statkue_ZulKuArt (
   SF nvarchar(2) NOT NULL, 
   FSP nvarchar(2) NOT NULL, 
-  BG nvarchar(2) NOT NULL, 
+  BG nvarchar(3) NOT NULL, 
   Kursart nvarchar(3) NOT NULL, 
   Kursart2 nvarchar(5) NOT NULL, 
   Bezeichnung nvarchar(120) NOT NULL, 
@@ -2482,8 +2586,11 @@ CREATE TABLE Schueler (
   MasernImpfnachweis nvarchar(1) DEFAULT '-', 
   Lernstandsbericht nvarchar(1) DEFAULT '-', 
   SprachfoerderungVon date, 
-  SprachfoerderungBis date,
+  SprachfoerderungBis date, 
+  EntlassungBemerkung nvarchar(255), 
+  CredentialID bigint,
   CONSTRAINT PK_Schueler PRIMARY KEY (ID),
+  CONSTRAINT Schueler_Credentials_FK FOREIGN KEY (CredentialID) REFERENCES Credentials(ID),
   CONSTRAINT Schueler_Einschulungsart_FK FOREIGN KEY (Einschulungsart_ID) REFERENCES K_EinschulungsArt(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT Schueler_Fahrschueler_FK FOREIGN KEY (Fahrschueler_ID) REFERENCES K_FahrschuelerArt(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT Schueler_Foerderschwerpunkt_FK FOREIGN KEY (Foerderschwerpunkt_ID) REFERENCES K_Foerderschwerpunkt(ID) ON UPDATE CASCADE ON DELETE SET NULL,
@@ -2743,8 +2850,10 @@ CREATE TABLE SchuelerErzAdr (
   ErzEmail2 nvarchar(100), 
   Erz1ZusatzNachname nvarchar(30), 
   Erz2ZusatzNachname nvarchar(30), 
-  Bemerkungen nvarchar(max),
+  Bemerkungen nvarchar(max), 
+  CredentialID bigint,
   CONSTRAINT PK_SchuelerErzAdr PRIMARY KEY (ID),
+  CONSTRAINT SchuelerErzAdr_Credentials_FK FOREIGN KEY (CredentialID) REFERENCES Credentials(ID),
   CONSTRAINT SchuelerErzAdr_ErzieherArt_FK FOREIGN KEY (ErzieherArt_ID) REFERENCES K_ErzieherArt(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT SchuelerErzAdr_Ort_FK FOREIGN KEY (ErzOrt_ID) REFERENCES K_Ort(ID),
   CONSTRAINT SchuelerErzAdr_Ortsteil_FK FOREIGN KEY (ErzOrtsteil_ID) REFERENCES K_Ortsteil(ID),
@@ -2998,6 +3107,21 @@ CREATE TABLE SchuelerLernabschnittsdaten (
 );
 
 
+CREATE TABLE SchuelerLernplattform (
+  SchuelerID bigint NOT NULL, 
+  LernplattformID bigint NOT NULL, 
+  CredentialID bigint, 
+  EinwilligungAbgefragt int DEFAULT 0 NOT NULL, 
+  EinwilligungNutzung int DEFAULT 0 NOT NULL, 
+  EinwilligungAudiokonferenz int DEFAULT 0 NOT NULL, 
+  EinwilligungVideokonferenz int DEFAULT 0 NOT NULL,
+  CONSTRAINT PK_SchuelerLernplattform PRIMARY KEY (SchuelerID, LernplattformID),
+  CONSTRAINT SchuelerLernplattform_Schueler_FK FOREIGN KEY (SchuelerID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerLernplattform_Lernplattform_FK FOREIGN KEY (LernplattformID) REFERENCES Lernplattformen(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerLernplattform_Credential_FK FOREIGN KEY (CredentialID) REFERENCES Credentials(ID)
+);
+
+
 CREATE TABLE SchuelerListe_Inhalt (
   Liste_ID bigint NOT NULL, 
   Schueler_ID bigint NOT NULL, 
@@ -3096,6 +3220,31 @@ CREATE TABLE Schueler_AllgAdr (
 CREATE INDEX Schueler_AllgAdr_IDX1 ON Schueler_AllgAdr(Schueler_ID);
 
 
+CREATE TABLE ErzieherDatenschutz (
+  ErzieherID bigint NOT NULL, 
+  DatenschutzID bigint NOT NULL, 
+  Status int DEFAULT 0 NOT NULL,
+  CONSTRAINT PK_ErzieherDatenschutz PRIMARY KEY (ErzieherID, DatenschutzID),
+  CONSTRAINT ErzieherDatenschutz_Erzieher_FK FOREIGN KEY (ErzieherID) REFERENCES SchuelerErzAdr(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT ErzieherDatenschutz_Datenschutz_FK FOREIGN KEY (DatenschutzID) REFERENCES K_Datenschutz(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE ErzieherLernplattform (
+  ErzieherID bigint NOT NULL, 
+  LernplattformID bigint NOT NULL, 
+  CredentialID bigint, 
+  EinwilligungAbgefragt int DEFAULT 0 NOT NULL, 
+  EinwilligungNutzung int DEFAULT 0 NOT NULL, 
+  EinwilligungAudiokonferenz int DEFAULT 0 NOT NULL, 
+  EinwilligungVideokonferenz int DEFAULT 0 NOT NULL,
+  CONSTRAINT PK_ErzieherLernplattform PRIMARY KEY (ErzieherID, LernplattformID),
+  CONSTRAINT ErzieherLernplattform_Erzieher_FK FOREIGN KEY (ErzieherID) REFERENCES SchuelerErzAdr(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT ErzieherLernplattform_Lernplattform_FK FOREIGN KEY (LernplattformID) REFERENCES Lernplattformen(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT ErzieherLernplattform_Credential_FK FOREIGN KEY (CredentialID) REFERENCES Credentials(ID)
+);
+
+
 CREATE TABLE SchuelerErzFunktion (
   ID bigint DEFAULT -1 NOT NULL, 
   Erzieher_ID bigint NOT NULL, 
@@ -3130,6 +3279,7 @@ CREATE TABLE SchuelerLD_PSFachBem (
   Abschnitt_ID bigint NOT NULL, 
   ASV nvarchar(max), 
   LELS nvarchar(max), 
+  AUE nvarchar(max), 
   ESF nvarchar(max), 
   BemerkungFSP nvarchar(max), 
   BemerkungVersetzung nvarchar(max), 
@@ -3216,49 +3366,128 @@ CREATE TABLE ZuordnungReportvorlagen (
 
 GO
 
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Credentials ON Credentials INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Credentials
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''Credentials'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Credentials)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''Credentials'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Credentials
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Credentials''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Credentials ON Credentials AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''Credentials'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Credentials)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''Credentials'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Credentials''
+    END
+END;
+')
+
+GO
+
+
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_EigeneSchule_Fachklassen ON EigeneSchule_Fachklassen INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO EigeneSchule_Fachklassen
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'EigeneSchule_Fachklassen');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''EigeneSchule_Fachklassen'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Fachklassen);
+      SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Fachklassen)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Fachklassen', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''EigeneSchule_Fachklassen'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO EigeneSchule_Fachklassen
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'EigeneSchule_Fachklassen';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''EigeneSchule_Fachklassen''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_EigeneSchule_Fachklassen ON EigeneSchule_Fachklassen AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -3266,71 +3495,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'EigeneSchule_Fachklassen');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''EigeneSchule_Fachklassen'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Fachklassen);
+          SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Fachklassen)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Fachklassen', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''EigeneSchule_Fachklassen'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'EigeneSchule_Fachklassen';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''EigeneSchule_Fachklassen''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_EigeneSchule_Faecher ON EigeneSchule_Faecher INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO EigeneSchule_Faecher
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'EigeneSchule_Faecher');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''EigeneSchule_Faecher'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Faecher);
+      SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Faecher)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Faecher', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''EigeneSchule_Faecher'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO EigeneSchule_Faecher
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'EigeneSchule_Faecher';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''EigeneSchule_Faecher''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_EigeneSchule_Faecher ON EigeneSchule_Faecher AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -3338,71 +3571,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'EigeneSchule_Faecher');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''EigeneSchule_Faecher'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Faecher);
+          SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Faecher)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Faecher', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''EigeneSchule_Faecher'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'EigeneSchule_Faecher';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''EigeneSchule_Faecher''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_EigeneSchule_Jahrgaenge ON EigeneSchule_Jahrgaenge INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO EigeneSchule_Jahrgaenge
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'EigeneSchule_Jahrgaenge');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''EigeneSchule_Jahrgaenge'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Jahrgaenge);
+      SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Jahrgaenge)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Jahrgaenge', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''EigeneSchule_Jahrgaenge'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO EigeneSchule_Jahrgaenge
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'EigeneSchule_Jahrgaenge';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''EigeneSchule_Jahrgaenge''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_EigeneSchule_Jahrgaenge ON EigeneSchule_Jahrgaenge AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -3410,71 +3647,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'EigeneSchule_Jahrgaenge');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''EigeneSchule_Jahrgaenge'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Jahrgaenge);
+          SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Jahrgaenge)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Jahrgaenge', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''EigeneSchule_Jahrgaenge'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'EigeneSchule_Jahrgaenge';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''EigeneSchule_Jahrgaenge''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_EigeneSchule_Kursart ON EigeneSchule_Kursart INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO EigeneSchule_Kursart
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'EigeneSchule_Kursart');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''EigeneSchule_Kursart'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Kursart);
+      SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Kursart)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Kursart', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''EigeneSchule_Kursart'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO EigeneSchule_Kursart
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'EigeneSchule_Kursart';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''EigeneSchule_Kursart''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_EigeneSchule_Kursart ON EigeneSchule_Kursart AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -3482,71 +3723,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'EigeneSchule_Kursart');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''EigeneSchule_Kursart'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Kursart);
+          SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Kursart)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Kursart', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''EigeneSchule_Kursart'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'EigeneSchule_Kursart';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''EigeneSchule_Kursart''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_EigeneSchule_Merkmale ON EigeneSchule_Merkmale INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO EigeneSchule_Merkmale
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'EigeneSchule_Merkmale');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''EigeneSchule_Merkmale'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Merkmale);
+      SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Merkmale)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Merkmale', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''EigeneSchule_Merkmale'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO EigeneSchule_Merkmale
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'EigeneSchule_Merkmale';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''EigeneSchule_Merkmale''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_EigeneSchule_Merkmale ON EigeneSchule_Merkmale AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -3554,71 +3799,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'EigeneSchule_Merkmale');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''EigeneSchule_Merkmale'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Merkmale);
+          SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Merkmale)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Merkmale', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''EigeneSchule_Merkmale'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'EigeneSchule_Merkmale';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''EigeneSchule_Merkmale''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_EigeneSchule_Schulformen ON EigeneSchule_Schulformen INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO EigeneSchule_Schulformen
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'EigeneSchule_Schulformen');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''EigeneSchule_Schulformen'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Schulformen);
+      SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Schulformen)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Schulformen', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''EigeneSchule_Schulformen'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO EigeneSchule_Schulformen
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'EigeneSchule_Schulformen';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''EigeneSchule_Schulformen''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_EigeneSchule_Schulformen ON EigeneSchule_Schulformen AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -3626,71 +3875,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'EigeneSchule_Schulformen');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''EigeneSchule_Schulformen'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Schulformen);
+          SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Schulformen)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Schulformen', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''EigeneSchule_Schulformen'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'EigeneSchule_Schulformen';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''EigeneSchule_Schulformen''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_EigeneSchule_Zertifikate ON EigeneSchule_Zertifikate INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO EigeneSchule_Zertifikate
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'EigeneSchule_Zertifikate');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''EigeneSchule_Zertifikate'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Zertifikate);
+      SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Zertifikate)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Zertifikate', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''EigeneSchule_Zertifikate'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO EigeneSchule_Zertifikate
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'EigeneSchule_Zertifikate';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''EigeneSchule_Zertifikate''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_EigeneSchule_Zertifikate ON EigeneSchule_Zertifikate AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -3698,71 +3951,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'EigeneSchule_Zertifikate');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''EigeneSchule_Zertifikate'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Zertifikate);
+          SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Zertifikate)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Zertifikate', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''EigeneSchule_Zertifikate'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'EigeneSchule_Zertifikate';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''EigeneSchule_Zertifikate''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_K_Adressart ON K_Adressart INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO K_Adressart
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Adressart');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Adressart'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM K_Adressart);
+      SET @tmpID = (SELECT max(ID) FROM K_Adressart)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Adressart', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Adressart'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO K_Adressart
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Adressart';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Adressart''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_K_Adressart ON K_Adressart AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -3770,71 +4027,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Adressart');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Adressart'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM K_Adressart);
+          SET @tmpID = (SELECT max(ID) FROM K_Adressart)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Adressart', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Adressart'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Adressart';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Adressart''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_K_Ankreuzdaten ON K_Ankreuzdaten INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO K_Ankreuzdaten
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Ankreuzdaten');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Ankreuzdaten'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM K_Ankreuzdaten);
+      SET @tmpID = (SELECT max(ID) FROM K_Ankreuzdaten)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Ankreuzdaten', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Ankreuzdaten'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO K_Ankreuzdaten
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Ankreuzdaten';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Ankreuzdaten''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_K_Ankreuzdaten ON K_Ankreuzdaten AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -3842,71 +4103,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Ankreuzdaten');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Ankreuzdaten'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM K_Ankreuzdaten);
+          SET @tmpID = (SELECT max(ID) FROM K_Ankreuzdaten)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Ankreuzdaten', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Ankreuzdaten'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Ankreuzdaten';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Ankreuzdaten''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_K_Ankreuzfloskeln ON K_Ankreuzfloskeln INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO K_Ankreuzfloskeln
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Ankreuzfloskeln');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Ankreuzfloskeln'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM K_Ankreuzfloskeln);
+      SET @tmpID = (SELECT max(ID) FROM K_Ankreuzfloskeln)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Ankreuzfloskeln', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Ankreuzfloskeln'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO K_Ankreuzfloskeln
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Ankreuzfloskeln';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Ankreuzfloskeln''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_K_Ankreuzfloskeln ON K_Ankreuzfloskeln AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -3914,71 +4179,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Ankreuzfloskeln');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Ankreuzfloskeln'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM K_Ankreuzfloskeln);
+          SET @tmpID = (SELECT max(ID) FROM K_Ankreuzfloskeln)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Ankreuzfloskeln', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Ankreuzfloskeln'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Ankreuzfloskeln';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Ankreuzfloskeln''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_K_BeschaeftigungsArt ON K_BeschaeftigungsArt INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO K_BeschaeftigungsArt
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_BeschaeftigungsArt');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_BeschaeftigungsArt'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM K_BeschaeftigungsArt);
+      SET @tmpID = (SELECT max(ID) FROM K_BeschaeftigungsArt)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_BeschaeftigungsArt', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_BeschaeftigungsArt'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO K_BeschaeftigungsArt
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_BeschaeftigungsArt';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_BeschaeftigungsArt''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_K_BeschaeftigungsArt ON K_BeschaeftigungsArt AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -3986,71 +4255,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_BeschaeftigungsArt');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_BeschaeftigungsArt'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM K_BeschaeftigungsArt);
+          SET @tmpID = (SELECT max(ID) FROM K_BeschaeftigungsArt)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_BeschaeftigungsArt', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_BeschaeftigungsArt'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_BeschaeftigungsArt';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_BeschaeftigungsArt''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_K_Datenschutz ON K_Datenschutz INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO K_Datenschutz
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Datenschutz');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Datenschutz'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM K_Datenschutz);
+      SET @tmpID = (SELECT max(ID) FROM K_Datenschutz)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Datenschutz', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Datenschutz'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO K_Datenschutz
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Datenschutz';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Datenschutz''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_K_Datenschutz ON K_Datenschutz AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -4058,71 +4331,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Datenschutz');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Datenschutz'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM K_Datenschutz);
+          SET @tmpID = (SELECT max(ID) FROM K_Datenschutz)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Datenschutz', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Datenschutz'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Datenschutz';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Datenschutz''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_K_EinschulungsArt ON K_EinschulungsArt INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO K_EinschulungsArt
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_EinschulungsArt');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_EinschulungsArt'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM K_EinschulungsArt);
+      SET @tmpID = (SELECT max(ID) FROM K_EinschulungsArt)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_EinschulungsArt', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_EinschulungsArt'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO K_EinschulungsArt
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_EinschulungsArt';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_EinschulungsArt''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_K_EinschulungsArt ON K_EinschulungsArt AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -4130,71 +4407,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_EinschulungsArt');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_EinschulungsArt'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM K_EinschulungsArt);
+          SET @tmpID = (SELECT max(ID) FROM K_EinschulungsArt)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_EinschulungsArt', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_EinschulungsArt'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_EinschulungsArt';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_EinschulungsArt''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_K_Einzelleistungen ON K_Einzelleistungen INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO K_Einzelleistungen
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Einzelleistungen');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Einzelleistungen'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM K_Einzelleistungen);
+      SET @tmpID = (SELECT max(ID) FROM K_Einzelleistungen)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Einzelleistungen', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Einzelleistungen'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO K_Einzelleistungen
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Einzelleistungen';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Einzelleistungen''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_K_Einzelleistungen ON K_Einzelleistungen AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -4202,71 +4483,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Einzelleistungen');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Einzelleistungen'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM K_Einzelleistungen);
+          SET @tmpID = (SELECT max(ID) FROM K_Einzelleistungen)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Einzelleistungen', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Einzelleistungen'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Einzelleistungen';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Einzelleistungen''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_K_EntlassGrund ON K_EntlassGrund INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO K_EntlassGrund
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_EntlassGrund');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_EntlassGrund'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM K_EntlassGrund);
+      SET @tmpID = (SELECT max(ID) FROM K_EntlassGrund)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_EntlassGrund', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_EntlassGrund'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO K_EntlassGrund
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_EntlassGrund';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_EntlassGrund''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_K_EntlassGrund ON K_EntlassGrund AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -4274,71 +4559,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_EntlassGrund');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_EntlassGrund'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM K_EntlassGrund);
+          SET @tmpID = (SELECT max(ID) FROM K_EntlassGrund)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_EntlassGrund', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_EntlassGrund'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_EntlassGrund';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_EntlassGrund''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_K_ErzieherArt ON K_ErzieherArt INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO K_ErzieherArt
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_ErzieherArt');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_ErzieherArt'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM K_ErzieherArt);
+      SET @tmpID = (SELECT max(ID) FROM K_ErzieherArt)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_ErzieherArt', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_ErzieherArt'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO K_ErzieherArt
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_ErzieherArt';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_ErzieherArt''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_K_ErzieherArt ON K_ErzieherArt AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -4346,71 +4635,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_ErzieherArt');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_ErzieherArt'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM K_ErzieherArt);
+          SET @tmpID = (SELECT max(ID) FROM K_ErzieherArt)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_ErzieherArt', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_ErzieherArt'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_ErzieherArt';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_ErzieherArt''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_K_ErzieherFunktion ON K_ErzieherFunktion INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO K_ErzieherFunktion
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_ErzieherFunktion');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_ErzieherFunktion'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM K_ErzieherFunktion);
+      SET @tmpID = (SELECT max(ID) FROM K_ErzieherFunktion)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_ErzieherFunktion', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_ErzieherFunktion'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO K_ErzieherFunktion
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_ErzieherFunktion';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_ErzieherFunktion''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_K_ErzieherFunktion ON K_ErzieherFunktion AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -4418,71 +4711,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_ErzieherFunktion');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_ErzieherFunktion'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM K_ErzieherFunktion);
+          SET @tmpID = (SELECT max(ID) FROM K_ErzieherFunktion)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_ErzieherFunktion', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_ErzieherFunktion'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_ErzieherFunktion';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_ErzieherFunktion''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_K_FahrschuelerArt ON K_FahrschuelerArt INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO K_FahrschuelerArt
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_FahrschuelerArt');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_FahrschuelerArt'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM K_FahrschuelerArt);
+      SET @tmpID = (SELECT max(ID) FROM K_FahrschuelerArt)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_FahrschuelerArt', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_FahrschuelerArt'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO K_FahrschuelerArt
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_FahrschuelerArt';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_FahrschuelerArt''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_K_FahrschuelerArt ON K_FahrschuelerArt AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -4490,71 +4787,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_FahrschuelerArt');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_FahrschuelerArt'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM K_FahrschuelerArt);
+          SET @tmpID = (SELECT max(ID) FROM K_FahrschuelerArt)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_FahrschuelerArt', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_FahrschuelerArt'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_FahrschuelerArt';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_FahrschuelerArt''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_K_Foerderschwerpunkt ON K_Foerderschwerpunkt INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO K_Foerderschwerpunkt
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Foerderschwerpunkt');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Foerderschwerpunkt'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM K_Foerderschwerpunkt);
+      SET @tmpID = (SELECT max(ID) FROM K_Foerderschwerpunkt)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Foerderschwerpunkt', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Foerderschwerpunkt'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO K_Foerderschwerpunkt
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Foerderschwerpunkt';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Foerderschwerpunkt''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_K_Foerderschwerpunkt ON K_Foerderschwerpunkt AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -4562,71 +4863,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Foerderschwerpunkt');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Foerderschwerpunkt'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM K_Foerderschwerpunkt);
+          SET @tmpID = (SELECT max(ID) FROM K_Foerderschwerpunkt)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Foerderschwerpunkt', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Foerderschwerpunkt'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Foerderschwerpunkt';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Foerderschwerpunkt''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_K_Haltestelle ON K_Haltestelle INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO K_Haltestelle
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Haltestelle');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Haltestelle'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM K_Haltestelle);
+      SET @tmpID = (SELECT max(ID) FROM K_Haltestelle)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Haltestelle', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Haltestelle'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO K_Haltestelle
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Haltestelle';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Haltestelle''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_K_Haltestelle ON K_Haltestelle AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -4634,71 +4939,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Haltestelle');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Haltestelle'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM K_Haltestelle);
+          SET @tmpID = (SELECT max(ID) FROM K_Haltestelle)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Haltestelle', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Haltestelle'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Haltestelle';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Haltestelle''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_K_Kindergarten ON K_Kindergarten INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO K_Kindergarten
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Kindergarten');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Kindergarten'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM K_Kindergarten);
+      SET @tmpID = (SELECT max(ID) FROM K_Kindergarten)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Kindergarten', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Kindergarten'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO K_Kindergarten
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Kindergarten';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Kindergarten''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_K_Kindergarten ON K_Kindergarten AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -4706,71 +5015,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Kindergarten');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Kindergarten'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM K_Kindergarten);
+          SET @tmpID = (SELECT max(ID) FROM K_Kindergarten)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Kindergarten', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Kindergarten'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Kindergarten';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Kindergarten''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_K_Ort ON K_Ort INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO K_Ort
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Ort');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Ort'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM K_Ort);
+      SET @tmpID = (SELECT max(ID) FROM K_Ort)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Ort', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Ort'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO K_Ort
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Ort';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Ort''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_K_Ort ON K_Ort AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -4778,71 +5091,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Ort');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Ort'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM K_Ort);
+          SET @tmpID = (SELECT max(ID) FROM K_Ort)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Ort', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Ort'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Ort';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Ort''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_K_AllgAdresse ON K_AllgAdresse INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO K_AllgAdresse
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_AllgAdresse');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_AllgAdresse'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM K_AllgAdresse);
+      SET @tmpID = (SELECT max(ID) FROM K_AllgAdresse)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_AllgAdresse', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_AllgAdresse'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO K_AllgAdresse
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_AllgAdresse';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_AllgAdresse''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_K_AllgAdresse ON K_AllgAdresse AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -4850,71 +5167,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_AllgAdresse');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_AllgAdresse'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM K_AllgAdresse);
+          SET @tmpID = (SELECT max(ID) FROM K_AllgAdresse)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_AllgAdresse', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_AllgAdresse'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_AllgAdresse';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_AllgAdresse''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_AllgAdrAnsprechpartner ON AllgAdrAnsprechpartner INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO AllgAdrAnsprechpartner
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'AllgAdrAnsprechpartner');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''AllgAdrAnsprechpartner'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM AllgAdrAnsprechpartner);
+      SET @tmpID = (SELECT max(ID) FROM AllgAdrAnsprechpartner)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('AllgAdrAnsprechpartner', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''AllgAdrAnsprechpartner'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO AllgAdrAnsprechpartner
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'AllgAdrAnsprechpartner';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''AllgAdrAnsprechpartner''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_AllgAdrAnsprechpartner ON AllgAdrAnsprechpartner AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -4922,71 +5243,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'AllgAdrAnsprechpartner');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''AllgAdrAnsprechpartner'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM AllgAdrAnsprechpartner);
+          SET @tmpID = (SELECT max(ID) FROM AllgAdrAnsprechpartner)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('AllgAdrAnsprechpartner', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''AllgAdrAnsprechpartner'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'AllgAdrAnsprechpartner';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''AllgAdrAnsprechpartner''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_K_Ortsteil ON K_Ortsteil INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO K_Ortsteil
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Ortsteil');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Ortsteil'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM K_Ortsteil);
+      SET @tmpID = (SELECT max(ID) FROM K_Ortsteil)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Ortsteil', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Ortsteil'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO K_Ortsteil
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Ortsteil';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Ortsteil''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_K_Ortsteil ON K_Ortsteil AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -4994,71 +5319,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Ortsteil');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Ortsteil'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM K_Ortsteil);
+          SET @tmpID = (SELECT max(ID) FROM K_Ortsteil)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Ortsteil', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Ortsteil'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Ortsteil';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Ortsteil''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_K_Religion ON K_Religion INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO K_Religion
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Religion');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Religion'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM K_Religion);
+      SET @tmpID = (SELECT max(ID) FROM K_Religion)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Religion', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Religion'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO K_Religion
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Religion';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Religion''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_K_Religion ON K_Religion AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -5066,71 +5395,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Religion');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Religion'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM K_Religion);
+          SET @tmpID = (SELECT max(ID) FROM K_Religion)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Religion', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Religion'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Religion';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Religion''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_K_Schule ON K_Schule INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO K_Schule
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Schule');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Schule'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM K_Schule);
+      SET @tmpID = (SELECT max(ID) FROM K_Schule)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Schule', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Schule'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO K_Schule
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Schule';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Schule''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_K_Schule ON K_Schule AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -5138,71 +5471,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Schule');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Schule'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM K_Schule);
+          SET @tmpID = (SELECT max(ID) FROM K_Schule)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Schule', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Schule'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Schule';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Schule''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_K_Schulfunktionen ON K_Schulfunktionen INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO K_Schulfunktionen
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Schulfunktionen');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Schulfunktionen'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM K_Schulfunktionen);
+      SET @tmpID = (SELECT max(ID) FROM K_Schulfunktionen)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Schulfunktionen', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Schulfunktionen'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO K_Schulfunktionen
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Schulfunktionen';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Schulfunktionen''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_K_Schulfunktionen ON K_Schulfunktionen AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -5210,71 +5547,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Schulfunktionen');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Schulfunktionen'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM K_Schulfunktionen);
+          SET @tmpID = (SELECT max(ID) FROM K_Schulfunktionen)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Schulfunktionen', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Schulfunktionen'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Schulfunktionen';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Schulfunktionen''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_K_Schwerpunkt ON K_Schwerpunkt INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO K_Schwerpunkt
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Schwerpunkt');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Schwerpunkt'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM K_Schwerpunkt);
+      SET @tmpID = (SELECT max(ID) FROM K_Schwerpunkt)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Schwerpunkt', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Schwerpunkt'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO K_Schwerpunkt
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Schwerpunkt';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Schwerpunkt''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_K_Schwerpunkt ON K_Schwerpunkt AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -5282,71 +5623,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Schwerpunkt');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Schwerpunkt'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM K_Schwerpunkt);
+          SET @tmpID = (SELECT max(ID) FROM K_Schwerpunkt)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Schwerpunkt', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Schwerpunkt'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Schwerpunkt';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Schwerpunkt''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_K_Sportbefreiung ON K_Sportbefreiung INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO K_Sportbefreiung
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Sportbefreiung');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Sportbefreiung'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM K_Sportbefreiung);
+      SET @tmpID = (SELECT max(ID) FROM K_Sportbefreiung)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Sportbefreiung', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Sportbefreiung'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO K_Sportbefreiung
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Sportbefreiung';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Sportbefreiung''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_K_Sportbefreiung ON K_Sportbefreiung AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -5354,71 +5699,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Sportbefreiung');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Sportbefreiung'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM K_Sportbefreiung);
+          SET @tmpID = (SELECT max(ID) FROM K_Sportbefreiung)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Sportbefreiung', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Sportbefreiung'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Sportbefreiung';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Sportbefreiung''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_K_Staat ON K_Staat INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO K_Staat
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Staat');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Staat'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM K_Staat);
+      SET @tmpID = (SELECT max(ID) FROM K_Staat)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Staat', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Staat'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO K_Staat
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Staat';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Staat''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_K_Staat ON K_Staat AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -5426,71 +5775,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Staat');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Staat'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM K_Staat);
+          SET @tmpID = (SELECT max(ID) FROM K_Staat)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Staat', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Staat'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Staat';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Staat''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_K_TelefonArt ON K_TelefonArt INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO K_TelefonArt
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_TelefonArt');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_TelefonArt'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM K_TelefonArt);
+      SET @tmpID = (SELECT max(ID) FROM K_TelefonArt)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_TelefonArt', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_TelefonArt'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO K_TelefonArt
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_TelefonArt';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_TelefonArt''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_K_TelefonArt ON K_TelefonArt AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -5498,71 +5851,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_TelefonArt');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_TelefonArt'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM K_TelefonArt);
+          SET @tmpID = (SELECT max(ID) FROM K_TelefonArt)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_TelefonArt', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_TelefonArt'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_TelefonArt';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_TelefonArt''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_K_Textdateien ON K_Textdateien INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO K_Textdateien
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Textdateien');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Textdateien'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM K_Textdateien);
+      SET @tmpID = (SELECT max(ID) FROM K_Textdateien)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Textdateien', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Textdateien'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO K_Textdateien
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Textdateien';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Textdateien''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_K_Textdateien ON K_Textdateien AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -5570,71 +5927,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Textdateien');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Textdateien'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM K_Textdateien);
+          SET @tmpID = (SELECT max(ID) FROM K_Textdateien)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Textdateien', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Textdateien'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Textdateien';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Textdateien''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_K_Verkehrssprachen ON K_Verkehrssprachen INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO K_Verkehrssprachen
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Verkehrssprachen');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Verkehrssprachen'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM K_Verkehrssprachen);
+      SET @tmpID = (SELECT max(ID) FROM K_Verkehrssprachen)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Verkehrssprachen', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Verkehrssprachen'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO K_Verkehrssprachen
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Verkehrssprachen';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Verkehrssprachen''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_K_Verkehrssprachen ON K_Verkehrssprachen AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -5642,71 +6003,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Verkehrssprachen');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Verkehrssprachen'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM K_Verkehrssprachen);
+          SET @tmpID = (SELECT max(ID) FROM K_Verkehrssprachen)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Verkehrssprachen', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Verkehrssprachen'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Verkehrssprachen';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Verkehrssprachen''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_K_Vermerkart ON K_Vermerkart INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO K_Vermerkart
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Vermerkart');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Vermerkart'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM K_Vermerkart);
+      SET @tmpID = (SELECT max(ID) FROM K_Vermerkart)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Vermerkart', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Vermerkart'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO K_Vermerkart
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Vermerkart';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Vermerkart''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_K_Vermerkart ON K_Vermerkart AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -5714,71 +6079,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Vermerkart');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Vermerkart'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM K_Vermerkart);
+          SET @tmpID = (SELECT max(ID) FROM K_Vermerkart)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Vermerkart', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Vermerkart'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Vermerkart';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Vermerkart''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_Kurse ON Kurse INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO Kurse
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'Kurse');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''Kurse'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM Kurse);
+      SET @tmpID = (SELECT max(ID) FROM Kurse)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Kurse', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''Kurse'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO Kurse
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'Kurse';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Kurse''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_Kurse ON Kurse AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -5786,71 +6155,151 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'Kurse');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''Kurse'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM Kurse);
+          SET @tmpID = (SELECT max(ID) FROM Kurse)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Kurse', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''Kurse'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'Kurse';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Kurse''
+    END
 END;
+')
 
 GO
 
 
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Lernplattformen ON Lernplattformen INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Lernplattformen
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''Lernplattformen'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Lernplattformen)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''Lernplattformen'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Lernplattformen
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Lernplattformen''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Lernplattformen ON Lernplattformen AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''Lernplattformen'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Lernplattformen)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''Lernplattformen'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Lernplattformen''
+    END
+END;
+')
+
+GO
+
+
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_Personengruppen ON Personengruppen INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO Personengruppen
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'Personengruppen');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''Personengruppen'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM Personengruppen);
+      SET @tmpID = (SELECT max(ID) FROM Personengruppen)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Personengruppen', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''Personengruppen'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO Personengruppen
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'Personengruppen';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Personengruppen''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_Personengruppen ON Personengruppen AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -5858,71 +6307,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'Personengruppen');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''Personengruppen'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM Personengruppen);
+          SET @tmpID = (SELECT max(ID) FROM Personengruppen)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Personengruppen', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''Personengruppen'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'Personengruppen';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Personengruppen''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_Personengruppen_Personen ON Personengruppen_Personen INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO Personengruppen_Personen
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'Personengruppen_Personen');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''Personengruppen_Personen'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM Personengruppen_Personen);
+      SET @tmpID = (SELECT max(ID) FROM Personengruppen_Personen)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Personengruppen_Personen', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''Personengruppen_Personen'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO Personengruppen_Personen
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'Personengruppen_Personen';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Personengruppen_Personen''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_Personengruppen_Personen ON Personengruppen_Personen AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -5930,71 +6383,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'Personengruppen_Personen');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''Personengruppen_Personen'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM Personengruppen_Personen);
+          SET @tmpID = (SELECT max(ID) FROM Personengruppen_Personen)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Personengruppen_Personen', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''Personengruppen_Personen'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'Personengruppen_Personen';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Personengruppen_Personen''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_SchildFilter ON SchildFilter INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO SchildFilter
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchildFilter');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchildFilter'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchildFilter);
+      SET @tmpID = (SELECT max(ID) FROM SchildFilter)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchildFilter', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchildFilter'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO SchildFilter
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchildFilter';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchildFilter''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_SchildFilter ON SchildFilter AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -6002,71 +6459,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchildFilter');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchildFilter'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchildFilter);
+          SET @tmpID = (SELECT max(ID) FROM SchildFilter)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchildFilter', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchildFilter'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchildFilter';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchildFilter''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerEinzelleistungen ON SchuelerEinzelleistungen INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO SchuelerEinzelleistungen
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerEinzelleistungen');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerEinzelleistungen'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerEinzelleistungen);
+      SET @tmpID = (SELECT max(ID) FROM SchuelerEinzelleistungen)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerEinzelleistungen', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerEinzelleistungen'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO SchuelerEinzelleistungen
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerEinzelleistungen';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerEinzelleistungen''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerEinzelleistungen ON SchuelerEinzelleistungen AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -6074,71 +6535,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerEinzelleistungen');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerEinzelleistungen'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerEinzelleistungen);
+          SET @tmpID = (SELECT max(ID) FROM SchuelerEinzelleistungen)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerEinzelleistungen', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerEinzelleistungen'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerEinzelleistungen';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerEinzelleistungen''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerListe ON SchuelerListe INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO SchuelerListe
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerListe');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerListe'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerListe);
+      SET @tmpID = (SELECT max(ID) FROM SchuelerListe)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerListe', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerListe'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO SchuelerListe
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerListe';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerListe''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerListe ON SchuelerListe AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -6146,71 +6611,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerListe');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerListe'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerListe);
+          SET @tmpID = (SELECT max(ID) FROM SchuelerListe)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerListe', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerListe'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerListe';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerListe''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerWiedervorlage ON SchuelerWiedervorlage INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO SchuelerWiedervorlage
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerWiedervorlage');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerWiedervorlage'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerWiedervorlage);
+      SET @tmpID = (SELECT max(ID) FROM SchuelerWiedervorlage)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerWiedervorlage', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerWiedervorlage'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO SchuelerWiedervorlage
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerWiedervorlage';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerWiedervorlage''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerWiedervorlage ON SchuelerWiedervorlage AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -6218,71 +6687,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerWiedervorlage');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerWiedervorlage'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerWiedervorlage);
+          SET @tmpID = (SELECT max(ID) FROM SchuelerWiedervorlage)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerWiedervorlage', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerWiedervorlage'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerWiedervorlage';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerWiedervorlage''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_K_Lehrer ON K_Lehrer INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO K_Lehrer
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Lehrer');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Lehrer'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM K_Lehrer);
+      SET @tmpID = (SELECT max(ID) FROM K_Lehrer)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Lehrer', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Lehrer'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO K_Lehrer
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Lehrer';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Lehrer''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_K_Lehrer ON K_Lehrer AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -6290,71 +6763,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'K_Lehrer');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''K_Lehrer'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM K_Lehrer);
+          SET @tmpID = (SELECT max(ID) FROM K_Lehrer)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Lehrer', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''K_Lehrer'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'K_Lehrer';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Lehrer''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_EigeneSchule_Abteilungen ON EigeneSchule_Abteilungen INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO EigeneSchule_Abteilungen
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'EigeneSchule_Abteilungen');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''EigeneSchule_Abteilungen'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Abteilungen);
+      SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Abteilungen)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abteilungen', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''EigeneSchule_Abteilungen'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO EigeneSchule_Abteilungen
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'EigeneSchule_Abteilungen';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''EigeneSchule_Abteilungen''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_EigeneSchule_Abteilungen ON EigeneSchule_Abteilungen AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -6362,71 +6839,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'EigeneSchule_Abteilungen');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''EigeneSchule_Abteilungen'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Abteilungen);
+          SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Abteilungen)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abteilungen', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''EigeneSchule_Abteilungen'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'EigeneSchule_Abteilungen';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''EigeneSchule_Abteilungen''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_Stundentafel ON Stundentafel INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO Stundentafel
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'Stundentafel');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''Stundentafel'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM Stundentafel);
+      SET @tmpID = (SELECT max(ID) FROM Stundentafel)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Stundentafel', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundentafel'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO Stundentafel
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'Stundentafel';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundentafel''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_Stundentafel ON Stundentafel AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -6434,71 +6915,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'Stundentafel');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''Stundentafel'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM Stundentafel);
+          SET @tmpID = (SELECT max(ID) FROM Stundentafel)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Stundentafel', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundentafel'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'Stundentafel';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundentafel''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_Stundentafel_Faecher ON Stundentafel_Faecher INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO Stundentafel_Faecher
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'Stundentafel_Faecher');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''Stundentafel_Faecher'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM Stundentafel_Faecher);
+      SET @tmpID = (SELECT max(ID) FROM Stundentafel_Faecher)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Stundentafel_Faecher', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundentafel_Faecher'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO Stundentafel_Faecher
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'Stundentafel_Faecher';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundentafel_Faecher''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_Stundentafel_Faecher ON Stundentafel_Faecher AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -6506,71 +6991,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'Stundentafel_Faecher');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''Stundentafel_Faecher'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM Stundentafel_Faecher);
+          SET @tmpID = (SELECT max(ID) FROM Stundentafel_Faecher)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Stundentafel_Faecher', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundentafel_Faecher'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'Stundentafel_Faecher';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundentafel_Faecher''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_Users ON Users INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO Users
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'Users');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''Users'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM Users);
+      SET @tmpID = (SELECT max(ID) FROM Users)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Users', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''Users'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO Users
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'Users';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Users''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_Users ON Users AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -6578,71 +7067,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'Users');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''Users'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM Users);
+          SET @tmpID = (SELECT max(ID) FROM Users)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Users', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''Users'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'Users';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Users''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_Versetzung ON Versetzung INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO Versetzung
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'Versetzung');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''Versetzung'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM Versetzung);
+      SET @tmpID = (SELECT max(ID) FROM Versetzung)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Versetzung', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''Versetzung'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO Versetzung
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'Versetzung';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Versetzung''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_Versetzung ON Versetzung AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -6650,71 +7143,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'Versetzung');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''Versetzung'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM Versetzung);
+          SET @tmpID = (SELECT max(ID) FROM Versetzung)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Versetzung', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''Versetzung'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'Versetzung';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Versetzung''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_EigeneSchule_Abt_Kl ON EigeneSchule_Abt_Kl INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO EigeneSchule_Abt_Kl
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'EigeneSchule_Abt_Kl');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''EigeneSchule_Abt_Kl'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Abt_Kl);
+      SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Abt_Kl)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abt_Kl', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''EigeneSchule_Abt_Kl'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO EigeneSchule_Abt_Kl
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'EigeneSchule_Abt_Kl';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''EigeneSchule_Abt_Kl''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_EigeneSchule_Abt_Kl ON EigeneSchule_Abt_Kl AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -6722,71 +7219,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'EigeneSchule_Abt_Kl');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''EigeneSchule_Abt_Kl'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Abt_Kl);
+          SET @tmpID = (SELECT max(ID) FROM EigeneSchule_Abt_Kl)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abt_Kl', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''EigeneSchule_Abt_Kl'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'EigeneSchule_Abt_Kl';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''EigeneSchule_Abt_Kl''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_Schueler ON Schueler INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO Schueler
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'Schueler');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''Schueler'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM Schueler);
+      SET @tmpID = (SELECT max(ID) FROM Schueler)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Schueler', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''Schueler'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO Schueler
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'Schueler';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Schueler''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_Schueler ON Schueler AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -6794,71 +7295,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'Schueler');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''Schueler'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM Schueler);
+          SET @tmpID = (SELECT max(ID) FROM Schueler)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Schueler', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''Schueler'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'Schueler';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Schueler''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerAbgaenge ON SchuelerAbgaenge INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO SchuelerAbgaenge
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAbgaenge');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerAbgaenge'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerAbgaenge);
+      SET @tmpID = (SELECT max(ID) FROM SchuelerAbgaenge)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbgaenge', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerAbgaenge'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO SchuelerAbgaenge
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAbgaenge';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerAbgaenge''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerAbgaenge ON SchuelerAbgaenge AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -6866,71 +7371,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAbgaenge');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerAbgaenge'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerAbgaenge);
+          SET @tmpID = (SELECT max(ID) FROM SchuelerAbgaenge)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbgaenge', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerAbgaenge'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAbgaenge';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerAbgaenge''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerAbiFaecher ON SchuelerAbiFaecher INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO SchuelerAbiFaecher
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAbiFaecher');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerAbiFaecher'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerAbiFaecher);
+      SET @tmpID = (SELECT max(ID) FROM SchuelerAbiFaecher)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbiFaecher', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerAbiFaecher'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO SchuelerAbiFaecher
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAbiFaecher';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerAbiFaecher''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerAbiFaecher ON SchuelerAbiFaecher AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -6938,71 +7447,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAbiFaecher');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerAbiFaecher'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerAbiFaecher);
+          SET @tmpID = (SELECT max(ID) FROM SchuelerAbiFaecher)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbiFaecher', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerAbiFaecher'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAbiFaecher';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerAbiFaecher''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerAbitur ON SchuelerAbitur INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO SchuelerAbitur
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAbitur');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerAbitur'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerAbitur);
+      SET @tmpID = (SELECT max(ID) FROM SchuelerAbitur)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbitur', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerAbitur'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO SchuelerAbitur
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAbitur';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerAbitur''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerAbitur ON SchuelerAbitur AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -7010,71 +7523,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAbitur');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerAbitur'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerAbitur);
+          SET @tmpID = (SELECT max(ID) FROM SchuelerAbitur)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbitur', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerAbitur'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAbitur';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerAbitur''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerAnkreuzfloskeln ON SchuelerAnkreuzfloskeln INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO SchuelerAnkreuzfloskeln
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAnkreuzfloskeln');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerAnkreuzfloskeln'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerAnkreuzfloskeln);
+      SET @tmpID = (SELECT max(ID) FROM SchuelerAnkreuzfloskeln)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAnkreuzfloskeln', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerAnkreuzfloskeln'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO SchuelerAnkreuzfloskeln
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAnkreuzfloskeln';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerAnkreuzfloskeln''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerAnkreuzfloskeln ON SchuelerAnkreuzfloskeln AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -7082,71 +7599,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerAnkreuzfloskeln');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerAnkreuzfloskeln'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerAnkreuzfloskeln);
+          SET @tmpID = (SELECT max(ID) FROM SchuelerAnkreuzfloskeln)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAnkreuzfloskeln', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerAnkreuzfloskeln'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerAnkreuzfloskeln';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerAnkreuzfloskeln''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerBKFaecher ON SchuelerBKFaecher INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO SchuelerBKFaecher
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerBKFaecher');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerBKFaecher'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerBKFaecher);
+      SET @tmpID = (SELECT max(ID) FROM SchuelerBKFaecher)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerBKFaecher', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerBKFaecher'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO SchuelerBKFaecher
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerBKFaecher';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerBKFaecher''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerBKFaecher ON SchuelerBKFaecher AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -7154,71 +7675,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerBKFaecher');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerBKFaecher'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerBKFaecher);
+          SET @tmpID = (SELECT max(ID) FROM SchuelerBKFaecher)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerBKFaecher', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerBKFaecher'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerBKFaecher';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerBKFaecher''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerErzAdr ON SchuelerErzAdr INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO SchuelerErzAdr
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerErzAdr');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerErzAdr'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerErzAdr);
+      SET @tmpID = (SELECT max(ID) FROM SchuelerErzAdr)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerErzAdr', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerErzAdr'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO SchuelerErzAdr
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerErzAdr';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerErzAdr''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerErzAdr ON SchuelerErzAdr AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -7226,71 +7751,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerErzAdr');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerErzAdr'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerErzAdr);
+          SET @tmpID = (SELECT max(ID) FROM SchuelerErzAdr)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerErzAdr', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerErzAdr'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerErzAdr';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerErzAdr''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerFHR ON SchuelerFHR INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO SchuelerFHR
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerFHR');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerFHR'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerFHR);
+      SET @tmpID = (SELECT max(ID) FROM SchuelerFHR)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFHR', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerFHR'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO SchuelerFHR
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerFHR';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerFHR''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerFHR ON SchuelerFHR AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -7298,71 +7827,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerFHR');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerFHR'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerFHR);
+          SET @tmpID = (SELECT max(ID) FROM SchuelerFHR)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFHR', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerFHR'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerFHR';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerFHR''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerFHRFaecher ON SchuelerFHRFaecher INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO SchuelerFHRFaecher
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerFHRFaecher');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerFHRFaecher'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerFHRFaecher);
+      SET @tmpID = (SELECT max(ID) FROM SchuelerFHRFaecher)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFHRFaecher', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerFHRFaecher'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO SchuelerFHRFaecher
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerFHRFaecher';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerFHRFaecher''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerFHRFaecher ON SchuelerFHRFaecher AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -7370,71 +7903,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerFHRFaecher');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerFHRFaecher'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerFHRFaecher);
+          SET @tmpID = (SELECT max(ID) FROM SchuelerFHRFaecher)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFHRFaecher', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerFHRFaecher'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerFHRFaecher';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerFHRFaecher''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerKAoADaten ON SchuelerKAoADaten INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO SchuelerKAoADaten
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerKAoADaten');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerKAoADaten'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerKAoADaten);
+      SET @tmpID = (SELECT max(ID) FROM SchuelerKAoADaten)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerKAoADaten', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerKAoADaten'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO SchuelerKAoADaten
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerKAoADaten';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerKAoADaten''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerKAoADaten ON SchuelerKAoADaten AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -7442,71 +7979,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerKAoADaten');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerKAoADaten'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerKAoADaten);
+          SET @tmpID = (SELECT max(ID) FROM SchuelerKAoADaten)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerKAoADaten', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerKAoADaten'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerKAoADaten';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerKAoADaten''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerLernabschnittsdaten ON SchuelerLernabschnittsdaten INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO SchuelerLernabschnittsdaten
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerLernabschnittsdaten');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerLernabschnittsdaten'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerLernabschnittsdaten);
+      SET @tmpID = (SELECT max(ID) FROM SchuelerLernabschnittsdaten)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLernabschnittsdaten', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerLernabschnittsdaten'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO SchuelerLernabschnittsdaten
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerLernabschnittsdaten';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerLernabschnittsdaten''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerLernabschnittsdaten ON SchuelerLernabschnittsdaten AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -7514,71 +8055,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerLernabschnittsdaten');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerLernabschnittsdaten'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerLernabschnittsdaten);
+          SET @tmpID = (SELECT max(ID) FROM SchuelerLernabschnittsdaten)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLernabschnittsdaten', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerLernabschnittsdaten'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerLernabschnittsdaten';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerLernabschnittsdaten''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerSprachenfolge ON SchuelerSprachenfolge INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO SchuelerSprachenfolge
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerSprachenfolge');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerSprachenfolge'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerSprachenfolge);
+      SET @tmpID = (SELECT max(ID) FROM SchuelerSprachenfolge)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerSprachenfolge', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerSprachenfolge'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO SchuelerSprachenfolge
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerSprachenfolge';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerSprachenfolge''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerSprachenfolge ON SchuelerSprachenfolge AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -7586,71 +8131,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerSprachenfolge');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerSprachenfolge'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerSprachenfolge);
+          SET @tmpID = (SELECT max(ID) FROM SchuelerSprachenfolge)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerSprachenfolge', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerSprachenfolge'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerSprachenfolge';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerSprachenfolge''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerTelefone ON SchuelerTelefone INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO SchuelerTelefone
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerTelefone');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerTelefone'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerTelefone);
+      SET @tmpID = (SELECT max(ID) FROM SchuelerTelefone)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerTelefone', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerTelefone'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO SchuelerTelefone
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerTelefone';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerTelefone''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerTelefone ON SchuelerTelefone AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -7658,71 +8207,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerTelefone');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerTelefone'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerTelefone);
+          SET @tmpID = (SELECT max(ID) FROM SchuelerTelefone)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerTelefone', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerTelefone'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerTelefone';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerTelefone''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerVermerke ON SchuelerVermerke INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO SchuelerVermerke
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerVermerke');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerVermerke'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerVermerke);
+      SET @tmpID = (SELECT max(ID) FROM SchuelerVermerke)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerVermerke', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerVermerke'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO SchuelerVermerke
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerVermerke';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerVermerke''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerVermerke ON SchuelerVermerke AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -7730,71 +8283,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerVermerke');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerVermerke'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerVermerke);
+          SET @tmpID = (SELECT max(ID) FROM SchuelerVermerke)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerVermerke', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerVermerke'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerVermerke';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerVermerke''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_Schueler_AllgAdr ON Schueler_AllgAdr INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO Schueler_AllgAdr
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'Schueler_AllgAdr');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''Schueler_AllgAdr'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM Schueler_AllgAdr);
+      SET @tmpID = (SELECT max(ID) FROM Schueler_AllgAdr)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Schueler_AllgAdr', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''Schueler_AllgAdr'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO Schueler_AllgAdr
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'Schueler_AllgAdr';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Schueler_AllgAdr''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_Schueler_AllgAdr ON Schueler_AllgAdr AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -7802,71 +8359,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'Schueler_AllgAdr');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''Schueler_AllgAdr'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM Schueler_AllgAdr);
+          SET @tmpID = (SELECT max(ID) FROM Schueler_AllgAdr)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Schueler_AllgAdr', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''Schueler_AllgAdr'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'Schueler_AllgAdr';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Schueler_AllgAdr''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerErzFunktion ON SchuelerErzFunktion INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO SchuelerErzFunktion
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerErzFunktion');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerErzFunktion'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerErzFunktion);
+      SET @tmpID = (SELECT max(ID) FROM SchuelerErzFunktion)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerErzFunktion', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerErzFunktion'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO SchuelerErzFunktion
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerErzFunktion';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerErzFunktion''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerErzFunktion ON SchuelerErzFunktion AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -7874,71 +8435,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerErzFunktion');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerErzFunktion'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerErzFunktion);
+          SET @tmpID = (SELECT max(ID) FROM SchuelerErzFunktion)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerErzFunktion', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerErzFunktion'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerErzFunktion';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerErzFunktion''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerFehlstunden ON SchuelerFehlstunden INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO SchuelerFehlstunden
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerFehlstunden');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerFehlstunden'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerFehlstunden);
+      SET @tmpID = (SELECT max(ID) FROM SchuelerFehlstunden)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFehlstunden', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerFehlstunden'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO SchuelerFehlstunden
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerFehlstunden';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerFehlstunden''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerFehlstunden ON SchuelerFehlstunden AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -7946,71 +8511,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerFehlstunden');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerFehlstunden'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerFehlstunden);
+          SET @tmpID = (SELECT max(ID) FROM SchuelerFehlstunden)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFehlstunden', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerFehlstunden'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerFehlstunden';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerFehlstunden''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerLD_PSFachBem ON SchuelerLD_PSFachBem INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO SchuelerLD_PSFachBem
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerLD_PSFachBem');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerLD_PSFachBem'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerLD_PSFachBem);
+      SET @tmpID = (SELECT max(ID) FROM SchuelerLD_PSFachBem)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLD_PSFachBem', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerLD_PSFachBem'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO SchuelerLD_PSFachBem
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerLD_PSFachBem';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerLD_PSFachBem''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerLD_PSFachBem ON SchuelerLD_PSFachBem AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -8018,24 +8587,25 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerLD_PSFachBem');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerLD_PSFachBem'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerLD_PSFachBem);
+          SET @tmpID = (SELECT max(ID) FROM SchuelerLD_PSFachBem)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLD_PSFachBem', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerLD_PSFachBem'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerLD_PSFachBem';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerLD_PSFachBem''
+    END
 END;
+')
 
 GO
 
@@ -8092,49 +8662,52 @@ END;
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerLeistungsdaten ON SchuelerLeistungsdaten INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO SchuelerLeistungsdaten
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerLeistungsdaten');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerLeistungsdaten'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM SchuelerLeistungsdaten);
+      SET @tmpID = (SELECT max(ID) FROM SchuelerLeistungsdaten)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLeistungsdaten', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerLeistungsdaten'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO SchuelerLeistungsdaten
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerLeistungsdaten';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerLeistungsdaten''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_SchuelerLeistungsdaten ON SchuelerLeistungsdaten AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -8142,71 +8715,75 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'SchuelerLeistungsdaten');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''SchuelerLeistungsdaten'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM SchuelerLeistungsdaten);
+          SET @tmpID = (SELECT max(ID) FROM SchuelerLeistungsdaten)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLeistungsdaten', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''SchuelerLeistungsdaten'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'SchuelerLeistungsdaten';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''SchuelerLeistungsdaten''
+    END
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_ZuordnungReportvorlagen ON ZuordnungReportvorlagen INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
   DECLARE @maxInsertedID bigint
 
-  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
   INSERT INTO ZuordnungReportvorlagen
-    SELECT * FROM inserted WHERE ID >= 0;
+    SELECT * FROM inserted WHERE ID >= 0
     
-  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'ZuordnungReportvorlagen');
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''ZuordnungReportvorlagen'')
   IF (@tmpID IS NULL)
     BEGIN
-      SET @tmpID = (SELECT max(ID) FROM ZuordnungReportvorlagen);
+      SET @tmpID = (SELECT max(ID) FROM ZuordnungReportvorlagen)
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = 0;
-        END;
-      SET NOCOUNT ON;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('ZuordnungReportvorlagen', @tmpID);
-      SET NOCOUNT OFF;
-    END;
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''ZuordnungReportvorlagen'', @tmpID)
+      SET NOCOUNT OFF
+    END
   
   IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
     BEGIN  
-      SELECT * INTO #tmp FROM inserted WHERE ID < 0;
-      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1;
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
       INSERT INTO ZuordnungReportvorlagen
-        SELECT * FROM #tmp;
-      DROP TABLE #tmp;
-    END;
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
   
-  SET NOCOUNT ON;
+  SET NOCOUNT ON
   IF (@maxInsertedID > @tmpID)
     BEGIN
-      SET @tmpID = @maxInsertedID;
-	END;
-  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'ZuordnungReportvorlagen';
-  SET NOCOUNT OFF;
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''ZuordnungReportvorlagen''
+  SET NOCOUNT OFF
 END;
+')
 
 GO
 
 
+exec('
 CREATE TRIGGER t_AutoIncrement_UPDATE_ZuordnungReportvorlagen ON ZuordnungReportvorlagen AFTER UPDATE AS
 BEGIN
   if (UPDATE(ID))
@@ -8214,24 +8791,25 @@ BEGIN
       DECLARE @tmpID bigint
       DECLARE @maxInsertedID bigint
 
-      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0);
-      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = 'ZuordnungReportvorlagen');
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''ZuordnungReportvorlagen'')
       IF (@tmpID IS NULL)
         BEGIN
-          SET @tmpID = (SELECT max(ID) FROM ZuordnungReportvorlagen);
+          SET @tmpID = (SELECT max(ID) FROM ZuordnungReportvorlagen)
           IF (@tmpID IS NULL)
             BEGIN
-              SET @tmpID = 0;
-            END;
-          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('ZuordnungReportvorlagen', @tmpID);
-        END;    
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''ZuordnungReportvorlagen'', @tmpID)
+        END    
       IF (@maxInsertedID > @tmpID)
         BEGIN
-          SET @tmpID = @maxInsertedID;
-	      END;
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = 'ZuordnungReportvorlagen';
-    END;
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''ZuordnungReportvorlagen''
+    END
 END;
+')
 
 GO
 

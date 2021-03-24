@@ -1,8 +1,6 @@
 NameTabelle;Revision;Kommentar
 Kompetenzen;0;Initialisierung
 Kompetenzgruppen;0;Initialisierung
-LuPO_Fachgruppen;4;Initialisierung
-LuPO_FachgruppenFaecher;4;Initialisierung
 Schildintern_AbiturInfos;0;Initialisierung
 Schildintern_Berufsebene;0;Initialisierung
 Schildintern_Datenart;0;Initialisierung
@@ -26,6 +24,7 @@ Schildintern_PruefungsOrdnung;0;Initialisierung
 Schildintern_SchuelerImpExp;0;Initialisierung
 Schildintern_SpezialFilterFelder;0;Initialisierung
 Schildintern_TextExport;0;Initialisierung
+Schildintern_UnicodeUmwandlung;0;Initialisierung
 Schildintern_VerfImportFelder;0;Initialisierung
 Schildintern_VerfImportTabellen;0;Initialisierung
 Schildintern_Zusatzinfos;0;Initialisierung
@@ -69,6 +68,12 @@ Statkue_SchuelerUebergangsempfehlung5Jg;0;Initialisierung
 Statkue_SchuelerVerkehrssprache;0;Initialisierung
 Statkue_Schulformen;0;Initialisierung
 Statkue_Strassen;0;Initialisierung
+Statkue_SVWS_BKAnlagen;0;Initialisierung
+Statkue_SVWS_Fachgruppen;0;Initialisierung
+Statkue_SVWS_Schulgliederungen;0;Initialisierung
+Statkue_SVWS_ZulaessigeFaecher;0;Initialisierung
+Statkue_SVWS_ZulaessigeJahrgaenge;0;Initialisierung
+Statkue_SVWS_ZulaessigeKursarten;0;Initialisierung
 Statkue_ZulFaecher;0;Initialisierung
 Statkue_ZulJahrgaenge;0;Initialisierung
 Statkue_ZulKlArt;0;Initialisierung

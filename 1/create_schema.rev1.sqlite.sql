@@ -1,3 +1,17 @@
+CREATE TABLE Credentials (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Benutzername varchar(255) NOT NULL, 
+  BenutzernamePseudonym varchar(255), 
+  Initialkennwort varchar(255), 
+  PashwordHash varchar(255), 
+  RSAPublicKey text, 
+  RSAPrivateKey text, 
+  AES text,
+  CONSTRAINT PK_Credentials PRIMARY KEY (ID),
+  CONSTRAINT Credentials_UC1 UNIQUE (Benutzername)
+);
+
+
 CREATE TABLE EigeneSchule (
   ID bigint NOT NULL, 
   SchulformNr varchar(3), 
@@ -679,8 +693,10 @@ CREATE TABLE K_Lehrer (
   Antwort2 varchar(255), 
   KennwortToolsAktuell varchar(3) DEFAULT '-;5', 
   XNMPassword varchar(255), 
-  XNMPassword2 varchar(255),
+  XNMPassword2 varchar(255), 
+  CredentialID bigint,
   CONSTRAINT PK_K_Lehrer PRIMARY KEY (ID),
+  CONSTRAINT K_Lehrer_Credentials_FK FOREIGN KEY (CredentialID) REFERENCES Credentials(ID),
   CONSTRAINT K_Lehrer_Ort_FK FOREIGN KEY (Ort_ID) REFERENCES K_Ort(ID),
   CONSTRAINT K_Lehrer_Ortsteil_FK FOREIGN KEY (Ortsteil_ID) REFERENCES K_Ortsteil(ID),
   CONSTRAINT K_Lehrer_UC1 UNIQUE (Kuerzel)
@@ -942,6 +958,16 @@ CREATE TABLE LehrerAnrechnung (
 );
 
 
+CREATE TABLE LehrerDatenschutz (
+  LehrerID bigint NOT NULL, 
+  DatenschutzID bigint NOT NULL, 
+  Status int DEFAULT 0 NOT NULL,
+  CONSTRAINT PK_LehrerDatenschutz PRIMARY KEY (LehrerID, DatenschutzID),
+  CONSTRAINT LehrerDatenschutz_Lehrer_FK FOREIGN KEY (LehrerID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT LehrerDatenschutz_Datenschutz_FK FOREIGN KEY (DatenschutzID) REFERENCES K_Datenschutz(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
 CREATE TABLE LehrerEntlastung (
   Lehrer_ID bigint NOT NULL, 
   EntlastungsgrundKrz varchar(10), 
@@ -1024,6 +1050,32 @@ CREATE TABLE Lehrer_IMEI (
   IMEI varchar(20),
   CONSTRAINT PK_Lehrer_IMEI PRIMARY KEY (ID),
   CONSTRAINT Lehrer_IMEI_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE Lernplattformen (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Bezeichnung varchar(255) NOT NULL, 
+  BenutzernameSuffixLehrer varchar(255), 
+  BenutzernameSuffixErzieher varchar(255), 
+  BenutzernameSuffixSchueler varchar(255), 
+  Konfiguration text,
+  CONSTRAINT PK_Lernplattformen PRIMARY KEY (ID)
+);
+
+
+CREATE TABLE LehrerLernplattform (
+  LehrerID bigint NOT NULL, 
+  LernplattformID bigint NOT NULL, 
+  CredentialID bigint, 
+  EinwilligungAbgefragt int DEFAULT 0 NOT NULL, 
+  EinwilligungNutzung int DEFAULT 0 NOT NULL, 
+  EinwilligungAudiokonferenz int DEFAULT 0 NOT NULL, 
+  EinwilligungVideokonferenz int DEFAULT 0 NOT NULL,
+  CONSTRAINT PK_LehrerLernplattform PRIMARY KEY (LehrerID, LernplattformID),
+  CONSTRAINT LehrerLernplattform_Lehrer_FK FOREIGN KEY (LehrerID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT LehrerLernplattform_Lernplattform_FK FOREIGN KEY (LernplattformID) REFERENCES Lernplattformen(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT LehrerLernplattform_Credential_FK FOREIGN KEY (CredentialID) REFERENCES Credentials(ID)
 );
 
 
@@ -1449,6 +1501,18 @@ CREATE TABLE Schildintern_TextExport (
 );
 
 
+CREATE TABLE Schildintern_UnicodeUmwandlung (
+  ID bigint NOT NULL, 
+  Unicodezeichen varchar(2), 
+  Ersatzzeichen varchar(2), 
+  DecimalZeichen varchar(20), 
+  DecimalErsatzzeichen varchar(20), 
+  Hexzeichen varchar(50), 
+  HexErsatzzeichen varchar(50),
+  CONSTRAINT PK_Schildintern_UnicodeUmwandlung PRIMARY KEY (ID)
+);
+
+
 CREATE TABLE Schildintern_VerfImportFelder (
   ID bigint NOT NULL, 
   TableDescription varchar(50), 
@@ -1566,6 +1630,15 @@ CREATE TABLE SchuelerWiedervorlage (
   Typ varchar(1), 
   NichtLoeschen varchar(1) DEFAULT '-',
   CONSTRAINT PK_SchuelerWiedervorlage PRIMARY KEY (ID)
+);
+
+
+CREATE TABLE SchuleCredentials (
+  Schulnummer int NOT NULL, 
+  RSAPublicKey text, 
+  RSAPrivateKey text, 
+  AES text,
+  CONSTRAINT PK_SchuleCredentials PRIMARY KEY (Schulnummer)
 );
 
 
@@ -2012,31 +2085,56 @@ CREATE TABLE Statkue_Religionen (
 );
 
 
+CREATE TABLE Statkue_SVWS_BKAnlagen (
+  BKAnlage varchar(1) NOT NULL, 
+  Beschreibung varchar(120) NOT NULL,
+  CONSTRAINT PK_Statkue_SVWS_BKAnlagen PRIMARY KEY (BKAnlage)
+);
+
+
 CREATE TABLE Statkue_SVWS_Fachgruppen (
   ID bigint NOT NULL, 
-  Aufgabenfeld int, 
+  Fachbereich int, 
   SchildFgID bigint, 
   FG_Bezeichnung varchar(80) NOT NULL, 
   FG_Kuerzel varchar(10), 
+  Schulformen varchar(255), 
   FarbeR int, 
   FarbeG int, 
-  FarbeB int,
+  FarbeB int, 
+  gueltigVon int, 
+  gueltigBis int,
   CONSTRAINT PK_Statkue_SVWS_Fachgruppen PRIMARY KEY (ID)
 );
 
 
-CREATE TABLE Statkue_SVWS_FachgruppenSchulform (
-  FachgruppenID bigint NOT NULL, 
-  SchulformNr varchar(2) NOT NULL,
-  CONSTRAINT PK_Statkue_SVWS_FachgruppenSchulform PRIMARY KEY (FachgruppenID, SchulformNr)
+CREATE TABLE Statkue_SVWS_Schulgliederungen (
+  SGL varchar(3) NOT NULL, 
+  istBK int DEFAULT 0 NOT NULL, 
+  Schulformen varchar(120) NOT NULL, 
+  istAuslaufend int DEFAULT 0 NOT NULL, 
+  istAusgelaufen int DEFAULT 0 NOT NULL, 
+  Beschreibung varchar(120) NOT NULL, 
+  BKAnlage varchar(1), 
+  BKTyp varchar(2), 
+  BKIndex varchar(10), 
+  istVZ int DEFAULT 0, 
+  BKAbschlussBeruf varchar(10), 
+  BKAbschlussAllg varchar(10),
+  CONSTRAINT PK_Statkue_SVWS_Schulgliederungen PRIMARY KEY (SGL)
 );
 
 
-CREATE TABLE Statkue_SVWS_ZulaessigeFaecherMapping (
+CREATE TABLE Statkue_SVWS_ZulaessigeFaecher (
   Fach varchar(2) NOT NULL, 
   Bezeichnung varchar(80) NOT NULL, 
   FachkuerzelAtomar varchar(2) NOT NULL, 
   Kurzbezeichnung varchar(80), 
+  Aufgabenfeld int, 
+  Fachgruppe_ID bigint, 
+  SchulformenUndGliederungen varchar(255), 
+  SchulformenAusgelaufen varchar(255), 
+  AusgelaufenInSchuljahr varchar(255), 
   AbJahrgang varchar(2), 
   IstFremdsprache int NOT NULL, 
   IstHKFS int NOT NULL, 
@@ -2044,14 +2142,17 @@ CREATE TABLE Statkue_SVWS_ZulaessigeFaecherMapping (
   IstErsatzPflichtFS int NOT NULL, 
   IstKonfKoop int NOT NULL, 
   NurSII int NOT NULL, 
-  ExportASD int NOT NULL,
-  CONSTRAINT PK_Statkue_SVWS_ZulaessigeFaecherMapping PRIMARY KEY (Fach)
+  ExportASD int NOT NULL, 
+  gueltigVon int, 
+  gueltigBis int,
+  CONSTRAINT PK_Statkue_SVWS_ZulaessigeFaecher PRIMARY KEY (Fach)
 );
 
 
 CREATE TABLE Statkue_SVWS_ZulaessigeJahrgaenge (
   ID bigint NOT NULL, 
   Schulform varchar(2) NOT NULL, 
+  SchulformKuerzel varchar(3) NOT NULL, 
   Jahrgang varchar(2) NOT NULL, 
   Beschreibung varchar(80) NOT NULL, 
   Beginn datetime, 
@@ -2062,16 +2163,19 @@ CREATE TABLE Statkue_SVWS_ZulaessigeJahrgaenge (
 );
 
 
-CREATE TABLE Statkue_SVWS_ZulaessigeKursartenMapping (
+CREATE TABLE Statkue_SVWS_ZulaessigeKursarten (
   ID varchar(5) NOT NULL, 
   Kuerzel varchar(5) NOT NULL, 
   ASDNummer varchar(2) NOT NULL, 
   Bezeichnung varchar(120) NOT NULL, 
+  SchulformenUndGliederungen varchar(255), 
   KuerzelAllg varchar(5), 
   BezeichnungAllg varchar(120), 
+  SchulformenAusgelaufen varchar(255), 
   erlaubtGOSt int DEFAULT 0 NOT NULL, 
+  AusgelaufenInSchuljahr varchar(255), 
   Bemerkungen varchar(120),
-  CONSTRAINT PK_Statkue_SVWS_ZulaessigeKursartenMapping PRIMARY KEY (ID)
+  CONSTRAINT PK_Statkue_SVWS_ZulaessigeKursarten PRIMARY KEY (ID)
 );
 
 
@@ -2185,7 +2289,7 @@ CREATE TABLE Statkue_ZulKlArt (
 CREATE TABLE Statkue_ZulKuArt (
   SF varchar(2) NOT NULL, 
   FSP varchar(2) NOT NULL, 
-  BG varchar(2) NOT NULL, 
+  BG varchar(3) NOT NULL, 
   Kursart varchar(3) NOT NULL, 
   Kursart2 varchar(5) NOT NULL, 
   Bezeichnung varchar(120) NOT NULL, 
@@ -2481,8 +2585,11 @@ CREATE TABLE Schueler (
   MasernImpfnachweis varchar(1) DEFAULT '-', 
   Lernstandsbericht varchar(1) DEFAULT '-', 
   SprachfoerderungVon date, 
-  SprachfoerderungBis date,
+  SprachfoerderungBis date, 
+  EntlassungBemerkung varchar(255), 
+  CredentialID bigint,
   CONSTRAINT PK_Schueler PRIMARY KEY (ID),
+  CONSTRAINT Schueler_Credentials_FK FOREIGN KEY (CredentialID) REFERENCES Credentials(ID),
   CONSTRAINT Schueler_Einschulungsart_FK FOREIGN KEY (Einschulungsart_ID) REFERENCES K_EinschulungsArt(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT Schueler_Fahrschueler_FK FOREIGN KEY (Fahrschueler_ID) REFERENCES K_FahrschuelerArt(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT Schueler_Foerderschwerpunkt_FK FOREIGN KEY (Foerderschwerpunkt_ID) REFERENCES K_Foerderschwerpunkt(ID) ON UPDATE CASCADE ON DELETE SET NULL,
@@ -2741,8 +2848,10 @@ CREATE TABLE SchuelerErzAdr (
   ErzEmail2 varchar(100), 
   Erz1ZusatzNachname varchar(30), 
   Erz2ZusatzNachname varchar(30), 
-  Bemerkungen text,
+  Bemerkungen text, 
+  CredentialID bigint,
   CONSTRAINT PK_SchuelerErzAdr PRIMARY KEY (ID),
+  CONSTRAINT SchuelerErzAdr_Credentials_FK FOREIGN KEY (CredentialID) REFERENCES Credentials(ID),
   CONSTRAINT SchuelerErzAdr_ErzieherArt_FK FOREIGN KEY (ErzieherArt_ID) REFERENCES K_ErzieherArt(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT SchuelerErzAdr_Ort_FK FOREIGN KEY (ErzOrt_ID) REFERENCES K_Ort(ID),
   CONSTRAINT SchuelerErzAdr_Ortsteil_FK FOREIGN KEY (ErzOrtsteil_ID) REFERENCES K_Ortsteil(ID),
@@ -2995,6 +3104,21 @@ CREATE TABLE SchuelerLernabschnittsdaten (
 );
 
 
+CREATE TABLE SchuelerLernplattform (
+  SchuelerID bigint NOT NULL, 
+  LernplattformID bigint NOT NULL, 
+  CredentialID bigint, 
+  EinwilligungAbgefragt int DEFAULT 0 NOT NULL, 
+  EinwilligungNutzung int DEFAULT 0 NOT NULL, 
+  EinwilligungAudiokonferenz int DEFAULT 0 NOT NULL, 
+  EinwilligungVideokonferenz int DEFAULT 0 NOT NULL,
+  CONSTRAINT PK_SchuelerLernplattform PRIMARY KEY (SchuelerID, LernplattformID),
+  CONSTRAINT SchuelerLernplattform_Schueler_FK FOREIGN KEY (SchuelerID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerLernplattform_Lernplattform_FK FOREIGN KEY (LernplattformID) REFERENCES Lernplattformen(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerLernplattform_Credential_FK FOREIGN KEY (CredentialID) REFERENCES Credentials(ID)
+);
+
+
 CREATE TABLE SchuelerListe_Inhalt (
   Liste_ID bigint NOT NULL, 
   Schueler_ID bigint NOT NULL, 
@@ -3093,6 +3217,31 @@ CREATE TABLE Schueler_AllgAdr (
 CREATE INDEX Schueler_AllgAdr_IDX1 ON Schueler_AllgAdr(Schueler_ID);
 
 
+CREATE TABLE ErzieherDatenschutz (
+  ErzieherID bigint NOT NULL, 
+  DatenschutzID bigint NOT NULL, 
+  Status int DEFAULT 0 NOT NULL,
+  CONSTRAINT PK_ErzieherDatenschutz PRIMARY KEY (ErzieherID, DatenschutzID),
+  CONSTRAINT ErzieherDatenschutz_Erzieher_FK FOREIGN KEY (ErzieherID) REFERENCES SchuelerErzAdr(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT ErzieherDatenschutz_Datenschutz_FK FOREIGN KEY (DatenschutzID) REFERENCES K_Datenschutz(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE ErzieherLernplattform (
+  ErzieherID bigint NOT NULL, 
+  LernplattformID bigint NOT NULL, 
+  CredentialID bigint, 
+  EinwilligungAbgefragt int DEFAULT 0 NOT NULL, 
+  EinwilligungNutzung int DEFAULT 0 NOT NULL, 
+  EinwilligungAudiokonferenz int DEFAULT 0 NOT NULL, 
+  EinwilligungVideokonferenz int DEFAULT 0 NOT NULL,
+  CONSTRAINT PK_ErzieherLernplattform PRIMARY KEY (ErzieherID, LernplattformID),
+  CONSTRAINT ErzieherLernplattform_Erzieher_FK FOREIGN KEY (ErzieherID) REFERENCES SchuelerErzAdr(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT ErzieherLernplattform_Lernplattform_FK FOREIGN KEY (LernplattformID) REFERENCES Lernplattformen(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT ErzieherLernplattform_Credential_FK FOREIGN KEY (CredentialID) REFERENCES Credentials(ID)
+);
+
+
 CREATE TABLE SchuelerErzFunktion (
   ID bigint DEFAULT -1 NOT NULL, 
   Erzieher_ID bigint NOT NULL, 
@@ -3127,6 +3276,7 @@ CREATE TABLE SchuelerLD_PSFachBem (
   Abschnitt_ID bigint NOT NULL, 
   ASV text, 
   LELS text, 
+  AUE text, 
   ESF text, 
   BemerkungFSP text, 
   BemerkungVersetzung text, 
@@ -3207,6 +3357,96 @@ CREATE TABLE ZuordnungReportvorlagen (
   CONSTRAINT PK_ZuordnungReportvorlagen PRIMARY KEY (ID)
 );
 
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_Credentials_1 AFTER INSERT ON Credentials FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Credentials') IS NOT NULL AND 
+	  NEW.ID > (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Credentials')
+BEGIN
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle = 'Credentials';
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_Credentials_2 AFTER INSERT ON Credentials FOR EACH ROW
+	WHEN NEW.ID < 0 AND
+	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Credentials') IS NOT NULL
+BEGIN
+  UPDATE Credentials SET ID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Credentials') + 1 WHERE ID = NEW.ID;
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = MaxID + 1 WHERE NameTabelle = 'Credentials';
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_Credentials_3 AFTER INSERT ON Credentials FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Credentials') IS NULL AND
+	  NEW.ID < coalesce((SELECT max(ID) FROM Credentials), 0)
+BEGIN
+  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Credentials', coalesce((SELECT max(ID) FROM Credentials), 0));
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_Credentials_4 AFTER INSERT ON Credentials FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Credentials') IS NULL AND
+	  NEW.ID >= coalesce((SELECT max(ID) FROM Credentials), 0)
+BEGIN
+  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Credentials',  NEW.ID);
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_Credentials_5 AFTER INSERT ON Credentials FOR EACH ROW
+	WHEN NEW.ID < 0 AND
+	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Credentials') IS NULL
+BEGIN
+  UPDATE Credentials SET ID = coalesce((SELECT max(ID) FROM Credentials), 0) + 1 WHERE ID = NEW.ID;
+  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Credentials',  coalesce((SELECT max(ID) FROM Credentials), 0) + 1);
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_Credentials_1 AFTER UPDATE ON Credentials FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Credentials') IS NOT NULL AND 
+	  NEW.ID > (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Credentials')
+BEGIN
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle = 'Credentials';
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_Credentials_2 AFTER UPDATE ON Credentials FOR EACH ROW
+	WHEN NEW.ID < 0 AND
+	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Credentials') IS NOT NULL
+BEGIN
+  UPDATE Credentials SET ID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Credentials') + 1 WHERE ID = NEW.ID;
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = MaxID + 1 WHERE NameTabelle = 'Credentials';
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_Credentials_3 AFTER UPDATE ON Credentials FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Credentials') IS NULL AND
+	  NEW.ID < coalesce((SELECT max(ID) FROM Credentials), 0)
+BEGIN
+  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Credentials', coalesce((SELECT max(ID) FROM Credentials), 0));
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_Credentials_4 AFTER UPDATE ON Credentials FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Credentials') IS NULL AND
+	  NEW.ID >= coalesce((SELECT max(ID) FROM Credentials), 0)
+BEGIN
+  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Credentials',  NEW.ID);
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_Credentials_5 AFTER UPDATE ON Credentials FOR EACH ROW
+	WHEN NEW.ID < 0 AND
+	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Credentials') IS NULL
+BEGIN
+  -- Update der ID in der Tabelle Credentials erfolgt durch den Autoinkrement-Trigger 2, daher hier auch kein +1, sondern nur den Max-Wert schreiben
+  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Credentials',  coalesce((SELECT max(ID) FROM Credentials), 0));
+END;
 
 
 CREATE TRIGGER t_AutoIncrement_INSERT_EigeneSchule_Fachklassen_1 AFTER INSERT ON EigeneSchule_Fachklassen FOR EACH ROW
@@ -6626,6 +6866,96 @@ CREATE TRIGGER t_AutoIncrement_UPDATE_Kurse_5 AFTER UPDATE ON Kurse FOR EACH ROW
 BEGIN
   -- Update der ID in der Tabelle Kurse erfolgt durch den Autoinkrement-Trigger 2, daher hier auch kein +1, sondern nur den Max-Wert schreiben
   INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Kurse',  coalesce((SELECT max(ID) FROM Kurse), 0));
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_Lernplattformen_1 AFTER INSERT ON Lernplattformen FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Lernplattformen') IS NOT NULL AND 
+	  NEW.ID > (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Lernplattformen')
+BEGIN
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle = 'Lernplattformen';
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_Lernplattformen_2 AFTER INSERT ON Lernplattformen FOR EACH ROW
+	WHEN NEW.ID < 0 AND
+	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Lernplattformen') IS NOT NULL
+BEGIN
+  UPDATE Lernplattformen SET ID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Lernplattformen') + 1 WHERE ID = NEW.ID;
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = MaxID + 1 WHERE NameTabelle = 'Lernplattformen';
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_Lernplattformen_3 AFTER INSERT ON Lernplattformen FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Lernplattformen') IS NULL AND
+	  NEW.ID < coalesce((SELECT max(ID) FROM Lernplattformen), 0)
+BEGIN
+  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Lernplattformen', coalesce((SELECT max(ID) FROM Lernplattformen), 0));
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_Lernplattformen_4 AFTER INSERT ON Lernplattformen FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Lernplattformen') IS NULL AND
+	  NEW.ID >= coalesce((SELECT max(ID) FROM Lernplattformen), 0)
+BEGIN
+  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Lernplattformen',  NEW.ID);
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_Lernplattformen_5 AFTER INSERT ON Lernplattformen FOR EACH ROW
+	WHEN NEW.ID < 0 AND
+	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Lernplattformen') IS NULL
+BEGIN
+  UPDATE Lernplattformen SET ID = coalesce((SELECT max(ID) FROM Lernplattformen), 0) + 1 WHERE ID = NEW.ID;
+  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Lernplattformen',  coalesce((SELECT max(ID) FROM Lernplattformen), 0) + 1);
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_Lernplattformen_1 AFTER UPDATE ON Lernplattformen FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Lernplattformen') IS NOT NULL AND 
+	  NEW.ID > (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Lernplattformen')
+BEGIN
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle = 'Lernplattformen';
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_Lernplattformen_2 AFTER UPDATE ON Lernplattformen FOR EACH ROW
+	WHEN NEW.ID < 0 AND
+	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Lernplattformen') IS NOT NULL
+BEGIN
+  UPDATE Lernplattformen SET ID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Lernplattformen') + 1 WHERE ID = NEW.ID;
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = MaxID + 1 WHERE NameTabelle = 'Lernplattformen';
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_Lernplattformen_3 AFTER UPDATE ON Lernplattformen FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Lernplattformen') IS NULL AND
+	  NEW.ID < coalesce((SELECT max(ID) FROM Lernplattformen), 0)
+BEGIN
+  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Lernplattformen', coalesce((SELECT max(ID) FROM Lernplattformen), 0));
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_Lernplattformen_4 AFTER UPDATE ON Lernplattformen FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Lernplattformen') IS NULL AND
+	  NEW.ID >= coalesce((SELECT max(ID) FROM Lernplattformen), 0)
+BEGIN
+  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Lernplattformen',  NEW.ID);
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_Lernplattformen_5 AFTER UPDATE ON Lernplattformen FOR EACH ROW
+	WHEN NEW.ID < 0 AND
+	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Lernplattformen') IS NULL
+BEGIN
+  -- Update der ID in der Tabelle Lernplattformen erfolgt durch den Autoinkrement-Trigger 2, daher hier auch kein +1, sondern nur den Max-Wert schreiben
+  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Lernplattformen',  coalesce((SELECT max(ID) FROM Lernplattformen), 0));
 END;
 
 

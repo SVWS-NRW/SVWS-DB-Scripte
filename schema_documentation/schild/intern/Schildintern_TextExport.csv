@@ -63,6 +63,16 @@ Lehrer;Tel;Telefon (Festnetz);S;;;;;ALLE
 Lehrer;Titel;Titel;S;;;;;ALLE
 Lehrer;Vorname;Vorname;S;;;;;ALLE
 Lehrer;Vschluessel;Vergütungsschlüssel;S;;;;;ALLE
+Lehrer;MasernImpfnachweis;Masern-Impfnachweis;B;;;;;ALLE
+Lehrer;ID;Pflichtstunden-Soll;S;;;PflichtstdSoll;select A.PflichtstdSoll from LehrerAbschnittsdaten A where A.Lehrer_ID=% order by A.Jahr desc, A.Abschnitt desc;ALLE
+Lehrer;ID;Rechtsverhältnis;S;;;Rechtsverhaeltnis;select A.Rechtsverhaeltnis from LehrerAbschnittsdaten A where A.Lehrer_ID=% order by A.Jahr desc, A.Abschnitt desc;ALLE
+Lehrer;ID;Beschäftigungsart;S;;;Beschaeftigungsart;select A.Beschaeftigungsart from LehrerAbschnittsdaten A where A.Lehrer_ID=% order by A.Jahr desc, A.Abschnitt desc;ALLE
+Lehrer;ID;Einsatzstatus;S;;;Einsatzstatus;select A.Einsatzstatus from LehrerAbschnittsdaten A where A.Lehrer_ID=% order by A.Jahr desc, A.Abschnitt desc;ALLE
+Lehrer;ID;Unterrichtsstunden;S;;;UnterrichtsStd;select A.UnterrichtsStd from LehrerAbschnittsdaten A where A.Lehrer_ID=% order by A.Jahr desc, A.Abschnitt desc;ALLE
+Lehrer;ID;Mehrleistungsstunden;S;;;MehrleistungStd;select A.MehrleistungStd from LehrerAbschnittsdaten A where A.Lehrer_ID=% order by A.Jahr desc, A.Abschnitt desc;ALLE
+Lehrer;ID;Minderleistungsstunden;S;;;EntlastungStd;select A.EntlastungStd from LehrerAbschnittsdaten A where A.Lehrer_ID=% order by A.Jahr desc, A.Abschnitt desc;ALLE
+Lehrer;ID;nicht-unterrichtliche Tätigkeit;S;;;AnrechnungStd;select A.AnrechnungStd from LehrerAbschnittsdaten A where A.Lehrer_ID=% order by A.Jahr desc, A.Abschnitt desc;ALLE
+Lehrer;ID;Reststunden;S;;;RestStd;select A.RestStd from LehrerAbschnittsdaten A where A.Lehrer_ID=% order by A.Jahr desc, A.Abschnitt desc;ALLE
 Schueler;***;Schul-Nummer;S;;;SchulNr;SELECT SchulNr FROM EigeneSchule WHERE Schulnr<>'' AND SchulnrEigner=#;ALLE
 Schueler;***;Schulform;S;;;SchulformKrz;SELECT SchulformKrz FROM EigeneSchule WHERE Schulnr<>'' AND SchulnrEigner=#;ALLE
 Schueler;***;Schulform (f. SIM-Export);S;;;SchulformKrz;SELECT SchulformKrz FROM EigeneSchule WHERE Schulnr<>'' AND SchulnrEigner=#;ALLE
@@ -229,11 +239,13 @@ Schueler;Uebergangsempfehlung_JG5;Übergangsempfehlung;S;;;;;ALLE
 Schueler;VerkehrsspracheFamilie;Verkehrssprache in der Familie;S;;;Langtext;SELECT Langtext from K_Verkehrssprachen where Kurztext=% AND  (SchulnrEigner=# OR SchulnrEigner=0);ALLE
 Schueler;Volljaehrig;Volljährig;B;;;;;ALLE
 Schueler;Vorname;Vorname;S;;;;;ALLE
-Schueler;Zusatz;Namenszusatz;S;;;;;ALLE
+Schueler;Zusatz;Alle Vornamen;S;;;;;ALLE
+Schueler;ZusatzNachname;Namenszusatz;S;;;;;ALLE
+Schueler;MasernImpfnachweis;Masern-Impfnachweis;B;;;;;ALLE
 Tel;Bemerkung;Bemerkung;S;;;;;ALLE
 Tel;Schueler_ID;Schüler-Klasse;S;;;Klasse;SELECT Klasse FROM Schueler WHERE ID=%;ALLE
 Tel;Schueler_ID;Schüler-Nachname;S;;;Name;SELECT Name FROM Schueler WHERE ID=%;ALLE
 Tel;Schueler_ID;Schüler-Vorname;S;;;Vorname;SELECT Vorname FROM Schueler WHERE ID=%;ALLE
 Tel;Telefonart_ID;Anschluss-Art;S;;;Bezeichnung;SELECT Bezeichnung FROM K_Telefonart WHERE ID=%;ALLE
 Tel;Telefonnummer;Telefon-Nummer;S;;;;;ALLE
-_Schueler;ID;Erzieher: Art (Import/Export-Bez.);S;;;ExportBez;SELECT K_Erzieherart.ExportBez, SchuelerErzAdr.ID FROM K_Erzieherart, SchuelerErzAdr WHERE K_Erzieherart.ID=SchuelerErzAdr.Erzieherart_ID AND SchuelerErzAdr.Schueler_ID=% ORDER BY SchuelerErzAdr.Sortierung;ALLE
+Schueler;ID;Erzieher: Art (Import/Export-Bez.);S;;;ExportBez;SELECT K_Erzieherart.ExportBez, SchuelerErzAdr.ID FROM K_Erzieherart, SchuelerErzAdr WHERE K_Erzieherart.ID=SchuelerErzAdr.Erzieherart_ID AND SchuelerErzAdr.Schueler_ID=% ORDER BY SchuelerErzAdr.Sortierung;ALLE
