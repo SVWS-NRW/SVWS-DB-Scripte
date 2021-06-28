@@ -10,7 +10,7 @@ AllgAdrAnsprechpartner;Abteilung;;;8;varchar;50;;0;;;ggf Abteilung des Ansprechp
 AllgAdrAnsprechpartner;SchulNrEigner;;;9;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
 AllgAdrAnsprechpartner;Titel;;;10;varchar;15;;0;;;Titel des Ansprechpartners im Betrieb
 AllgAdrAnsprechpartner;GU_ID;;;11;varchar;40;;0;;;GU_ID des Ansprechpartners im Betrieb
-Credentials;ID;;;1;bigint;;;1;;;ID des Datensatzes für die Account-Credentials
+Credentials;ID;;;1;bigint;;;1;;;ID des Datensatzes für die SVWS internen Account-Credentials
 Credentials;Benutzername;;;2;varchar;255;;1;;;Benutzername für den Credential-Datensatz
 Credentials;BenutzernamePseudonym;;;3;varchar;255;;0;;;Der pseudonymisierte Benutzername für den Credential-Datensatz
 Credentials;Initialkennwort;;;4;varchar;255;;0;;;Initialkennwort für den Credential-Datensatz
@@ -18,13 +18,21 @@ Credentials;PashwordHash;;;5;varchar;255;;0;;;Passwordhash für den Credential-D
 Credentials;RSAPublicKey;;;6;text;;;0;;;RSAPublicKey für den Credential-Datensatz
 Credentials;RSAPrivateKey;;;7;text;;;0;;;RSAPrivateKey für den Credential-Datensatz
 Credentials;AES;;;8;text;;;0;;;AES-Schlüssel für den Credential-Datensatz
+CredentialsLernplattformen;ID;;;1;bigint;;;1;;;ID des Datensatzes für die externen Account-Credentials (Lernplattformen)
+CredentialsLernplattformen;Benutzername;;;2;varchar;255;;1;;;Benutzername für den Credential-Datensatz
+CredentialsLernplattformen;BenutzernamePseudonym;;;3;varchar;255;;0;;;Der pseudonymisierte Benutzername für den Credential-Datensatz
+CredentialsLernplattformen;Initialkennwort;;;4;varchar;255;;0;;;Initialkennwort für den Credential-Datensatz
+CredentialsLernplattformen;PashwordHash;;;5;varchar;255;;0;;;Passwordhash für den Credential-Datensatz
+CredentialsLernplattformen;RSAPublicKey;;;6;text;;;0;;;RSAPublicKey für den Credential-Datensatz
+CredentialsLernplattformen;RSAPrivateKey;;;7;text;;;0;;;RSAPrivateKey für den Credential-Datensatz
+CredentialsLernplattformen;AES;;;8;text;;;0;;;AES-Schlüssel für den Credential-Datensatz
 EigeneSchule;ID;;;1;bigint;;;1;;;ID des Datensatzes der eigenen Schule
 EigeneSchule;SchulformNr;;;2;varchar;3;;0;;;Schulformnummer der eigenen Schule (Statkue IT.NRW)
 EigeneSchule;SchulformKrz;;;3;varchar;3;;0;Schulform;SchulformKuerzelConverter;Schulformkürzel der eigenen Schule (Statkue IT.NRW)
 EigeneSchule;SchulformBez;;;4;varchar;50;;0;;;Bezeichnender Text der Schulform
 EigeneSchule;SchultraegerArt;;;5;varchar;2;;0;;;Art des Schulträgers
 EigeneSchule;SchultraegerNr;;;6;varchar;6;;0;;;Schulträgernummer aus dem Katalog der Schulver IT.NRW
-EigeneSchule;Schulgliederung;;;7;varchar;3;;0;;;Gliederung der Schule wenn sie in der Schulver angegeben ist IT.NRW
+EigeneSchule;Schulgliederung;;;7;varchar;3;;0;;SchulgliederungKuerzelConverter;Gliederung der Schule wenn sie in der Schulver angegeben ist IT.NRW
 EigeneSchule;SchulNr;;;8;varchar;6;;0;;StringToIntegerConverter;Eindeutige Schulnummer der eigenen Schule aus der Schulver IT.NRW
 EigeneSchule;Bezeichnung1;;;9;varchar;50;;0;;;1. Text für die Bezeichnung der Schule
 EigeneSchule;Bezeichnung2;;;10;varchar;50;;0;;;2. Text für die Bezeichnung der Schule
@@ -36,9 +44,9 @@ EigeneSchule;Telefon;;;15;varchar;20;;0;;;Telefonnummer der eigenen Schule
 EigeneSchule;Fax;;;16;varchar;20;;0;;;Faxnummer der eigenen Schule
 EigeneSchule;Email;;;17;varchar;100;;0;;;Email-Adresse der eigenen Schule
 EigeneSchule;Ganztags;;;18;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Gibt an, ob die Schule Ganztagsbetrieb hat
-EigeneSchule;Schuljahr;;;19;smallint;;;0;;;Aktuelle Schuljahr der Datenbank
-EigeneSchule;SchuljahrAbschnitt;;;20;smallint;;;0;;;Aktueller Abschnitt der Datenbank
-EigeneSchule;AnzahlAbschnitte;;;21;smallint;;2;0;;;Anzahl der verfügbaren Abschnitte (meist Halbjahre oder Quartale)
+EigeneSchule;Schuljahr;;;19;int;;;0;;;Aktuelle Schuljahr der Datenbank
+EigeneSchule;SchuljahrAbschnitt;;;20;int;;;0;;;Aktueller Abschnitt der Datenbank
+EigeneSchule;AnzahlAbschnitte;;;21;int;;2;0;;;Anzahl der verfügbaren Abschnitte (meist Halbjahre oder Quartale)
 EigeneSchule;Fremdsprachen;;;22;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Welche Fremdsprachen werden unterrichtet
 EigeneSchule;JVAZeigen;;;23;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Schule unterrichtet in der Justizvollzugsanstalt
 EigeneSchule;RefPaedagogikZeigen;;;24;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Schule hat Reformpädagogischen-Zweig
@@ -122,7 +130,7 @@ EigeneSchule_Faecher;FachKrz;;;2;varchar;20;;0;Kuerzel;;Ein eindeutiges Kürzel 
 EigeneSchule_Faecher;Bezeichnung;;;3;varchar;255;;0;;;Die Bezeichnung des Faches
 EigeneSchule_Faecher;ZeugnisBez;;;4;varchar;255;;0;BezeichnungZeugnis;;Die Bezeichnung des Faches auf einem Zeugnis
 EigeneSchule_Faecher;UeZeugnisBez;;;5;varchar;255;;0;BezeichnungUeberweisungsZeugnis;;Die Bezeichnung des Faches auf einem Überweisungszeugnis
-EigeneSchule_Faecher;StatistikKrz;;;6;varchar;2;;0;KuerzelStatistik;;Das Statistik-Kürzel des Faches
+EigeneSchule_Faecher;StatistikKrz;;;6;varchar;2;;0;StatistikFach;ZulaessigesFachKuerzelASDConverter;Das Statistik-Kürzel des Faches
 EigeneSchule_Faecher;BasisFach;;;7;varchar;1;-;0;IstOberstufenFach;BooleanPlusMinusDefaultMinusConverter;Gibt an, ob das Fach in der Oberstufe unterrichtet wird
 EigeneSchule_Faecher;IstSprache;;;8;varchar;1;-;0;IstFremdsprache;BooleanPlusMinusDefaultMinusConverter;Gibt an, ob das Fach eine Fremdsprache ist
 EigeneSchule_Faecher;Sortierung;;;9;int;;32000;0;SortierungAllg;;Gibt eine Sortierung für die Fächer vor
@@ -139,7 +147,7 @@ EigeneSchule_Faecher;AufZeugnis;;;19;varchar;1;+;0;;BooleanPlusMinusDefaultPlusC
 EigeneSchule_Faecher;Lernfelder;;;20;text;;;0;;;speichert die Lernfeld-Texte zu den Fachklassen beim Unterrichtsfach am BK, ist von den Textfelder im Menü Fachklassen abgelöst worden, sollte nicht mehr genutzt werden
 EigeneSchule_Faecher;SchulNrEigner;;;21;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
 EigeneSchule_Faecher;LK_Moegl;;;22;varchar;1;+;0;IstMoeglichAbiLK;BooleanPlusMinusDefaultPlusConverter;gibt an, ob das Fach als Leistungskurs belegt werden kann.
-EigeneSchule_Faecher;Abi_Moegl;;;23;varchar;1;+;0;IstMoeglichAbiGKMoeglich;BooleanPlusMinusDefaultPlusConverter;gibt an, ob das Fach als drittes oder viertes Abiturfach belegt werden kann.
+EigeneSchule_Faecher;Abi_Moegl;;;23;varchar;1;+;0;IstMoeglichAbiGK;BooleanPlusMinusDefaultPlusConverter;gibt an, ob das Fach als drittes oder viertes Abiturfach belegt werden kann.
 EigeneSchule_Faecher;E1;;;24;varchar;1;+;0;IstMoeglichEF1;BooleanPlusMinusDefaultPlusConverter;gibt an, ob das Fach im 1. Halbjahr der Einführungsphase belegt werden kann,
 EigeneSchule_Faecher;E2;;;25;varchar;1;+;0;IstMoeglichEF2;BooleanPlusMinusDefaultPlusConverter;gibt an, ob das Fach im 2. Halbjahr der Einführungsphase belegt werden kann,
 EigeneSchule_Faecher;Q1;;;26;varchar;1;+;0;IstMoeglichQ11;BooleanPlusMinusDefaultPlusConverter;gibt an, ob das Fach im 1. Halbjahr des 1. Jahres der Qualifikationsphase belegt werden kann,
@@ -168,7 +176,7 @@ EigeneSchule_Jahrgaenge;Sortierung;;;6;int;;32000;0;;;Ein Zahlwert, welcher bei 
 EigeneSchule_Jahrgaenge;IstChronologisch;;;7;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Gibt an ob ein Jahrgang zu einer chronologischen Reihenfolge gehört
 EigeneSchule_Jahrgaenge;Spaltentitel;;;8;varchar;2;;0;Kurzbezeichnung;;Wird in der Übersicht benutzt um den Spaltentitel anzuzeigen. (Kurzbezeichnung in Jahrgangstabelle)
 EigeneSchule_Jahrgaenge;SekStufe;;;9;varchar;6;;0;Sekundarstufe;;Gibt die Primar- bzw. Sekundarstufe des Jahrgang an (Pr, SI, SII-1, SII-2, SII-3)
-EigeneSchule_Jahrgaenge;SGL;;;10;varchar;3;;0;Gliederung;;Schulgliederung des Jahrgangs
+EigeneSchule_Jahrgaenge;SGL;;;10;varchar;3;;0;Gliederung;SchulgliederungKuerzelConverter;Schulgliederung des Jahrgangs
 EigeneSchule_Jahrgaenge;Restabschnitte;;;11;int;;;0;AnzahlRestabschnitte;;Gibt die Anzahl der Restabschnitte an, die für den Verbleib an dieser Schulform üblich ist.
 EigeneSchule_Jahrgaenge;SchulNrEigner;;;12;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
 EigeneSchule_Jahrgaenge;Folgejahrgang_ID;;;13;bigint;;;0;;;Die eindeutige ID des Jahrgangs, welcher auf diesen folgt – verweist auf diese Tabelle oder NULL, falls es sich um den letzten Jahrgang handelt
@@ -263,6 +271,71 @@ Floskeln;FloskelGruppe;;;4;varchar;10;;0;;;Gruppe der Floskel
 Floskeln;FloskelFach;;;5;varchar;20;;0;;;Fach bei Fachfloskeln
 Floskeln;FloskelNiveau;;;6;varchar;2;;0;;;Niveau bei Fachfloskeln
 Floskeln;FloskelJahrgang;;;7;varchar;2;;0;;;Jahrgang bei Fachfloskeln
+Gost_Jahrgang_Beratungslehrer;Abi_Jahrgang;;;1;int;;;1;;;Gymnasiale Oberstufe - Jahrgangsdaten: Schuljahr, in welchem der Jahrgang das Abitur macht 
+Gost_Jahrgang_Beratungslehrer;Lehrer_ID;;;2;bigint;;;1;;;Gymnasiale Oberstufe - Jahrgangsdaten: ID des Beratungslehrers in der Lehrertabelle
+Gost_Jahrgang_Faecher;Abi_Jahrgang;;;1;int;;;1;;;Gymnasiale Oberstufe - Jahrgangsdaten: Schuljahr, in welchem der Jahrgang das Abitur macht
+Gost_Jahrgang_Faecher;Fach_ID;;;2;bigint;;;1;;;Gymnasiale Oberstufe - Jahrgangsdaten: ID des Faches in der Fächertabelle
+Gost_Jahrgang_Faecher;WaehlbarEF1;;;3;int;;1;1;;Boolean01Converter;Gymnasiale Oberstufe - Jahrgangsdaten: Belegung des Faches in der EF.1 möglich: 1 - true, 0 - false 
+Gost_Jahrgang_Faecher;WaehlbarEF2;;;4;int;;1;1;;Boolean01Converter;Gymnasiale Oberstufe - Jahrgangsdaten: Belegung des Faches in der EF.2 möglich: 1 - true, 0 - false
+Gost_Jahrgang_Faecher;WaehlbarQ11;;;5;int;;1;1;;Boolean01Converter;Gymnasiale Oberstufe - Jahrgangsdaten: Belegung des Faches in der Q1.1 möglich: 1 - true, 0 - false
+Gost_Jahrgang_Faecher;WaehlbarQ12;;;6;int;;1;1;;Boolean01Converter;Gymnasiale Oberstufe - Jahrgangsdaten: Belegung des Faches in der Q1.2 möglich: 1 - true, 0 - false
+Gost_Jahrgang_Faecher;WaehlbarQ21;;;7;int;;1;1;;Boolean01Converter;Gymnasiale Oberstufe - Jahrgangsdaten: Belegung des Faches in der Q2.1 möglich: 1 - true, 0 - false
+Gost_Jahrgang_Faecher;WaehlbarQ22;;;8;int;;1;1;;Boolean01Converter;Gymnasiale Oberstufe - Jahrgangsdaten: Belegung des Faches in der Q2.2 möglich: 1 - true, 0 - false
+Gost_Jahrgang_Faecher;WaehlbarAbiGK;;;9;int;;1;1;;Boolean01Converter;Gymnasiale Oberstufe - Jahrgangsdaten: Eintrag, ob das Fach als 3. oder 4. Abiturfach gewählt werden kann: 1 - true, 0 - false
+Gost_Jahrgang_Faecher;WaehlbarAbiLK;;;10;int;;1;1;;Boolean01Converter;Gymnasiale Oberstufe - Jahrgangsdaten: Eintrag, ob das Fach als 1. oder 2. Abiturfach (LK) gewählt werden kann: 1 - true, 0 - false
+Gost_Jahrgang_Faecher;WochenstundenEF1;;;11;int;;;0;;;Gymnasiale Oberstufe - Jahrgangsdaten: Anzahl der Unterrichtsstunden in 45-minuten-Einheiten des Faches in der EF.1
+Gost_Jahrgang_Faecher;WochenstundenEF2;;;12;int;;;0;;;Gymnasiale Oberstufe - Jahrgangsdaten: Anzahl der Unterrichtsstunden in 45-minuten-Einheiten des Faches in der EF.2
+Gost_Jahrgang_Faecher;WochenstundenQPhase;;;13;int;;;0;;;Gymnasiale Oberstufe - Jahrgangsdaten: Anzahl der Unterrichtsstunden in 45-minuten-Einheiten des Faches in der Qualifikationsphase
+Gost_Jahrgang_Faecher;SchiftlichkeitEF1;;;14;varchar;1;;0;;;Gymnasiale Oberstufe - Jahrgangsdaten: Mündlich oder Schriftlich bei dem Fach in der EF1
+Gost_Jahrgang_Faecher;SchiftlichkeitEF2;;;15;varchar;1;;0;;;Gymnasiale Oberstufe - Jahrgangsdaten: Mündlich oder Schriftlich dei dem Fach in der EF2
+Gost_Jahrgang_Faecher;NurMuendlich;;;17;int;;0;1;;Boolean01Converter;Gymnasiale Oberstufe - Jahrgangsdaten: Gibt an, ob das Fach nur mündlich belegt werden kann: 1 - true, 0 - false
+Gost_Jahrgangsdaten;Abi_Jahrgang;;;1;int;;;1;;;Gymnasiale Oberstufe - Jahrgangsdaten: Schuljahr, in welchem der Jahrgang das Abitur macht
+Gost_Jahrgangsdaten;ZusatzkursGEErstesHalbjahr;;;2;varchar;4;Q2.1;0;;;Gymnasiale Oberstufe - Jahrgangsdaten: Halbjahr, in welchem ein Zusatzkurs in Geschichte beginnt (z.B. Q2.1)
+Gost_Jahrgangsdaten;ZusatzkursSWErstesHalbjahr;;;3;varchar;4;Q2.1;0;;;Gymnasiale Oberstufe - Jahrgangsdaten: Halbjahr, in welchem ein Zusatzkurs in Sozialwissenschaften beginnt (z.B. Q2.1)
+Gost_Jahrgangsdaten;TextBeratungsbogen;;;4;varchar;2000;;0;;;Gymnasiale Oberstufe - Jahrgangsdaten: Text, welcher auf dem Ausdruck eines Beratungsbogens gedruckt wird
+Gost_Jahrgangsdaten;TextMailversand;;;5;varchar;2000;;0;;;Gymnasiale Oberstufe - Jahrgangsdaten: Text, welcher in einer Mail beim Versenden von Beratungsdateien verwendet wird
+Gost_Jahrgang_Fachkombinationen;Abi_Jahrgang;;;1;int;;;1;;;Gymnasiale Oberstufe - Jahrgangsdaten: Schuljahr, in welchem der Jahrgang das Abitur macht
+Gost_Jahrgang_Fachkombinationen;ID;;;2;varchar;30;;1;;;Gymnasiale Oberstufe - Jahrgangsdaten: ID des Datensatzes der nicht möglichen Fächerkombination
+Gost_Jahrgang_Fachkombinationen;Fach1_ID;;;3;bigint;;;1;;;Gymnasiale Oberstufe - Jahrgangsdaten: Die ID des ersten Faches der nicht möglichen Fächerkombination / eines Fächerprofils
+Gost_Jahrgang_Fachkombinationen;Fach2_ID;;;4;bigint;;;1;;;Gymnasiale Oberstufe - Jahrgangsdaten: Die ID des zweiten Faches der nicht möglichen Fächerkombination / eines Fächerprofils
+Gost_Jahrgang_Fachkombinationen;Kursart1;;;5;varchar;5;;0;;;Gymnasiale Oberstufe - Jahrgangsdaten: Die Kursart des ersten Faches der nicht möglichen Fächerkombination / eines Fächerprofils
+Gost_Jahrgang_Fachkombinationen;Kursart2;;;6;varchar;5;;0;;;Gymnasiale Oberstufe - Jahrgangsdaten: Die Kursart des zweiten Faches der nicht möglichen Fächerkombination / eines Fächerprofils
+Gost_Jahrgang_Fachkombinationen;Phase;;;7;varchar;10;-;1;;;Gymnasiale Oberstufe - Jahrgangsdaten: Die Gültigkeit der nicht möglichen Fächerkombination EF.1 bis Q2.2 oder Q1.1 bis Q2.2
+Gost_Jahrgang_Fachkombinationen;Typ;;;8;int;;0;1;;;Gymnasiale Oberstufe - Jahrgangsdaten: Gibt an, ob es sich um eine nicht mögliche Fächerkombination (0) oder ein Fächerprofil handelt (1)
+Gost_Schueler;Schueler_ID;;;1;bigint;;;1;;;Gymnasiale Oberstufe - Schülerdaten: Die ID des Schülers in der Schülertabelle
+Gost_Schueler;DatumBeratung;;;2;datetime;;;0;;DatumConverter;Gymnasiale Oberstufe - Schülerdaten: Das Datum der letzten Beratung des Schülers
+Gost_Schueler;DatumRuecklauf;;;3;datetime;;;0;;DatumConverter;Gymnasiale Oberstufe - Schülerdaten: Das Datum an dem der letzte Beratungsbogen des Schülersmit seiner Fächerwahl in der Schule eingereicht wurde
+Gost_Schueler;HatSprachPraktischePruefung;;;4;int;;0;1;;Boolean01Converter;Gymnasiale Oberstufe - Schülerdaten: Gibt an, ob eine Teilnahme an einer sprachpraktischen Prüfung erfolgt ist: 1 - true, 0 - false
+Gost_Schueler;HatSportattest;;;5;int;;0;1;;Boolean01Converter;Gymnasiale Oberstufe - Schülerdaten: Gibt an, ob ein Sportattest bei dem Schüler vorliegt oder nicht und die Wahl eines Ersatzfaches zulässig ist: 1 - true, 0 - false
+Gost_Schueler;Kommentar;;;6;text;;;0;;;Gymnasiale Oberstufe - Schülerdaten: Kommentar des Beratungslehrers zur der Wahl des Schülers
+Gost_Schueler;Beratungslehrer;;;7;varchar;120;;0;;;Gymnasiale Oberstufe - Schülerdaten: Name des Beratungslehrers, der die letzte Beratung vorgenommen hat
+Gost_Schueler;PruefPhase;;;8;varchar;1;;0;;;Gymnasiale Oberstufe - Schülerdaten: Gibt an welche Halbjahre bei der Belegprüfung geprüft werden sollen (E - nur EF.1, G - Gesamtprüfung bis einschließlich Q2.2)
+Gost_Schueler;BesondereLernleistung_Art;;;9;varchar;1;;0;;;Gymnasiale Oberstufe - Schülerdaten: Die Art einer besonderen Lernleistung
+Gost_Schueler;BesondereLernleistung_Punkte;;;10;int;;;0;;;Gymnasiale Oberstufe - Schülerdaten: Die Notenpunkte der besonderen Lernleistung 
+Gost_Schueler;ZweiteFremdpracheInSekIVorhanden;;;11;int;;0;1;;Boolean01Converter;Gymnasiale Oberstufe - Schülerdaten: Gibt an, ob die Belegung der zweiten Fremdsprache in der Sek I manuell geprüft wurde und eine Prüfung bei der Laufbahnplanung entfallen kann: 1 - true, 0 - false
+Gost_Schueler_Fachwahlen;Schueler_ID;;;1;bigint;;;1;;;Gymnasiale Oberstufe - Schülerdaten - Fachwahlen: ID des Schülers in der Schuelertabelle
+Gost_Schueler_Fachwahlen;Fach_ID;;;2;bigint;;;1;;;Gymnasiale Oberstufe - Schülerdaten - Fachwahlen: ID des Faches in der Fächertabelle
+Gost_Schueler_Fachwahlen;EF1_Kursart;;;3;varchar;5;;0;;;Gymnasiale Oberstufe - Schülerdaten - Fachwahlen: Kursart des belegten Faches in EF.1
+Gost_Schueler_Fachwahlen;EF1_Punkte;;;4;varchar;2;;0;;;Gymnasiale Oberstufe - Schülerdaten - Fachwahlen: Notenpunkte des belegten faches in EF.1
+Gost_Schueler_Fachwahlen;EF2_Kursart;;;5;varchar;5;;0;;;Gymnasiale Oberstufe - Schülerdaten - Fachwahlen: Kursart des belegten Faches in EF.2
+Gost_Schueler_Fachwahlen;EF2_Punkte;;;6;varchar;2;;0;;;Gymnasiale Oberstufe - Schülerdaten - Fachwahlen: Notenpunkte des belegten faches in EF.2
+Gost_Schueler_Fachwahlen;Q11_Kursart;;;7;varchar;5;;0;;;Gymnasiale Oberstufe - Schülerdaten - Fachwahlen: Kursart des belegten Faches in Q1.1
+Gost_Schueler_Fachwahlen;Q11_Punkte;;;8;varchar;2;;0;;;Gymnasiale Oberstufe - Schülerdaten - Fachwahlen: Notenpunkte des belegten faches in Q1.1
+Gost_Schueler_Fachwahlen;Q12_Kursart;;;9;varchar;5;;0;;;Gymnasiale Oberstufe - Schülerdaten - Fachwahlen: Kursart des belegten Faches in Q1.2
+Gost_Schueler_Fachwahlen;Q12_Punkte;;;10;varchar;2;;0;;;Gymnasiale Oberstufe - Schülerdaten - Fachwahlen: Notenpunkte des belegten faches in Q1.2
+Gost_Schueler_Fachwahlen;Q21_Kursart;;;11;varchar;5;;0;;;Gymnasiale Oberstufe - Schülerdaten - Fachwahlen: Kursart des belegten Faches in Q2.1
+Gost_Schueler_Fachwahlen;Q21_Punkte;;;12;varchar;2;;0;;;Gymnasiale Oberstufe - Schülerdaten - Fachwahlen: Notenpunkte des belegten faches in Q2.1
+Gost_Schueler_Fachwahlen;Q22_Kursart;;;13;varchar;5;;0;;;Gymnasiale Oberstufe - Schülerdaten - Fachwahlen: Kursart des belegten Faches in Q2.2
+Gost_Schueler_Fachwahlen;Q22_Punkte;;;14;varchar;2;;0;;;Gymnasiale Oberstufe - Schülerdaten - Fachwahlen: Notenpunkte des belegten faches in Q2.2
+Gost_Schueler_Fachwahlen;AbiturFach;;;15;int;;;0;;;Gymnasiale Oberstufe - Schülerdaten - Fachwahlen: Abiturfach 1 bis 4 oder null
+Gost_Schueler_Fachwahlen;Bemerkungen;;;16;varchar;50;;0;;;Gymnasiale Oberstufe - Schülerdaten - Fachwahlen: Bemerkungen zum belegten Fach
+Gost_Schueler_Fachwahlen;Markiert_Q1;;;17;int;;;0;;Boolean01Converter;Gymnasiale Oberstufe - Schülerdaten - Fachwahlen - Abiturberechnung: Gibt an, ob das belegte Fach in der Q1.1 für die Einbringung in das Abitur markiert wurde
+Gost_Schueler_Fachwahlen;Markiert_Q2;;;18;int;;;0;;Boolean01Converter;Gymnasiale Oberstufe - Schülerdaten - Fachwahlen - Abiturberechnung: Gibt an, ob das belegte Fach in der Q1.2 für die Einbringung in das Abitur markiert wurde
+Gost_Schueler_Fachwahlen;Markiert_Q3;;;19;int;;;0;;Boolean01Converter;Gymnasiale Oberstufe - Schülerdaten - Fachwahlen - Abiturberechnung: Gibt an, ob das belegte Fach in der Q2.1 für die Einbringung in das Abitur markiert wurde
+Gost_Schueler_Fachwahlen;Markiert_Q4;;;20;int;;;0;;Boolean01Converter;Gymnasiale Oberstufe - Schülerdaten - Fachwahlen - Abiturberechnung: Gibt an, ob das belegte Fach in der Q2.2 für die Einbringung in das Abitur markiert wurde
+Gost_Schueler_Fachwahlen;ergebnisAbiturpruefung;;;21;int;;;0;;;Gymnasiale Oberstufe - Schülerdaten - Fachwahlen - Abiturberechnung: Das Ergebnis der Abiturprüfung in einem Abiturfach (1. - 4. Fach)
+Gost_Schueler_Fachwahlen;hatMuendlichePflichtpruefung;;;22;int;;;0;;Boolean01Converter;Gymnasiale Oberstufe - Schülerdaten - Fachwahlen - Abiturberechnung: Gibt an, ob eine mündliche Pflichtprüfung im 1. - 3. Fach angesetzt werden muss (null - unbekannt, 0 - Nein, 1 - Ja)  
+Gost_Schueler_Fachwahlen;ergebnisMuendlichePruefung;;;23;int;;;0;;;Gymnasiale Oberstufe - Schülerdaten - Fachwahlen - Abiturberechnung: Ergebnis der mündlichen Prüfung im 1. - 3. Fach
 ImpExp_EigeneImporte;ID;;;1;int;;0;1;;;ID des Importschemas für den externen Textimport
 ImpExp_EigeneImporte;Title;;;2;varchar;50;;0;;;Bezeichnung des Schemas
 ImpExp_EigeneImporte;DelimiterChar;;;3;varchar;1;;0;;;Enthält das Trennzeichen für den Import
@@ -622,8 +695,8 @@ Kompetenzgruppen;KG_Bezeichnung;;;4;varchar;50;;1;;;Bezeichnung der Kompetenzgru
 Kurs_Schueler;Kurs_ID;;;1;bigint;;;1;;;Die eindeutige ID des Kurses – verweist auf den Kurs
 Kurs_Schueler;Schueler_ID;;;2;bigint;;;1;;;Die eindeutige ID des Schülers – verweist auf den Schüler
 Kurse;ID;;;1;bigint;;;1;;;ID des Kurses
-Kurse;Jahr;;;2;smallint;;;1;;;Schuljahr des Kurses
-Kurse;Abschnitt;;;3;smallint;;;1;;;Abschnitt des Kurses
+Kurse;Jahr;;;2;int;;;1;;;Schuljahr des Kurses
+Kurse;Abschnitt;;;3;int;;;1;;;Abschnitt des Kurses
 Kurse;KurzBez;;;4;varchar;20;;1;;;Kursbezeichnung des Kurses
 Kurse;Jahrgang_ID;;;5;bigint;;;0;;;Jahrgangs_ID des Kurses
 Kurse;ASDJahrgang;;;6;varchar;2;;0;;;ASD-Kürzel des Jahrgangs des Kurses
@@ -723,72 +796,6 @@ Logins;LI_UserID;;;1;bigint;;;1;;;UserID des Logins
 Logins;LI_LoginTime;;;2;datetime;;;0;;;Login Zeit
 Logins;LI_LogoffTime;;;3;datetime;;;0;;;Logoff Zeit
 Logins;SchulNrEigner;;;4;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
-LuPO_Beratungslehrer;Abi_Jahrgang;;;1;int;;;1;;;LuPO Tabelle:  Schuljahr des Abiturs
-LuPO_Beratungslehrer;Lehrer_ID;;;2;bigint;;;1;;;LuPO Tabelle:  ID des Lehrerdatensatzes
-LuPO_Faecher;Abi_Jahrgang;;;1;int;;;1;;;LuPO Tabelle:  Schuljahr des Abiturs???
-LuPO_Faecher;Fach_ID;;;2;bigint;;;1;;;LuPO Tabelle:  ID des Faches der Fächertabelle
-LuPO_Faecher;E1;;;3;int;;1;1;;Boolean01Converter;LuPO Tabelle:  Belegung des Faches in EF.1 J/N
-LuPO_Faecher;E2;;;4;int;;1;1;;Boolean01Converter;LuPO Tabelle:  Belegung des Faches in EF.2 J/N
-LuPO_Faecher;Q1;;;5;int;;1;1;;Boolean01Converter;LuPO Tabelle:  Belegung des Faches in Q1.1 J/N
-LuPO_Faecher;Q2;;;6;int;;1;1;;Boolean01Converter;LuPO Tabelle:  Belegung des Faches in Q1.2 J/N
-LuPO_Faecher;Q3;;;7;int;;1;1;;Boolean01Converter;LuPO Tabelle:  Belegung des Faches in Q2.1 J/N
-LuPO_Faecher;Q4;;;8;int;;1;1;;Boolean01Converter;LuPO Tabelle:  Belegung des Faches in Q2.2 J/N
-LuPO_Faecher;Abi_Moegl;;;9;int;;1;1;;Boolean01Converter;LuPO Tabelle:  Eintrag, ob das Fach als 3. oder 4. Abiturfach gewählt werden kann J/N
-LuPO_Faecher;LK_Moegl;;;10;int;;1;1;;Boolean01Converter;LuPO Tabelle:  Eintrag, ob das Fach als 1. oder 2. Abiturfach (LK) gewählt werden kann J/N
-LuPO_Faecher;E1_WStd;;;11;int;;;0;;;LuPO Tabelle:  Anzahl der Unterrichtsstunden in 45-minuten-Einheiten des Faches in der EF.1
-LuPO_Faecher;E2_WStd;;;12;int;;;0;;;LuPO Tabelle:  Anzahl der Unterrichtsstunden in 45-minuten-Einheiten des Faches in der EF.2
-LuPO_Faecher;E1_S_M;;;13;varchar;1;;0;;;LuPO Tabelle: Mündlich oder Schriftlich des Faches in der EF1
-LuPO_Faecher;E2_S_M;;;14;varchar;1;;0;;;LuPO Tabelle: Mündlich oder Schriftlich des Faches in der EF2
-LuPO_Faecher;Q_WStd;;;15;int;;;0;;;LuPO Tabelle:  Anzahl der Unterrichtsstunden in 45-minuten-Einheiten des Faches in der Qualifikationsphase
-LuPO_Faecher;E_ExportKursart;;;16;varchar;5;;0;;;LuPO Tabelle:  ???
-LuPO_Faecher;NurMuendlich;;;17;int;;0;1;;Boolean01Converter;LuPO Tabelle:  Fach kann nur mündlich belegt werden J/N
-LuPO_Jahrgangsdaten;Abi_Jahrgang;;;1;int;;;1;;;LuPO Tabelle:  Schuljahr des Abiturs???
-LuPO_Jahrgangsdaten;ZK_Beginn_GE;;;2;varchar;2;Q3;0;;;LuPO Tabelle:  Halbjahr, in welchem ein Zusatzkurs beginnt
-LuPO_Jahrgangsdaten;ZK_Beginn_SW;;;3;varchar;2;Q3;0;;;LuPO Tabelle:  Halbjahr, in welchem ein Zusatzkurs endet
-LuPO_Jahrgangsdaten;BeratungsText;;;4;varchar;2000;;0;;;LuPO Tabelle:  Text, welcher auf dem Ausdruck des Beratungsbogens gedruckt wird
-LuPO_Jahrgangsdaten;MailText;;;5;varchar;2000;;0;;;LuPO Tabelle:  Text, welcher in einer Mail übernommen wird
-LuPO_NichtMoeglAbiFachKombi;Abi_Jahrgang;;;1;int;;;1;;;LuPO Tabelle:  Schuljahr des Abiturs
-LuPO_NichtMoeglAbiFachKombi;ID;;;2;varchar;30;;1;;;LuPO Tabelle:  ID der nicht möglichen Fächerkombination
-LuPO_NichtMoeglAbiFachKombi;Fach1_ID;;;3;bigint;;;1;;;LuPO Tabelle:  ID des ersten Faches der nicht möglichen Fächerkombination / eines Fächerprofils
-LuPO_NichtMoeglAbiFachKombi;Fach2_ID;;;4;bigint;;;1;;;LuPO Tabelle:  ID des zweiten Faches der nicht möglichen Fächerkombination / eines Fächerprofils
-LuPO_NichtMoeglAbiFachKombi;Kursart1;;;5;varchar;5;;0;;;LuPO Tabelle:  Kursart des ersten Faches der nicht möglichen Fächerkombination / eines Fächerprofils
-LuPO_NichtMoeglAbiFachKombi;Kursart2;;;6;varchar;5;;0;;;LuPO Tabelle:  Kursart des zweiten Faches der nicht möglichen Fächerkombination / eines Fächerprofils
-LuPO_NichtMoeglAbiFachKombi;Phase;;;7;varchar;10;-;1;;;LuPO Tabelle:  Gültigkeit der nicht möglichen Fächerkombination EF.1 bis Q2.2 oder Q1.1 bis Q2.2
-LuPO_NichtMoeglAbiFachKombi;Typ;;;8;varchar;1;-;1;;;LuPO Tabelle:  Nicht mögliche Fächerkombination oder Fächerprofil -/+
-LuPO_Schueler;Schueler_ID;;;1;bigint;;;1;;;LuPO Tabelle:  ID des Schülers in der Schülertabelle
-LuPO_Schueler;DatumBeratung;;;2;datetime;;;0;;DatumConverter;LuPO Tabelle:  Datum der Beratung
-LuPO_Schueler;DatumRuecklauf;;;3;datetime;;;0;;DatumConverter;LuPO Tabelle:  Datum der Abgabe der Fächerwahl
-LuPO_Schueler;SPP;;;4;int;;0;1;;Boolean01Converter;LuPO Tabelle:  Teilnahme an einer sprachpraktischen Prüfung J/N
-LuPO_Schueler;Sportattest;;;5;int;;0;1;;Boolean01Converter;LuPO Tabelle:  Sportattes des Schülers vorhanden
-LuPO_Schueler;Kommentar;;;6;text;;;0;;;LuPO Tabelle:  Kommentar des Beratungslehrers zur Schülerwahl des Schülers
-LuPO_Schueler;Beratungslehrer;;;7;varchar;120;;0;;;LuPO Tabelle:  Name des Beratungslehrers
-LuPO_Schueler;PruefPhase;;;8;varchar;1;;0;;;LuPO Tabelle:  Halbjahr, in dem sich der Schüler befindet???
-LuPO_Schueler;BLL_Art;;;9;varchar;1;;0;;;LuPO Tabelle:  besondere Lernleistung J/N
-LuPO_Schueler;BLL_Punkte;;;10;int;;;0;;;LuPO Tabelle:  Note der besonderen Lernleistung in Punkten
-LuPO_Schueler;FS2_SekI_Manuell;;;11;int;;0;1;;Boolean01Converter;LuPO Tabelle:  Zwei Fremdsprchen in SI belegt wurde manuell geprüft J/N
-LuPO_SchuelerFaecher;Schueler_ID;;;1;bigint;;;1;;;LuPO Tabelle:  ID des Schülers in der Schuelertabelle
-LuPO_SchuelerFaecher;Fach_ID;;;2;bigint;;;1;;;LuPO Tabelle:  ID des Faches in der Fächertabelle
-LuPO_SchuelerFaecher;Kursart_E1;;;3;varchar;5;;0;;;LuPO Tabelle:  Kursart des belegten Faches in EF.1
-LuPO_SchuelerFaecher;Punkte_E1;;;4;varchar;2;;0;;;LuPO Tabelle:  Notenpunkte des belegten faches in EF.1
-LuPO_SchuelerFaecher;Kursart_E2;;;5;varchar;5;;0;;;LuPO Tabelle:  Kursart des belegten Faches in EF.2
-LuPO_SchuelerFaecher;Punkte_E2;;;6;varchar;2;;0;;;LuPO Tabelle:  Notenpunkte des belegten faches in EF.2
-LuPO_SchuelerFaecher;Kursart_Q1;;;7;varchar;5;;0;;;LuPO Tabelle:  Kursart des belegten Faches in Q1.1
-LuPO_SchuelerFaecher;Punkte_Q1;;;8;varchar;2;;0;;;LuPO Tabelle:  Notenpunkte des belegten faches in Q1.1
-LuPO_SchuelerFaecher;Kursart_Q2;;;9;varchar;5;;0;;;LuPO Tabelle:  Kursart des belegten Faches in Q1.2
-LuPO_SchuelerFaecher;Punkte_Q2;;;10;varchar;2;;0;;;LuPO Tabelle:  Notenpunkte des belegten faches in Q1.2
-LuPO_SchuelerFaecher;Kursart_Q3;;;11;varchar;5;;0;;;LuPO Tabelle:  Kursart des belegten Faches in Q2.1
-LuPO_SchuelerFaecher;Punkte_Q3;;;12;varchar;2;;0;;;LuPO Tabelle:  Notenpunkte des belegten faches in Q2.1
-LuPO_SchuelerFaecher;Kursart_Q4;;;13;varchar;5;;0;;;LuPO Tabelle:  Kursart des belegten Faches in Q2.2
-LuPO_SchuelerFaecher;Punkte_Q4;;;14;varchar;2;;0;;;LuPO Tabelle:  Notenpunkte des belegten faches in Q2.2
-LuPO_SchuelerFaecher;AbiturFach;;;15;int;;;0;;;LuPO Tabelle:  Abiturfach 1 bis 4
-LuPO_SchuelerFaecher;Bemerkungen;;;16;varchar;50;;0;;;LuPO Tabelle:  Fachbemerkungen des belegten fachs
-LuPO_SchuelerFaecher;MdlPruefErgebnis;;;17;int;;;0;;;LuPO Tabelle:  Ergebnis der mündlichen Prüfung des belegten fachs
-LuPO_SchuelerFaecher;Markiert_Q1;;;18;int;;;0;;Boolean01Converter;LuPO Tabelle:  Belegtes Fach in Q1.1 für die Abitureinbringung markiert
-LuPO_SchuelerFaecher;Markiert_Q2;;;19;int;;;0;;Boolean01Converter;LuPO Tabelle:  Belegtes Fach in Q1.1 für die Abitureinbringung markiert
-LuPO_SchuelerFaecher;Markiert_Q3;;;20;int;;;0;;Boolean01Converter;LuPO Tabelle:  Belegtes Fach in Q2.1 für die Abitureinbringung markiert
-LuPO_SchuelerFaecher;Markiert_Q4;;;21;int;;;0;;Boolean01Converter;LuPO Tabelle:  Belegtes Fach in Q2.2 für die Abitureinbringung markiert
-LuPO_SchuelerFaecher;AbiPruefErgebnis;;;22;int;;;0;;;LuPO Tabelle:  Abiturergebnis des belegten Faches
-LuPO_SchuelerFaecher;MdlPflichtPruefung;;;23;varchar;1;;0;;;LuPO Tabelle:  Ergebnis der mündlichen Prüfung bei 1. bis 3. Fach
 NichtMoeglAbiFachKombi;Fach1_ID;;;1;bigint;;;1;;;FACH1ID für eine nicht mögliche Kombination
 NichtMoeglAbiFachKombi;Fach2_ID;;;2;bigint;;;1;;;FACH2ID für eine nicht mögliche Kombination
 NichtMoeglAbiFachKombi;SchulNrEigner;;;3;int;;;1;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
@@ -1096,7 +1103,7 @@ Schueler;Sportbefreiung_ID;;;38;bigint;;;0;;;ID der Sportbefreiung
 Schueler;Fahrschueler_ID;;;39;bigint;;;0;;;ID des Fahrschülereintras
 Schueler;Haltestelle_ID;;;40;bigint;;;0;;;ID der Haltestelle
 Schueler;HaltestelleAbk;;;41;varchar;30;;0;;;Text der Haltestelle
-Schueler;ASDSchulform;;;42;varchar;3;;0;;;ASD-Küzel Schulform
+Schueler;ASDSchulform;;;42;varchar;3;;0;Schulgliederung;SchulgliederungKuerzelConverter;ASD-Kürzel der Schulgliederung - Spalte fehlerhaft benannt!
 Schueler;Jahrgang_ID;;;43;bigint;;;0;;;ID des Jahrgangs
 Schueler;ASDJahrgang;;;44;varchar;2;;0;;;ASD-Kürzel des Jahrgangs
 Schueler;Fachklasse_ID;;;45;bigint;;;0;;;ID der Fachklasse (BK)
@@ -1634,8 +1641,8 @@ SchuelerLeistungsdaten;NoteAbschlussBA;;;31;varchar;2;;0;;;Beim BK wird hier die
 SchuelerLeistungsdaten;Umfang;;;32;varchar;1;;0;;;Facheigenschaft für Lernstandsberichte (V voller Umfang) (R reduzierter Umfang)
 SchuelerLernabschnittsdaten;ID;;;1;bigint;;;1;;;Eine eindeutige ID für den Lernabschnitt des Schülers
 SchuelerLernabschnittsdaten;Schueler_ID;;;2;bigint;;;1;;;Die eindeutige ID des Schülers – verweist auf den Schülers
-SchuelerLernabschnittsdaten;Jahr;;;3;smallint;;;1;;;Schuljahr des Lernabschnitts
-SchuelerLernabschnittsdaten;Abschnitt;;;4;smallint;;;1;;;Abschnitt des Lernabschnitts
+SchuelerLernabschnittsdaten;Jahr;;;3;int;;;1;;;Schuljahr des Lernabschnitts
+SchuelerLernabschnittsdaten;Abschnitt;;;4;int;;;1;;;Abschnitt des Lernabschnitts
 SchuelerLernabschnittsdaten;WechselNr;;;5;smallint;;;1;;;Wird für Wiederholungen im Laufenden Abschnitt genutzt
 SchuelerLernabschnittsdaten;Jahrgang;;;6;smallint;;;0;;;DEPRECATED: Jahrgang des Lernabschnitts
 SchuelerLernabschnittsdaten;Hochrechnung;;;7;int;;;0;;;Lernabschnitt ist Hochrechnung (nur noch BK)
@@ -1934,9 +1941,11 @@ Statkue_LehrerAbgang;ASDSchluessel;;;7;varchar;2;;0;;;Statkue Tabelle IT.NRW: AS
 Statkue_LehrerAnrechnung;ID;;;1;bigint;;;1;;;Statkue Tabelle IT.NRW: ID für Leheranrechnungsgründe
 Statkue_LehrerAnrechnung;Kurztext;;;2;varchar;10;;1;;;Statkue Tabelle IT.NRW: Statistikschlüssel für Leheranrechnungsgründe
 Statkue_LehrerAnrechnung;Langtext;;;3;varchar;255;;1;;;Statkue Tabelle IT.NRW: Langtext für Leheranrechnungsgründe
-Statkue_LehrerAnrechnung;Beginn;;;4;datetime;;;0;;;Statkue Tabelle IT.NRW: Beginn der Gültigkeit für Leheranrechnungsgründe
-Statkue_LehrerAnrechnung;Ende;;;5;datetime;;;0;;;Statkue Tabelle IT.NRW: Ende der Gültigkeit  für Leheranrechnungsgründe
-Statkue_LehrerAnrechnung;Sort;;;6;int;;0;1;;;Statkue Tabelle IT.NRW: Sortierung für Leheranrechnungsgründe
+Statkue_LehrerAnrechnung;GueltigAbSJ;;;4;int;;;0;;;Statkue Tabelle IT.NRW: Gibt an, ab welchem Schuljahr der Anrechnungsgrund gültig ist, Angabe als erstes Kalenderjahr der beiden Kalenderjahre des Schuljahres
+Statkue_LehrerAnrechnung;GueltigBisSJ;;;5;int;;;0;;;Statkue Tabelle IT.NRW: Gibt an, bis zu welchem Schuljahr der Anrechnungsgrund gültig ist, Angabe als erstes Kalenderjahr der beiden Kalenderjahre des Schuljahres
+Statkue_LehrerAnrechnung;Beginn;;;6;datetime;;;0;;;Statkue Tabelle IT.NRW: Beginn der Gültigkeit für Leheranrechnungsgründe
+Statkue_LehrerAnrechnung;Ende;;;7;datetime;;;0;;;Statkue Tabelle IT.NRW: Ende der Gültigkeit  für Leheranrechnungsgründe
+Statkue_LehrerAnrechnung;Sort;;;8;int;;0;1;;;Statkue Tabelle IT.NRW: Sortierung für Leheranrechnungsgründe
 Statkue_LehrerBeschaeftigungsart;ID;;;1;bigint;;;1;;;Statkue Tabelle IT.NRW:  ID der Lehrerbeschäftigungsart
 Statkue_LehrerBeschaeftigungsart;Kurztext;;;2;varchar;10;;1;;;Statkue Tabelle IT.NRW: StatistikKürzel der Lehrerbeschäftigungsart
 Statkue_LehrerBeschaeftigungsart;Langtext;;;3;varchar;255;;1;;;Statkue Tabelle IT.NRW: Langtext der Lehrerbeschäftigungsart

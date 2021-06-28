@@ -12,6 +12,20 @@ CREATE TABLE Credentials (
 );
 
 
+CREATE TABLE CredentialsLernplattformen (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Benutzername nvarchar(255) NOT NULL, 
+  BenutzernamePseudonym nvarchar(255), 
+  Initialkennwort nvarchar(255), 
+  PashwordHash nvarchar(255), 
+  RSAPublicKey nvarchar(max), 
+  RSAPrivateKey nvarchar(max), 
+  AES nvarchar(max),
+  CONSTRAINT PK_CredentialsLernplattformen PRIMARY KEY (ID),
+  CONSTRAINT CredentialsLernplattformen_UC1 UNIQUE (Benutzername)
+);
+
+
 CREATE TABLE EigeneSchule (
   ID bigint NOT NULL, 
   SchulformNr nvarchar(3), 
@@ -31,9 +45,9 @@ CREATE TABLE EigeneSchule (
   Fax nvarchar(20), 
   Email nvarchar(100), 
   Ganztags nvarchar(1) DEFAULT '+', 
-  Schuljahr smallint, 
-  SchuljahrAbschnitt smallint, 
-  AnzahlAbschnitte smallint DEFAULT 2, 
+  Schuljahr int, 
+  SchuljahrAbschnitt int, 
+  AnzahlAbschnitte int DEFAULT 2, 
   Fremdsprachen nvarchar(1) DEFAULT '+', 
   JVAZeigen nvarchar(1) DEFAULT '-', 
   RefPaedagogikZeigen nvarchar(1) DEFAULT '-', 
@@ -892,8 +906,8 @@ CREATE TABLE Kompetenzgruppen (
 
 CREATE TABLE Kurse (
   ID bigint DEFAULT -1 NOT NULL, 
-  Jahr smallint NOT NULL, 
-  Abschnitt smallint NOT NULL, 
+  Jahr int NOT NULL, 
+  Abschnitt int NOT NULL, 
   KurzBez nvarchar(20) NOT NULL, 
   Jahrgang_ID bigint, 
   ASDJahrgang nvarchar(2), 
@@ -1884,6 +1898,8 @@ CREATE TABLE Statkue_LehrerAnrechnung (
   ID bigint NOT NULL, 
   Kurztext nvarchar(10) NOT NULL, 
   Langtext nvarchar(255) NOT NULL, 
+  GueltigAbSJ int, 
+  GueltigBisSJ int, 
   Beginn datetime2, 
   Ende datetime2, 
   Sort int DEFAULT 0 NOT NULL,
@@ -3023,8 +3039,8 @@ CREATE TABLE SchuelerKAoADaten (
 CREATE TABLE SchuelerLernabschnittsdaten (
   ID bigint DEFAULT -1 NOT NULL, 
   Schueler_ID bigint NOT NULL, 
-  Jahr smallint NOT NULL, 
-  Abschnitt smallint NOT NULL, 
+  Jahr int NOT NULL, 
+  Abschnitt int NOT NULL, 
   WechselNr smallint NOT NULL, 
   Jahrgang smallint, 
   Hochrechnung int, 
@@ -3421,6 +3437,82 @@ BEGIN
           SET @tmpID = @maxInsertedID
 	      END
       UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Credentials''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_CredentialsLernplattformen ON CredentialsLernplattformen INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO CredentialsLernplattformen
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''CredentialsLernplattformen'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM CredentialsLernplattformen)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''CredentialsLernplattformen'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO CredentialsLernplattformen
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''CredentialsLernplattformen''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_CredentialsLernplattformen ON CredentialsLernplattformen AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''CredentialsLernplattformen'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM CredentialsLernplattformen)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''CredentialsLernplattformen'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''CredentialsLernplattformen''
     END
 END;
 ')

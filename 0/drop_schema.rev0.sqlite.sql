@@ -196,4 +196,5 @@ DROP TABLE IF EXISTS EigeneSchule_FachTeilleistungen;
 DROP TABLE IF EXISTS EigeneSchule_Faecher;
 DROP TABLE IF EXISTS EigeneSchule_Fachklassen;
 DROP TABLE IF EXISTS EigeneSchule;
+DROP TABLE IF EXISTS CredentialsLernplattformen;
 DROP TABLE IF EXISTS Credentials;

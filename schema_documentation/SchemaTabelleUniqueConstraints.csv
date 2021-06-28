@@ -1,5 +1,6 @@
 Name;Revision;Veraltet;NameTabelle;NameSpalte
 Credentials_UC1;;;Credentials;Benutzername
+CredentialsLernplattformen_UC1;;;CredentialsLernplattformen;Benutzername
 EigeneSchule_Fachklassen_UC1;;;EigeneSchule_Fachklassen;AP
 EigeneSchule_Fachklassen_UC1;;;EigeneSchule_Fachklassen;BKIndexTyp
 EigeneSchule_Fachklassen_UC1;;;EigeneSchule_Fachklassen;FKS

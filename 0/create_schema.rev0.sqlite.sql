@@ -12,6 +12,20 @@ CREATE TABLE Credentials (
 );
 
 
+CREATE TABLE CredentialsLernplattformen (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Benutzername varchar(255) NOT NULL, 
+  BenutzernamePseudonym varchar(255), 
+  Initialkennwort varchar(255), 
+  PashwordHash varchar(255), 
+  RSAPublicKey text, 
+  RSAPrivateKey text, 
+  AES text,
+  CONSTRAINT PK_CredentialsLernplattformen PRIMARY KEY (ID),
+  CONSTRAINT CredentialsLernplattformen_UC1 UNIQUE (Benutzername)
+);
+
+
 CREATE TABLE EigeneSchule (
   ID bigint NOT NULL, 
   SchulformNr varchar(3), 
@@ -31,9 +45,9 @@ CREATE TABLE EigeneSchule (
   Fax varchar(20), 
   Email varchar(100), 
   Ganztags varchar(1) DEFAULT '+', 
-  Schuljahr smallint, 
-  SchuljahrAbschnitt smallint, 
-  AnzahlAbschnitte smallint DEFAULT 2, 
+  Schuljahr int, 
+  SchuljahrAbschnitt int, 
+  AnzahlAbschnitte int DEFAULT 2, 
   Fremdsprachen varchar(1) DEFAULT '+', 
   JVAZeigen varchar(1) DEFAULT '-', 
   RefPaedagogikZeigen varchar(1) DEFAULT '-', 
@@ -892,8 +906,8 @@ CREATE TABLE Kompetenzgruppen (
 
 CREATE TABLE Kurse (
   ID bigint DEFAULT -1 NOT NULL, 
-  Jahr smallint NOT NULL, 
-  Abschnitt smallint NOT NULL, 
+  Jahr int NOT NULL, 
+  Abschnitt int NOT NULL, 
   KurzBez varchar(20) NOT NULL, 
   Jahrgang_ID bigint, 
   ASDJahrgang varchar(2), 
@@ -1884,6 +1898,8 @@ CREATE TABLE Statkue_LehrerAnrechnung (
   ID bigint NOT NULL, 
   Kurztext varchar(10) NOT NULL, 
   Langtext varchar(255) NOT NULL, 
+  GueltigAbSJ int, 
+  GueltigBisSJ int, 
   Beginn datetime, 
   Ende datetime, 
   Sort int DEFAULT 0 NOT NULL,
@@ -3023,8 +3039,8 @@ CREATE TABLE SchuelerKAoADaten (
 CREATE TABLE SchuelerLernabschnittsdaten (
   ID bigint DEFAULT -1 NOT NULL, 
   Schueler_ID bigint NOT NULL, 
-  Jahr smallint NOT NULL, 
-  Abschnitt smallint NOT NULL, 
+  Jahr int NOT NULL, 
+  Abschnitt int NOT NULL, 
   WechselNr smallint NOT NULL, 
   Jahrgang smallint, 
   Hochrechnung int, 
@@ -3437,6 +3453,96 @@ CREATE TRIGGER t_AutoIncrement_UPDATE_Credentials_5 AFTER UPDATE ON Credentials 
 BEGIN
   -- Update der ID in der Tabelle Credentials erfolgt durch den Autoinkrement-Trigger 2, daher hier auch kein +1, sondern nur den Max-Wert schreiben
   INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Credentials',  coalesce((SELECT max(ID) FROM Credentials), 0));
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_CredentialsLernplattformen_1 AFTER INSERT ON CredentialsLernplattformen FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='CredentialsLernplattformen') IS NOT NULL AND 
+	  NEW.ID > (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='CredentialsLernplattformen')
+BEGIN
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle = 'CredentialsLernplattformen';
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_CredentialsLernplattformen_2 AFTER INSERT ON CredentialsLernplattformen FOR EACH ROW
+	WHEN NEW.ID < 0 AND
+	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='CredentialsLernplattformen') IS NOT NULL
+BEGIN
+  UPDATE CredentialsLernplattformen SET ID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='CredentialsLernplattformen') + 1 WHERE ID = NEW.ID;
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = MaxID + 1 WHERE NameTabelle = 'CredentialsLernplattformen';
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_CredentialsLernplattformen_3 AFTER INSERT ON CredentialsLernplattformen FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='CredentialsLernplattformen') IS NULL AND
+	  NEW.ID < coalesce((SELECT max(ID) FROM CredentialsLernplattformen), 0)
+BEGIN
+  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('CredentialsLernplattformen', coalesce((SELECT max(ID) FROM CredentialsLernplattformen), 0));
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_CredentialsLernplattformen_4 AFTER INSERT ON CredentialsLernplattformen FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='CredentialsLernplattformen') IS NULL AND
+	  NEW.ID >= coalesce((SELECT max(ID) FROM CredentialsLernplattformen), 0)
+BEGIN
+  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('CredentialsLernplattformen',  NEW.ID);
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_CredentialsLernplattformen_5 AFTER INSERT ON CredentialsLernplattformen FOR EACH ROW
+	WHEN NEW.ID < 0 AND
+	  (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='CredentialsLernplattformen') IS NULL
+BEGIN
+  UPDATE CredentialsLernplattformen SET ID = coalesce((SELECT max(ID) FROM CredentialsLernplattformen), 0) + 1 WHERE ID = NEW.ID;
+  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('CredentialsLernplattformen',  coalesce((SELECT max(ID) FROM CredentialsLernplattformen), 0) + 1);
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_CredentialsLernplattformen_1 AFTER UPDATE ON CredentialsLernplattformen FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='CredentialsLernplattformen') IS NOT NULL AND 
+	  NEW.ID > (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='CredentialsLernplattformen')
+BEGIN
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle = 'CredentialsLernplattformen';
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_CredentialsLernplattformen_2 AFTER UPDATE ON CredentialsLernplattformen FOR EACH ROW
+	WHEN NEW.ID < 0 AND
+	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='CredentialsLernplattformen') IS NOT NULL
+BEGIN
+  UPDATE CredentialsLernplattformen SET ID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='CredentialsLernplattformen') + 1 WHERE ID = NEW.ID;
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = MaxID + 1 WHERE NameTabelle = 'CredentialsLernplattformen';
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_CredentialsLernplattformen_3 AFTER UPDATE ON CredentialsLernplattformen FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='CredentialsLernplattformen') IS NULL AND
+	  NEW.ID < coalesce((SELECT max(ID) FROM CredentialsLernplattformen), 0)
+BEGIN
+  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('CredentialsLernplattformen', coalesce((SELECT max(ID) FROM CredentialsLernplattformen), 0));
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_CredentialsLernplattformen_4 AFTER UPDATE ON CredentialsLernplattformen FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='CredentialsLernplattformen') IS NULL AND
+	  NEW.ID >= coalesce((SELECT max(ID) FROM CredentialsLernplattformen), 0)
+BEGIN
+  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('CredentialsLernplattformen',  NEW.ID);
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_CredentialsLernplattformen_5 AFTER UPDATE ON CredentialsLernplattformen FOR EACH ROW
+	WHEN NEW.ID < 0 AND
+	  (SELECT max(MaxID) FROM SVWS_DB_AutoInkremente WHERE NameTabelle='CredentialsLernplattformen') IS NULL
+BEGIN
+  -- Update der ID in der Tabelle CredentialsLernplattformen erfolgt durch den Autoinkrement-Trigger 2, daher hier auch kein +1, sondern nur den Max-Wert schreiben
+  INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('CredentialsLernplattformen',  coalesce((SELECT max(ID) FROM CredentialsLernplattformen), 0));
 END;
 
 

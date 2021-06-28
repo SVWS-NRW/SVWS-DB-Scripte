@@ -196,4 +196,5 @@ DROP TABLE EigeneSchule_FachTeilleistungen;
 DROP TABLE EigeneSchule_Faecher;
 DROP TABLE EigeneSchule_Fachklassen;
 DROP TABLE EigeneSchule;
+DROP TABLE CredentialsLernplattformen;
 DROP TABLE Credentials;

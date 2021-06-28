@@ -8,7 +8,7 @@ ID;Fachbereich;SchildFgID;FG_Bezeichnung;FG_Kuerzel;Schulformen;FarbeR;FarbeG;Fa
 7;5;;Philosophie;PL;GE,GY,WB,BK,SG,SB;234;241;222;;
 8;6;900;Religion;RE;G,BK,H,SR,V,SG,S,SB,R,PS,SK,GE,FW,GY,WB;215;228;188;;
 9;7;700;Mathematik;M;GE,FW,GY,WB,G,BK,H,SR,V,SG,S,SB,R,PS,SK;197;217;241;;
-10;8;200;Naturwissenschaften;NW;V,SG,S,SB,R,PS,SK,GE,FW,GY,WB,G,BK,H,SR;216;216;216;;
+10;8;200;Naturwissenschaften;NW;V,SG,S,SB,R,PS,SK,GE,FW,GY,WB,G,BK,H,SR;141;180;227;;
 11;8;;weiteres naturwissenschaftliches / technisches Fach;WN;GE,GY,WB,BK,SG,SB;141;180;227;;
 12;9;600;Sport;SP;SG,S,SB,R,PS,SK,GE,FW,GY,WB,G,BK,H,SR,V;255;255;255;;
 13;10;1500;Vertiefungskurs;VX;GE,GY,WB,BK,SG,SB;216;216;216;;

@@ -1,6 +1,7 @@
 Name;Revision;Veraltet;Migration;JavaKlasse;JavaPackage;JavaKommentar
 AllgAdrAnsprechpartner;0;-1;1;DTOAnsprechpartnerAllgemeineAdresse;schild.katalog;Ansprechpartner-Daten die einem Betrieb/Adresse in K_AllgAdresse zugeordnet werden können
-Credentials;0;-1;1;DTOCredentials;svws.auth;Daten für die Zugänge zu anderen Systemen (Lernplattformen) und später auch für SingleSignOn-Lösungen
+Credentials;0;-1;1;DTOCredentials;svws.auth;Daten für die Zugänge zu SVWS internen Systemen für SingleSignOn-Lösungen
+CredentialsLernplattformen;0;-1;1;DTOCredentialsLernplattformen;svws.auth;Daten für die Zugänge zu anderen Systemen (Lernplattformen)
 EigeneSchule;0;-1;1;DTOEigeneSchule;schild.schule;Tabelle in der die Daten der Schule verwaltet werden, diese Tabelle darf in einer Einzelinstallation nur eine Zeile haben
 EigeneSchule_Abt_Kl;0;-1;1;DTOAbteilungsKlassen;schild.schule;Tabelle ordnet den Abteilungen (EigeneSchule_Abteilungen) die zugehörigen Klassen zu
 EigeneSchule_Abteilungen;0;-1;1;DTOAbteilungen;schild.schule;Katalog der Abteilungen, denen dann ein Abteilungsleiter zugewiesen werden kann 
@@ -21,6 +22,12 @@ Fach_Gliederungen;0;-1;1;DTOFachgliederungen;schild.berufskolleg;Gliederungsspez
 Fachklassen_Schwerpunkte;0;-1;1;DTOFachklassenSchwerpunkt;schild.berufskolleg;Schwerpunkte für Fachklassen (nur BK)
 Floskelgruppen;0;-1;1;DTOFloskelgruppen;schild.katalog;Liste der Floskelgruppen, diese Liste kann erweitert werden um Textbausteinen zu verwalten und die Anzeige in den Editoren zu steuern
 Floskeln;0;-1;1;DTOFloskeln;schild.katalog;Textbausteine, die in den Editoren angezeigt und ausgewählt werden können
+Gost_Jahrgang_Beratungslehrer;4;-1;0;DTOGostJahrgangBeratungslehrer;gost;Gymnasiale Oberstufe - Jahrgangsdaten: Die Beratungslehrer in den einzelnen Jahrgängen
+Gost_Jahrgang_Faecher;4;-1;0;DTOGostJahrgangFaecher;gost;Gymnasiale Oberstufe - Jahrgangsdaten: Informationen zu den wählbaren Fächern der einzelnen Jahrgänge
+Gost_Jahrgangsdaten;4;-1;0;DTOGostJahrgangsdaten;gost;Gymnasiale Oberstufe - Allgemeine Informationen zu den Jahrgängen
+Gost_Jahrgang_Fachkombinationen;4;-1;0;DTOGostJahrgangFachkombinationen;gost;Gymnasiale Oberstufe - Jahrgangsdaten: Zu erzwingende Fachkombinationen oder nicht mögliche Fachkombinationen in einem Jahrgang
+Gost_Schueler;4;-1;0;DTOGostSchueler;gost;Gymnasiale Oberstufe: Zusatzinformationen für Schüler der gymnasialen Oberstufe 
+Gost_Schueler_Fachwahlen;4;-1;0;DTOGostSchuelerFachbelegungen;gost;Gymnasiale Oberstufe - Schülerdaten: Informationen zu den vom Schüler gewählten Fächern
 ImpExp_EigeneImporte;0;-1;0;DTOEigeneImporte;schild.impexp;"Importschemata, die im Programm ""Externimport.exe"" definiert werden"
 ImpExp_EigeneImporte_Felder;0;-1;0;DTOEigeneImporteFelder;schild.impexp;"Importschemata, die im Programm ""Externimport.exe"" definiert werden - Hier die Spaltendefinitionen"
 ImpExp_EigeneImporte_Tabellen;0;-1;0;DTOEigeneImporteTabellen;schild.impexp;"Importschemata, die im Programm ""Externimport.exe"" definiert werden - Hier die Tabellendefinitionen"
@@ -76,12 +83,6 @@ LehrerLernplattform;0;-1;1;DTOLehrerLernplattform;schild.lehrer;Tabelle zur Spei
 LehrerMehrleistung;0;-1;1;DTOLehrerMehrleistung;schild.lehrer;gültige Schlüssel zur Lehrkraft für die Mehrleistungsstunden
 Lernplattformen;0;-1;1;DTOLernplattformen;svws.auth;Tabelle mit Lernplattformen die die Schule nutzt und zu denen Credentials existieren
 Logins;0;-1;1;DTOProtokollLogin;schild.benutzer;Tabelle zur Speicherung der LogIns mit Benutzernamen und Zeit für die Datenbank-User
-LuPO_Beratungslehrer;4;-1;0;DTOLupoBeratungslehrer;lupo;Lupo Liste der Beratungslehrer
-LuPO_Faecher;4;-1;0;DTOLupoFaecher;lupo;Lupo Fächer
-LuPO_Jahrgangsdaten;4;-1;0;DTOLupoJahrgangsdaten;lupo;Lupo Daten zu den Jahrgängen
-LuPO_NichtMoeglAbiFachKombi;4;-1;0;DTOLupoNichtMoeglAbiFachKombi;lupo;Lupo nicht mögliche Abiturfach Kombinationen
-LuPO_Schueler;4;-1;0;DTOLupoSchueler;lupo;Lupo Schülerliste
-LuPO_SchuelerFaecher;4;-1;0;DTOLupoSchuelerFaecher;lupo;Lupo Fächer zum Schüler
 NichtMoeglAbiFachKombi;0;-1;1;DTOFaecherNichtMoeglicheKombination;schild.gost;Nicht mögliche Abiturfach-Kombinationen unter Fächer der Oberstufe bearbeiten
 Personengruppen;0;-1;1;DTOPersonengruppen;schild.personengruppen;Katalog der definierten Personengruppen
 Personengruppen_Personen;0;-1;1;DTOPersonengruppenPersonen;schild.personengruppen;Zuordnung von Personen zur den Einträgen in der Tabelle Personengruppen

@@ -12,6 +12,20 @@ CREATE TABLE Credentials (
 );
 
 
+CREATE TABLE CredentialsLernplattformen (
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Benutzername varchar(255) NOT NULL, 
+  BenutzernamePseudonym varchar(255), 
+  Initialkennwort varchar(255), 
+  PashwordHash varchar(255), 
+  RSAPublicKey text, 
+  RSAPrivateKey text, 
+  AES text,
+  CONSTRAINT PK_CredentialsLernplattformen PRIMARY KEY (ID),
+  CONSTRAINT CredentialsLernplattformen_UC1 UNIQUE (Benutzername)
+);
+
+
 CREATE TABLE EigeneSchule (
   ID bigint NOT NULL, 
   SchulformNr varchar(3), 
@@ -31,9 +45,9 @@ CREATE TABLE EigeneSchule (
   Fax varchar(20), 
   Email varchar(100), 
   Ganztags varchar(1) DEFAULT '+', 
-  Schuljahr smallint, 
-  SchuljahrAbschnitt smallint, 
-  AnzahlAbschnitte smallint DEFAULT 2, 
+  Schuljahr int, 
+  SchuljahrAbschnitt int, 
+  AnzahlAbschnitte int DEFAULT 2, 
   Fremdsprachen varchar(1) DEFAULT '+', 
   JVAZeigen varchar(1) DEFAULT '-', 
   RefPaedagogikZeigen varchar(1) DEFAULT '-', 
@@ -892,8 +906,8 @@ CREATE TABLE Kompetenzgruppen (
 
 CREATE TABLE Kurse (
   ID bigint AUTOINCREMENT NOT NULL, 
-  Jahr smallint NOT NULL, 
-  Abschnitt smallint NOT NULL, 
+  Jahr int NOT NULL, 
+  Abschnitt int NOT NULL, 
   KurzBez varchar(20) NOT NULL, 
   Jahrgang_ID bigint, 
   ASDJahrgang varchar(2), 
@@ -1884,6 +1898,8 @@ CREATE TABLE Statkue_LehrerAnrechnung (
   ID bigint NOT NULL, 
   Kurztext varchar(10) NOT NULL, 
   Langtext varchar(255) NOT NULL, 
+  GueltigAbSJ int, 
+  GueltigBisSJ int, 
   Beginn datetime, 
   Ende datetime, 
   Sort int DEFAULT 0 NOT NULL,
@@ -3023,8 +3039,8 @@ CREATE TABLE SchuelerKAoADaten (
 CREATE TABLE SchuelerLernabschnittsdaten (
   ID bigint AUTOINCREMENT NOT NULL, 
   Schueler_ID bigint NOT NULL, 
-  Jahr smallint NOT NULL, 
-  Abschnitt smallint NOT NULL, 
+  Jahr int NOT NULL, 
+  Abschnitt int NOT NULL, 
   WechselNr smallint NOT NULL, 
   Jahrgang smallint, 
   Hochrechnung int, 

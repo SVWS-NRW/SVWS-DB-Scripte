@@ -12,6 +12,20 @@ CREATE TABLE Credentials (
 );
 
 
+CREATE TABLE CredentialsLernplattformen (
+  ID bigint DEFAULT -1 NOT NULL, 
+  Benutzername nvarchar(255) NOT NULL, 
+  BenutzernamePseudonym nvarchar(255), 
+  Initialkennwort nvarchar(255), 
+  PashwordHash nvarchar(255), 
+  RSAPublicKey nvarchar(max), 
+  RSAPrivateKey nvarchar(max), 
+  AES nvarchar(max),
+  CONSTRAINT PK_CredentialsLernplattformen PRIMARY KEY (ID),
+  CONSTRAINT CredentialsLernplattformen_UC1 UNIQUE (Benutzername)
+);
+
+
 CREATE TABLE EigeneSchule (
   ID bigint NOT NULL, 
   SchulformNr nvarchar(3), 
@@ -31,9 +45,9 @@ CREATE TABLE EigeneSchule (
   Fax nvarchar(20), 
   Email nvarchar(100), 
   Ganztags nvarchar(1) DEFAULT '+', 
-  Schuljahr smallint, 
-  SchuljahrAbschnitt smallint, 
-  AnzahlAbschnitte smallint DEFAULT 2, 
+  Schuljahr int, 
+  SchuljahrAbschnitt int, 
+  AnzahlAbschnitte int DEFAULT 2, 
   Fremdsprachen nvarchar(1) DEFAULT '+', 
   JVAZeigen nvarchar(1) DEFAULT '-', 
   RefPaedagogikZeigen nvarchar(1) DEFAULT '-', 
@@ -309,6 +323,55 @@ CREATE TABLE Floskeln (
   FloskelNiveau nvarchar(2), 
   FloskelJahrgang nvarchar(2),
   CONSTRAINT PK_Floskeln PRIMARY KEY (Kuerzel)
+);
+
+
+CREATE TABLE Gost_Jahrgangsdaten (
+  Abi_Jahrgang int NOT NULL, 
+  ZusatzkursGEErstesHalbjahr nvarchar(4) DEFAULT 'Q2.1', 
+  ZusatzkursSWErstesHalbjahr nvarchar(4) DEFAULT 'Q2.1', 
+  TextBeratungsbogen nvarchar(2000), 
+  TextMailversand nvarchar(2000),
+  CONSTRAINT PK_Gost_Jahrgangsdaten PRIMARY KEY (Abi_Jahrgang)
+);
+
+
+CREATE TABLE Gost_Jahrgang_Fachkombinationen (
+  Abi_Jahrgang int NOT NULL, 
+  ID nvarchar(30) NOT NULL, 
+  Fach1_ID bigint NOT NULL, 
+  Fach2_ID bigint NOT NULL, 
+  Kursart1 nvarchar(5), 
+  Kursart2 nvarchar(5), 
+  Phase nvarchar(10) DEFAULT '-' NOT NULL, 
+  Typ int DEFAULT 0 NOT NULL,
+  CONSTRAINT PK_Gost_Jahrgang_Fachkombinationen PRIMARY KEY (Abi_Jahrgang, ID),
+  CONSTRAINT Gost_Jahrgang_Fachkombinationen_Abi_Jahrgang_FK FOREIGN KEY (Abi_Jahrgang) REFERENCES Gost_Jahrgangsdaten(Abi_Jahrgang) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Jahrgang_Fachkombinationen_Fach1_ID_FK FOREIGN KEY (Fach1_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Jahrgang_Fachkombinationen_Fach2_ID_FK FOREIGN KEY (Fach2_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE Gost_Jahrgang_Faecher (
+  Abi_Jahrgang int NOT NULL, 
+  Fach_ID bigint NOT NULL, 
+  WaehlbarEF1 int DEFAULT 1 NOT NULL, 
+  WaehlbarEF2 int DEFAULT 1 NOT NULL, 
+  WaehlbarQ11 int DEFAULT 1 NOT NULL, 
+  WaehlbarQ12 int DEFAULT 1 NOT NULL, 
+  WaehlbarQ21 int DEFAULT 1 NOT NULL, 
+  WaehlbarQ22 int DEFAULT 1 NOT NULL, 
+  WaehlbarAbiGK int DEFAULT 1 NOT NULL, 
+  WaehlbarAbiLK int DEFAULT 1 NOT NULL, 
+  WochenstundenEF1 int, 
+  WochenstundenEF2 int, 
+  WochenstundenQPhase int, 
+  SchiftlichkeitEF1 nvarchar(1), 
+  SchiftlichkeitEF2 nvarchar(1), 
+  NurMuendlich int DEFAULT 0 NOT NULL,
+  CONSTRAINT PK_Gost_Jahrgang_Faecher PRIMARY KEY (Abi_Jahrgang, Fach_ID),
+  CONSTRAINT Gost_Jahrgang_Faecher_Abi_Jahrgang_FK FOREIGN KEY (Abi_Jahrgang) REFERENCES Gost_Jahrgangsdaten(Abi_Jahrgang) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Jahrgang_Faecher_Fach_ID_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -847,8 +910,8 @@ CREATE TABLE Kompetenzgruppen (
 
 CREATE TABLE Kurse (
   ID bigint DEFAULT -1 NOT NULL, 
-  Jahr smallint NOT NULL, 
-  Abschnitt smallint NOT NULL, 
+  Jahr int NOT NULL, 
+  Abschnitt int NOT NULL, 
   KurzBez nvarchar(20) NOT NULL, 
   Jahrgang_ID bigint, 
   ASDJahrgang nvarchar(2), 
@@ -917,102 +980,6 @@ CREATE TABLE Logins (
   LI_LogoffTime datetime2, 
   SchulNrEigner int,
   CONSTRAINT PK_Logins PRIMARY KEY (LI_LoginTime, LI_UserID)
-);
-
-
-CREATE TABLE LuPO_Beratungslehrer (
-  Abi_Jahrgang int NOT NULL, 
-  Lehrer_ID bigint NOT NULL,
-  CONSTRAINT PK_LuPO_Beratungslehrer PRIMARY KEY (Abi_Jahrgang, Lehrer_ID)
-);
-
-
-CREATE TABLE LuPO_Faecher (
-  Abi_Jahrgang int NOT NULL, 
-  Fach_ID bigint NOT NULL, 
-  E1 int DEFAULT 1 NOT NULL, 
-  E2 int DEFAULT 1 NOT NULL, 
-  Q1 int DEFAULT 1 NOT NULL, 
-  Q2 int DEFAULT 1 NOT NULL, 
-  Q3 int DEFAULT 1 NOT NULL, 
-  Q4 int DEFAULT 1 NOT NULL, 
-  Abi_Moegl int DEFAULT 1 NOT NULL, 
-  LK_Moegl int DEFAULT 1 NOT NULL, 
-  E1_WStd int, 
-  E2_WStd int, 
-  E1_S_M nvarchar(1), 
-  E2_S_M nvarchar(1), 
-  Q_WStd int, 
-  E_ExportKursart nvarchar(5), 
-  NurMuendlich int DEFAULT 0 NOT NULL,
-  CONSTRAINT PK_LuPO_Faecher PRIMARY KEY (Abi_Jahrgang, Fach_ID)
-);
-
-
-CREATE TABLE LuPO_Jahrgangsdaten (
-  Abi_Jahrgang int NOT NULL, 
-  ZK_Beginn_GE nvarchar(2) DEFAULT 'Q3', 
-  ZK_Beginn_SW nvarchar(2) DEFAULT 'Q3', 
-  BeratungsText nvarchar(2000), 
-  MailText nvarchar(2000),
-  CONSTRAINT PK_LuPO_Jahrgangsdaten PRIMARY KEY (Abi_Jahrgang)
-);
-
-
-CREATE TABLE LuPO_NichtMoeglAbiFachKombi (
-  Abi_Jahrgang int NOT NULL, 
-  ID nvarchar(30) NOT NULL, 
-  Fach1_ID bigint NOT NULL, 
-  Fach2_ID bigint NOT NULL, 
-  Kursart1 nvarchar(5), 
-  Kursart2 nvarchar(5), 
-  Phase nvarchar(10) DEFAULT '-' NOT NULL, 
-  Typ nvarchar(1) DEFAULT '-' NOT NULL,
-  CONSTRAINT PK_LuPO_NichtMoeglAbiFachKombi PRIMARY KEY (Abi_Jahrgang, ID)
-);
-
-
-CREATE TABLE LuPO_Schueler (
-  Schueler_ID bigint NOT NULL, 
-  DatumBeratung datetime2, 
-  DatumRuecklauf datetime2, 
-  SPP int DEFAULT 0 NOT NULL, 
-  Sportattest int DEFAULT 0 NOT NULL, 
-  Kommentar nvarchar(max), 
-  Beratungslehrer nvarchar(120), 
-  PruefPhase nvarchar(1), 
-  BLL_Art nvarchar(1), 
-  BLL_Punkte int, 
-  FS2_SekI_Manuell int DEFAULT 0 NOT NULL,
-  CONSTRAINT PK_LuPO_Schueler PRIMARY KEY (Schueler_ID)
-);
-
-
-CREATE TABLE LuPO_SchuelerFaecher (
-  Schueler_ID bigint NOT NULL, 
-  Fach_ID bigint NOT NULL, 
-  Kursart_E1 nvarchar(5), 
-  Punkte_E1 nvarchar(2), 
-  Kursart_E2 nvarchar(5), 
-  Punkte_E2 nvarchar(2), 
-  Kursart_Q1 nvarchar(5), 
-  Punkte_Q1 nvarchar(2), 
-  Kursart_Q2 nvarchar(5), 
-  Punkte_Q2 nvarchar(2), 
-  Kursart_Q3 nvarchar(5), 
-  Punkte_Q3 nvarchar(2), 
-  Kursart_Q4 nvarchar(5), 
-  Punkte_Q4 nvarchar(2), 
-  AbiturFach int, 
-  Bemerkungen nvarchar(50), 
-  MdlPruefErgebnis int, 
-  Markiert_Q1 int, 
-  Markiert_Q2 int, 
-  Markiert_Q3 int, 
-  Markiert_Q4 int, 
-  AbiPruefErgebnis int, 
-  MdlPflichtPruefung nvarchar(1),
-  CONSTRAINT PK_LuPO_SchuelerFaecher PRIMARY KEY (Schueler_ID, Fach_ID)
 );
 
 
@@ -1812,6 +1779,8 @@ CREATE TABLE Statkue_LehrerAnrechnung (
   ID bigint NOT NULL, 
   Kurztext nvarchar(10) NOT NULL, 
   Langtext nvarchar(255) NOT NULL, 
+  GueltigAbSJ int, 
+  GueltigBisSJ int, 
   Beginn datetime2, 
   Ende datetime2, 
   Sort int DEFAULT 0 NOT NULL,
@@ -2058,6 +2027,15 @@ CREATE TABLE EigeneSchule_Abteilungen (
   Sortierung int,
   CONSTRAINT PK_EigeneSchule_Abteilungen PRIMARY KEY (ID),
   CONSTRAINT EigeneSchule_Abteilungen_Leiter_FK FOREIGN KEY (AbteilungsLeiter) REFERENCES K_Lehrer(Kuerzel) ON UPDATE CASCADE ON DELETE SET NULL
+);
+
+
+CREATE TABLE Gost_Jahrgang_Beratungslehrer (
+  Abi_Jahrgang int NOT NULL, 
+  Lehrer_ID bigint NOT NULL,
+  CONSTRAINT PK_Gost_Jahrgang_Beratungslehrer PRIMARY KEY (Abi_Jahrgang, Lehrer_ID),
+  CONSTRAINT Gost_Jahrgang_Beratungslehrer_Abi_Jahrgang_FK FOREIGN KEY (Abi_Jahrgang) REFERENCES Gost_Jahrgangsdaten(Abi_Jahrgang) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Jahrgang_Beratungslehrer_Lehrer_ID_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -2839,6 +2817,53 @@ CREATE TABLE Stundenplan_Unterricht (
 );
 
 
+CREATE TABLE Gost_Schueler (
+  Schueler_ID bigint NOT NULL, 
+  DatumBeratung datetime2, 
+  DatumRuecklauf datetime2, 
+  HatSprachPraktischePruefung int DEFAULT 0 NOT NULL, 
+  HatSportattest int DEFAULT 0 NOT NULL, 
+  Kommentar nvarchar(max), 
+  Beratungslehrer nvarchar(120), 
+  PruefPhase nvarchar(1), 
+  BesondereLernleistung_Art nvarchar(1), 
+  BesondereLernleistung_Punkte int, 
+  ZweiteFremdpracheInSekIVorhanden int DEFAULT 0 NOT NULL,
+  CONSTRAINT PK_Gost_Schueler PRIMARY KEY (Schueler_ID),
+  CONSTRAINT Gost_Schueler_Schueler_ID_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE Gost_Schueler_Fachwahlen (
+  Schueler_ID bigint NOT NULL, 
+  Fach_ID bigint NOT NULL, 
+  EF1_Kursart nvarchar(5), 
+  EF1_Punkte nvarchar(2), 
+  EF2_Kursart nvarchar(5), 
+  EF2_Punkte nvarchar(2), 
+  Q11_Kursart nvarchar(5), 
+  Q11_Punkte nvarchar(2), 
+  Q12_Kursart nvarchar(5), 
+  Q12_Punkte nvarchar(2), 
+  Q21_Kursart nvarchar(5), 
+  Q21_Punkte nvarchar(2), 
+  Q22_Kursart nvarchar(5), 
+  Q22_Punkte nvarchar(2), 
+  AbiturFach int, 
+  Bemerkungen nvarchar(50), 
+  Markiert_Q1 int, 
+  Markiert_Q2 int, 
+  Markiert_Q3 int, 
+  Markiert_Q4 int, 
+  ergebnisAbiturpruefung int, 
+  hatMuendlichePflichtpruefung int, 
+  ergebnisMuendlichePruefung int,
+  CONSTRAINT PK_Gost_Schueler_Fachwahlen PRIMARY KEY (Schueler_ID, Fach_ID),
+  CONSTRAINT Gost_Schueler_Fachwahlen_Schueler_ID_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Schueler_Fachwahlen_Fach_ID_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
 CREATE TABLE Kurs_Schueler (
   Kurs_ID bigint NOT NULL, 
   Schueler_ID bigint NOT NULL,
@@ -3268,8 +3293,8 @@ CREATE TABLE SchuelerKAoADaten (
 CREATE TABLE SchuelerLernabschnittsdaten (
   ID bigint DEFAULT -1 NOT NULL, 
   Schueler_ID bigint NOT NULL, 
-  Jahr smallint NOT NULL, 
-  Abschnitt smallint NOT NULL, 
+  Jahr int NOT NULL, 
+  Abschnitt int NOT NULL, 
   WechselNr smallint NOT NULL, 
   Jahrgang smallint, 
   Hochrechnung int, 
@@ -3691,6 +3716,82 @@ BEGIN
           SET @tmpID = @maxInsertedID
 	      END
       UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Credentials''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_CredentialsLernplattformen ON CredentialsLernplattformen INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO CredentialsLernplattformen
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''CredentialsLernplattformen'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM CredentialsLernplattformen)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''CredentialsLernplattformen'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO CredentialsLernplattformen
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''CredentialsLernplattformen''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_CredentialsLernplattformen ON CredentialsLernplattformen AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM SVWS_DB_AutoInkremente WHERE NameTabelle = ''CredentialsLernplattformen'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM CredentialsLernplattformen)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES (''CredentialsLernplattformen'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE SVWS_DB_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''CredentialsLernplattformen''
     END
 END;
 ')
@@ -10157,7 +10258,7 @@ FROM
         JOIN Schueler ON SchuelerLernabschnittsdaten.Schueler_ID = Schueler.ID;
 
 
-INSERT INTO SVWS_DB_Version(Revision) VALUES (3);
+INSERT INTO SVWS_DB_Version(Revision) VALUES (4);
 
 
 INSERT INTO Users (ID,US_Name,US_LoginName,US_UserGroups,US_Privileges) VALUES (1,'Administrator','Admin','1;2;3;4;5','$');
