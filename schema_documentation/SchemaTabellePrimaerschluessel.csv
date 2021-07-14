@@ -29,7 +29,6 @@ Fachklassen_Schwerpunkte;Fachklasse_ID;0
 Fachklassen_Schwerpunkte;SchulNrEigner;0
 Fachklassen_Schwerpunkte;Schwerpunkt_ID;0
 Floskelgruppen;Kuerzel;0
-Floskelgruppen;SchulNrEigner;0
 Floskeln;Kuerzel;0
 Gost_Jahrgang_Beratungslehrer;Abi_Jahrgang;0
 Gost_Jahrgang_Beratungslehrer;Lehrer_ID;0
@@ -80,12 +79,8 @@ Katalog_Aufsichtsbereich;ID;1
 Katalog_Pausenzeiten;ID;1
 Katalog_Raeume;ID;1
 Katalog_Zeitraster;ID;1
-Kompetenzen;KO_Gruppe;0
 Kompetenzen;KO_ID;0
-Kompetenzgruppen;KG_Bezeichnung;0
 Kompetenzgruppen;KG_ID;0
-Kompetenzgruppen;KG_Spalte;0
-Kompetenzgruppen;KG_Zeile;0
 Kurs_Schueler;Kurs_ID;0
 Kurs_Schueler;Schueler_ID;0
 Kurse;ID;1

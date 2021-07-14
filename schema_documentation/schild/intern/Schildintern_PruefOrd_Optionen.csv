@@ -579,6 +579,7 @@ OP_Schulformen;OP_POKrz;OP_Krz;OP_Abgangsart_B;OP_Abgangsart_NB;OP_Art;OP_Typ;OP
 -BK-SB-;APO-BK-15/B;APO-BK-15/B/V11;;;V;;A;Versetzung nach APO-BK-15, Anl.B);B, § 6 (1);-01-;-6-7-;-B01-B02-;1
 -BK-SB-;APO-BK-15/C-BFS-BAB;APO-BK-15/C-BFS-BAB;;;A;;B;BAB: Berufsabschluss nach APO-BK-15, Anl.C;C, § 15;-03-;-10-;-C01-;1
 -BK-SB-;APO-BK-15/C-BFS-BAB;APO-BK-15/C-BFS-BAB;;;A;;B;BAB: Berufsabschluss nach APO-BK-15, Anl.C;C, § 26 (2);-02-;-11-;-C02-;1
+-BK-SB-;APO-BK-15/C-BFS-BAB;APO-BK-15/C-BFS-BAB;;;A;;B;BAB: Berufsabschluss nach APO-BK-15, Anl.C13;C, § 26 (2);-03-;-11-;-C13-;1
 -BK-SB-;APO-BK-15/C-BFS-BAB;APO-BK-15/C-BFS-BAB/FHR;0H;;A;;A;FHR: Fachhochschulreife nach APO-BK-15, Anl.C;C, § 12 (1)-(6);-03-;-10-;-C01-;1
 -BK-SB-;APO-BK-15/C-BFS-BAB;APO-BK-15/C-BFS-BAB/FHRsT;0H;;A;;A;FHRsT: Fachhochschulreife schulischer Teil nach APO-BK-15, Anl.C;C, § 12 (1)-(6);-03-;-10-;-C01-;99
 -BK-SB-;APO-BK-15/C-BFS-BAB;APO-BK-15/C-BFS-BAB/V;;;V;;A;Versetzung nach APO-BK-15;§ 10;-01-;-11-;-C02-;1
@@ -586,8 +587,8 @@ OP_Schulformen;OP_POKrz;OP_Krz;OP_Abgangsart_B;OP_Abgangsart_NB;OP_Art;OP_Typ;OP
 -BK-SB-;APO-BK-15/C-BFS-BK;APO-BK-15/C-BFS-BK/VBK;8A;;A;;B;vertiefte berufliche Kenntnisse nach Anl.C;C, § 5;-01-02-;-13-;-C07-C08-C11-;1
 -BK-SB-;APO-BK-15/C-BFS-BK;APO-BK-15/C-BFS-BK/BK;;;A;;B;BK: berufliche Kenntnisse, Fähigkeiten und Fertigkeiten nach Anl.C;C;-01-02-;-12-;-C03-;2
 -Bkgesperrt-;APO-BK-15/C-BFS-BK;APO-BK-15/C-BFS-BK;;;A;;B;BK: berufliche Kenntnisse, Fähigkeiten und Fertigkeiten nach Anl.C;C;-01-;-12-;-C03-;2
--BK-SB-;APO-BK-15/C-BFS-BK;APO-BK-15/C-BFS-BK/FHR-S;;;A;;A;FHRsT: schulischer Teil der Fachhochschulreife nach APO-BK-15, Anl.C;C, § 12 (8);-02-;-12-;-C03-;1
--BK-SB-;APO-BK-15/C-BFS-BK;APO-BK-15/C-BFS-BK/V;;;V;;A;Versetzung nach APO-BK-15;§ 10;-01-;-12-;-C03-;1
+-BK-SB-;APO-BK-15/C-BFS-BK;APO-BK-15/C-BFS-BK/FHR-S;;;A;;A;FHRsT: schulischer Teil der Fachhochschulreife nach APO-BK-15, Anl.C;C, § 12 (8);-02-;-12-;-C03-C13-;1
+-BK-SB-;APO-BK-15/C-BFS-BK;APO-BK-15/C-BFS-BK/V;;;V;;A;Versetzung nach APO-BK-15;§ 10;-01-;-12-;-C03-C13-;1
 -BK-SB-;APO-BK-15/C-FOS;APO-BK-15/C-FOS/BK;;;A;;B;BK: berufliche Kenntnisse , Fähigkeiten und Fertigkeiten (ohne Abschlussprüfung);;-01-;-14-;-C05-C06-;2
 -BK-SB-;APO-BK-15/C-FOS;APO-BK-15/C-FOS/FHR;;;A;;A;FHR: Fachhochschulreife nach APO-BK-15, Anl.C;C, § 12 (1)-(6);-02-;-14-;-C07-;1
 -BK-SB-;APO-BK-15/C-FOS;APO-BK-15/C-FOS/FHR;;;A;;A;FHR: Fachhochschulreife nach APO-BK-15, Anl.C;C, § 12 (1)-(6);-01-;-14-;-C08-C06-;1

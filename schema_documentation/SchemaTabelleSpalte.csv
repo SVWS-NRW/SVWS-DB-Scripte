@@ -1,6 +1,6 @@
 NameTabelle;NameSpalte;Revision;Veraltet;Sortierung;Datentyp;Datenlaenge;DefaultWert;IsNotNull;JavaAttributName;JavaAttributConverter;JavaKommentar
 AllgAdrAnsprechpartner;ID;;;1;bigint;;;1;;;ID des Ansprechpartners der Tabelle AllgAdresse (Betriebe)
-AllgAdrAnsprechpartner;Adresse_ID;;;2;bigint;;;0;;;ID des Betriebs (der Adresse) aus der Tabelle AllgAdresse
+AllgAdrAnsprechpartner;Adresse_ID;;;2;bigint;;;1;;;ID des Betriebs (der Adresse) aus der Tabelle AllgAdresse
 AllgAdrAnsprechpartner;Name;;;3;varchar;120;;0;;;Name des Ansprechpartners im Betrieb PAuswG vom 21.6.2019 §5 Abs. 2
 AllgAdrAnsprechpartner;Vorname;;;4;varchar;80;;0;;;Vorname des Ansprechpartners im Betrieb PAuswG vom 21.6.2019 §5 Abs. 2
 AllgAdrAnsprechpartner;Anrede;;;5;varchar;10;;0;;;Anrede des Ansprechpartners im Betrieb
@@ -121,10 +121,10 @@ EigeneSchule_Fachklassen;DQR_Niveau;;;16;int;;;0;;;DQR-Niveau der Fachklasse Deu
 EigeneSchule_Fachklassen;Ebene1Klartext;;;17;varchar;255;;0;;;Berufsebene 1
 EigeneSchule_Fachklassen;Ebene2Klartext;;;18;varchar;255;;0;;;Berufsebene 2
 EigeneSchule_Fachklassen;Ebene3Klartext;;;19;varchar;255;;0;;;Berufsebene 3
-EigeneSchule_FachTeilleistungen;SchulNrEigner;;;1;int;;;1;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
+EigeneSchule_FachTeilleistungen;Teilleistung_ID;;;1;bigint;;;1;Teilleistungsart_ID;;Die eindeutige ID der Teilleistungsart – verweist auf die Teilleistungsart
 EigeneSchule_FachTeilleistungen;Fach_ID;;;2;bigint;;;1;;;Die eindeutige ID des Faches – verweist auf das Fach
-EigeneSchule_FachTeilleistungen;Teilleistung_ID;;;3;bigint;;;1;Teilleistungsart_ID;;Die eindeutige ID der Teilleistungsart – verweist auf die Teilleistungsart
-EigeneSchule_FachTeilleistungen;Kursart;;;4;varchar;5;;0;;;Gibt an, bei welcher Kursart die Teilleistungsart zugeordnet werden soll
+EigeneSchule_FachTeilleistungen;Kursart;;;3;varchar;5;;0;;;Gibt an, bei welcher Kursart die Teilleistungsart zugeordnet werden soll
+EigeneSchule_FachTeilleistungen;SchulNrEigner;;;4;int;;;1;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
 EigeneSchule_Faecher;ID;;;1;bigint;;;1;;;Eindeutige ID zur Kennzeichnung des Fächer-Datensatzes
 EigeneSchule_Faecher;FachKrz;;;2;varchar;20;;0;Kuerzel;;Ein eindeutiges Kürzel zur Identifikation des Fach
 EigeneSchule_Faecher;Bezeichnung;;;3;varchar;255;;0;;;Die Bezeichnung des Faches
@@ -139,7 +139,7 @@ EigeneSchule_Faecher;NachprErlaubt;;;11;varchar;1;+;0;IstNachpruefungErlaubt;Boo
 EigeneSchule_Faecher;Sichtbar;;;12;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Gibt an, ob der Datensatz in der Oberfläche sichtbar sein soll und bei einer Auswahl zur Verfügung steht. 
 EigeneSchule_Faecher;Aenderbar;;;13;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Gibt an, ob Änderungen am Datensatz erlaubt sind.
 EigeneSchule_Faecher;Gewichtung;;;14;smallint;;1;0;;;Gibt die Gewichtung des Faches im allgemeinbildenden Bereich am BK an, wenn keine gliederungsbezogenen Gewichtungen vergeben sind
-EigeneSchule_Faecher;Fachgruppe_ID;;;15;bigint;;;0;;;Die Eindeutige ID der zugehörigen Fachgruppe – verweist auf die Fachgruppe
+EigeneSchule_Faecher;Fachgruppe_ID;;;15;bigint;;;0;;;DEPRECATED: Die Eindeutige ID der zugehörigen Fachgruppe – verweist auf die Fachgruppe (wird bei den Zulässigen Fächern der Statkue definiert)
 EigeneSchule_Faecher;Unterichtssprache;;;16;varchar;1;D;0;;;Einstelliges Kürzel der Unterrichtssprache (E, F, …)
 EigeneSchule_Faecher;IstSchriftlich;;;17;varchar;1;-;0;IstSchriftlichZK;BooleanPlusMinusDefaultMinusConverter;gibt an, ob das Fach ein schritliches Fach für ZK ist oder nicht
 EigeneSchule_Faecher;IstSchriftlichBA;;;18;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;gibt an, ob ein Fach am BK für den beruflichen Abschluss schriftlich gewertet wird
@@ -259,18 +259,18 @@ Fach_Gliederungen;Sortierung;;;13;int;;32000;0;;;Sortierung dfür die gliederung
 Fachklassen_Schwerpunkte;SchulNrEigner;;;1;int;;;1;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
 Fachklassen_Schwerpunkte;Fachklasse_ID;;;2;bigint;;;1;;;FachklassenID für den Schwerpunkt (BK)
 Fachklassen_Schwerpunkte;Schwerpunkt_ID;;;3;bigint;;;1;;;ID des Schwerpunktes
-Floskelgruppen;SchulNrEigner;;;1;int;;;1;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
-Floskelgruppen;Kuerzel;;;2;varchar;4;;1;;;Kürzel der Floskelgruppe
+Floskelgruppen;Kuerzel;;;1;varchar;10;;1;;;Kürzel der Floskelgruppe
+Floskelgruppen;Hauptgruppe;;;2;varchar;4;;0;;;Hauptgruppe der Floskelgruppe ermöglich es Floskel Unterkategorien zuzuordnen
 Floskelgruppen;Bezeichnung;;;3;varchar;50;;1;;;Bezeichnung der Floskelgruppe
-Floskelgruppen;Hauptgruppe;;;4;varchar;4;;0;;;Hauptgruppe der Flsokelgruppe ermöglich es Floskel Unterkategorien zuzuordnen
-Floskelgruppen;Farbe;;;5;int;;;0;;;Farbe für die Flsokelgruppe
-Floskeln;SchulNrEigner;;;1;int;;;1;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
-Floskeln;Kuerzel;;;2;varchar;10;;1;;;Kürzel für die Floskel wird beim Import automatisch vergeben
-Floskeln;FloskelText;;;3;text;;;1;;;Text der Floskel
-Floskeln;FloskelGruppe;;;4;varchar;10;;0;;;Gruppe der Floskel
-Floskeln;FloskelFach;;;5;varchar;20;;0;;;Fach bei Fachfloskeln
-Floskeln;FloskelNiveau;;;6;varchar;2;;0;;;Niveau bei Fachfloskeln
-Floskeln;FloskelJahrgang;;;7;varchar;2;;0;;;Jahrgang bei Fachfloskeln
+Floskelgruppen;Farbe;;;4;int;;;0;;;Farbe für die Flsokelgruppe
+Floskelgruppen;SchulNrEigner;;;5;int;;;1;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
+Floskeln;Kuerzel;;;1;varchar;10;;1;;;Kürzel für die Floskel wird beim Import automatisch vergeben
+Floskeln;FloskelText;;;2;text;;;1;;;Text der Floskel
+Floskeln;FloskelGruppe;;;3;varchar;10;;0;;;Gruppe der Floskel
+Floskeln;FloskelFach;;;4;varchar;20;;0;;;Fach bei Fachfloskeln
+Floskeln;FloskelNiveau;;;5;varchar;2;;0;;;Niveau bei Fachfloskeln
+Floskeln;FloskelJahrgang;;;6;varchar;2;;0;;;Jahrgang bei Fachfloskeln
+Floskeln;SchulNrEigner;;;7;int;;;1;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
 Gost_Jahrgang_Beratungslehrer;Abi_Jahrgang;;;1;int;;;1;;;Gymnasiale Oberstufe - Jahrgangsdaten: Schuljahr, in welchem der Jahrgang das Abitur macht 
 Gost_Jahrgang_Beratungslehrer;Lehrer_ID;;;2;bigint;;;1;;;Gymnasiale Oberstufe - Jahrgangsdaten: ID des Beratungslehrers in der Lehrertabelle
 Gost_Jahrgang_Faecher;Abi_Jahrgang;;;1;int;;;1;;;Gymnasiale Oberstufe - Jahrgangsdaten: Schuljahr, in welchem der Jahrgang das Abitur macht
@@ -388,7 +388,7 @@ K_Adressart;Sichtbar;;;4;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Sic
 K_Adressart;Aenderbar;;;5;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Adressart ist änderbar Ja Nein
 K_Adressart;SchulNrEigner;;;6;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
 K_AllgAdresse;ID;;;1;bigint;;;1;;;ID der weiteren Adresse (Betriebe)
-K_AllgAdresse;AllgAdrAdressArt;;;2;varchar;30;;1;adressArt;;Adressart des Betriebs
+K_AllgAdresse;AllgAdrAdressArt;;;2;varchar;30;;0;adressArt;;Adressart des Betriebs
 K_AllgAdresse;AllgAdrName1;;;3;varchar;50;;0;name1;;Name1 des Betriebs
 K_AllgAdresse;AllgAdrName2;;;4;varchar;50;;0;name2;;Name2 des Betriebs
 K_AllgAdresse;AllgAdrStrasse;;;5;varchar;55;;0;strasse;;Straße des Betriebs
@@ -641,18 +641,18 @@ K_Staat;Aenderbar;;;6;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;DEPREC
 K_Staat;ExportBez;;;7;varchar;20;;0;;;DEPRECATED: Exportbezeichnung der Staatsangehörtigkeit
 K_Staat;SchulNrEigner;;;8;int;;;0;;;DEPRECATED: Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
 K_Staat;Bezeichnung2;;;9;varchar;80;;0;;;DEPRECATED: Bezeichnung2  der Staatsangehörtigkeit
-K_TelefonArt;ID;;;1;bigint;;;1;;;ID der Telfonart
-K_TelefonArt;Bezeichnung;;;2;varchar;30;;1;;;Bezeichnung der Telfonart
-K_TelefonArt;Sortierung;;;3;int;;32000;0;;;Sortierung der Telfonart
-K_TelefonArt;Sichtbar;;;4;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Sichbarkeit der Telfonart
-K_TelefonArt;Aenderbar;;;5;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Änderbarkeit der Telfonart
+K_TelefonArt;ID;;;1;bigint;;;1;;;ID der Telefonart
+K_TelefonArt;Bezeichnung;;;2;varchar;30;;1;;;Bezeichnung der Telefonart
+K_TelefonArt;Sortierung;;;3;int;;32000;0;;;Sortierung der Telefonart
+K_TelefonArt;Sichtbar;;;4;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Sichbarkeit der Telefonart
+K_TelefonArt;Aenderbar;;;5;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Änderbarkeit der Telefonart
 K_TelefonArt;SchulNrEigner;;;6;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
 K_Textdateien;ID;;;1;bigint;;;1;;;ID des Textes der zum Ersatz für txt-Dateien genutzt wird
 K_Textdateien;Bezeichnung;;;2;varchar;32;;0;;;Bezeichnungdes Textes der zum Ersatz für txt-Dateien genutzt wird
 K_Textdateien;Text_ID;;;3;bigint;;;1;;;TextID des Textes der zum Ersatz für txt-Dateien genutzt wird
-K_Textdateien;Text_Body;;;4;text;;;0;;;Text-Bodydes Textes der zum Ersatz für txt-Dateien genutzt wird
-K_Textdateien;Sichtbar;;;5;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Sichbarkeitdes Textes der zum Ersatz für txt-Dateien genutzt wird
-K_Textdateien;Sortierung;;;6;smallint;;;0;;;Sortierungdes Textes der zum Ersatz für txt-Dateien genutzt wird
+K_Textdateien;Text_Body;;;4;text;;;0;;;Text-Body des Textes der zum Ersatz für txt-Dateien genutzt wird
+K_Textdateien;Sichtbar;;;5;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Sichbarkeit des Textes der zum Ersatz für txt-Dateien genutzt wird
+K_Textdateien;Sortierung;;;6;smallint;;;0;;;Sortierung des Textes der zum Ersatz für txt-Dateien genutzt wird
 K_Textdateien;SchulNrEigner;;;7;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
 K_Verkehrssprachen;ID;;;1;bigint;;;1;;;DEPRECATED: ID der Verkehrsprache
 K_Verkehrssprachen;Kurztext;;;2;varchar;10;;0;;;DEPRECATED: Kurztext der Verkehrsprache
@@ -741,15 +741,15 @@ LehrerAnrechnung;AnrechnungStd;;;3;float;;;0;;;Zahl der Anrechnungsstunden für 
 LehrerAnrechnung;Jahr;;;4;int;;;0;;;Schuljahr für die Anrechnungsstunden
 LehrerAnrechnung;Abschnitt;;;5;int;;;0;;;Abschnit für die Anrechnungsstunden
 LehrerAnrechnung;SchulNrEigner;;;6;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
+LehrerDatenschutz;LehrerID;;;1;bigint;;;1;;;LehrerID des Datenschutzeintrags
+LehrerDatenschutz;DatenschutzID;;;2;bigint;;;1;;;DatenschutzID des Eintrags
+LehrerDatenschutz;Status;;;3;int;;0;1;;Boolean01Converter;Status des Datenschutz-Eintrags (true/false)
 LehrerEntlastung;Lehrer_ID;;;1;bigint;;;1;;;LehrerID für die Entlastungsstunden (Mehr-Minderleistung)
 LehrerEntlastung;EntlastungsgrundKrz;;;2;varchar;10;;0;;;Kürzel für die Entlastungsstunden (Minderleistung)
 LehrerEntlastung;EntlastungStd;;;3;float;;;0;;;Anzahl  für die Entlastungsstunden (Minderleistung)
 LehrerEntlastung;Jahr;;;4;int;;;0;;;Schuljahr für die Entlastungsstunden (Minderleistung)
 LehrerEntlastung;Abschnitt;;;5;int;;;0;;;Abschnitt für die Entlastungsstunden (Minderleistung)
 LehrerEntlastung;SchulNrEigner;;;6;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
-LehrerDatenschutz;LehrerID;;;1;bigint;;;1;;;LehrerID des Datenschutzeintrags
-LehrerDatenschutz;DatenschutzID;;;2;bigint;;;1;;;DatenschutzID des Eintrags
-LehrerDatenschutz;Status;;;3;int;;0;1;;Boolean01Converter;Status des Datenschutz-Eintrags (true/false)
 LehrerFotos;Lehrer_ID;;;1;bigint;;;1;;;LehrerID zu der das Foto gehört
 LehrerFotos;Foto;;;2;longblob;;;0;;;Lehrerfoto im binär-Format
 LehrerFotos;FotoBase64;;;3;text;;;0;;;Lehrerfoto im Base64-Format
@@ -848,7 +848,7 @@ Schild_Verwaltung;Version;;;8;varchar;10;;0;;;Versionsdatum (wird zur Erkennung 
 Schild_Verwaltung;GU_ID;;;9;varchar;40;;1;;;Stellt eine GU_ID für die Datenbank zur Verfügung damit bei Kurs42 erkannt werden kann ob verschiedene DBs verwendet wurden.
 Schild_Verwaltung;SchulNrEigner;;;10;int;;;1;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
 Schild_Verwaltung;DatumLoeschfristHinweisDeaktiviert;;;11;datetime;;;0;;;Gibt an ob der User den Hiweis zu den Löschfristen deaktiviert hat.
-Schild_Verwaltung;DatumLoeschfristHinweisDeaktiviertUserID;;;12;int;;;0;;;Gibt an welcher User den Hiweis deaktiviert hat.
+Schild_Verwaltung;DatumLoeschfristHinweisDeaktiviertUserID;;;12;bigint;;;0;;;Gibt an welcher User den Hiweis deaktiviert hat.
 Schild_Verwaltung;DatumDatenGeloescht;;;13;datetime;;;0;;;Gibt an wann der Löschvorgang zuletzt gelaufen ist.
 SchildFilter;ID;;;1;bigint;;;1;;;ID des gespeicherten Filters
 SchildFilter;Art;;;2;varchar;1;;0;;;Art des Filters
@@ -1195,7 +1195,7 @@ Schueler;BilingualerZweig;;;130;varchar;1;;0;;;Sprache des Bilingualen Zweigs
 Schueler;DurchschnittsnoteFHR;;;131;varchar;4;;0;;;Speichert die Durchschnittsnote der FHR-Prüfung mit einer Nachkommastelle (aber als Textfeld) Wird nur am BK benutzt
 Schueler;DSN_FHR_Text;;;132;varchar;15;;0;;;Speichert die Durchschnittsnote der FHR-Prüfung im Klartext (also befriedigend bei einer Durchschnittsnote von z.B. 3.1) wird nur am BK verwendet
 Schueler;Eigenanteil;;;133;float;;;0;;;TODO DEPRECATED: Eigenanteil Ja/Nein 
-Schueler;StaatAbk2;;;134;varchar;50;;0;;;Kürzel der 2. Staatsangehörigkeit
+Schueler;StaatAbk2;;;134;varchar;50;;0;;;DEPRECATED: Kürzel der 2. Staatsangehörigkeit
 Schueler;ZustimmungFoto;;;135;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;DEPRECATED: nicht mehr genutzt Zustimmungen werden nun auf DSGVO verwaltet
 Schueler;BKAZVO;;;136;int;;;0;;;Gibt an ob der Schüler in einem Bildungsgang nach BKAZVO ist (BK)
 Schueler;HatBerufsausbildung;;;137;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob der Schüler eine Berufsausbildung hat (BK)
@@ -1585,19 +1585,13 @@ SchuelerKAoADaten;SchulNrEigner;;;3;int;;;1;;;Die Schulnummer zu welcher der Dat
 SchuelerKAoADaten;Jahr;;;4;int;;;1;;;Schuljahr des KAOA-Eintrags beim Schüler
 SchuelerKAoADaten;Abschnitt;;;5;int;;;1;;;Abschnitt des KAOA-Eintrags beim Schüler
 SchuelerKAoADaten;Jahrgang;;;6;varchar;2;;0;;;Jahrgang des KAOA-Eintrags beim Schüler
-SchuelerKAoADaten;Kategorie;;;7;varchar;10;;0;;;DEPRECATED: Kategorie des KAOA-Eintrags beim Schüler
-SchuelerKAoADaten;Merkmal;;;8;varchar;20;;0;;;DEPRECATED: Merkmal des KAOA-Eintrags beim Schüler
-SchuelerKAoADaten;Zusatzmerkmal;;;9;varchar;20;;0;;;DEPRECATED: Zusatzmerkmal des KAOA-Eintrags beim Schüler
-SchuelerKAoADaten;Anschlussoption;;;10;varchar;10;;0;;;DEPRECATED: Anschlussoption des KAOA-Eintrags beim Schüler
-SchuelerKAoADaten;Berufsfeld;;;11;varchar;10;;0;;;DEPRECATED: Berufsfeld des KAOA-Eintrags beim Schüler
-SchuelerKAoADaten;SBO_Ebene4;;;12;varchar;20;;0;;;DEPRECATED: SBO_Ebene4 des KAOA-Eintrags beim Schüler
-SchuelerKAoADaten;KategorieID;;;13;bigint;;;1;;;ID der Kategorie des KAOA-Eintrags beim Schüler FK
-SchuelerKAoADaten;MerkmalID;;;14;bigint;;;0;;;ID des Merkmal des KAOA-Eintrags beim Schüler FK
-SchuelerKAoADaten;ZusatzmerkmalID;;;15;bigint;;;0;;;ID des Zusatzmerkmal des KAOA-Eintrags beim Schüler FK
-SchuelerKAoADaten;AnschlussoptionID;;;16;bigint;;;0;;;ID der Anschlussoption des KAOA-Eintrags beim Schüler FK
-SchuelerKAoADaten;BerufsfeldID;;;17;bigint;;;0;;;ID des Berufsfeld des KAOA-Eintrags beim Schüler FK
-SchuelerKAoADaten;SBO_Ebene4ID;;;18;bigint;;;0;;;ID der Ebene4 des KAOA-Eintrags beim Schüler FK
-SchuelerKAoADaten;Bemerkung;;;19;varchar;255;;0;;;Bemerkung des KAOA-Eintrags beim Schüler
+SchuelerKAoADaten;KategorieID;;;7;bigint;;;1;;;ID der Kategorie des KAOA-Eintrags beim Schüler FK
+SchuelerKAoADaten;MerkmalID;;;8;bigint;;;0;;;ID des Merkmal des KAOA-Eintrags beim Schüler FK
+SchuelerKAoADaten;ZusatzmerkmalID;;;9;bigint;;;0;;;ID des Zusatzmerkmal des KAOA-Eintrags beim Schüler FK
+SchuelerKAoADaten;AnschlussoptionID;;;10;bigint;;;0;;;ID der Anschlussoption des KAOA-Eintrags beim Schüler FK
+SchuelerKAoADaten;BerufsfeldID;;;11;bigint;;;0;;;ID des Berufsfeld des KAOA-Eintrags beim Schüler FK
+SchuelerKAoADaten;SBO_Ebene4ID;;;12;bigint;;;0;;;ID der Ebene4 des KAOA-Eintrags beim Schüler FK
+SchuelerKAoADaten;Bemerkung;;;13;varchar;255;;0;;;Bemerkung des KAOA-Eintrags beim Schüler
 SchuelerLD_PSFachBem;ID;;;1;bigint;;;1;;;ID des Bemerkungseintrags
 SchuelerLD_PSFachBem;Abschnitt_ID;;;2;bigint;;;1;;;ID des Lernabschnittes
 SchuelerLD_PSFachBem;ASV;;;3;text;;;0;;;Text zum Arvbeits und Sozialverhalten
@@ -2311,7 +2305,7 @@ Versetzung;KoopKlasse;;;23;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;
 Versetzung;Ankreuzzeugnisse;;;24;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob in der Klasse Ankreuzeugnisse (GS) oder Kompentenzschreiben (andere) verwendet werden
 ZuordnungReportvorlagen;ID;;;1;bigint;;;1;;;ID des Datensatzes der einen Zeugnisreport einer Gruppe oder Klasse zuordnet
 ZuordnungReportvorlagen;SchulNrEigner;;;2;int;;;1;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
-ZuordnungReportvorlagen;Jahrgang_ID;;;3;bigint;;;1;;;ID des Jahrgangs der zum Report zugeordnet wird
+ZuordnungReportvorlagen;Jahrgang_ID;;;3;bigint;;;0;;;ID des Jahrgangs der zum Report zugeordnet wird
 ZuordnungReportvorlagen;Abschluss;;;4;varchar;50;;0;;;Bezeichnung des Abschluss der für den Report zugeordnet wird
 ZuordnungReportvorlagen;AbschlussBB;;;5;varchar;50;;0;;;Bezeichnung des berufsbezogenen Abschluss der für den Report zugeordnet wird
 ZuordnungReportvorlagen;AbschlussArt;;;6;int;;;0;;;Art des Abschluss der für den Report zugeordnet wird
