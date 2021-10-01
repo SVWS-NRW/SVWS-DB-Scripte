@@ -39,6 +39,9 @@ CREATE TABLE EigeneSchule (
   Bezeichnung2 varchar(50), 
   Bezeichnung3 varchar(50), 
   Strasse varchar(55), 
+  Strassenname varchar(55), 
+  HausNr varchar(10), 
+  HausNrZusatz varchar(30), 
   PLZ varchar(10), 
   Ort varchar(50), 
   Telefon varchar(20), 
@@ -256,7 +259,9 @@ CREATE TABLE EigeneSchule_Teilstandorte (
   PLZ varchar(10), 
   Ort varchar(50), 
   Strasse varchar(55), 
+  Strassenname varchar(55), 
   HausNr varchar(10), 
+  HausNrZusatz varchar(30), 
   Bemerkung varchar(50), 
   Kuerzel varchar(30),
   CONSTRAINT PK_EigeneSchule_Teilstandorte PRIMARY KEY (AdrMerkmal)
@@ -415,7 +420,8 @@ CREATE TABLE K_Ankreuzdaten (
 CREATE TABLE K_Ankreuzfloskeln (
   ID bigint DEFAULT -1 NOT NULL, 
   SchulNrEigner int NOT NULL, 
-  Fach_ID bigint NOT NULL, 
+  Fach_ID bigint, 
+  IstASV int DEFAULT 0 NOT NULL, 
   Jahrgang varchar(2) NOT NULL, 
   Gliederung varchar(3), 
   FloskelText varchar(255) NOT NULL, 
@@ -425,7 +431,7 @@ CREATE TABLE K_Ankreuzfloskeln (
   Sichtbar varchar(1) DEFAULT '+', 
   Aktiv varchar(1) DEFAULT '+',
   CONSTRAINT PK_K_Ankreuzfloskeln PRIMARY KEY (ID),
-  CONSTRAINT K_Ankreuzfloskeln_Fach_ID_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE
+  CONSTRAINT K_Ankreuzfloskeln_Fach_ID_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE SET NULL
 );
 
 
@@ -553,10 +559,13 @@ CREATE TABLE K_Haltestelle (
 
 CREATE TABLE K_Kindergarten (
   ID bigint DEFAULT -1 NOT NULL, 
-  Bezeichnung varchar(50), 
+  Bezeichnung varchar(100), 
   PLZ varchar(10), 
   Ort varchar(30), 
   Strasse varchar(55), 
+  Strassenname varchar(55), 
+  HausNr varchar(10), 
+  HausNrZusatz varchar(30), 
   Tel varchar(20), 
   Email varchar(40), 
   Bemerkung varchar(50), 
@@ -590,6 +599,9 @@ CREATE TABLE K_AllgAdresse (
   AllgAdrName1 varchar(50), 
   AllgAdrName2 varchar(50), 
   AllgAdrStrasse varchar(55), 
+  AllgAdrStrassenname varchar(55), 
+  AllgAdrHausNr varchar(10), 
+  AllgAdrHausNrZusatz varchar(30), 
   AllgAdrOrt_ID bigint, 
   AllgAdrPLZ varchar(10), 
   AllgAdrTelefon1 varchar(20), 
@@ -710,16 +722,6 @@ CREATE TABLE K_Schwerpunkt (
   SchulNrEigner int,
   CONSTRAINT PK_K_Schwerpunkt PRIMARY KEY (ID),
   CONSTRAINT K_Schwerpunkt_UC1 UNIQUE (Bezeichnung)
-);
-
-
-CREATE TABLE Fachklassen_Schwerpunkte (
-  SchulNrEigner int NOT NULL, 
-  Fachklasse_ID bigint NOT NULL, 
-  Schwerpunkt_ID bigint NOT NULL,
-  CONSTRAINT PK_Fachklassen_Schwerpunkte PRIMARY KEY (Fachklasse_ID, SchulNrEigner, Schwerpunkt_ID),
-  CONSTRAINT Fachklassen_Schwerpunkte_Fachkl_FK FOREIGN KEY (Fachklasse_ID) REFERENCES EigeneSchule_Fachklassen(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT Fachklassen_Schwerpunkte_Schwerp_FK FOREIGN KEY (Schwerpunkt_ID) REFERENCES K_Schwerpunkt(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -904,6 +906,9 @@ CREATE TABLE Personengruppen_Personen (
   PersonPLZ varchar(10), 
   PersonOrt varchar(50), 
   PersonStrasse varchar(55), 
+  PersonStrassenname varchar(55), 
+  PersonHausNr varchar(10), 
+  PersonHausNrZusatz varchar(30), 
   PersonTelefon varchar(20), 
   PersonMobil varchar(20), 
   PersonEmail varchar(100), 
@@ -1501,20 +1506,20 @@ CREATE TABLE Statkue_Fachklasse (
   AP varchar(2) NOT NULL, 
   BGrp varchar(1), 
   BFeld varchar(2), 
-  Sortierung int DEFAULT 0, 
-  Status varchar(20), 
-  Beschreibung varchar(100), 
-  Beschreibung_W varchar(100), 
-  geaendert datetime, 
-  Beschreibung_MW varchar(100), 
+  Ebene3 varchar(2), 
   BAKLALT varchar(2), 
   BAGRALT varchar(4), 
+  Sortierung int DEFAULT 0, 
+  Status varchar(20), 
+  Flag_APOBK varchar(1), 
+  Beschreibung varchar(100), 
+  Beschreibung_W varchar(100), 
+  Beschreibung_MW varchar(100), 
+  geaendert datetime, 
   BAKL varchar(5), 
   BAGR varchar(8), 
   Ebene1 varchar(2), 
-  Ebene2 varchar(2), 
-  Ebene3 varchar(2), 
-  Flag_APOBK varchar(1),
+  Ebene2 varchar(2),
   CONSTRAINT PK_Statkue_Fachklasse PRIMARY KEY (AP, BKIndex, FKS)
 );
 
@@ -1758,6 +1763,9 @@ CREATE TABLE K_Lehrer (
   FuerExport varchar(1) DEFAULT '+', 
   Statistik varchar(1) DEFAULT '+', 
   Strasse varchar(55), 
+  Strassenname varchar(55), 
+  HausNr varchar(10), 
+  HausNrZusatz varchar(30), 
   Ort_ID bigint, 
   PLZ varchar(10), 
   Ortsteil_ID bigint, 
@@ -2101,7 +2109,7 @@ CREATE TABLE Statkue_SVWS_ZulaessigeJahrgaenge (
 
 
 CREATE TABLE Statkue_SVWS_ZulaessigeKursarten (
-  ID varchar(5) NOT NULL, 
+  ID varchar(7) NOT NULL, 
   Kuerzel varchar(5) NOT NULL, 
   ASDNummer varchar(2) NOT NULL, 
   Bezeichnung varchar(120) NOT NULL, 
@@ -2418,6 +2426,9 @@ CREATE TABLE Schueler (
   Zusatz varchar(255), 
   Geburtsname varchar(120), 
   Strasse varchar(55), 
+  Strassenname varchar(55), 
+  HausNr varchar(10), 
+  HausNrZusatz varchar(30), 
   Ort_ID bigint, 
   PLZ varchar(10), 
   OrtAbk varchar(50), 
@@ -2534,8 +2545,6 @@ CREATE TABLE Schueler (
   SV_Koop int, 
   Duplikat varchar(1) DEFAULT '-', 
   EinschulungsartASD varchar(2), 
-  HausNr varchar(10), 
-  Strassenname varchar(55), 
   SchulNrEigner int, 
   BilingualerZweig varchar(1), 
   DurchschnittsnoteFHR varchar(4), 
@@ -2556,7 +2565,6 @@ CREATE TABLE Schueler (
   OnlineAnmeldung varchar(1) DEFAULT '-', 
   Dokumentenverzeichnis varchar(255), 
   Berufsqualifikation varchar(100), 
-  HausNrZusatz varchar(30), 
   ZieldifferentesLernen varchar(1) DEFAULT '-', 
   ZusatzNachname varchar(30), 
   EndeEingliederung date, 
@@ -2827,8 +2835,11 @@ CREATE TABLE SchuelerErzAdr (
   Vorname2 varchar(80), 
   ErzStrasse varchar(55), 
   ErzOrt_ID bigint, 
+  ErzStrassenname varchar(55), 
   ErzPLZ varchar(10), 
+  ErzHausNr varchar(10), 
   ErzOrtsteil_ID bigint, 
+  ErzHausNrZusatz varchar(30), 
   ErzAnschreiben varchar(1) DEFAULT '+', 
   Sortierung int, 
   ErzEmail varchar(100), 
@@ -3033,7 +3044,7 @@ CREATE TABLE SchuelerLernabschnittsdaten (
   AbschlIstPrognose varchar(1) DEFAULT '-', 
   Konferenzdatum date, 
   ZeugnisDatum date, 
-  KlassenLehrer varchar(10), 
+  Klassenlehrer varchar(10), 
   ASDSchulgliederung varchar(3), 
   ASDJahrgang varchar(2), 
   Jahrgang_ID bigint, 
@@ -3082,7 +3093,7 @@ CREATE TABLE SchuelerLernabschnittsdaten (
   CONSTRAINT SchuelerLernabschnittsdaten_Foerderschwerpunkt_FK FOREIGN KEY (Foerderschwerpunkt_ID) REFERENCES K_Foerderschwerpunkt(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT SchuelerLernabschnittsdaten_Foerderschwerpunkt2_FK FOREIGN KEY (Foerderschwerpunkt2_ID) REFERENCES K_Foerderschwerpunkt(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT SchuelerLernabschnittsdaten_Jahrgang_FK FOREIGN KEY (Jahrgang_ID) REFERENCES EigeneSchule_Jahrgaenge(ID) ON UPDATE CASCADE ON DELETE SET NULL,
-  CONSTRAINT SchuelerLernabschnittsdaten_Klassenlehrer_1_FK FOREIGN KEY (KlassenLehrer) REFERENCES K_Lehrer(Kuerzel) ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT SchuelerLernabschnittsdaten_Klassenlehrer_1_FK FOREIGN KEY (Klassenlehrer) REFERENCES K_Lehrer(Kuerzel) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT SchuelerLernabschnittsdaten_Klassenlehrer_2_FK FOREIGN KEY (StvKlassenlehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT SchuelerLernabschnittsdaten_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT SchuelerLernabschnittsdaten_Schwerpunkt_FK FOREIGN KEY (Schwerpunkt_ID) REFERENCES K_Schwerpunkt(ID) ON UPDATE CASCADE ON DELETE SET NULL,
@@ -3132,9 +3143,12 @@ CREATE TABLE SchuelerSprachenfolge (
   ID bigint DEFAULT -1 NOT NULL, 
   Schueler_ID bigint NOT NULL, 
   Fach_ID bigint NOT NULL, 
+  ReihenfolgeNr int, 
+  IstSprachpruefungSI int DEFAULT 0 NOT NULL, 
+  NoteSprachpruefungSI int, 
+  IstSprachnachweisSI int DEFAULT 0 NOT NULL, 
   JahrgangVon smallint, 
   JahrgangBis smallint, 
-  Reihenfolge varchar(1), 
   AbschnittVon smallint, 
   AbschnittBis smallint, 
   SchulNrEigner int, 

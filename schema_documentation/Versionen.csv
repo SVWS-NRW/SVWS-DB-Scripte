@@ -1,5 +1,5 @@
 Revision;MaxRevision;Datum;Kommentar
--1;4;2019-08-14;Dummy Revision, welche anzeigt dass keine Revision definiert ist - z.B., um zu kennzeichnen, dass ein Datensatz noch nicht veraltet ist.
+-1;5;2019-08-14;Dummy Revision, welche anzeigt dass keine Revision definiert ist - z.B., um zu kennzeichnen, dass ein Datensatz noch nicht veraltet ist.
 0;;2019-08-14;Erste Version der SVWS-Datenbank. Das Schema wurde von der letzten Schild-NRW Version 2.x übernommen
 1;;2019-08-14;"Korrekturen an aus Schild2 importierten Daten, bevor weitere Fremdschlüssel mit Revision 2 ergänzt werden. 
 Außerdem: Hinzufügen der Tabelle SchildKursSchueler (Erstellen der Tabelle) für den schnellen Zugriff auf die Schüler-Zuordnung zu Kursen."

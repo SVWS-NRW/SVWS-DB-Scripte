@@ -25,9 +25,6 @@ ErzieherLernplattform;ErzieherID;0
 ErzieherLernplattform;LernplattformID;0
 Fach_Gliederungen;Fach_ID;0
 Fach_Gliederungen;Fachklasse_ID;0
-Fachklassen_Schwerpunkte;Fachklasse_ID;0
-Fachklassen_Schwerpunkte;SchulNrEigner;0
-Fachklassen_Schwerpunkte;Schwerpunkt_ID;0
 Floskelgruppen;Kuerzel;0
 Floskeln;Kuerzel;0
 Gost_Jahrgang_Beratungslehrer;Abi_Jahrgang;0

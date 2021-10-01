@@ -19,7 +19,6 @@ EigeneSchule_Zertifikate;0;-1;1;DTOZertifikate;schild.berufskolleg;Liste von Zer
 ErzieherLernplattform;0;-1;1;DTOErzieherLernplattform;schild.erzieher;Tabelle zur Speicherung der CredentialID und den Einwilligungen zu den Lernplattformen bei den Erziehern
 ErzieherDatenschutz;0;-1;1;DTOErzieherDatenschutz;schild.erzieher;Tabelle zur Speicherung der Einwilligungen zu Datenschutz bei den Erziehern
 Fach_Gliederungen;0;-1;1;DTOFachgliederungen;schild.berufskolleg;Gliederungsspezifische Einstellungen zu den Unterrichtsfächern (nur BK)
-Fachklassen_Schwerpunkte;0;-1;1;DTOFachklassenSchwerpunkt;schild.berufskolleg;Schwerpunkte für Fachklassen (nur BK)
 Floskelgruppen;0;-1;1;DTOFloskelgruppen;schild.katalog;Liste der Floskelgruppen, diese Liste kann erweitert werden um Textbausteinen zu verwalten und die Anzeige in den Editoren zu steuern
 Floskeln;0;-1;1;DTOFloskeln;schild.katalog;Textbausteine, die in den Editoren angezeigt und ausgewählt werden können
 Gost_Jahrgang_Beratungslehrer;4;-1;0;DTOGostJahrgangBeratungslehrer;gost;Gymnasiale Oberstufe - Jahrgangsdaten: Die Beratungslehrer in den einzelnen Jahrgängen

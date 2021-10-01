@@ -38,56 +38,59 @@ EigeneSchule;Bezeichnung1;;;9;varchar;50;;0;;;1. Text für die Bezeichnung der S
 EigeneSchule;Bezeichnung2;;;10;varchar;50;;0;;;2. Text für die Bezeichnung der Schule
 EigeneSchule;Bezeichnung3;;;11;varchar;50;;0;;;3. Text für die Bezeichnung der Schule
 EigeneSchule;Strasse;;;12;varchar;55;;0;;;Straße der eigenen Schule
-EigeneSchule;PLZ;;;13;varchar;10;;0;;;PLZ der eigenen Schule
-EigeneSchule;Ort;;;14;varchar;50;;0;;;Ortsangabe der eigenen Schule
-EigeneSchule;Telefon;;;15;varchar;20;;0;;;Telefonnummer der eigenen Schule
-EigeneSchule;Fax;;;16;varchar;20;;0;;;Faxnummer der eigenen Schule
-EigeneSchule;Email;;;17;varchar;100;;0;;;Email-Adresse der eigenen Schule
-EigeneSchule;Ganztags;;;18;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Gibt an, ob die Schule Ganztagsbetrieb hat
-EigeneSchule;Schuljahr;;;19;int;;;0;;;Aktuelle Schuljahr der Datenbank
-EigeneSchule;SchuljahrAbschnitt;;;20;int;;;0;;;Aktueller Abschnitt der Datenbank
-EigeneSchule;AnzahlAbschnitte;;;21;int;;2;0;;;Anzahl der verfügbaren Abschnitte (meist Halbjahre oder Quartale)
-EigeneSchule;Fremdsprachen;;;22;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Welche Fremdsprachen werden unterrichtet
-EigeneSchule;JVAZeigen;;;23;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Schule unterrichtet in der Justizvollzugsanstalt
-EigeneSchule;RefPaedagogikZeigen;;;24;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Schule hat Reformpädagogischen-Zweig
-EigeneSchule;AnzJGS_Jahr;;;25;smallint;;1;0;;;Anzahl der Jahrgangstufen pro Schuljahr (Semesterbetrieb WBK)
-EigeneSchule;AbschnittBez;;;26;varchar;20;Halbjahr;0;;;Bezeichnung der Abschnitte
-EigeneSchule;BezAbschnitt1;;;27;varchar;10;1. Hj;0;;;Bezeichnung des ersten Abschnitts
-EigeneSchule;BezAbschnitt2;;;28;varchar;10;2. Hj;0;;;Bezeichnung des zweiten Abschnitts
-EigeneSchule;IstHauptsitz;;;29;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Gibt an, ob die Datenbank am Hauptsitzder Schule ist (Dependancebetrieb)
-EigeneSchule;NotenGesperrt;;;30;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Sperrt die Noteneingabe
-EigeneSchule;BezAbschnitt3;;;31;varchar;10;;0;;;Bezeichnung des dritten Abschnitts
-EigeneSchule;BezAbschnitt4;;;32;varchar;10;;0;;;Bezeichnung des vierten Abschnitts
-EigeneSchule;ZurueckgestelltAnzahl;;;33;int;;;0;;;Anzahl de Zurückgestellten Kinder in der Grundschule
-EigeneSchule;ZurueckgestelltWeibl;;;34;int;;;0;;;Anzahl de Zurückgestellten weiblichen Kinder in der Grundschule
-EigeneSchule;ZurueckgestelltAuslaender;;;35;int;;;0;;;Anzahl de Zurückgestellten ausländischen Kinder in der Grundschule
-EigeneSchule;ZurueckgestelltAuslaenderWeibl;;;36;int;;;0;;;Anzahl de Zurückgestellten ausländischen weiblichen Kinder in der Grundschule
-EigeneSchule;ZurueckgestelltAussiedler;;;37;int;;;0;;;DEPRECATED: Anzahl de Zurückgestellten ausgesiedelten Kinder in der Grundschule
-EigeneSchule;ZurueckgestelltAussiedlerWeibl;;;38;int;;;0;;;DEPRECATED: Anzahl de Zurückgestellten ausgesiedelten weiblichen Kinder in der Grundschule
-EigeneSchule;TeamTeaching;;;39;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Aktiviert das Teamteaching
-EigeneSchule;AbiGruppenprozess;;;40;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Sperrt oder erlaubt die Gruppenprozesse für das Abitur
-EigeneSchule;DauerUnterrichtseinheit;;;41;int;;;0;;;Dauer der Unterrichtseinheit (bei NULL = 45 Minuten)
-EigeneSchule;Gruppen8Bis1;;;42;int;;;0;;;Schule hat Betreuung 8 bis 13
-EigeneSchule;Gruppen13Plus;;;43;int;;;0;;;Gruppen in der 13Plus-Betreuung
-EigeneSchule;InternatsplaetzeM;;;44;int;;;0;;;Internatsplätze männlilch
-EigeneSchule;InternatsplaetzeW;;;45;int;;;0;;;Internatsplätze weiblich
-EigeneSchule;InternatsplaetzeNeutral;;;46;int;;;0;;;Internatsplätze divers ohne Angabe
-EigeneSchule;SchulLogo;;;47;longblob;;;0;;;Schullogo als Bild im Binärformat
-EigeneSchule;SchulLogoBase64;;;48;text;;;0;;;Schullogo als Bild im Base64-Format
-EigeneSchule;SchulNrEigner;;;49;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
-EigeneSchule;SchulleiterName;;;50;varchar;120;;0;;;Nachname der Schulleitung
-EigeneSchule;SchulleiterVorname;;;51;varchar;80;;0;;;Vorname der Schulleitung
-EigeneSchule;SchulleiterAmtsbez;;;52;varchar;30;;0;;;Amtsbezeichnung der Schulleitung
-EigeneSchule;SchulleiterGeschlecht;;;53;int;;;0;;GeschlechtConverter;Geschlecht der Schulleitung
-EigeneSchule;StvSchulleiterName;;;54;varchar;120;;0;;;Name der stellvertretenden Schulleitung
-EigeneSchule;StvSchulleiterVorname;;;55;varchar;80;;0;;;Vorname der stellvertretenden Schulleitung
-EigeneSchule;StvSchulleiterAmtsbez;;;56;varchar;30;;0;;;Amtsbezeichnung der stellvertretenden Schulleitung
-EigeneSchule;StvSchulleiterGeschlecht;;;57;int;;;0;;GeschlechtConverter;Geschlecht der stellvertretenden Schulleitung
-EigeneSchule;Einstellungen;;;58;text;;;0;;EigeneSchuleEinstellungenConverter;DEPRECATED: Einstellungen der Schule im INI-Format kann in einem Texteditor gelesen werden. Soll in eigene Tabelle ausgelagert werden.
-EigeneSchule;WebAdresse;;;59;varchar;100;;0;;;Enthält die Homepage-Adresse URL der Schule
-EigeneSchule;Land;;;60;varchar;50;;0;;;Land der Schule ??? Wird wahrscheinlich für Bundeswehr verwendet?
-EigeneSchule;SchulleiterTitel;;;61;varchar;10;;0;;;Titel der Schulleitung
-EigeneSchule;StvSchulleiterTitel;;;62;varchar;10;;0;;;Titel der stellvertretenden Schulleitung
+EigeneSchule;Strassenname;;;13;varchar;55;;0;;;Straßenname der Schule
+EigeneSchule;HausNr;;;14;varchar;10;;0;;;Hausnummer wenn getrennt gespeichert
+EigeneSchule;HausNrZusatz;;;15;varchar;30;;0;;;Hausnummerzusatz wenn getrennt gespeichert
+EigeneSchule;PLZ;;;16;varchar;10;;0;;;PLZ der eigenen Schule
+EigeneSchule;Ort;;;17;varchar;50;;0;;;Ortsangabe der eigenen Schule
+EigeneSchule;Telefon;;;18;varchar;20;;0;;;Telefonnummer der eigenen Schule
+EigeneSchule;Fax;;;19;varchar;20;;0;;;Faxnummer der eigenen Schule
+EigeneSchule;Email;;;20;varchar;100;;0;;;Email-Adresse der eigenen Schule
+EigeneSchule;Ganztags;;;21;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Gibt an, ob die Schule Ganztagsbetrieb hat
+EigeneSchule;Schuljahr;;;22;int;;;0;;;Aktuelle Schuljahr der Datenbank
+EigeneSchule;SchuljahrAbschnitt;;;23;int;;;0;;;Aktueller Abschnitt der Datenbank
+EigeneSchule;AnzahlAbschnitte;;;24;int;;2;0;;;Anzahl der verfügbaren Abschnitte (meist Halbjahre oder Quartale)
+EigeneSchule;Fremdsprachen;;;25;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Welche Fremdsprachen werden unterrichtet
+EigeneSchule;JVAZeigen;;;26;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Schule unterrichtet in der Justizvollzugsanstalt
+EigeneSchule;RefPaedagogikZeigen;;;27;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Schule hat Reformpädagogischen-Zweig
+EigeneSchule;AnzJGS_Jahr;;;28;smallint;;1;0;;;Anzahl der Jahrgangstufen pro Schuljahr (Semesterbetrieb WBK)
+EigeneSchule;AbschnittBez;;;29;varchar;20;Halbjahr;0;;;Bezeichnung der Abschnitte
+EigeneSchule;BezAbschnitt1;;;30;varchar;10;1. Hj;0;;;Bezeichnung des ersten Abschnitts
+EigeneSchule;BezAbschnitt2;;;31;varchar;10;2. Hj;0;;;Bezeichnung des zweiten Abschnitts
+EigeneSchule;IstHauptsitz;;;32;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Gibt an, ob die Datenbank am Hauptsitzder Schule ist (Dependancebetrieb)
+EigeneSchule;NotenGesperrt;;;33;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Sperrt die Noteneingabe
+EigeneSchule;BezAbschnitt3;;;34;varchar;10;;0;;;Bezeichnung des dritten Abschnitts
+EigeneSchule;BezAbschnitt4;;;35;varchar;10;;0;;;Bezeichnung des vierten Abschnitts
+EigeneSchule;ZurueckgestelltAnzahl;;;36;int;;;0;;;Anzahl de Zurückgestellten Kinder in der Grundschule
+EigeneSchule;ZurueckgestelltWeibl;;;37;int;;;0;;;Anzahl de Zurückgestellten weiblichen Kinder in der Grundschule
+EigeneSchule;ZurueckgestelltAuslaender;;;38;int;;;0;;;Anzahl de Zurückgestellten ausländischen Kinder in der Grundschule
+EigeneSchule;ZurueckgestelltAuslaenderWeibl;;;39;int;;;0;;;Anzahl de Zurückgestellten ausländischen weiblichen Kinder in der Grundschule
+EigeneSchule;ZurueckgestelltAussiedler;;;40;int;;;0;;;DEPRECATED: Anzahl de Zurückgestellten ausgesiedelten Kinder in der Grundschule
+EigeneSchule;ZurueckgestelltAussiedlerWeibl;;;41;int;;;0;;;DEPRECATED: Anzahl de Zurückgestellten ausgesiedelten weiblichen Kinder in der Grundschule
+EigeneSchule;TeamTeaching;;;42;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Aktiviert das Teamteaching
+EigeneSchule;AbiGruppenprozess;;;43;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Sperrt oder erlaubt die Gruppenprozesse für das Abitur
+EigeneSchule;DauerUnterrichtseinheit;;;44;int;;;0;;;Dauer der Unterrichtseinheit (bei NULL = 45 Minuten)
+EigeneSchule;Gruppen8Bis1;;;45;int;;;0;;;Schule hat Betreuung 8 bis 13
+EigeneSchule;Gruppen13Plus;;;46;int;;;0;;;Gruppen in der 13Plus-Betreuung
+EigeneSchule;InternatsplaetzeM;;;47;int;;;0;;;Internatsplätze männlilch
+EigeneSchule;InternatsplaetzeW;;;48;int;;;0;;;Internatsplätze weiblich
+EigeneSchule;InternatsplaetzeNeutral;;;49;int;;;0;;;Internatsplätze divers ohne Angabe
+EigeneSchule;SchulLogo;;;50;longblob;;;0;;;Schullogo als Bild im Binärformat
+EigeneSchule;SchulLogoBase64;;;51;text;;;0;;;Schullogo als Bild im Base64-Format
+EigeneSchule;SchulNrEigner;;;52;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
+EigeneSchule;SchulleiterName;;;53;varchar;120;;0;;;Nachname der Schulleitung
+EigeneSchule;SchulleiterVorname;;;54;varchar;80;;0;;;Vorname der Schulleitung
+EigeneSchule;SchulleiterAmtsbez;;;55;varchar;30;;0;;;Amtsbezeichnung der Schulleitung
+EigeneSchule;SchulleiterGeschlecht;;;56;int;;;0;;GeschlechtConverter;Geschlecht der Schulleitung
+EigeneSchule;StvSchulleiterName;;;57;varchar;120;;0;;;Name der stellvertretenden Schulleitung
+EigeneSchule;StvSchulleiterVorname;;;58;varchar;80;;0;;;Vorname der stellvertretenden Schulleitung
+EigeneSchule;StvSchulleiterAmtsbez;;;59;varchar;30;;0;;;Amtsbezeichnung der stellvertretenden Schulleitung
+EigeneSchule;StvSchulleiterGeschlecht;;;60;int;;;0;;GeschlechtConverter;Geschlecht der stellvertretenden Schulleitung
+EigeneSchule;Einstellungen;;;61;text;;;0;;EigeneSchuleEinstellungenConverter;DEPRECATED: Einstellungen der Schule im INI-Format kann in einem Texteditor gelesen werden. Soll in eigene Tabelle ausgelagert werden.
+EigeneSchule;WebAdresse;;;62;varchar;100;;0;;;Enthält die Homepage-Adresse URL der Schule
+EigeneSchule;Land;;;63;varchar;50;;0;;;Land der Schule ??? Wird wahrscheinlich für Bundeswehr verwendet?
+EigeneSchule;SchulleiterTitel;;;64;varchar;10;;0;;;Titel der Schulleitung
+EigeneSchule;StvSchulleiterTitel;;;65;varchar;10;;0;;;Titel der stellvertretenden Schulleitung
 EigeneSchule_Abt_Kl;ID;;;1;bigint;;;1;;;ID der Klassenzugehörigkeit zu einer Abteilung
 EigeneSchule_Abt_Kl;Abteilung_ID;;;2;bigint;;;1;;;ID der Abteilung in der übergeordneten Tabelle
 EigeneSchule_Abt_Kl;Klasse;;;3;varchar;15;;1;;;Klasse die zur Abteilung gehört
@@ -218,9 +221,11 @@ EigeneSchule_Teilstandorte;AdrMerkmal;;;2;varchar;1;;1;;;Adressmerkmal des Teils
 EigeneSchule_Teilstandorte;PLZ;;;3;varchar;10;;0;;;Postleitzahl des Teilstandortes
 EigeneSchule_Teilstandorte;Ort;;;4;varchar;50;;0;;;Ort des Teilstandortes
 EigeneSchule_Teilstandorte;Strasse;;;5;varchar;55;;0;;;Straße des Teilstandortes
-EigeneSchule_Teilstandorte;HausNr;;;6;varchar;10;;0;;;Hausnummer des Teilstandortes
-EigeneSchule_Teilstandorte;Bemerkung;;;7;varchar;50;;0;;;Bemerkung zum Teilstandort (Text)
-EigeneSchule_Teilstandorte;Kuerzel;;;8;varchar;30;;0;;;Kürzel des Teilstandortes
+EigeneSchule_Teilstandorte;Strassenname;;;6;varchar;55;;0;;;Straßenname des Teilstandortes
+EigeneSchule_Teilstandorte;HausNr;;;7;varchar;10;;0;;;Hausnummer des Teilstandortes
+EigeneSchule_Teilstandorte;HausNrZusatz;;;8;varchar;30;;0;;;Hausnummerzusatz des Teilstandortes
+EigeneSchule_Teilstandorte;Bemerkung;;;9;varchar;50;;0;;;Bemerkung zum Teilstandort (Text)
+EigeneSchule_Teilstandorte;Kuerzel;;;10;varchar;30;;0;;;Kürzel des Teilstandortes
 EigeneSchule_Texte;ID;;;1;bigint;;;1;;;ID des Textes unter Schulverwaltung Eigene Schule bearbeiten
 EigeneSchule_Texte;SchulNrEigner;;;2;int;;;1;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
 EigeneSchule_Texte;Kuerzel;;;3;varchar;50;;0;;;Kürzel des Schultextes
@@ -256,9 +261,6 @@ Fach_Gliederungen;ZeugnisBez;;;10;varchar;130;;0;;;Zeugnisbezeihnung für die gl
 Fach_Gliederungen;Lernfelder;;;11;text;;;0;;;Lernfelder für die gliederungsbezogenen Einstellungen zum Fach (BK)
 Fach_Gliederungen;Fachklasse_ID;;;12;bigint;;0;1;;;Fachklassen ID für die gliederungsbezogenen Einstellungen zum Fach (BK)
 Fach_Gliederungen;Sortierung;;;13;int;;32000;0;;;Sortierung dfür die gliederungsbezogenen Einstellungen zum Fach (BK)
-Fachklassen_Schwerpunkte;SchulNrEigner;;;1;int;;;1;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
-Fachklassen_Schwerpunkte;Fachklasse_ID;;;2;bigint;;;1;;;FachklassenID für den Schwerpunkt (BK)
-Fachklassen_Schwerpunkte;Schwerpunkt_ID;;;3;bigint;;;1;;;ID des Schwerpunktes
 Floskelgruppen;Kuerzel;;;1;varchar;10;;1;;;Kürzel der Floskelgruppe
 Floskelgruppen;Hauptgruppe;;;2;varchar;4;;0;;;Hauptgruppe der Floskelgruppe ermöglich es Floskel Unterkategorien zuzuordnen
 Floskelgruppen;Bezeichnung;;;3;varchar;50;;1;;;Bezeichnung der Floskelgruppe
@@ -290,10 +292,12 @@ Gost_Jahrgang_Faecher;SchiftlichkeitEF1;;;14;varchar;1;;0;;;Gymnasiale Oberstufe
 Gost_Jahrgang_Faecher;SchiftlichkeitEF2;;;15;varchar;1;;0;;;Gymnasiale Oberstufe - Jahrgangsdaten: Mündlich oder Schriftlich dei dem Fach in der EF2
 Gost_Jahrgang_Faecher;NurMuendlich;;;17;int;;0;1;;Boolean01Converter;Gymnasiale Oberstufe - Jahrgangsdaten: Gibt an, ob das Fach nur mündlich belegt werden kann: 1 - true, 0 - false
 Gost_Jahrgangsdaten;Abi_Jahrgang;;;1;int;;;1;;;Gymnasiale Oberstufe - Jahrgangsdaten: Schuljahr, in welchem der Jahrgang das Abitur macht
-Gost_Jahrgangsdaten;ZusatzkursGEErstesHalbjahr;;;2;varchar;4;Q2.1;0;;;Gymnasiale Oberstufe - Jahrgangsdaten: Halbjahr, in welchem ein Zusatzkurs in Geschichte beginnt (z.B. Q2.1)
-Gost_Jahrgangsdaten;ZusatzkursSWErstesHalbjahr;;;3;varchar;4;Q2.1;0;;;Gymnasiale Oberstufe - Jahrgangsdaten: Halbjahr, in welchem ein Zusatzkurs in Sozialwissenschaften beginnt (z.B. Q2.1)
-Gost_Jahrgangsdaten;TextBeratungsbogen;;;4;varchar;2000;;0;;;Gymnasiale Oberstufe - Jahrgangsdaten: Text, welcher auf dem Ausdruck eines Beratungsbogens gedruckt wird
-Gost_Jahrgangsdaten;TextMailversand;;;5;varchar;2000;;0;;;Gymnasiale Oberstufe - Jahrgangsdaten: Text, welcher in einer Mail beim Versenden von Beratungsdateien verwendet wird
+Gost_Jahrgangsdaten;ZusatzkursGEVorhanden;;;2;int;;1;0;;Boolean01Converter;Gymnasiale Oberstufe - Jahrgangsdaten: Legt fest, ob ein Zusatzkurs in Geschichte angeboten wird
+Gost_Jahrgangsdaten;ZusatzkursGEErstesHalbjahr;;;3;varchar;4;Q2.1;0;;;Gymnasiale Oberstufe - Jahrgangsdaten: Halbjahr, in welchem ein Zusatzkurs in Geschichte beginnt (z.B. Q2.1)
+Gost_Jahrgangsdaten;ZusatzkursSWVorhanden;;;4;int;;1;0;;Boolean01Converter;Gymnasiale Oberstufe - Jahrgangsdaten: Legt fest, ob ein Zusatzkurs in Sozialwissenschaften angeboten wird
+Gost_Jahrgangsdaten;ZusatzkursSWErstesHalbjahr;;;5;varchar;4;Q2.1;0;;;Gymnasiale Oberstufe - Jahrgangsdaten: Halbjahr, in welchem ein Zusatzkurs in Sozialwissenschaften beginnt (z.B. Q2.1)
+Gost_Jahrgangsdaten;TextBeratungsbogen;;;6;varchar;2000;;0;;;Gymnasiale Oberstufe - Jahrgangsdaten: Text, welcher auf dem Ausdruck eines Beratungsbogens gedruckt wird
+Gost_Jahrgangsdaten;TextMailversand;;;7;varchar;2000;;0;;;Gymnasiale Oberstufe - Jahrgangsdaten: Text, welcher in einer Mail beim Versenden von Beratungsdateien verwendet wird
 Gost_Jahrgang_Fachkombinationen;Abi_Jahrgang;;;1;int;;;1;;;Gymnasiale Oberstufe - Jahrgangsdaten: Schuljahr, in welchem der Jahrgang das Abitur macht
 Gost_Jahrgang_Fachkombinationen;ID;;;2;varchar;30;;1;;;Gymnasiale Oberstufe - Jahrgangsdaten: ID des Datensatzes der nicht möglichen Fächerkombination
 Gost_Jahrgang_Fachkombinationen;Fach1_ID;;;3;bigint;;;1;;;Gymnasiale Oberstufe - Jahrgangsdaten: Die ID des ersten Faches der nicht möglichen Fächerkombination / eines Fächerprofils
@@ -392,27 +396,30 @@ K_AllgAdresse;AllgAdrAdressArt;;;2;varchar;30;;0;adressArt;;Adressart des Betrie
 K_AllgAdresse;AllgAdrName1;;;3;varchar;50;;0;name1;;Name1 des Betriebs
 K_AllgAdresse;AllgAdrName2;;;4;varchar;50;;0;name2;;Name2 des Betriebs
 K_AllgAdresse;AllgAdrStrasse;;;5;varchar;55;;0;strasse;;Straße des Betriebs
-K_AllgAdresse;AllgAdrOrt_ID;;;6;bigint;;;0;ort_id;;OrtID des Betriebs
-K_AllgAdresse;AllgAdrPLZ;;;7;varchar;10;;0;plz;;PLZ des Betriebs
-K_AllgAdresse;AllgAdrTelefon1;;;8;varchar;20;;0;telefon1;;Telefonnummer1 des Betriebs
-K_AllgAdresse;AllgAdrTelefon2;;;9;varchar;20;;0;telefon2;;Telefonnummer2 des Betriebs
-K_AllgAdresse;AllgAdrFax;;;10;varchar;20;;0;fax;;Faxnummer des Betriebs
-K_AllgAdresse;AllgAdrEmail;;;11;varchar;100;;0;email;;E-MailAdresse des Betriebes
-K_AllgAdresse;AllgAdrBemerkungen;;;12;varchar;255;;0;bemerkungen;;Bermeung zum Betrieb
-K_AllgAdresse;Sortierung;;;13;int;;32000;0;sortierung;;Sortierung des Betriebsdatensatz
-K_AllgAdresse;AllgAdrAusbildungsBetrieb;;;14;varchar;1;-;0;ausbildungsbetrieb;BooleanPlusMinusDefaultMinusConverter;Gibt an ob der Betrieb ausbildet Ja Nein
-K_AllgAdresse;AllgAdrBietetPraktika;;;15;varchar;1;-;0;bietetPraktika;BooleanPlusMinusDefaultMinusConverter;Gibt an ob der Betrieb Praktikumsplätze bietet Ja Nein
-K_AllgAdresse;AllgAdrBranche;;;16;varchar;50;;0;branche;;Brache des Betriebs
-K_AllgAdresse;AllgAdrZusatz1;;;17;varchar;10;;0;zusatz1;;Adresszusatz zum Betrieb
-K_AllgAdresse;AllgAdrZusatz2;;;18;varchar;10;;0;zusatz2;;Adresszusatz2 zum Betrieb
-K_AllgAdresse;Sichtbar;;;19;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Sichtbarkeit des Datensatzes
-K_AllgAdresse;Aenderbar;;;20;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Datensatz ist änderbar Ja Nein
-K_AllgAdresse;SchulNrEigner;;;21;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
-K_AllgAdresse;Massnahmentraeger;;;22;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Bezeichnung des Maßnahmenträgers
-K_AllgAdresse;BelehrungISG;;;23;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Belehrung nach Infektionsschutzgesetz notwendig Ja Nein
-K_AllgAdresse;GU_ID;;;24;varchar;40;;0;;;GU_ID des Betriebsdatensatzes (für Import zur Erkennung)
-K_AllgAdresse;ErwFuehrungszeugnis;;;25;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Wird für diesen Betrieb ein Erweitertes Führungszeugnis benötigt?
-K_AllgAdresse;ExtID;;;26;varchar;50;;0;;;Externe ID des Betriebsdatensatzes
+K_AllgAdresse;AllgAdrStrassenname;;;6;varchar;55;;0;strassenname;;Straßenname des Betriebsdatensatz
+K_AllgAdresse;AllgAdrHausNr;;;7;varchar;10;;0;hausnr;;Hausnummer wenn getrennt gespeichert
+K_AllgAdresse;AllgAdrHausNrZusatz;;;8;varchar;30;;0;hausnrzusatz;;Zusatz zur Hausnummer wenn Hausnummern getrennt gespeichert werden
+K_AllgAdresse;AllgAdrOrt_ID;;;9;bigint;;;0;ort_id;;OrtID des Betriebs
+K_AllgAdresse;AllgAdrPLZ;;;10;varchar;10;;0;plz;;PLZ des Betriebs
+K_AllgAdresse;AllgAdrTelefon1;;;11;varchar;20;;0;telefon1;;Telefonnummer1 des Betriebs
+K_AllgAdresse;AllgAdrTelefon2;;;12;varchar;20;;0;telefon2;;Telefonnummer2 des Betriebs
+K_AllgAdresse;AllgAdrFax;;;13;varchar;20;;0;fax;;Faxnummer des Betriebs
+K_AllgAdresse;AllgAdrEmail;;;14;varchar;100;;0;email;;E-MailAdresse des Betriebes
+K_AllgAdresse;AllgAdrBemerkungen;;;15;varchar;255;;0;bemerkungen;;Bermeung zum Betrieb
+K_AllgAdresse;Sortierung;;;16;int;;32000;0;sortierung;;Sortierung des Betriebsdatensatz
+K_AllgAdresse;AllgAdrAusbildungsBetrieb;;;17;varchar;1;-;0;ausbildungsbetrieb;BooleanPlusMinusDefaultMinusConverter;Gibt an ob der Betrieb ausbildet Ja Nein
+K_AllgAdresse;AllgAdrBietetPraktika;;;18;varchar;1;-;0;bietetPraktika;BooleanPlusMinusDefaultMinusConverter;Gibt an ob der Betrieb Praktikumsplätze bietet Ja Nein
+K_AllgAdresse;AllgAdrBranche;;;19;varchar;50;;0;branche;;Brache des Betriebs
+K_AllgAdresse;AllgAdrZusatz1;;;20;varchar;10;;0;zusatz1;;Adresszusatz zum Betrieb
+K_AllgAdresse;AllgAdrZusatz2;;;21;varchar;10;;0;zusatz2;;Adresszusatz2 zum Betrieb
+K_AllgAdresse;Sichtbar;;;22;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Sichtbarkeit des Datensatzes
+K_AllgAdresse;Aenderbar;;;23;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Datensatz ist änderbar Ja Nein
+K_AllgAdresse;SchulNrEigner;;;24;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
+K_AllgAdresse;Massnahmentraeger;;;25;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Bezeichnung des Maßnahmenträgers
+K_AllgAdresse;BelehrungISG;;;26;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Belehrung nach Infektionsschutzgesetz notwendig Ja Nein
+K_AllgAdresse;GU_ID;;;27;varchar;40;;0;;;GU_ID des Betriebsdatensatzes (für Import zur Erkennung)
+K_AllgAdresse;ErwFuehrungszeugnis;;;28;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Wird für diesen Betrieb ein Erweitertes Führungszeugnis benötigt?
+K_AllgAdresse;ExtID;;;29;varchar;50;;0;;;Externe ID des Betriebsdatensatzes
 K_Ankreuzdaten;ID;;;1;bigint;;;1;;;ID des Datensatzes für die Angaben zu den Ankreuzkompetenzen
 K_Ankreuzdaten;SchulNrEigner;;;2;int;;;1;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
 K_Ankreuzdaten;TextStufe1;;;3;varchar;100;;0;;;Bezeichnung Stufe 1
@@ -423,15 +430,16 @@ K_Ankreuzdaten;TextStufe5;;;7;varchar;100;;0;;;Bezeichnung Stufe 5
 K_Ankreuzdaten;BezeichnungSONST;;;8;varchar;100;;0;;;Bezeichnung Zusatzstufe
 K_Ankreuzfloskeln;ID;;;1;bigint;;;1;;;ID der Ankreuzfloskel
 K_Ankreuzfloskeln;SchulNrEigner;;;2;int;;;1;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
-K_Ankreuzfloskeln;Fach_ID;;;3;bigint;;;1;;;FachID zu der die Ankreuzfloskel gehört
-K_Ankreuzfloskeln;Jahrgang;;;4;varchar;2;;1;;;Jahrgang zu der die Ankreuzfloskel gehört
-K_Ankreuzfloskeln;Gliederung;;;5;varchar;3;;0;;;Schulgliederung zu der die Ankreuzkompetenz gehört (nur wichtig bei BK)
-K_Ankreuzfloskeln;FloskelText;;;6;varchar;255;;1;;;Text der Ankreuzfloskel
-K_Ankreuzfloskeln;Sortierung;;;7;int;;;0;;;Sortierung der Ankreuzfloskel
-K_Ankreuzfloskeln;FachSortierung;;;8;int;;;0;;;Sortierung des Faches der Ankreuzfloskel
-K_Ankreuzfloskeln;Abschnitt;;;9;int;;;0;;;Wird in welchen Abschnitten verwendet 1Hj 2HJ beide
-K_Ankreuzfloskeln;Sichtbar;;;10;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Sichtbarkeit der Ankreuzfloskel
-K_Ankreuzfloskeln;Aktiv;;;11;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Gibt an ob die Ankreuzfloskel aktiv ist
+K_Ankreuzfloskeln;Fach_ID;;;3;bigint;;;0;;;FachID zu der die Ankreuzfloskel gehört, null für individuelle Ankreuzfloskeln bzw. siehe Spalte IstASV
+K_Ankreuzfloskeln;IstASV;;;4;int;;0;1;;;Gibt an, falls die Fach_ID null ist, ob es sich bei der Ankreuzfloskel um eine Floskel zum Arbeits- und Sozialverhalten handelt (1) oder nicht (0).
+K_Ankreuzfloskeln;Jahrgang;;;5;varchar;2;;1;;;Jahrgang zu der die Ankreuzfloskel gehört
+K_Ankreuzfloskeln;Gliederung;;;6;varchar;3;;0;;;Schulgliederung zu der die Ankreuzkompetenz gehört (nur wichtig bei BK)
+K_Ankreuzfloskeln;FloskelText;;;7;varchar;255;;1;;;Text der Ankreuzfloskel
+K_Ankreuzfloskeln;Sortierung;;;8;int;;;0;;;Sortierung der Ankreuzfloskel
+K_Ankreuzfloskeln;FachSortierung;;;9;int;;;0;;;Sortierung des Faches der Ankreuzfloskel
+K_Ankreuzfloskeln;Abschnitt;;;10;int;;;0;;;Wird in welchen Abschnitten verwendet 1Hj 2HJ beide
+K_Ankreuzfloskeln;Sichtbar;;;11;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Sichtbarkeit der Ankreuzfloskel
+K_Ankreuzfloskeln;Aktiv;;;12;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Gibt an ob die Ankreuzfloskel aktiv ist
 K_BeschaeftigungsArt;ID;;;1;bigint;;;1;;;ID der Beschäftigungsart unter weitere Adressen
 K_BeschaeftigungsArt;Bezeichnung;;;2;varchar;100;;0;;;Bezeichnung der Beschäftigungsart
 K_BeschaeftigungsArt;Sortierung;;;3;int;;32000;0;;;Sortierung der Beschäftigungsart
@@ -497,16 +505,19 @@ K_Haltestelle;Aenderbar;;;5;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;
 K_Haltestelle;EntfernungSchule;;;6;float;;;0;;;Enterfung zur Schule von der Haltestelle
 K_Haltestelle;SchulNrEigner;;;7;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
 K_Kindergarten;ID;;;1;bigint;;;1;;;ID des Kindergartens
-K_Kindergarten;Bezeichnung;;;2;varchar;50;;0;;;Bezeichnung des Kindergartens
+K_Kindergarten;Bezeichnung;;;2;varchar;100;;0;;;Bezeichnung des Kindergartens
 K_Kindergarten;PLZ;;;3;varchar;10;;0;;;PLZ  des Kindergartens
 K_Kindergarten;Ort;;;4;varchar;30;;0;;;Ort des Kindergartens
 K_Kindergarten;Strasse;;;5;varchar;55;;0;;;Straße des Kindergartens
-K_Kindergarten;Tel;;;6;varchar;20;;0;;;Telefonnummer des Kindergartens
-K_Kindergarten;Email;;;7;varchar;40;;0;;;E-Mail-Adresse des Kindergartens
-K_Kindergarten;Bemerkung;;;8;varchar;50;;0;;;Bemerkung zum Kindergarten
-K_Kindergarten;Sichtbar;;;9;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Sichbarkeit des Kindergartens
-K_Kindergarten;Sortierung;;;10;int;;;0;;;Sortierung des Kindergartens
-K_Kindergarten;SchulNrEigner;;;11;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
+K_Kindergarten;Strassenname;;;6;varchar;55;;0;;;Strassenname des Kindergartens
+K_Kindergarten;HausNr;;;7;varchar;10;;0;;;Hausnummer des Kindergarten
+K_Kindergarten;HausNrZusatz;;;8;varchar;30;;0;;;Hausnumemrzusatz des Kindergartens
+K_Kindergarten;Tel;;;9;varchar;20;;0;;;Telefonnummer des Kindergartens
+K_Kindergarten;Email;;;10;varchar;40;;0;;;E-Mail-Adresse des Kindergartens
+K_Kindergarten;Bemerkung;;;11;varchar;50;;0;;;Bemerkung zum Kindergarten
+K_Kindergarten;Sichtbar;;;12;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Sichbarkeit des Kindergartens
+K_Kindergarten;Sortierung;;;13;int;;;0;;;Sortierung des Kindergartens
+K_Kindergarten;SchulNrEigner;;;14;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
 K_Lehrer;ID;;;1;bigint;;;1;;;Eindeutige ID zur Kennzeichnung des Lehrer-Datensatzes
 K_Lehrer;GU_ID;;;2;varchar;40;;0;;;Eindeutige ID Datenbank übergreifend. Wurde früher mal für Logineo genutzt, kann später mal zur Identifizierung genutzt werden.
 K_Lehrer;Kuerzel;;;3;varchar;10;;1;;;Lehrer-Kürzel für eine lesbare eindeutige Identifikation des Lehrers
@@ -521,53 +532,56 @@ K_Lehrer;Aenderbar;;;11;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Gibt
 K_Lehrer;FuerExport;;;12;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Gibt an, ob der Lehrer-Datensatz für den Export in andere Software verwendet werden soll - TODO fuer welche(n) Zweck(e) wird dies gespeichert - gehört dies an diese Stelle? 
 K_Lehrer;Statistik;;;13;varchar;1;+;0;statistikRelevant;BooleanPlusMinusDefaultPlusConverter;Gibt an, ob der Lehrer-Datensatz bei der Statistik berücksichtigt werden soll.
 K_Lehrer;Strasse;;;14;varchar;55;;0;;;Adressdaten des Lehrers: Strasse
-K_Lehrer;Ort_ID;;;15;bigint;;;0;;;Adressdaten des Lehrers: Fremdschlüssel auf die Katalog-Tabelle mit den Orten
-K_Lehrer;PLZ;;;16;varchar;10;;0;;;Adressdaten des Lehrers: Postleitzahl - TODO Ort als Spalte in der Tabelle ergänzen, ähnlich wie bei Schüler, wichtig da ansonsten Probleme auftauchen, wenn ein PLZ ? Ortsname nicht eindeutig ist, was gelegentlich vorkommt
-K_Lehrer;Ortsteil_ID;;;17;bigint;;;0;;;Adressdaten des Lehrers: Fremdschlüssel auf die Katalog-Tabelle mit den Ortsteilen
-K_Lehrer;Tel;;;18;varchar;20;;0;telefon;;Adressdaten des Lehrers: Telefonnummer
-K_Lehrer;Handy;;;19;varchar;20;;0;telefonMobil;;Adressdaten des Lehrers: Mobilnummer oder Faxnummer
-K_Lehrer;Email;;;20;varchar;100;;0;eMailPrivat;;Adressdaten des Lehrers: Private Email-Adresse
-K_Lehrer;EmailDienstlich;;;21;varchar;100;;0;eMailDienstlich;;Adressdaten des Lehrers: Dienstliche Email-Adresse
-K_Lehrer;StaatKrz;;;22;varchar;3;;0;staatsangehoerigkeit;;Die erste Staatsangehörigkeit des Lehrers
-K_Lehrer;Geburtsdatum;;;23;date;;;0;;DatumConverter;Das Geburtsdatum des Lehrers
-K_Lehrer;Geschlecht;;;24;varchar;1;;0;;GeschlechtConverterFromString;Das Geschlecht des Lehrers - TODO ist in der Datenbank als String und nicht als Integer (3/4) hinterlegt, dies sollte in allen Tabellen einheitlich sein
-K_Lehrer;Anrede;;;25;varchar;10;;0;;;Die Anrede für den Lehrer
-K_Lehrer;Amtsbezeichnung;;;26;varchar;15;;0;;;Die Amtsbezeichnung des Lehrers
-K_Lehrer;Titel;;;27;varchar;20;;0;;;Ggf. der Titel des Lehrers
-K_Lehrer;Faecher;;;28;varchar;100;;0;;;Die Fächer, die der Lehrer unterrichtet - TODO hat dieses Feld noch einen Zweck? Fächer sind dem Lehrer eigentlich anders zugeordnet...  
-K_Lehrer;IdentNr1;;;29;varchar;10;;0;identNrTeil1;;Der vordere Teil der NRW-weit eindeutigen Ident-Nummer - setzt sich normalerweise aus Geburtsdatum und Geschlecht (3/4) zusammen, kann in Einzelfällen aber von diesem Schema abweichen
-K_Lehrer;SerNr;;;30;varchar;5;;0;identNrTeil2SerNr;;Der hintere Teil der Ident-Nummer – wird üblicherweise NRW-weit fortlaufend vergeben
-K_Lehrer;PANr;;;31;varchar;20;;0;;;Personalakten-Nummer (wird von den Bezirksregierungen ggf genutzt)
-K_Lehrer;LBVNr;;;32;varchar;15;;0;personalNrLBV;;Die Personalnummer beim Landesamt für Besoldung und Versorgung (LBV)
-K_Lehrer;VSchluessel;;;33;varchar;1;;0;verguetungsSchluessel;;Der Vergütungsschlüssel
-K_Lehrer;DatumZugang;;;34;date;;;0;;DatumConverter;Das Datum, wann der Lehrer an die Schule gekommen ist.
-K_Lehrer;GrundZugang;;;35;varchar;10;;0;;;Der Grund für den Zugang des Lehrers
-K_Lehrer;DatumAbgang;;;36;date;;;0;;DatumConverter;Das Datum, wann der Lehrer die Schule verlassen hat.
-K_Lehrer;GrundAbgang;;;37;varchar;10;;0;;;Der Grund für das Verlassen der Schule durch den Lehrer
-K_Lehrer;SchulFunktion;;;38;varchar;10;;0;;;Die Funktion innerhalb der Schule
-K_Lehrer;PflichtstdSoll;;;39;float;;;0;;;Das Pflichtstundensoll des Lehrers
-K_Lehrer;Rechtsverhaeltnis;;;40;varchar;1;;0;;;Das Rechtsverhältnis unter welchem der Lehrer beschäftigt ist (z.B. Beamter auf Lebenszeit)
-K_Lehrer;Beschaeftigungsart;;;41;varchar;2;;0;;;Die Art der Beschäftigung (Vollzeit, Teilzeit, etc.)
-K_Lehrer;Einsatzstatus;;;42;varchar;1;;0;;;Der Einsatzstatus (z.B. Stammschule, nur hier tätig)
-K_Lehrer;StammschulNr;;;43;varchar;6;;0;;;Die Schulnummer der Stammschule, sofern diese abweicht
-K_Lehrer;MasernImpfnachweis;;;44;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an, ob ein Nachweis über die Masern-Impfung erbracht wurde
-K_Lehrer;UnterrichtsStd;;;45;float;;;0;;;Berechnetes Feld: Die Anzahl der unterrichteten Stunden
-K_Lehrer;MehrleistungStd;;;46;float;;;0;;;Berechnetes Feld: Die Stunden für eine Mehrleistung
-K_Lehrer;EntlastungStd;;;47;float;;;0;;;Berechnetes Feld: Die Stunden für eine Entlastung
-K_Lehrer;AnrechnungStd;;;48;float;;;0;;;Berechnetes Feld: Die angerechneten Stunden für eine nichtunterrichtliche Tätigkeit
-K_Lehrer;RestStd;;;49;float;;;0;;;Berechnetes Feld: Reststunden
-K_Lehrer;LPassword;;;50;varchar;255;;0;;;Wird für das GS-Modul genutzt (gehashed).
-K_Lehrer;PWAktuell;;;51;varchar;3;"-;5";0;;;Gibt an ob das LPassword geändert wurde oder ob es noch das Initialkennwort ist
-K_Lehrer;SchILDweb_FL;;;52;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;DEPRECATED: nicht mehr genutzt SchildWeb
-K_Lehrer;SchILDweb_KL;;;53;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;DEPRECATED: nicht mehr genutzt SchildWeb
-K_Lehrer;SchILDweb_Config;;;54;text;;;0;;;DEPRECATED: nicht mehr genutzt SchildWeb
-K_Lehrer;KennwortTools;;;55;varchar;255;;0;;;DEPRECATED: wurde nie verwendet
-K_Lehrer;Antwort1;;;56;varchar;255;;0;;;DEPRECATED: wurde nie verwendet
-K_Lehrer;Antwort2;;;57;varchar;255;;0;;;DEPRECATED: wurde nie verwendet
-K_Lehrer;KennwortToolsAktuell;;;58;varchar;3;"-;5";0;;;DEPRECATED: wurde nie verwendet
-K_Lehrer;XNMPassword;;;59;varchar;255;;0;;;Passwort für das XNM-Tool 
-K_Lehrer;XNMPassword2;;;60;varchar;255;;0;;;zweites Passwort für das XNM-Tool 
-K_Lehrer;CredentialID;;;61;bigint;;;0;;;Die ID des Credential-Eintrags
+K_Lehrer;Strassenname;;;15;varchar;55;;0;;;Straßenname der Lehrkraft
+K_Lehrer;HausNr;;;16;varchar;10;;0;;;Hausnummer wenn getrennt gespeichert
+K_Lehrer;HausNrZusatz;;;17;varchar;30;;0;;;Zusatz zur Hausnummer wenn Hausnummern getrennt gespeichert werden
+K_Lehrer;Ort_ID;;;18;bigint;;;0;;;Adressdaten des Lehrers: Fremdschlüssel auf die Katalog-Tabelle mit den Orten
+K_Lehrer;PLZ;;;19;varchar;10;;0;;;Adressdaten des Lehrers: Postleitzahl - TODO Ort als Spalte in der Tabelle ergänzen, ähnlich wie bei Schüler, wichtig da ansonsten Probleme auftauchen, wenn ein PLZ ? Ortsname nicht eindeutig ist, was gelegentlich vorkommt
+K_Lehrer;Ortsteil_ID;;;20;bigint;;;0;;;Adressdaten des Lehrers: Fremdschlüssel auf die Katalog-Tabelle mit den Ortsteilen
+K_Lehrer;Tel;;;21;varchar;20;;0;telefon;;Adressdaten des Lehrers: Telefonnummer
+K_Lehrer;Handy;;;22;varchar;20;;0;telefonMobil;;Adressdaten des Lehrers: Mobilnummer oder Faxnummer
+K_Lehrer;Email;;;23;varchar;100;;0;eMailPrivat;;Adressdaten des Lehrers: Private Email-Adresse
+K_Lehrer;EmailDienstlich;;;24;varchar;100;;0;eMailDienstlich;;Adressdaten des Lehrers: Dienstliche Email-Adresse
+K_Lehrer;StaatKrz;;;25;varchar;3;;0;staatsangehoerigkeit;;Die erste Staatsangehörigkeit des Lehrers
+K_Lehrer;Geburtsdatum;;;26;date;;;0;;DatumConverter;Das Geburtsdatum des Lehrers
+K_Lehrer;Geschlecht;;;27;varchar;1;;0;;GeschlechtConverterFromString;Das Geschlecht des Lehrers - TODO ist in der Datenbank als String und nicht als Integer (3/4) hinterlegt, dies sollte in allen Tabellen einheitlich sein
+K_Lehrer;Anrede;;;28;varchar;10;;0;;;Die Anrede für den Lehrer
+K_Lehrer;Amtsbezeichnung;;;29;varchar;15;;0;;;Die Amtsbezeichnung des Lehrers
+K_Lehrer;Titel;;;30;varchar;20;;0;;;Ggf. der Titel des Lehrers
+K_Lehrer;Faecher;;;31;varchar;100;;0;;;Die Fächer, die der Lehrer unterrichtet - TODO hat dieses Feld noch einen Zweck? Fächer sind dem Lehrer eigentlich anders zugeordnet...  
+K_Lehrer;IdentNr1;;;32;varchar;10;;0;identNrTeil1;;Der vordere Teil der NRW-weit eindeutigen Ident-Nummer - setzt sich normalerweise aus Geburtsdatum und Geschlecht (3/4) zusammen, kann in Einzelfällen aber von diesem Schema abweichen
+K_Lehrer;SerNr;;;33;varchar;5;;0;identNrTeil2SerNr;;Der hintere Teil der Ident-Nummer – wird üblicherweise NRW-weit fortlaufend vergeben
+K_Lehrer;PANr;;;34;varchar;20;;0;;;Personalakten-Nummer (wird von den Bezirksregierungen ggf genutzt)
+K_Lehrer;LBVNr;;;35;varchar;15;;0;personalNrLBV;;Die Personalnummer beim Landesamt für Besoldung und Versorgung (LBV)
+K_Lehrer;VSchluessel;;;36;varchar;1;;0;verguetungsSchluessel;;Der Vergütungsschlüssel
+K_Lehrer;DatumZugang;;;37;date;;;0;;DatumConverter;Das Datum, wann der Lehrer an die Schule gekommen ist.
+K_Lehrer;GrundZugang;;;38;varchar;10;;0;;;Der Grund für den Zugang des Lehrers
+K_Lehrer;DatumAbgang;;;39;date;;;0;;DatumConverter;Das Datum, wann der Lehrer die Schule verlassen hat.
+K_Lehrer;GrundAbgang;;;40;varchar;10;;0;;;Der Grund für das Verlassen der Schule durch den Lehrer
+K_Lehrer;SchulFunktion;;;41;varchar;10;;0;;;Die Funktion innerhalb der Schule
+K_Lehrer;PflichtstdSoll;;;42;float;;;0;;;Das Pflichtstundensoll des Lehrers
+K_Lehrer;Rechtsverhaeltnis;;;43;varchar;1;;0;;;Das Rechtsverhältnis unter welchem der Lehrer beschäftigt ist (z.B. Beamter auf Lebenszeit)
+K_Lehrer;Beschaeftigungsart;;;44;varchar;2;;0;;;Die Art der Beschäftigung (Vollzeit, Teilzeit, etc.)
+K_Lehrer;Einsatzstatus;;;45;varchar;1;;0;;;Der Einsatzstatus (z.B. Stammschule, nur hier tätig)
+K_Lehrer;StammschulNr;;;46;varchar;6;;0;;;Die Schulnummer der Stammschule, sofern diese abweicht
+K_Lehrer;MasernImpfnachweis;;;47;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an, ob ein Nachweis über die Masern-Impfung erbracht wurde
+K_Lehrer;UnterrichtsStd;;;48;float;;;0;;;Berechnetes Feld: Die Anzahl der unterrichteten Stunden
+K_Lehrer;MehrleistungStd;;;49;float;;;0;;;Berechnetes Feld: Die Stunden für eine Mehrleistung
+K_Lehrer;EntlastungStd;;;50;float;;;0;;;Berechnetes Feld: Die Stunden für eine Entlastung
+K_Lehrer;AnrechnungStd;;;51;float;;;0;;;Berechnetes Feld: Die angerechneten Stunden für eine nichtunterrichtliche Tätigkeit
+K_Lehrer;RestStd;;;52;float;;;0;;;Berechnetes Feld: Reststunden
+K_Lehrer;LPassword;;;53;varchar;255;;0;;;Wird für das GS-Modul genutzt (gehashed).
+K_Lehrer;PWAktuell;;;54;varchar;3;"-;5";0;;;Gibt an ob das LPassword geändert wurde oder ob es noch das Initialkennwort ist
+K_Lehrer;SchILDweb_FL;;;55;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;DEPRECATED: nicht mehr genutzt SchildWeb
+K_Lehrer;SchILDweb_KL;;;56;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;DEPRECATED: nicht mehr genutzt SchildWeb
+K_Lehrer;SchILDweb_Config;;;57;text;;;0;;;DEPRECATED: nicht mehr genutzt SchildWeb
+K_Lehrer;KennwortTools;;;58;varchar;255;;0;;;DEPRECATED: wurde nie verwendet
+K_Lehrer;Antwort1;;;59;varchar;255;;0;;;DEPRECATED: wurde nie verwendet
+K_Lehrer;Antwort2;;;60;varchar;255;;0;;;DEPRECATED: wurde nie verwendet
+K_Lehrer;KennwortToolsAktuell;;;61;varchar;3;"-;5";0;;;DEPRECATED: wurde nie verwendet
+K_Lehrer;XNMPassword;;;62;varchar;255;;0;;;Passwort für das XNM-Tool 
+K_Lehrer;XNMPassword2;;;63;varchar;255;;0;;;zweites Passwort für das XNM-Tool 
+K_Lehrer;CredentialID;;;64;bigint;;;0;;;Die ID des Credential-Eintrags
 K_Ort;ID;;;1;bigint;;;1;;;ID des Ortes
 K_Ort;PLZ;;;2;varchar;10;;1;;;PLZ des Ortes
 K_Ort;Bezeichnung;;;3;varchar;50;;1;;;Bezeichnung des Ortes
@@ -825,14 +839,17 @@ Personengruppen_Personen;PersonVorname;;;8;varchar;80;;0;;;Vorname des Personene
 Personengruppen_Personen;PersonPLZ;;;9;varchar;10;;0;;;PLZ des Personeneintrags zur Personengruppe
 Personengruppen_Personen;PersonOrt;;;10;varchar;50;;0;;;Ort des Personeneintrags zur Personengruppe
 Personengruppen_Personen;PersonStrasse;;;11;varchar;55;;0;;;Straße des Personeneintrags zur Personengruppe
-Personengruppen_Personen;PersonTelefon;;;12;varchar;20;;0;;;Telfonnummer des Personeneintrags zur Personengruppe
-Personengruppen_Personen;PersonMobil;;;13;varchar;20;;0;;;Mobilnummer des Personeneintrags zur Personengruppe
-Personengruppen_Personen;PersonEmail;;;14;varchar;100;;0;;;Email  des Personeneintrags zur Personengruppe
-Personengruppen_Personen;Bemerkung;;;15;varchar;100;;0;;;Bemerkung des Personeneintrags zur Personengruppe
-Personengruppen_Personen;Zusatzinfo;;;16;varchar;100;;0;;;Zusatzinfo des Personeneintrags zur Personengruppe
-Personengruppen_Personen;Sortierung;;;17;int;;;0;;;Sortierung des Personeneintrags zur Personengruppe
-Personengruppen_Personen;PersonAnrede;;;18;varchar;10;;0;;;Anrede des Personeneintrags zur Personengruppe
-Personengruppen_Personen;PersonAkadGrad;;;19;varchar;15;;0;;;DEPRECATED: Titel des Personeneintrags zur Personengruppe
+Personengruppen_Personen;PersonStrassenname;;;12;varchar;55;;0;;;Straßenname zur Person der Personengruppe
+Personengruppen_Personen;PersonHausNr;;;13;varchar;10;;0;;;Hausnummer wenn getrennt gespeichert
+Personengruppen_Personen;PersonHausNrZusatz;;;14;varchar;30;;0;;;Zusatz zur Hausnummer wenn Hausnummern getrennt gespeichert werden
+Personengruppen_Personen;PersonTelefon;;;15;varchar;20;;0;;;Telfonnummer des Personeneintrags zur Personengruppe
+Personengruppen_Personen;PersonMobil;;;16;varchar;20;;0;;;Mobilnummer des Personeneintrags zur Personengruppe
+Personengruppen_Personen;PersonEmail;;;17;varchar;100;;0;;;Email  des Personeneintrags zur Personengruppe
+Personengruppen_Personen;Bemerkung;;;18;varchar;100;;0;;;Bemerkung des Personeneintrags zur Personengruppe
+Personengruppen_Personen;Zusatzinfo;;;19;varchar;100;;0;;;Zusatzinfo des Personeneintrags zur Personengruppe
+Personengruppen_Personen;Sortierung;;;20;int;;;0;;;Sortierung des Personeneintrags zur Personengruppe
+Personengruppen_Personen;PersonAnrede;;;21;varchar;10;;0;;;Anrede des Personeneintrags zur Personengruppe
+Personengruppen_Personen;PersonAkadGrad;;;22;varchar;15;;0;;;DEPRECATED: Titel des Personeneintrags zur Personengruppe
 PrfSemAbschl;Nr;;;1;varchar;2;;1;;;DEPRECATED: Versetzungsvermerke Nr 
 PrfSemAbschl;Klartext;;;2;varchar;30;;0;;;DEPRECATED: Versetzungsvermerke Text
 PrfSemAbschl;StatistikKrz;;;3;varchar;1;;0;;;DEPRECATED: Versetzungsvermerke StatistikKRZ
@@ -1072,145 +1089,145 @@ Schueler;Vorname;;;7;varchar;80;;0;;;Vorname des Schülers PAuswG vom 21.6.2019 
 Schueler;Zusatz;;;8;varchar;255;;0;AlleVornamen;;Alle gültigen Vornamen, wenn mehrere vorhanden sind. Ist nur ein Vorname vorhanden bleibt das Feld leer und Vorname wird genutzt.
 Schueler;Geburtsname;;;9;varchar;120;;0;;;Geburtsname des Schülers
 Schueler;Strasse;;;10;varchar;55;;0;;;Straße des Schülers
-Schueler;Ort_ID;;;11;bigint;;;0;;;ID des Orts des Schülers
-Schueler;PLZ;;;12;varchar;10;;0;;;PLZ des Schülers
-Schueler;OrtAbk;;;13;varchar;50;;0;;;DEPRECATED: Klartext des Orts des Schülers
-Schueler;Ortsteil_ID;;;14;bigint;;;0;;;ID des Ortsteils des Schülers
-Schueler;Telefon;;;15;varchar;20;;0;;;Telefonnummer des Schülers
-Schueler;Email;;;16;varchar;100;;0;;;E-Mail-Adresse des Schülers
-Schueler;Fax;;;17;varchar;20;;0;;;Fax oder Mobilnummer des Schülers
-Schueler;AktSchuljahr;;;18;smallint;;;0;;;Aktuelles Schuljahr des Schülers
-Schueler;AktAbschnitt;;;19;smallint;;;0;;;Aktueller Abschnitt des Schülers
-Schueler;Klasse;;;20;varchar;15;;0;;;Klartext Klasse des Schülers
-Schueler;Jahrgang;;;21;smallint;;;0;JahrgangSchueler;;Klatext des Jahrgangs des Schülers
-Schueler;PruefOrdnung;;;22;varchar;20;;0;;;Prüfungsordnung des Schülers
-Schueler;Geburtsdatum;;;23;date;;;0;;DatumConverter;Geburtsdatum des Schülers
-Schueler;Geburtsort;;;24;varchar;100;;0;;;Geburtsort des Schülers
-Schueler;Volljaehrig;;;25;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob der Schüler volljährig ist
-Schueler;Geschlecht;;;26;smallint;;;0;;GeschlechtConverter;Geschlecht des Schülers
-Schueler;StaatKrz;;;27;varchar;3;;0;;;Kürzel der 1. Staatsangehörigkeit
-Schueler;StaatKrz2;;;28;varchar;3;;0;;;Kürzel der 2. Staatsangehörigkeit
-Schueler;StaatAbk;;;29;varchar;50;;0;;;DEPRECATED: Klartext der 1. Staatsangehörigkeit des Schülers
-Schueler;Aussiedler;;;30;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;DEPRECATED: Gibt an ob der Schüler ausgesiedelt ist (wird nicht mehr erfasst)
-Schueler;Religion_ID;;;31;bigint;;;0;;;ID des Religionskatalogeintrags
-Schueler;ReligionAbk;;;32;varchar;30;;0;;;Klartext des Religionseintrags
-Schueler;Religionsabmeldung;;;33;date;;;0;;DatumConverter;Abmeldetdateum vom Religionsunterricht
-Schueler;Religionsanmeldung;;;34;date;;;0;;DatumConverter;Anmeldedatum zum Religionsunterricht wenn vorher abgemeldet
-Schueler;Bafoeg;;;35;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob ein Schüler BAFög bezieht
-Schueler;Schwerbehinderung;;;36;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob eine Schwerbehinderung vorliegt Ja Nein
-Schueler;Foerderschwerpunkt_ID;;;37;bigint;;;0;;;ID des ersten Förderschwerpunkts
-Schueler;Sportbefreiung_ID;;;38;bigint;;;0;;;ID der Sportbefreiung
-Schueler;Fahrschueler_ID;;;39;bigint;;;0;;;ID des Fahrschülereintras
-Schueler;Haltestelle_ID;;;40;bigint;;;0;;;ID der Haltestelle
-Schueler;HaltestelleAbk;;;41;varchar;30;;0;;;Text der Haltestelle
-Schueler;ASDSchulform;;;42;varchar;3;;0;Schulgliederung;SchulgliederungKuerzelConverter;ASD-Kürzel der Schulgliederung - Spalte fehlerhaft benannt!
-Schueler;Jahrgang_ID;;;43;bigint;;;0;;;ID des Jahrgangs
-Schueler;ASDJahrgang;;;44;varchar;2;;0;;;ASD-Kürzel des Jahrgangs
-Schueler;Fachklasse_ID;;;45;bigint;;;0;;;ID der Fachklasse (BK)
-Schueler;SchulpflichtErf;;;46;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob die Vollzeitschulpflicht erfüllt ist Ja Nein
-Schueler;Anschreibdatum;;;47;date;;;0;;DatumConverter;Datum des letzten Anschreiben (benötigt?)
-Schueler;Aufnahmedatum;;;48;date;;;0;;DatumConverter;Aufnahmedatum
-Schueler;Einschulungsjahr;;;49;smallint;;;0;;;Einschulungsjahr
-Schueler;Einschulungsart_ID;;;50;bigint;;;0;;;ID der Einschlungsart IT.NRW
-Schueler;LSSchulNr;;;51;varchar;6;;0;;;letzte Schule Schulnummer
-Schueler;LSSchulformSIM;;;52;varchar;3;;0;;;letzte Schule Schulgliederung
-Schueler;LSJahrgang;;;53;varchar;2;;0;;;letzte Schule Jahrgang
-Schueler;LSSchulEntlassDatum;;;54;date;;;0;;DatumConverter;letzte Schule Entlassdatum
-Schueler;LSVersetzung;;;55;varchar;2;;0;;;letzte Schule Versetzungsvermerk
-Schueler;LSFachklKennung;;;56;varchar;10;;0;;;letzte Schule Fachklassenkennung
-Schueler;LSFachklSIM;;;57;varchar;5;;0;;;letzte Schule Fachklassenschlüssel
-Schueler;LSEntlassgrund;;;58;varchar;50;;0;;;letzte Schule Entlassgrund
-Schueler;LSEntlassArt;;;59;varchar;2;;0;;;letzte Schule Entlassart
-Schueler;LSKlassenart;;;60;varchar;2;;0;;;letzte Schule Klassenart
-Schueler;LSRefPaed;;;61;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;letzte Schule Reformpädagogik
-Schueler;Entlassjahrgang;;;62;varchar;2;;0;;;Entlasung von eigener Schule Jahrgang
-Schueler;Entlassjahrgang_ID;;;63;bigint;;;0;;;Entlasung von eigener Schule JahrgangsID
-Schueler;Entlassdatum;;;64;date;;;0;;DatumConverter;Entlassdatum
-Schueler;Entlassgrund;;;65;varchar;50;;0;;;Entlassgrund 
-Schueler;Entlassart;;;66;varchar;2;;0;;;Entlassart
-Schueler;SchulwechselNr;;;67;varchar;6;;0;;;Schulnummer aufnehmende Schule
-Schueler;Schulwechseldatum;;;68;date;;;0;;DatumConverter;Datum des Schulwechsels
-Schueler;Geloescht;;;69;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Löschmarkierung Schülerdatensatz
-Schueler;Gesperrt;;;70;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Datensatz gesperrt Ja Nein
-Schueler;ModifiziertAm;;;71;datetime;;;0;;DatumConverter;zuletzt geändert Datum
-Schueler;ModifiziertVon;;;72;varchar;20;;0;;;zuletzt geändert Benutzer
-Schueler;Markiert;;;73;varchar;21;-;0;;BooleanPlusMinusDefaultMinusConverter;Datensatz ist markiert
-Schueler;FotoVorhanden;;;74;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;DEPRECATED: nicht mehr genutzt Zustimmung Foto
-Schueler;JVA;;;75;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Ist Schüler einer Justizvollzugsanstalt
-Schueler;RefPaed;;;76;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Teilnahme an Reformpädagogik
-Schueler;KeineAuskunft;;;77;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Keine Auskunft an Dritte Ja Nein
-Schueler;Lehrer;;;78;varchar;10;;0;;;Kürzel des Klassenlehrers
-Schueler;Beruf;;;79;varchar;100;;0;;;Berufsbezeichnung wenn der Schüler einen hat
-Schueler;AbschlussDatum;;;80;varchar;15;;0;;;Abschlussdatum
-Schueler;Bemerkungen;;;81;text;;;0;;;Text für Bemerkungen zum Schüler Memofeld
-Schueler;BeginnBildungsgang;;;82;date;;;0;;DatumConverter;Beginn des Bildungsgangs BK
-Schueler;OrgFormKrz;;;83;varchar;1;;0;;;Kürzel der Organisationsform IT.NRW
-Schueler;Klassenart;;;84;varchar;2;;0;;;Klassenart IT.NRW
-Schueler;DurchschnittsNote;;;85;varchar;4;;0;;;Speichert die Durchschnittsnote mit einer Nachkommastelle (aber als Textfeld) Wird primär am BK benutzt
-Schueler;LSSGL;;;86;varchar;5;;0;;;letzte Schule Gliederung
-Schueler;LSSchulform;;;87;varchar;2;;0;;;letzte Schule Schulform
-Schueler;KonfDruck;;;88;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Konfession aufs Zeugnis für den Druck
-Schueler;DSN_Text;;;89;varchar;15;;0;;;Speichert die Durchschnittsnote im Klartext (also befriedigend bei einer Durchschnittsnote von z.B. 3.1)
-Schueler;Berufsabschluss;;;90;varchar;1;;0;;;Bezeichnung Berufsabschluss
-Schueler;Schwerpunkt_ID;;;91;bigint;;;0;;;ID des Schwerpunkt (BK und RS)
-Schueler;LSSGL_SIM;;;92;varchar;3;;0;;;Letzte Schule Schulgiederung (wichtig wenn BK)
-Schueler;BerufsschulpflErf;;;93;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob die Berufsschulpflicht erfüllt ist (Ja/Nein)
-Schueler;StatusNSJ;;;94;int;;;0;;;Gibt an, welcher Status für das kommende Schuljahr geplant ist (nur BK)
-Schueler;FachklasseNSJ_ID;;;95;bigint;;;0;;;Gibt an, welche Fachklasse für das kommende Schuljahr geplant ist (nur BK)
-Schueler;BuchKonto;;;96;float;;;0;;;DEPRECATED: SchildMedia
-Schueler;VerkehrsspracheFamilie;;;97;varchar;2;;0;;;Migrationshintergrund Verkehrssprache in der Familie
-Schueler;JahrZuzug;;;98;int;;;0;;;Migrationshintergrund Zuzugsjahr
-Schueler;DauerKindergartenbesuch;;;99;varchar;1;;0;;;Dauer des Kindergartenbesuchs
-Schueler;VerpflichtungSprachfoerderkurs;;;100;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Wurde zu einem Sprachförderkurs verpflichtet (Ja/Nein)
-Schueler;TeilnahmeSprachfoerderkurs;;;101;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Teilnahme an einen Sprachförderkurs (Ja/Nein)
-Schueler;SchulbuchgeldBefreit;;;102;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Vom Schulbuchgeld befreit (Ja/Nein)
-Schueler;Autist;;;103;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob Autismuss vorliegt (Ja/Nein)
-Schueler;GeburtslandSchueler;;;104;varchar;10;;0;;;Migrationshintergrund Geburtsland des Schülers
-Schueler;GeburtslandVater;;;105;varchar;10;;0;;;Migrationshintergrund Geburtsland des Vaters
-Schueler;GeburtslandMutter;;;106;varchar;10;;0;;;Migrationshintergrund Geburtsland der Mutter
-Schueler;Uebergangsempfehlung_JG5;;;107;varchar;10;;0;;;Übergangsempfehlung für den Jahrgang 5
-Schueler;ErsteSchulform_SI;;;108;varchar;10;;0;;;Erste Schulform in der Sek1
-Schueler;JahrWechsel_SI;;;109;int;;;0;;;Jahr des Wechsels in die Sekundarstufe I
-Schueler;JahrWechsel_SII;;;110;int;;;0;;;Jahr des Wechsels in die Sekundarstufe II
-Schueler;Migrationshintergrund;;;111;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Migrationshintergrund vorhanden (Ja/Nein)
-Schueler;Foerderschwerpunkt2_ID;;;112;bigint;;;0;;;ID des zweiten Förderschwerpunktes
-Schueler;SortierungKlasse;;;113;int;;;0;;;DEPRECATED wenn auf IDs umgestellt wird. Sortierung der Klasse um Klassen auch ohne führende Null sortiert werden können
-Schueler;ExterneSchulNr;;;114;varchar;6;;0;;;Schulnummer von externen Koopschüern
-Schueler;Kindergarten_ID;;;115;bigint;;;0;;;ID des Kinderkarteneintrags (GS)
-Schueler;LetzterBerufsAbschluss;;;116;varchar;10;;0;;;erreichter berufsbezogener Abschluss LSSchule
-Schueler;LetzterAllgAbschluss;;;117;varchar;10;;0;;;erreichter allgemeinbildender Abschluss LSSchule
-Schueler;Land;;;118;varchar;2;;0;;;Land des Wohnsitzes des Schüler (in Grenzgebieten möglich)
-Schueler;AV_Leist;;;119;int;;;0;;;DEPRECATED: nicht mehr genutzt Kopfnoten
-Schueler;AV_Zuv;;;120;int;;;0;;;DEPRECATED: nicht mehr genutzt Kopfnoten
-Schueler;AV_Selbst;;;121;int;;;0;;;DEPRECATED: nicht mehr genutzt Kopfnoten
-Schueler;SV_Verant;;;122;int;;;0;;;DEPRECATED: nicht mehr genutzt Kopfnoten
-Schueler;SV_Konfl;;;123;int;;;0;;;DEPRECATED: nicht mehr genutzt Kopfnoten
-Schueler;SV_Koop;;;124;int;;;0;;;DEPRECATED: nicht mehr genutzt Kopfnoten
-Schueler;Duplikat;;;125;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob der Datensatz ein Duplikat ist
-Schueler;EinschulungsartASD;;;126;varchar;2;;0;;;ASD-Kürzel Einschulungsart IT.NRW
-Schueler;HausNr;;;127;varchar;10;;0;;;Hausnummer wenn getrennt gespeichert
-Schueler;Strassenname;;;128;varchar;55;;0;;;Straßenname des Schülers
-Schueler;SchulNrEigner;;;129;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
-Schueler;BilingualerZweig;;;130;varchar;1;;0;;;Sprache des Bilingualen Zweigs
-Schueler;DurchschnittsnoteFHR;;;131;varchar;4;;0;;;Speichert die Durchschnittsnote der FHR-Prüfung mit einer Nachkommastelle (aber als Textfeld) Wird nur am BK benutzt
-Schueler;DSN_FHR_Text;;;132;varchar;15;;0;;;Speichert die Durchschnittsnote der FHR-Prüfung im Klartext (also befriedigend bei einer Durchschnittsnote von z.B. 3.1) wird nur am BK verwendet
-Schueler;Eigenanteil;;;133;float;;;0;;;TODO DEPRECATED: Eigenanteil Ja/Nein 
-Schueler;StaatAbk2;;;134;varchar;50;;0;;;DEPRECATED: Kürzel der 2. Staatsangehörigkeit
-Schueler;ZustimmungFoto;;;135;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;DEPRECATED: nicht mehr genutzt Zustimmungen werden nun auf DSGVO verwaltet
-Schueler;BKAZVO;;;136;int;;;0;;;Gibt an ob der Schüler in einem Bildungsgang nach BKAZVO ist (BK)
-Schueler;HatBerufsausbildung;;;137;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob der Schüler eine Berufsausbildung hat (BK)
-Schueler;Ausweisnummer;;;138;varchar;30;;0;;;Nummer des Schülerausweises
-Schueler;AOSF;;;139;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob der Schüler ein AOSF hat
-Schueler;EPJahre;;;140;int;;2;0;;;Anzahl der Jahre in der Schuleingangssphase
-Schueler;LSBemerkung;;;141;varchar;255;;0;;;Bemerkung der zuletzt besuchten Schule
-Schueler;WechselBestaetigt;;;142;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Wechsel zur aufnehmenden Schule bestätigt
-Schueler;DauerBildungsgang;;;143;int;;;0;;;Dauer des Bildungsgangs am BK
-Schueler;AnmeldeDatum;;;144;date;;;0;;DatumConverter;Anmeldedatum des Schülers
-Schueler;MeisterBafoeg;;;145;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob ein Schüler MeisterBafög bezieht BK
-Schueler;OnlineAnmeldung;;;146;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Schüler hat sich Online angemeldet (Ja/Nein)
-Schueler;Dokumentenverzeichnis;;;147;varchar;255;;0;;;Pfad zum Dokumentenverzeichnis
-Schueler;Berufsqualifikation;;;148;varchar;100;;0;;;Karteireiter Schulbesuch Berufsausbildung vorhanden (Ja/Nein)
-Schueler;HausNrZusatz;;;149;varchar;30;;0;;;Zusatz zur Hausnummer wenn Hausnummern getrennt gespeichert werden
+Schueler;Strassenname;;;11;varchar;55;;0;;;Straßenname des Schülers
+Schueler;HausNr;;;12;varchar;10;;0;;;Hausnummer wenn getrennt gespeichert
+Schueler;HausNrZusatz;;;13;varchar;30;;0;;;Zusatz zur Hausnummer wenn Hausnummern getrennt gespeichert werden
+Schueler;Ort_ID;;;14;bigint;;;0;;;ID des Orts des Schülers
+Schueler;PLZ;;;15;varchar;10;;0;;;PLZ des Schülers
+Schueler;OrtAbk;;;16;varchar;50;;0;;;DEPRECATED: Klartext des Orts des Schülers
+Schueler;Ortsteil_ID;;;17;bigint;;;0;;;ID des Ortsteils des Schülers
+Schueler;Telefon;;;18;varchar;20;;0;;;Telefonnummer des Schülers
+Schueler;Email;;;19;varchar;100;;0;;;E-Mail-Adresse des Schülers
+Schueler;Fax;;;20;varchar;20;;0;;;Fax oder Mobilnummer des Schülers
+Schueler;AktSchuljahr;;;21;smallint;;;0;;;Aktuelles Schuljahr des Schülers
+Schueler;AktAbschnitt;;;22;smallint;;;0;;;Aktueller Abschnitt des Schülers
+Schueler;Klasse;;;23;varchar;15;;0;;;Klartext Klasse des Schülers
+Schueler;Jahrgang;;;24;smallint;;;0;JahrgangSchueler;;Klatext des Jahrgangs des Schülers
+Schueler;PruefOrdnung;;;25;varchar;20;;0;;;Prüfungsordnung des Schülers
+Schueler;Geburtsdatum;;;26;date;;;0;;DatumConverter;Geburtsdatum des Schülers
+Schueler;Geburtsort;;;27;varchar;100;;0;;;Geburtsort des Schülers
+Schueler;Volljaehrig;;;28;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob der Schüler volljährig ist
+Schueler;Geschlecht;;;29;smallint;;;0;;GeschlechtConverter;Geschlecht des Schülers
+Schueler;StaatKrz;;;30;varchar;3;;0;;;Kürzel der 1. Staatsangehörigkeit
+Schueler;StaatKrz2;;;31;varchar;3;;0;;;Kürzel der 2. Staatsangehörigkeit
+Schueler;StaatAbk;;;32;varchar;50;;0;;;DEPRECATED: Klartext der 1. Staatsangehörigkeit des Schülers
+Schueler;Aussiedler;;;33;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;DEPRECATED: Gibt an ob der Schüler ausgesiedelt ist (wird nicht mehr erfasst)
+Schueler;Religion_ID;;;34;bigint;;;0;;;ID des Religionskatalogeintrags
+Schueler;ReligionAbk;;;35;varchar;30;;0;;;Klartext des Religionseintrags
+Schueler;Religionsabmeldung;;;36;date;;;0;;DatumConverter;Abmeldetdateum vom Religionsunterricht
+Schueler;Religionsanmeldung;;;37;date;;;0;;DatumConverter;Anmeldedatum zum Religionsunterricht wenn vorher abgemeldet
+Schueler;Bafoeg;;;38;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob ein Schüler BAFög bezieht
+Schueler;Schwerbehinderung;;;39;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob eine Schwerbehinderung vorliegt Ja Nein
+Schueler;Foerderschwerpunkt_ID;;;40;bigint;;;0;;;ID des ersten Förderschwerpunkts
+Schueler;Sportbefreiung_ID;;;41;bigint;;;0;;;ID der Sportbefreiung
+Schueler;Fahrschueler_ID;;;42;bigint;;;0;;;ID des Fahrschülereintras
+Schueler;Haltestelle_ID;;;43;bigint;;;0;;;ID der Haltestelle
+Schueler;HaltestelleAbk;;;44;varchar;30;;0;;;Text der Haltestelle
+Schueler;ASDSchulform;;;45;varchar;3;;0;Schulgliederung;SchulgliederungKuerzelConverter;ASD-Kürzel der Schulgliederung - Spalte fehlerhaft benannt!
+Schueler;Jahrgang_ID;;;46;bigint;;;0;;;ID des Jahrgangs
+Schueler;ASDJahrgang;;;47;varchar;2;;0;;;ASD-Kürzel des Jahrgangs
+Schueler;Fachklasse_ID;;;48;bigint;;;0;;;ID der Fachklasse (BK)
+Schueler;SchulpflichtErf;;;49;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob die Vollzeitschulpflicht erfüllt ist Ja Nein
+Schueler;Anschreibdatum;;;50;date;;;0;;DatumConverter;Datum des letzten Anschreiben (benötigt?)
+Schueler;Aufnahmedatum;;;51;date;;;0;;DatumConverter;Aufnahmedatum
+Schueler;Einschulungsjahr;;;52;smallint;;;0;;;Einschulungsjahr
+Schueler;Einschulungsart_ID;;;53;bigint;;;0;;;ID der Einschlungsart IT.NRW
+Schueler;LSSchulNr;;;54;varchar;6;;0;;;letzte Schule Schulnummer
+Schueler;LSSchulformSIM;;;55;varchar;3;;0;;;letzte Schule Schulgliederung
+Schueler;LSJahrgang;;;56;varchar;2;;0;;;letzte Schule Jahrgang
+Schueler;LSSchulEntlassDatum;;;57;date;;;0;;DatumConverter;letzte Schule Entlassdatum
+Schueler;LSVersetzung;;;58;varchar;2;;0;;;letzte Schule Versetzungsvermerk
+Schueler;LSFachklKennung;;;59;varchar;10;;0;;;letzte Schule Fachklassenkennung
+Schueler;LSFachklSIM;;;60;varchar;5;;0;;;letzte Schule Fachklassenschlüssel
+Schueler;LSEntlassgrund;;;61;varchar;50;;0;;;letzte Schule Entlassgrund
+Schueler;LSEntlassArt;;;62;varchar;2;;0;;;letzte Schule Entlassart
+Schueler;LSKlassenart;;;63;varchar;2;;0;;;letzte Schule Klassenart
+Schueler;LSRefPaed;;;64;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;letzte Schule Reformpädagogik
+Schueler;Entlassjahrgang;;;65;varchar;2;;0;;;Entlasung von eigener Schule Jahrgang
+Schueler;Entlassjahrgang_ID;;;66;bigint;;;0;;;Entlasung von eigener Schule JahrgangsID
+Schueler;Entlassdatum;;;67;date;;;0;;DatumConverter;Entlassdatum
+Schueler;Entlassgrund;;;68;varchar;50;;0;;;Entlassgrund 
+Schueler;Entlassart;;;69;varchar;2;;0;;;Entlassart
+Schueler;SchulwechselNr;;;70;varchar;6;;0;;;Schulnummer aufnehmende Schule
+Schueler;Schulwechseldatum;;;71;date;;;0;;DatumConverter;Datum des Schulwechsels
+Schueler;Geloescht;;;72;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Löschmarkierung Schülerdatensatz
+Schueler;Gesperrt;;;73;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Datensatz gesperrt Ja Nein
+Schueler;ModifiziertAm;;;74;datetime;;;0;;DatumConverter;zuletzt geändert Datum
+Schueler;ModifiziertVon;;;75;varchar;20;;0;;;zuletzt geändert Benutzer
+Schueler;Markiert;;;76;varchar;21;-;0;;BooleanPlusMinusDefaultMinusConverter;Datensatz ist markiert
+Schueler;FotoVorhanden;;;77;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;DEPRECATED: nicht mehr genutzt Zustimmung Foto
+Schueler;JVA;;;78;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Ist Schüler einer Justizvollzugsanstalt
+Schueler;RefPaed;;;79;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Teilnahme an Reformpädagogik
+Schueler;KeineAuskunft;;;80;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Keine Auskunft an Dritte Ja Nein
+Schueler;Lehrer;;;81;varchar;10;;0;;;Kürzel des Klassenlehrers
+Schueler;Beruf;;;82;varchar;100;;0;;;Berufsbezeichnung wenn der Schüler einen hat
+Schueler;AbschlussDatum;;;83;varchar;15;;0;;;Abschlussdatum
+Schueler;Bemerkungen;;;84;text;;;0;;;Text für Bemerkungen zum Schüler Memofeld
+Schueler;BeginnBildungsgang;;;85;date;;;0;;DatumConverter;Beginn des Bildungsgangs BK
+Schueler;OrgFormKrz;;;86;varchar;1;;0;;;Kürzel der Organisationsform IT.NRW
+Schueler;Klassenart;;;87;varchar;2;;0;;;Klassenart IT.NRW
+Schueler;DurchschnittsNote;;;88;varchar;4;;0;;;Speichert die Durchschnittsnote mit einer Nachkommastelle (aber als Textfeld) Wird primär am BK benutzt
+Schueler;LSSGL;;;89;varchar;5;;0;;;letzte Schule Gliederung
+Schueler;LSSchulform;;;90;varchar;2;;0;;;letzte Schule Schulform
+Schueler;KonfDruck;;;91;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;Konfession aufs Zeugnis für den Druck
+Schueler;DSN_Text;;;92;varchar;15;;0;;;Speichert die Durchschnittsnote im Klartext (also befriedigend bei einer Durchschnittsnote von z.B. 3.1)
+Schueler;Berufsabschluss;;;93;varchar;1;;0;;;Bezeichnung Berufsabschluss
+Schueler;Schwerpunkt_ID;;;94;bigint;;;0;;;ID des Schwerpunkt (BK und RS)
+Schueler;LSSGL_SIM;;;95;varchar;3;;0;;;Letzte Schule Schulgiederung (wichtig wenn BK)
+Schueler;BerufsschulpflErf;;;96;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob die Berufsschulpflicht erfüllt ist (Ja/Nein)
+Schueler;StatusNSJ;;;97;int;;;0;;;Gibt an, welcher Status für das kommende Schuljahr geplant ist (nur BK)
+Schueler;FachklasseNSJ_ID;;;98;bigint;;;0;;;Gibt an, welche Fachklasse für das kommende Schuljahr geplant ist (nur BK)
+Schueler;BuchKonto;;;99;float;;;0;;;DEPRECATED: SchildMedia
+Schueler;VerkehrsspracheFamilie;;;100;varchar;2;;0;;;Migrationshintergrund Verkehrssprache in der Familie
+Schueler;JahrZuzug;;;101;int;;;0;;;Migrationshintergrund Zuzugsjahr
+Schueler;DauerKindergartenbesuch;;;102;varchar;1;;0;;;Dauer des Kindergartenbesuchs
+Schueler;VerpflichtungSprachfoerderkurs;;;103;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Wurde zu einem Sprachförderkurs verpflichtet (Ja/Nein)
+Schueler;TeilnahmeSprachfoerderkurs;;;104;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Teilnahme an einen Sprachförderkurs (Ja/Nein)
+Schueler;SchulbuchgeldBefreit;;;105;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Vom Schulbuchgeld befreit (Ja/Nein)
+Schueler;Autist;;;106;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob Autismuss vorliegt (Ja/Nein)
+Schueler;GeburtslandSchueler;;;107;varchar;10;;0;;;Migrationshintergrund Geburtsland des Schülers
+Schueler;GeburtslandVater;;;108;varchar;10;;0;;;Migrationshintergrund Geburtsland des Vaters
+Schueler;GeburtslandMutter;;;109;varchar;10;;0;;;Migrationshintergrund Geburtsland der Mutter
+Schueler;Uebergangsempfehlung_JG5;;;110;varchar;10;;0;;;Übergangsempfehlung für den Jahrgang 5
+Schueler;ErsteSchulform_SI;;;111;varchar;10;;0;;;Erste Schulform in der Sek1
+Schueler;JahrWechsel_SI;;;112;int;;;0;;;Jahr des Wechsels in die Sekundarstufe I
+Schueler;JahrWechsel_SII;;;113;int;;;0;;;Jahr des Wechsels in die Sekundarstufe II
+Schueler;Migrationshintergrund;;;114;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Migrationshintergrund vorhanden (Ja/Nein)
+Schueler;Foerderschwerpunkt2_ID;;;115;bigint;;;0;;;ID des zweiten Förderschwerpunktes
+Schueler;SortierungKlasse;;;116;int;;;0;;;DEPRECATED wenn auf IDs umgestellt wird. Sortierung der Klasse um Klassen auch ohne führende Null sortiert werden können
+Schueler;ExterneSchulNr;;;117;varchar;6;;0;;;Schulnummer von externen Koopschüern
+Schueler;Kindergarten_ID;;;118;bigint;;;0;;;ID des Kinderkarteneintrags (GS)
+Schueler;LetzterBerufsAbschluss;;;119;varchar;10;;0;;;erreichter berufsbezogener Abschluss LSSchule
+Schueler;LetzterAllgAbschluss;;;120;varchar;10;;0;;;erreichter allgemeinbildender Abschluss LSSchule
+Schueler;Land;;;121;varchar;2;;0;;;Land des Wohnsitzes des Schüler (in Grenzgebieten möglich)
+Schueler;AV_Leist;;;122;int;;;0;;;DEPRECATED: nicht mehr genutzt Kopfnoten
+Schueler;AV_Zuv;;;123;int;;;0;;;DEPRECATED: nicht mehr genutzt Kopfnoten
+Schueler;AV_Selbst;;;124;int;;;0;;;DEPRECATED: nicht mehr genutzt Kopfnoten
+Schueler;SV_Verant;;;125;int;;;0;;;DEPRECATED: nicht mehr genutzt Kopfnoten
+Schueler;SV_Konfl;;;126;int;;;0;;;DEPRECATED: nicht mehr genutzt Kopfnoten
+Schueler;SV_Koop;;;127;int;;;0;;;DEPRECATED: nicht mehr genutzt Kopfnoten
+Schueler;Duplikat;;;128;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob der Datensatz ein Duplikat ist
+Schueler;EinschulungsartASD;;;129;varchar;2;;0;;;ASD-Kürzel Einschulungsart IT.NRW
+Schueler;SchulNrEigner;;;130;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
+Schueler;BilingualerZweig;;;131;varchar;1;;0;;;Sprache des Bilingualen Zweigs
+Schueler;DurchschnittsnoteFHR;;;132;varchar;4;;0;;;Speichert die Durchschnittsnote der FHR-Prüfung mit einer Nachkommastelle (aber als Textfeld) Wird nur am BK benutzt
+Schueler;DSN_FHR_Text;;;133;varchar;15;;0;;;Speichert die Durchschnittsnote der FHR-Prüfung im Klartext (also befriedigend bei einer Durchschnittsnote von z.B. 3.1) wird nur am BK verwendet
+Schueler;Eigenanteil;;;134;float;;;0;;;TODO DEPRECATED: Eigenanteil Ja/Nein 
+Schueler;StaatAbk2;;;135;varchar;50;;0;;;DEPRECATED: Kürzel der 2. Staatsangehörigkeit
+Schueler;ZustimmungFoto;;;136;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;DEPRECATED: nicht mehr genutzt Zustimmungen werden nun auf DSGVO verwaltet
+Schueler;BKAZVO;;;137;int;;;0;;;Gibt an ob der Schüler in einem Bildungsgang nach BKAZVO ist (BK)
+Schueler;HatBerufsausbildung;;;138;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob der Schüler eine Berufsausbildung hat (BK)
+Schueler;Ausweisnummer;;;139;varchar;30;;0;;;Nummer des Schülerausweises
+Schueler;AOSF;;;140;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob der Schüler ein AOSF hat
+Schueler;EPJahre;;;141;int;;2;0;;;Anzahl der Jahre in der Schuleingangssphase
+Schueler;LSBemerkung;;;142;varchar;255;;0;;;Bemerkung der zuletzt besuchten Schule
+Schueler;WechselBestaetigt;;;143;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Wechsel zur aufnehmenden Schule bestätigt
+Schueler;DauerBildungsgang;;;144;int;;;0;;;Dauer des Bildungsgangs am BK
+Schueler;AnmeldeDatum;;;145;date;;;0;;DatumConverter;Anmeldedatum des Schülers
+Schueler;MeisterBafoeg;;;146;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob ein Schüler MeisterBafög bezieht BK
+Schueler;OnlineAnmeldung;;;147;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Schüler hat sich Online angemeldet (Ja/Nein)
+Schueler;Dokumentenverzeichnis;;;148;varchar;255;;0;;;Pfad zum Dokumentenverzeichnis
+Schueler;Berufsqualifikation;;;149;varchar;100;;0;;;Karteireiter Schulbesuch Berufsausbildung vorhanden (Ja/Nein)
 Schueler;ZieldifferentesLernen;;;150;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob der Schüler zieldifferent unterrichtet wird
 Schueler;ZusatzNachname;;;151;varchar;30;;0;;;Gibt ggf. den Zusatz zum Nachnamen an.
 Schueler;EndeEingliederung;;;152;date;;;0;;DatumConverter;Ende der Eingliederung bei zugezogenen Schülern (Flüchtlingen)
@@ -1417,6 +1434,9 @@ SchuelerErzAdr;Titel2;;;9;varchar;10;;0;;;Titel2 zum Erzieherdatensatz
 SchuelerErzAdr;Name2;;;10;varchar;120;;0;;;Nachname2 zum Erzieherdatensatz PAuswG vom 21.6.2019 §5 Abs. 2
 SchuelerErzAdr;Vorname2;;;11;varchar;80;;0;;;Vorname2 zum Erzieherdatensatz PAuswG vom 21.6.2019 §5 Abs. 2
 SchuelerErzAdr;ErzStrasse;;;12;varchar;55;;0;;;Straße zum Erzieherdatensatz
+SchuelerErzAdr;ErzStrassenname;;;13;varchar;55;;0;;;Straßenname des Erzieherdatensatzes
+SchuelerErzAdr;ErzHausNr;;;14;varchar;10;;0;;;Hausnummer wenn getrennt gespeichert
+SchuelerErzAdr;ErzHausNrZusatz;;;15;varchar;30;;0;;;Zusatz zur Hausnummer wenn Hausnummern getrennt gespeichert werden
 SchuelerErzAdr;ErzOrt_ID;;;13;bigint;;;0;;;OrtID zum Erzieherdatensatz
 SchuelerErzAdr;ErzPLZ;;;14;varchar;10;;0;;;PLZ zum Erzieherdatensatz
 SchuelerErzAdr;ErzOrtsteil_ID;;;15;bigint;;;0;;;OrtsteilID zum Erzieherdatensatz
@@ -1658,7 +1678,7 @@ SchuelerLernabschnittsdaten;AbschlussArt;;;22;smallint;;;0;;;Art des Abschlusses
 SchuelerLernabschnittsdaten;AbschlIstPrognose;;;23;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;Gibt an ob Abschluss Prognose ist (GE, PS und SK)
 SchuelerLernabschnittsdaten;Konferenzdatum;;;24;date;;;0;;DatumConverter;Konferenzdatum
 SchuelerLernabschnittsdaten;ZeugnisDatum;;;25;date;;;0;;DatumConverter;Zeugnisdatum
-SchuelerLernabschnittsdaten;KlassenLehrer;;;26;varchar;10;;0;;;Klassenlehrer Kürzel (hier muss ID rein)
+SchuelerLernabschnittsdaten;Klassenlehrer;;;26;varchar;10;;0;;;Klassenlehrer Kürzel (hier muss ID rein)
 SchuelerLernabschnittsdaten;ASDSchulgliederung;;;27;varchar;3;;0;;;ASD-Kürzel SGL
 SchuelerLernabschnittsdaten;ASDJahrgang;;;28;varchar;2;;0;;;ASD-Jahrgang kann alles über ID geregelt werden
 SchuelerLernabschnittsdaten;Jahrgang_ID;;;29;bigint;;;0;;;ID des Jahrgangs der zum Report zugeordnet wird
@@ -1727,13 +1747,17 @@ SchuelerReportvorlagen;Schueler_IDs;;;4;text;;;0;;;SchülerID für die gedruckt 
 SchuelerSprachenfolge;ID;;;1;bigint;;;1;;;ID des Sprachenfolgeeintrags
 SchuelerSprachenfolge;Schueler_ID;;;2;bigint;;;1;;;SchülerID des Sprachenfolgeeintrags
 SchuelerSprachenfolge;Fach_ID;;;3;bigint;;;1;;;FachID des Sprachenfolgeeintrags
-SchuelerSprachenfolge;JahrgangVon;;;4;smallint;;;0;;;Jahrgang Beginn des Sprachenfolgeeintrags
-SchuelerSprachenfolge;JahrgangBis;;;5;smallint;;;0;;;Jahrgang Ende des Sprachenfolgeeintrags
-SchuelerSprachenfolge;Reihenfolge;;;6;varchar;1;;0;;StringToIntegerConverter;Reihenfolge Nummer des Sprachenfolgeeintrags
-SchuelerSprachenfolge;AbschnittVon;;;7;smallint;;;0;;;Abschnitt Beginn des Sprachenfolgeeintrags
-SchuelerSprachenfolge;AbschnittBis;;;8;smallint;;;0;;;Abschnitt Ende des Sprachenfolgeeintrags
-SchuelerSprachenfolge;SchulNrEigner;;;9;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
-SchuelerSprachenfolge;Referenzniveau;;;10;varchar;5;;0;;;Referenzniveau GeR des Sprachenfolgeeintrags
+SchuelerSprachenfolge;ReihenfolgeNr;1;;4;int;;;0;;;Reihenfolge Nummer des Sprachenfolgeeintrags
+SchuelerSprachenfolge;IstSprachpruefungSI;1;;5;int;;0;1;;Boolean01Converter;Gibt an, ob eine Sprachprüfung im Rahmen des herkunftssprachlichen Unterrichtes laut §5 der APO SI abgelegt wurde. Ist dies in Kombination mit herkuntfssprachlichem Unterricht laut §5.1-§5.3 erfolgt, so sind auch gültige Zeiten einzutragen.
+SchuelerSprachenfolge;NoteSprachpruefungSI;1;;6;int;;;0;;NoteConverterFromInteger;Die Note der Sprachprüfung im Rahmen des herkunftssprachlichen Unterrichtes laut §5 der APO SI abgelegt wurde.
+SchuelerSprachenfolge;IstSprachnachweisSI;1;;7;int;;0;1;;Boolean01Converter;Gibt an, ob eine Sprachbelegung in der Sekundarstufe nachgewiesen wurde. Dies wird u.a. in Bezug auf die APO WBK §34.3-4 verwendet.
+SchuelerSprachenfolge;JahrgangVon;;;8;smallint;;;0;;;Jahrgang Beginn des Sprachenfolgeeintrags
+SchuelerSprachenfolge;JahrgangBis;;;9;smallint;;;0;;;Jahrgang Ende des Sprachenfolgeeintrags
+SchuelerSprachenfolge;AbschnittVon;;;10;smallint;;;0;;;Abschnitt Beginn des Sprachenfolgeeintrags
+SchuelerSprachenfolge;AbschnittBis;;;11;smallint;;;0;;;Abschnitt Ende des Sprachenfolgeeintrags
+SchuelerSprachenfolge;SchulNrEigner;;;12;int;;;0;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
+SchuelerSprachenfolge;Referenzniveau;;;13;varchar;5;;0;;SprachreferenzniveauConverter;Referenzniveau GeR des Sprachenfolgeeintrags
+SchuelerSprachenfolge;Reihenfolge;;1;14;varchar;1;;0;;;DEPRECATED: Reihenfolge Nummer des Sprachenfolgeeintrags bzw. N oder P
 SchuelerTelefone;ID;;;1;bigint;;;1;;;ID des Telefonnummerneintrags
 SchuelerTelefone;Schueler_ID;;;2;bigint;;;1;;;SchülerID des Telefonnummerneintrags
 SchuelerTelefone;TelefonArt_ID;;;3;bigint;;;0;;;Art des Telefonnummerneintrags
@@ -1888,20 +1912,20 @@ Statkue_Fachklasse;FKS;;;3;varchar;3;;1;;;Statkue Tabelle IT.NRW: Fachklassensch
 Statkue_Fachklasse;AP;;;4;varchar;2;;1;;;Statkue Tabelle IT.NRW: Fachklassenschlüssel Teil2
 Statkue_Fachklasse;BGrp;;;5;varchar;1;;0;;;Statkue Tabelle IT.NRW: ???
 Statkue_Fachklasse;BFeld;;;6;varchar;2;;0;;;Statkue Tabelle IT.NRW: Beruffeld der Fachklasse
-Statkue_Fachklasse;Sortierung;;;7;int;;0;0;;;Statkue Tabelle IT.NRW: Sortierung der Fachklasse
-Statkue_Fachklasse;Status;;;8;varchar;20;;0;;;Statkue Tabelle IT.NRW: Status der Fachklasse
-Statkue_Fachklasse;Beschreibung;;;9;varchar;100;;0;;;Statkue Tabelle IT.NRW: Berschreibung der Fachklasse (Beruf)
-Statkue_Fachklasse;Beschreibung_W;;;10;varchar;100;;0;;;Statkue Tabelle IT.NRW: Beschreibung weiblich der Fachklasse (Beruf)
-Statkue_Fachklasse;geaendert;;;11;datetime;;;0;;;Statkue Tabelle IT.NRW: letztes Datum der Änderung der Fachklasse
-Statkue_Fachklasse;Beschreibung_MW;;;12;varchar;100;;0;;;Statkue Tabelle IT.NRW: Beschreibung männlich/weiblich der Fachklasse (Beruf)
-Statkue_Fachklasse;BAKLALT;;;13;varchar;2;;0;;;Statkue Tabelle IT.NRW: ???
-Statkue_Fachklasse;BAGRALT;;;14;varchar;4;;0;;;Statkue Tabelle IT.NRW: ???
-Statkue_Fachklasse;BAKL;;;15;varchar;5;;0;;;Statkue Tabelle IT.NRW: ???
-Statkue_Fachklasse;BAGR;;;16;varchar;8;;0;;;Statkue Tabelle IT.NRW: ???
-Statkue_Fachklasse;Ebene1;;;17;varchar;2;;0;;;Statkue Tabelle IT.NRW: Berufsebene 1 der Fachklasse
-Statkue_Fachklasse;Ebene2;;;18;varchar;2;;0;;;Statkue Tabelle IT.NRW: Berufsebene 2 der Fachklasse
-Statkue_Fachklasse;Ebene3;;;19;varchar;2;;0;;;Statkue Tabelle IT.NRW: Berufsebene 3 der Fachklasse
-Statkue_Fachklasse;Flag_APOBK;;;20;varchar;1;;0;;;Statkue Tabelle IT.NRW: ???
+Statkue_Fachklasse;Ebene3;;;7;varchar;2;;0;;;Statkue Tabelle IT.NRW: Berufsebene 3 der Fachklasse
+Statkue_Fachklasse;BAKLALT;;;8;varchar;2;;0;;;Statkue Tabelle IT.NRW: ???
+Statkue_Fachklasse;BAGRALT;;;9;varchar;4;;0;;;Statkue Tabelle IT.NRW: ???
+Statkue_Fachklasse;Sortierung;;;10;int;;0;0;;;Statkue Tabelle IT.NRW: Sortierung der Fachklasse
+Statkue_Fachklasse;Status;;;11;varchar;20;;0;;;Statkue Tabelle IT.NRW: Status der Fachklasse
+Statkue_Fachklasse;Flag_APOBK;;;12;varchar;1;;0;;;Statkue Tabelle IT.NRW: ???
+Statkue_Fachklasse;Beschreibung;;;13;varchar;100;;0;;;Statkue Tabelle IT.NRW: Berschreibung der Fachklasse (Beruf)
+Statkue_Fachklasse;Beschreibung_W;;;14;varchar;100;;0;;;Statkue Tabelle IT.NRW: Beschreibung weiblich der Fachklasse (Beruf)
+Statkue_Fachklasse;Beschreibung_MW;;;15;varchar;100;;0;;;Statkue Tabelle IT.NRW: Beschreibung männlich/weiblich der Fachklasse (Beruf)
+Statkue_Fachklasse;geaendert;;;16;datetime;;;0;;;Statkue Tabelle IT.NRW: letztes Datum der Änderung der Fachklasse
+Statkue_Fachklasse;BAKL;;;17;varchar;5;;0;;;Statkue Tabelle IT.NRW: ???
+Statkue_Fachklasse;BAGR;;;18;varchar;8;;0;;;Statkue Tabelle IT.NRW: ???
+Statkue_Fachklasse;Ebene1;;;19;varchar;2;;0;;;Statkue Tabelle IT.NRW: Berufsebene 1 der Fachklasse
+Statkue_Fachklasse;Ebene2;;;20;varchar;2;;0;;;Statkue Tabelle IT.NRW: Berufsebene 2 der Fachklasse
 Statkue_Foerderschwerpunkt;Beschreibung;;;1;varchar;100;;0;;;Statkue Tabelle IT.NRW: Beschreibung des Förderschwerpunkts
 Statkue_Foerderschwerpunkt;Flag;;;2;varchar;1;1;0;;;Statkue Tabelle IT.NRW: ???
 Statkue_Foerderschwerpunkt;FSP;;;3;varchar;2;;1;;;Statkue Tabelle IT.NRW: StatistikKürzel des Förderschwerpunkts
@@ -2136,7 +2160,7 @@ Statkue_SVWS_ZulaessigeJahrgaenge;Beginn;;;6;datetime;;;0;;;Datum ab wann der Ei
 Statkue_SVWS_ZulaessigeJahrgaenge;Ende;;;7;datetime;;;0;;;Datum bis wann der Eintrag gültig ist
 Statkue_SVWS_ZulaessigeJahrgaenge;geaendert;;;8;datetime;;;0;;;Datum wann der Eintrag zuletzt geändert wurde
 Statkue_SVWS_ZulaessigeJahrgaenge;Sortierung;;;9;int;;0;0;;;Sortierungsnummer des zulässigen Jahrgangs
-Statkue_SVWS_ZulaessigeKursarten;ID;;;1;varchar;5;;1;;;Eine eindeutige ID die auch als Bezeichner in der Programmiersprache genutzt wird
+Statkue_SVWS_ZulaessigeKursarten;ID;;;1;varchar;7;;1;;;Eine eindeutige ID die auch als Bezeichner in der Programmiersprache genutzt wird
 Statkue_SVWS_ZulaessigeKursarten;Kuerzel;;;2;varchar;5;;1;;;das in der Statistik verwendete Kürzel der Kursart ITNRW
 Statkue_SVWS_ZulaessigeKursarten;ASDNummer;;;3;varchar;2;;1;;;die Statistiknummer in der ASD von ITNRW
 Statkue_SVWS_ZulaessigeKursarten;Bezeichnung;;;4;varchar;120;;1;;;die Bezeichnung der Kursart in vereinfachter Form für die Anzeige im Client

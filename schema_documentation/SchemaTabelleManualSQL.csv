@@ -2,15 +2,77 @@ Revision;Veraltet;Reihenfolge;dbms;NameTabelle;Kommentar;UpdateOnly;sql
 1;;1;ALL;EigeneSchule;Korrigiere das Feld SchulformKrz bei der Schulform PS;1;UPDATE EigeneSchule SET SchulformKrz = 'PS' WHERE SchulformNr = 13 AND SchulformKrz <> 'PS'
 1;;2;ALL;EigeneSchule;Korrigiere das Feld SchulformKrz bei der Schulform SK;1;UPDATE EigeneSchule SET SchulformKrz = 'SK' WHERE SchulformNr = 14 AND SchulformKrz <> 'SK'
 1;;3;ALL;EigeneSchule;Korrigiere das Feld SchulformKrz bei der Schulform GM;1;UPDATE EigeneSchule SET SchulformKrz = 'GM' WHERE SchulformNr = 16 AND SchulformKrz <> 'GM'
-1;;4;ALL;K_Lehrer;Korrektur für den Fremschluessel auf die Spalte StaatKrz der Tabelle K_Lehrer;1;UPDATE K_Lehrer SET StaatKrz = NULL WHERE StaatKrz NOT IN (SELECT Schluessel FROM Statkue_Nationalitaeten)
-1;;5;ALL;Schueler;Korrektur für den Fremschluessel auf die Spalte StaatKrz der Tabelle Schueler;1;UPDATE Schueler SET StaatKrz = NULL WHERE StaatKrz NOT IN (SELECT Schluessel FROM Statkue_Nationalitaeten)
-1;;6;ALL;SchuelerLeistungsdaten;Korrektur für den Fremschluessel auf die Spalte Fachlehrer der Tabelle SchuelerLeistungsdaten;1;UPDATE SchuelerLeistungsdaten SET Fachlehrer = NULL WHERE Fachlehrer NOT IN (SELECT Kuerzel FROM K_Lehrer)
-1;;7;ALL;SchuelerLernabschnittsdaten;Korrektur für den Fremschluessel auf die Spalte Jahrgang_ID der Tabelle Lernabschnittsdaten;1;UPDATE SchuelerLernabschnittsdaten SET Jahrgang_ID = NULL WHERE Jahrgang_ID NOT IN (SELECT ID FROM EigeneSchule_Jahrgaenge)
-1;;8;ALL;SchuelerLeistungsdaten;Fehlerbehebung bei einer fehlenden Kursart, Kursart raten und setzen auf PUK, falls die Kurs_ID nicht gesetzt ist;1;UPDATE SchuelerLeistungsdaten SET Kursart = 'PUK', KursartAllg = 'PUK' WHERE ((Kursart IS NULL) OR (Kursart = '')) AND (Kurs_ID IS NULL)  
-1;;9;ALL;SchuelerLeistungsdaten;Fehlerbehebung bei einer fehlenden Kursart, Kursart raten und setzen auf PUT, falls die Kurs_ID gesetzt ist;1;UPDATE SchuelerLeistungsdaten SET Kursart = 'PUT', KursartAllg = 'PUT' WHERE ((Kursart IS NULL) OR (Kursart = '')) AND (Kurs_ID IS NOT NULL)
-1;;10;ALL;SchuelerLD_PSFachBem;Kopieren der Daten im Feld LELS in das Feld AUE, falls die Schulform keine Grundschule ist.;1;UPDATE SchuelerLD_PSFachBem SET AUE = LELS WHERE ((SELECT count(*) FROM EigeneSchule WHERE SchulformKrz = 'G') = 0) AND LELS IS NOT NULL
-1;;11;ALL;SchuelerLD_PSFachBem;Löschen der Daten im Feld LELS, falls die Schulform keine Grundschule ist.;1;UPDATE SchuelerLD_PSFachBem SET LELS = NULL WHERE ((SELECT count(*) FROM EigeneSchule WHERE SchulformKrz = 'G') = 0) AND LELS IS NOT NULL
-1;;12;MSSQL;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten;1;"DELETE FROM SchuelerLeistungsdaten 
+1;;4;ALL;EigeneSchule_Abteilungen;Korrektur für den Fremdschluessel auf die Spalte AbteilungsLeiter der Tabelle EigeneSchule_Abteilungen;1;UPDATE EigeneSchule_Abteilungen SET AbteilungsLeiter = NULL WHERE AbteilungsLeiter NOT IN (SELECT Kuerzel FROM K_Lehrer)
+1;;5;ALL;Floskeln;Korrektur für den Fremdschluessel auf die Spalte FloskelGruppe der Tabelle Floskeln;1;UPDATE Floskeln SET FloskelGruppe = NULL WHERE FloskelGruppe NOT IN (SELECT Kuerzel FROM Floskelgruppen)
+1;;6;ALL;K_AllgAdresse;Korrektur für den Fremdschluessel auf die Spalte AllgAdrAdressArt der Tabelle K_AllgAdresse;1;UPDATE K_AllgAdresse SET AllgAdrAdressArt = NULL WHERE AllgAdrAdressArt NOT IN (SELECT Bezeichnung FROM K_Adressart)
+1;;7;ALL;K_Ankreuzfloskeln;Korrektur für den Fremdschluessel auf die Spalte Fach_ID der Tabelle K_Ankreuzfloskeln – Spalte IstASV nutzen;1;UPDATE K_Ankreuzfloskeln SET IstASV = 1 WHERE Fach_ID = -1
+1;;8;ALL;K_Ankreuzfloskeln;Korrektur für den Fremdschluessel auf die Spalte Fach_ID der Tabelle K_Ankreuzfloskeln – Setze Fach-ID auf null bei ungültigen Werten;1;UPDATE K_Ankreuzfloskeln SET Fach_ID = null WHERE Fach_ID NOT IN (SELECT ID FROM EigeneSchule_Faecher)
+1;;9;ALL;K_Lehrer;Korrektur für den Fremdschluessel auf die Spalte StaatKrz der Tabelle K_Lehrer;1;UPDATE K_Lehrer SET StaatKrz = NULL WHERE StaatKrz NOT IN (SELECT Schluessel FROM Statkue_Nationalitaeten)
+1;;10;ALL;Kurse;Korrektur für den Fremdschluessel auf die Spalte Jahrgang_ID der Tabelle Kurse;1;UPDATE Kurse SET Jahrgang_ID=null WHERE Jahrgang_ID NOT IN (SELECT ID FROM EigeneSchule_Jahrgaenge)
+1;;11;ALL;Schild_Verwaltung;Korrektur für den Fremdschluessel auf die Spalte DatumLoeschfristHinweisDeaktiviertUserID der Tabelle Schild_Verwaltung;1;UPDATE Schild_Verwaltung SET DatumLoeschfristHinweisDeaktiviertUserID=null WHERE DatumLoeschfristHinweisDeaktiviertUserID NOT IN (SELECT ID FROM Users)
+1;;12;ALL;Schueler;Korrektur für den Fremdschluessel auf die Spalte Einschulungsart_ID der Tabelle Schueler;1;UPDATE Schueler SET Einschulungsart_ID=null WHERE Einschulungsart_ID NOT IN (SELECT ID FROM K_EinschulungsArt)
+1;;13;ALL;Schueler;Korrektur für den Fremdschluessel auf die Spalte Entlassjahrgang_ID der Tabelle Schueler;1;UPDATE Schueler SET Entlassjahrgang_ID=null WHERE Entlassjahrgang_ID NOT IN (SELECT ID FROM EigeneSchule_Jahrgaenge)
+1;;14;ALL;Schueler;Korrektur für den Fremdschluessel auf die Spalte FachklasseNSJ_ID der Tabelle Schueler;1;UPDATE Schueler SET FachklasseNSJ_ID=null WHERE FachklasseNSJ_ID NOT IN (SELECT ID FROM EigeneSchule_Fachklassen)
+1;;15;ALL;Schueler;Korrektur für den Fremdschluessel auf die Spalte Fahrschueler_ID der Tabelle Schueler;1;UPDATE Schueler SET Fahrschueler_ID=null WHERE Fahrschueler_ID NOT IN (SELECT ID FROM K_FahrschuelerArt)
+1;;16;ALL;Schueler;Korrektur für den Fremdschluessel auf die Spalte Foerderschwerpunkt_ID der Tabelle Schueler;1;UPDATE Schueler SET Foerderschwerpunkt_ID=null WHERE Foerderschwerpunkt_ID NOT IN (SELECT ID FROM K_Foerderschwerpunkt)
+1;;17;ALL;Schueler;Korrektur für den Fremdschluessel auf die Spalte Foerderschwerpunkt2_ID der Tabelle Schueler;1;UPDATE Schueler SET Foerderschwerpunkt2_ID=null WHERE Foerderschwerpunkt2_ID NOT IN (SELECT ID FROM K_Foerderschwerpunkt)
+1;;18;ALL;Schueler;Korrektur für den Fremdschluessel auf die Spalte Haltestelle_ID der Tabelle Schueler;1;UPDATE Schueler SET Haltestelle_ID=null WHERE Haltestelle_ID NOT IN (SELECT ID FROM K_Haltestelle)
+1;;19;ALL;Schueler;Korrektur für den Fremdschluessel auf die Spalte Jahrgang_ID der Tabelle Schueler;1;UPDATE Schueler SET Jahrgang_ID=null WHERE Jahrgang_ID NOT IN (SELECT ID FROM EigeneSchule_Jahrgaenge)
+1;;20;ALL;Schueler;Korrektur für den Fremdschluessel auf die Spalte Kindergarten_ID der Tabelle Schueler;1;UPDATE Schueler SET Kindergarten_ID=null WHERE Kindergarten_ID NOT IN (SELECT ID FROM K_Kindergarten)
+1;;21;ALL;Schueler;Korrektur für den Fremdschluessel auf die Spalte Klasse der Tabelle Schueler;1;UPDATE Schueler SET Klasse=null WHERE Klasse NOT IN (SELECT Klasse FROM Versetzung)
+1;;22;ALL;Schueler;Korrektur für den Fremdschluessel auf die Spalte Lehrer der Tabelle Schueler;1;UPDATE Schueler SET Lehrer = NULL WHERE Lehrer NOT IN (SELECT Kuerzel FROM K_Lehrer)
+1;;23;ALL;Schueler;Korrektur für den Fremdschluessel auf die Spalte Religion_ID der Tabelle Schueler;1;UPDATE Schueler SET Religion_ID = NULL WHERE Religion_ID NOT IN (SELECT ID FROM K_Religion)
+1;;24;ALL;Schueler;Korrektur für den Fremdschluessel auf die Spalte StaatKrz der Tabelle Schueler;1;UPDATE Schueler SET StaatKrz = NULL WHERE StaatKrz NOT IN (SELECT Schluessel FROM Statkue_Nationalitaeten)
+1;;25;ALL;Schueler;Korrektur für den Fremdschluessel auf die Spalte StaatKrz2 der Tabelle Schueler;1;UPDATE Schueler SET StaatKrz2 = NULL WHERE StaatKrz2 NOT IN (SELECT Schluessel FROM Statkue_Nationalitaeten)
+1;;26;ALL;Schueler;Korrektur für den Fremdschluessel auf die Spalte Schwerpunkt_ID der Tabelle Schueler;1;UPDATE Schueler SET Schwerpunkt_ID = NULL WHERE Schwerpunkt_ID NOT IN (SELECT ID FROM K_Schwerpunkt)
+1;;27;ALL;Schueler;Korrektur für den Fremdschluessel auf die Spalte Sportbefreiung_ID der Tabelle Schueler;1;UPDATE Schueler SET Sportbefreiung_ID = NULL WHERE Sportbefreiung_ID NOT IN (SELECT ID FROM K_Sportbefreiung)
+1;;28;ALL;Schueler_AllgAdr;Korrektur für den Fremdschluessel auf die Spalte Ansprechpartner_ID der Tabelle Schueler_AllgAdr;1;UPDATE Schueler_AllgAdr SET Ansprechpartner_ID = NULL WHERE Ansprechpartner_ID NOT IN (SELECT ID FROM AllgAdrAnsprechpartner)
+1;;29;ALL;Schueler_AllgAdr;Korrektur für den Fremdschluessel auf die Spalte Vertragsart_ID der Tabelle Schueler_AllgAdr;1;UPDATE Schueler_AllgAdr SET Vertragsart_ID = NULL WHERE Vertragsart_ID NOT IN (SELECT ID FROM K_BeschaeftigungsArt)
+1;;30;ALL;SchuelerAbiFaecher;Korrektur für den Fremdschluessel auf die Spalte Kurs_ID der Tabelle SchuelerAbiFaecher;1;UPDATE SchuelerAbiFaecher SET Kurs_ID = NULL WHERE Kurs_ID NOT IN (SELECT ID FROM Kurse)
+1;;31;ALL;SchuelerEinzelleistungen;Korrektur für den Fremdschluessel auf die Spalte Lehrer_ID der Tabelle SchuelerEinzelleistungen;1;UPDATE SchuelerEinzelleistungen SET Lehrer_ID = NULL WHERE Lehrer_ID NOT IN (SELECT ID FROM K_Lehrer)
+1;;32;ALL;SchuelerErzAdr;Korrektur für den Fremdschluessel auf die Spalte ErzieherArt_ID der Tabelle SchuelerErzAdr;1;UPDATE SchuelerErzAdr SET ErzieherArt_ID = NULL WHERE ErzieherArt_ID NOT IN (SELECT ID FROM K_ErzieherArt)
+1;;33;ALL;SchuelerErzAdr;Korrektur für den Fremdschluessel auf die Spalte Erz1StaatKrz der Tabelle SchuelerErzAdr;1;UPDATE SchuelerErzAdr SET Erz1StaatKrz = NULL WHERE Erz1StaatKrz NOT IN (SELECT Schluessel FROM Statkue_Nationalitaeten)
+1;;34;ALL;SchuelerErzAdr;Korrektur für den Fremdschluessel auf die Spalte Erz2StaatKrz der Tabelle SchuelerErzAdr;1;UPDATE SchuelerErzAdr SET Erz2StaatKrz = NULL WHERE Erz2StaatKrz NOT IN (SELECT Schluessel FROM Statkue_Nationalitaeten)
+1;;35;ALL;SchuelerFehlstunden;Korrektur für den Fremdschluessel auf die Spalte Fach_ID der Tabelle SchuelerFehlstunden;1;UPDATE SchuelerFehlstunden SET Fach_ID = null WHERE Fach_ID NOT IN (SELECT ID FROM EigeneSchule_Faecher)
+1;;36;ALL;SchuelerFehlstunden;Korrektur für den Fremdschluessel auf die Spalte Lehrer_ID der Tabelle SchuelerFehlstunden;1;UPDATE SchuelerFehlstunden SET Lehrer_ID = NULL WHERE Lehrer_ID NOT IN (SELECT ID FROM K_Lehrer)
+1;;37;ALL;SchuelerFoerderempfehlungen;Korrektur für den Fremdschluessel auf die Spalte Fach_ID der Tabelle SchuelerFoerderempfehlungen;1;UPDATE SchuelerFoerderempfehlungen SET Fach_ID = null WHERE Fach_ID NOT IN (SELECT ID FROM EigeneSchule_Faecher)
+1;;38;ALL;SchuelerFoerderempfehlungen;Korrektur für den Fremdschluessel auf die Spalte Lehrer_ID der Tabelle SchuelerFoerderempfehlungen;1;UPDATE SchuelerFoerderempfehlungen SET Lehrer_ID = NULL WHERE Lehrer_ID NOT IN (SELECT ID FROM K_Lehrer)
+1;;39;ALL;SchuelerFoerderempfehlungen;Korrektur für den Fremdschluessel auf die Spalte Kurs_ID der Tabelle SchuelerFoerderempfehlungen;1;UPDATE SchuelerFoerderempfehlungen SET Kurs_ID = NULL WHERE Kurs_ID NOT IN (SELECT ID FROM Kurse)
+1;;40;ALL;SchuelerKAoADaten;Korrektur für den Fremdschluessel auf die Spalte MerkmalID der Tabelle SchuelerKAoADaten;1;UPDATE SchuelerKAoADaten SET MerkmalID = NULL WHERE MerkmalID NOT IN (SELECT ID FROM Schildintern_KAoA_Merkmal)
+1;;41;ALL;SchuelerKAoADaten;Korrektur für den Fremdschluessel auf die Spalte ZusatzmerkmalID der Tabelle SchuelerKAoADaten;1;UPDATE SchuelerKAoADaten SET ZusatzmerkmalID = NULL WHERE ZusatzmerkmalID NOT IN (SELECT ID FROM Schildintern_KAoA_Zusatzmerkmal)
+1;;42;ALL;SchuelerKAoADaten;Korrektur für den Fremdschluessel auf die Spalte AnschlussoptionID der Tabelle SchuelerKAoADaten;1;UPDATE SchuelerKAoADaten SET AnschlussoptionID = NULL WHERE AnschlussoptionID NOT IN (SELECT ID FROM Schildintern_KAoA_Anschlussoption)
+1;;43;ALL;SchuelerKAoADaten;Korrektur für den Fremdschluessel auf die Spalte BerufsfeldID der Tabelle SchuelerKAoADaten;1;UPDATE SchuelerKAoADaten SET BerufsfeldID = NULL WHERE BerufsfeldID NOT IN (SELECT ID FROM Schildintern_KAoA_Berufsfeld)
+1;;44;ALL;SchuelerKAoADaten;Korrektur für den Fremdschluessel auf die Spalte SBO_Ebene4ID der Tabelle SchuelerKAoADaten;1;UPDATE SchuelerKAoADaten SET SBO_Ebene4ID = NULL WHERE SBO_Ebene4ID NOT IN (SELECT ID FROM Schildintern_KAoA_SBO_Ebene4)
+1;;45;ALL;SchuelerLeistungsdaten;Korrektur für den Fremdschluessel auf die Spalte Fachlehrer der Tabelle SchuelerLeistungsdaten;1;UPDATE SchuelerLeistungsdaten SET Fachlehrer = NULL WHERE Fachlehrer NOT IN (SELECT Kuerzel FROM K_Lehrer)
+1;;46;ALL;SchuelerLeistungsdaten;Korrektur für den Fremdschluessel auf die Spalte Zusatzkraft der Tabelle SchuelerLeistungsdaten;1;UPDATE SchuelerLeistungsdaten SET Zusatzkraft = NULL WHERE Zusatzkraft NOT IN (SELECT Kuerzel FROM K_Lehrer)
+1;;47;ALL;SchuelerLeistungsdaten;Korrektur für den Fremdschluessel auf die Spalte Kurs_ID der Tabelle SchuelerLeistungsdaten;1;UPDATE SchuelerLeistungsdaten SET Kurs_ID = NULL WHERE Kurs_ID NOT IN (SELECT ID FROM Kurse)
+1;;48;ALL;SchuelerLernabschnittsdaten;Korrektur für den Fremdschluessel auf die Spalte NPV_Fach_ID der Tabelle Lernabschnittsdaten;1;UPDATE SchuelerLernabschnittsdaten SET NPV_Fach_ID = null WHERE NPV_Fach_ID NOT IN (SELECT ID FROM EigeneSchule_Faecher)
+1;;49;ALL;SchuelerLernabschnittsdaten;Korrektur für den Fremdschluessel auf die Spalte NPAA_Fach_ID der Tabelle Lernabschnittsdaten;1;UPDATE SchuelerLernabschnittsdaten SET NPAA_Fach_ID = null WHERE NPAA_Fach_ID NOT IN (SELECT ID FROM EigeneSchule_Faecher)
+1;;50;ALL;SchuelerLernabschnittsdaten;Korrektur für den Fremdschluessel auf die Spalte NPBQ_Fach_ID der Tabelle Lernabschnittsdaten;1;UPDATE SchuelerLernabschnittsdaten SET NPBQ_Fach_ID = null WHERE NPBQ_Fach_ID NOT IN (SELECT ID FROM EigeneSchule_Faecher)
+1;;51;ALL;SchuelerLernabschnittsdaten;Korrektur für den Fremdschluessel auf die Spalte Fachklasse_ID der Tabelle Lernabschnittsdaten;1;UPDATE SchuelerLernabschnittsdaten SET Fachklasse_ID = NULL WHERE Fachklasse_ID NOT IN (SELECT ID FROM EigeneSchule_Fachklassen)
+1;;52;ALL;SchuelerLernabschnittsdaten;Korrektur für den Fremdschluessel auf die Spalte Foerderschwerpunkt_ID der Tabelle Lernabschnittsdaten;1;UPDATE SchuelerLernabschnittsdaten SET Foerderschwerpunkt_ID = NULL WHERE Foerderschwerpunkt_ID NOT IN (SELECT ID FROM K_Foerderschwerpunkt)
+1;;53;ALL;SchuelerLernabschnittsdaten;Korrektur für den Fremdschluessel auf die Spalte Foerderschwerpunkt2_ID der Tabelle Lernabschnittsdaten;1;UPDATE SchuelerLernabschnittsdaten SET Foerderschwerpunkt2_ID = NULL WHERE Foerderschwerpunkt2_ID NOT IN (SELECT ID FROM K_Foerderschwerpunkt)
+1;;54;ALL;SchuelerLernabschnittsdaten;Korrektur für den Fremdschluessel auf die Spalte Jahrgang_ID der Tabelle Lernabschnittsdaten;1;UPDATE SchuelerLernabschnittsdaten SET Jahrgang_ID = NULL WHERE Jahrgang_ID NOT IN (SELECT ID FROM EigeneSchule_Jahrgaenge)
+1;;55;ALL;SchuelerLernabschnittsdaten;Korrektur für den Fremdschluessel auf die Spalte KlassenLehrer der Tabelle SchuelerLernabschnittsdaten;1;UPDATE SchuelerLernabschnittsdaten SET KlassenLehrer = NULL WHERE KlassenLehrer NOT IN (SELECT Kuerzel FROM K_Lehrer)
+1;;56;ALL;SchuelerLernabschnittsdaten;Korrektur für den Fremdschluessel auf die Spalte StvKlassenlehrer_ID der Tabelle SchuelerLernabschnittsdaten;1;UPDATE SchuelerLernabschnittsdaten SET StvKlassenlehrer_ID = NULL WHERE StvKlassenlehrer_ID NOT IN (SELECT ID FROM K_Lehrer)
+1;;57;ALL;SchuelerLernabschnittsdaten;Korrektur für den Fremdschluessel auf die Spalte Schwerpunkt_ID der Tabelle SchuelerLernabschnittsdaten;1;UPDATE SchuelerLernabschnittsdaten SET Schwerpunkt_ID = NULL WHERE Schwerpunkt_ID NOT IN (SELECT ID FROM K_Schwerpunkt)
+1;;58;ALL;SchuelerLernabschnittsdaten;Korrektur für den Fremdschluessel auf die Spalte Sonderpaedagoge_ID der Tabelle SchuelerLernabschnittsdaten;1;UPDATE SchuelerLernabschnittsdaten SET Sonderpaedagoge_ID = NULL WHERE Sonderpaedagoge_ID NOT IN (SELECT ID FROM K_Lehrer)
+1;;59;ALL;SchuelerTelefone;Korrektur für den Fremdschluessel auf die Spalte TelefonArt_ID der Tabelle SchuelerTelefone;1;UPDATE SchuelerTelefone SET TelefonArt_ID = NULL WHERE TelefonArt_ID NOT IN (SELECT ID FROM K_TelefonArt)
+1;;60;ALL;Versetzung;Korrektur für den Fremdschluessel auf die Spalte Fachklasse_ID der Tabelle Versetzung;1;UPDATE Versetzung SET Fachklasse_ID = NULL WHERE Fachklasse_ID NOT IN (SELECT ID FROM EigeneSchule_Fachklassen)
+1;;61;ALL;Versetzung;Korrektur für den Fremdschluessel auf die Spalte Jahrgang_ID der Tabelle Versetzung;1;UPDATE Versetzung SET Jahrgang_ID = NULL WHERE Jahrgang_ID NOT IN (SELECT ID FROM EigeneSchule_Jahrgaenge)
+1;;62;ALL;Versetzung;Korrektur für den Fremdschluessel auf die Spalte KlassenlehrerKrz der Tabelle Versetzung;1;UPDATE Versetzung SET KlassenlehrerKrz = NULL WHERE KlassenlehrerKrz NOT IN (SELECT Kuerzel FROM K_Lehrer)
+1;;63;ALL;Versetzung;Korrektur für den Fremdschluessel auf die Spalte StvKlassenlehrerKrz der Tabelle Versetzung;1;UPDATE Versetzung SET StvKlassenlehrerKrz = NULL WHERE StvKlassenlehrerKrz NOT IN (SELECT Kuerzel FROM K_Lehrer)
+1;;64;ALL;ZuordnungReportvorlagen;Korrektur für den Fremdschluessel auf die Spalte Fachklasse_ID der ZuordnungReportvorlagen;1;UPDATE ZuordnungReportvorlagen SET Fachklasse_ID = NULL WHERE Fachklasse_ID NOT IN (SELECT ID FROM EigeneSchule_Fachklassen)
+1;;65;ALL;ZuordnungReportvorlagen;Korrektur für den Fremdschluessel auf die Spalte Jahrgang_ID der ZuordnungReportvorlagen;1;UPDATE ZuordnungReportvorlagen SET Jahrgang_ID = NULL WHERE Jahrgang_ID NOT IN (SELECT ID FROM EigeneSchule_Jahrgaenge)
+1;;66;ALL;SchuelerLeistungsdaten;Fehlerbehebung bei einer fehlenden Kursart, Kursart raten und setzen auf PUK, falls die Kurs_ID nicht gesetzt ist;1;UPDATE SchuelerLeistungsdaten SET Kursart = 'PUK', KursartAllg = 'PUK' WHERE ((Kursart IS NULL) OR (Kursart = '')) AND (Kurs_ID IS NULL)  
+1;;67;ALL;SchuelerLeistungsdaten;Fehlerbehebung bei einer fehlenden Kursart, Kursart raten und setzen auf PUT, falls die Kurs_ID gesetzt ist;1;UPDATE SchuelerLeistungsdaten SET Kursart = 'PUT', KursartAllg = 'PUT' WHERE ((Kursart IS NULL) OR (Kursart = '')) AND (Kurs_ID IS NOT NULL)
+1;;68;ALL;SchuelerLD_PSFachBem;Kopieren der Daten im Feld LELS in das Feld AUE, falls die Schulform keine Grundschule ist.;1;UPDATE SchuelerLD_PSFachBem SET AUE = LELS WHERE ((SELECT count(*) FROM EigeneSchule WHERE SchulformKrz = 'G') = 0) AND LELS IS NOT NULL
+1;;69;ALL;SchuelerLD_PSFachBem;Löschen der Daten im Feld LELS, falls die Schulform keine Grundschule ist.;1;UPDATE SchuelerLD_PSFachBem SET LELS = NULL WHERE ((SELECT count(*) FROM EigeneSchule WHERE SchulformKrz = 'G') = 0) AND LELS IS NOT NULL
+1;;70;ALL;SchuelerSprachenfolge;Expandiere das Feld Reihenfolge zu den Feldern ReihenfolgeNr, IstSprachpruefungSI und IstSprachnachweisSI;1;"UPDATE SchuelerSprachenfolge SET
+ReihenfolgeNr = CASE WHEN Reihenfolge REGEXP '^[0-9]+$' THEN CONVERT(Reihenfolge, UNSIGNED) ELSE null END,
+IstSprachpruefungSI = CASE WHEN Reihenfolge = 'P' THEN 1 ELSE 0 END,
+IstSprachnachweisSI = CASE WHEN Reihenfolge = 'N' THEN 1 ELSE 0 END"
+1;;71;MSSQL;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten;1;"DELETE FROM SchuelerLeistungsdaten 
 WHERE ID IN (
   SELECT a.ID FROM SchuelerLeistungsdaten a 
     JOIN (SELECT max(ID) AS maxID, Abschnitt_ID, Fach_ID, Fachlehrer, Kurs_ID, Kursart FROM SchuelerLeistungsdaten GROUP BY Abschnitt_ID, Fach_ID, Fachlehrer, Kurs_ID, Kursart HAVING count(*) > 1) b
@@ -21,7 +83,7 @@ WHERE ID IN (
     	AND ((a.Kursart = b.Kursart) OR (a.Kursart IS NULL AND b.Kursart IS NULL)) 
     	AND a.ID <> b.maxID
 )"
-1;;12;SQLITE;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten;1;"DELETE FROM SchuelerLeistungsdaten 
+1;;71;SQLITE;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten;1;"DELETE FROM SchuelerLeistungsdaten 
 WHERE ID IN (
   SELECT a.ID FROM SchuelerLeistungsdaten a 
     JOIN (SELECT max(ID) AS maxID, Abschnitt_ID, Fach_ID, Fachlehrer, Kurs_ID, Kursart FROM SchuelerLeistungsdaten GROUP BY Abschnitt_ID, Fach_ID, Fachlehrer, Kurs_ID, Kursart HAVING count(*) > 1) b
@@ -32,9 +94,9 @@ WHERE ID IN (
     	AND ((a.Kursart = b.Kursart) OR (a.Kursart IS NULL AND b.Kursart IS NULL)) 
     	AND a.ID <> b.maxID
 )"
-1;;12;MARIA_DB;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (1);1;"CREATE TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_MaxID AS
+1;;71;MARIA_DB;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (1);1;"CREATE TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_MaxID AS
 SELECT max(ID) AS maxID, Abschnitt_ID, Fach_ID, Fachlehrer, Kurs_ID, Kursart FROM SchuelerLeistungsdaten GROUP BY Abschnitt_ID, Fach_ID, Fachlehrer, Kurs_ID, Kursart HAVING count(*) > 1"
-1;;13;MARIA_DB;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (2);1;"CREATE TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_DeleteIDs AS
+1;;72;MARIA_DB;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (2);1;"CREATE TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_DeleteIDs AS
   SELECT a.ID FROM SchuelerLeistungsdaten a 
     JOIN TMP_SchuelerLeistungsdaten_Duplikate_MaxID b
     ON a.Abschnitt_ID = b.Abschnitt_ID 
@@ -44,13 +106,13 @@ SELECT max(ID) AS maxID, Abschnitt_ID, Fach_ID, Fachlehrer, Kurs_ID, Kursart FRO
     	AND ((a.Kursart = b.Kursart) OR (a.Kursart IS NULL AND b.Kursart IS NULL)) 
     	AND a.ID <> b.maxID
 "
-1;;14;MARIA_DB;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (3);1;"DELETE FROM SchuelerLeistungsdaten 
+1;;73;MARIA_DB;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (3);1;"DELETE FROM SchuelerLeistungsdaten 
 WHERE ID IN (SELECT ID FROM TMP_SchuelerLeistungsdaten_Duplikate_DeleteIDs)"
-1;;15;MARIA_DB;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (4);1;DROP TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_DeleteIDs
-1;;16;MARIA_DB;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (5);1;DROP TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_MaxID
-1;;12;MYSQL;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (1);1;"CREATE TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_MaxID AS
+1;;74;MARIA_DB;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (4);1;DROP TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_DeleteIDs
+1;;75;MARIA_DB;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (5);1;DROP TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_MaxID
+1;;71;MYSQL;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (1);1;"CREATE TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_MaxID AS
 SELECT max(ID) AS maxID, Abschnitt_ID, Fach_ID, Fachlehrer, Kurs_ID, Kursart FROM SchuelerLeistungsdaten GROUP BY Abschnitt_ID, Fach_ID, Fachlehrer, Kurs_ID, Kursart HAVING count(*) > 1"
-1;;13;MYSQL;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (2);1;"CREATE TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_DeleteIDs AS
+1;;72;MYSQL;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (2);1;"CREATE TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_DeleteIDs AS
   SELECT a.ID FROM SchuelerLeistungsdaten a 
     JOIN TMP_SchuelerLeistungsdaten_Duplikate_MaxID b
     ON a.Abschnitt_ID = b.Abschnitt_ID 
@@ -60,10 +122,10 @@ SELECT max(ID) AS maxID, Abschnitt_ID, Fach_ID, Fachlehrer, Kurs_ID, Kursart FRO
     	AND ((a.Kursart = b.Kursart) OR (a.Kursart IS NULL AND b.Kursart IS NULL)) 
     	AND a.ID <> b.maxID
 "
-1;;14;MYSQL;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (3);1;"DELETE FROM SchuelerLeistungsdaten 
+1;;73;MYSQL;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (3);1;"DELETE FROM SchuelerLeistungsdaten 
 WHERE ID IN (SELECT ID FROM TMP_SchuelerLeistungsdaten_Duplikate_DeleteIDs)"
-1;;15;MYSQL;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (4);1;DROP TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_DeleteIDs
-1;;16;MYSQL;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (5);1;DROP TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_MaxID
+1;;74;MYSQL;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (4);1;DROP TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_DeleteIDs
+1;;75;MYSQL;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten (5);1;DROP TEMPORARY TABLE TMP_SchuelerLeistungsdaten_Duplikate_MaxID
 2;;1;ALL;Kurs_Schueler;Initialisierung Kurs_Schueler: ggf. leeren;0;DELETE FROM Kurs_Schueler
 2;;2;MSSQL;Kurs_Schueler;Entfernen fehlerhafter Kurs-Einträge in den Leistungsdaten (Zuordnung zu Lernabschnitten);0;"UPDATE SchuelerLeistungsdaten SET Kurs_ID = NULL WHERE ID IN (
 SELECT DISTINCT

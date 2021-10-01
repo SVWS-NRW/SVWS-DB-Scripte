@@ -156,7 +156,6 @@ DROP TABLE K_Textdateien;
 DROP TABLE K_TelefonArt;
 DROP TABLE K_Staat;
 DROP TABLE K_Sportbefreiung;
-DROP TABLE Fachklassen_Schwerpunkte;
 DROP TABLE K_Schwerpunkt;
 DROP TABLE K_Schulfunktionen;
 DROP TABLE K_Schule;
