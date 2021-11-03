@@ -27,10 +27,12 @@ BW;Betriebswirtschaftslehre;BW;Betriebswirtschaftslehre;;;BK,SB;;;;0;0;0;0;0;0;1
 BY;Betriebssysteme / Netzwerke;BY;Betriebssysteme / Netzwerke;;;BK,SB;;;;0;0;0;0;0;0;1;;
 C;Chinesisch;C;Chinesisch;1;3;BK,SB,WB;;;;1;0;0;0;0;0;1;;
 C0;Chinesisch, regulärer Beginn in der Einführungsphase;C;Chinesisch, regulärer Beginn in der Einführungsphase;1;3;GE,GM,GY,PS,SG;;;EF;1;0;0;0;0;1;1;;
-C5;Chinesisch, regulärer Beginn in Jahrgang 5;C;Chinesisch, regulärer Beginn in Jahrgang 5;1;3;GE,GM,GY,PS,SG,SK;;;5;1;0;0;0;0;0;1;;
-C6;Chinesisch, regulärer Beginn in Jahrgang 6;C;Chinesisch, regulärer Beginn in Jahrgang 6;1;3;GE,GM,GY,PS,SG,SK;;;6;1;0;0;0;0;0;1;;
-C7;Chinesisch, regulärer Beginn in Jahrgang 7;C;Chinesisch, regulärer Beginn in Jahrgang 7;1;3;GE,GM,GY,PS,SG,SK;;;7;1;0;0;0;0;0;1;;
-C8;Chinesisch, regulärer Beginn in Jahrgang 8;C;Chinesisch, regulärer Beginn in Jahrgang 8;1;3;GE,GM,GY,PS,SG,SK;;;8;1;0;0;0;0;0;1;;
+C1;Chinesisch, regulärer Beginn in Jahrgang 11;C;Chinesisch, regulärer Beginn in Jahrgang 11;1;3;GE,GM,GY,PS,SG;;2012;11;1;0;0;0;0;1;1;;2012
+C5;Chinesisch, regulärer Beginn in Jahrgang 5;C;Chinesisch, regulärer Beginn in Jahrgang 5;1;3;GE,GM,GY,PS,SG,SK;;;05;1;0;0;0;0;0;1;;
+C6;Chinesisch, regulärer Beginn in Jahrgang 6;C;Chinesisch, regulärer Beginn in Jahrgang 6;1;3;GE,GM,GY,PS,SG,SK;;;06;1;0;0;0;0;0;1;;
+C7;Chinesisch, regulärer Beginn in Jahrgang 7;C;Chinesisch, regulärer Beginn in Jahrgang 7;1;3;GE,GM,GY,PS,SG,SK;;;07;1;0;0;0;0;0;1;;
+C8;Chinesisch, regulärer Beginn in Jahrgang 8;C;Chinesisch, regulärer Beginn in Jahrgang 8;1;3;GE,GM,GY,PS,SG,SK;;;08;1;0;0;0;0;0;1;;
+C9;Chinesisch, regulärer Beginn in Jahrgang 9;C;Chinesisch, regulärer Beginn in Jahrgang 9;1;3;GE,GM,GY,PS,SG,SK;;;09;1;0;0;0;0;0;1;;
 CH;Chemie;CH;Chemie;3;10;BK,GE,GM,GY,H,PS,R,S,SB,SG,SK,SR,V,WB;;;;0;0;0;0;0;0;1;;
 CM;Unterricht in der Herkunftssprache - Kroatisch;CM;Unterricht in der Herkunftssprache - Kroatisch;;;G,GE,GM,GY,H,PS,R,S,SG,SK,SR,V;;;;1;1;0;0;0;0;1;;
 CQ;Chinesisch, außerhalb des regulären Fachunterrichts;C;Chinesisch, außerhalb des regulären Fachunterrichts;;;GE,GM,GY,PS,SG,SK;;;;1;0;1;0;0;0;1;;
@@ -50,10 +52,12 @@ EN;Evangelische Religionslehre (konfessionell kooperativ);ER;Evangelische Religi
 ER;Evangelische Religionslehre;ER;Evangelische Religionslehre;;8;BK,FW,G,GE,GM,GY,H,PS,R,S,SB,SG,SK,SR,V,WB;;;;0;0;0;0;0;0;1;;
 F;Französisch;F;Französisch;1;3;BK,FW,H,S,SB,(SK,H),V,WB;;;;1;0;0;0;0;0;1;;
 F0;Französisch, regulärer Beginn in der Einführungsphase;F;Französisch, regulärer Beginn in der Einführungsphase;1;3;GE,GM,GY,PS,SG;;;EF;1;0;0;0;0;1;1;;
-F5;Französisch, regulärer Beginn in Jahrgang 5;F;Französisch, regulärer Beginn in Jahrgang 5;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;5;1;0;0;0;0;0;1;;
-F6;Französisch, regulärer Beginn in Jahrgang 6;F;Französisch, regulärer Beginn in Jahrgang 6;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;6;1;0;0;0;0;0;1;;
-F7;Französisch, regulärer Beginn in Jahrgang 7;F;Französisch, regulärer Beginn in Jahrgang 7;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;7;1;0;0;0;0;0;1;;
-F8;Französisch, regulärer Beginn in Jahrgang 8;F;Französisch, regulärer Beginn in Jahrgang 8;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;8;1;0;0;0;0;0;1;;
+F1;Französisch, regulärer Beginn in Jahrgang 11;F;Französisch, regulärer Beginn in Jahrgang 11;1;3;GE,GM,GY,PS,SG;;2012;11;1;0;0;0;0;1;1;;2012
+F5;Französisch, regulärer Beginn in Jahrgang 5;F;Französisch, regulärer Beginn in Jahrgang 5;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;05;1;0;0;0;0;0;1;;
+F6;Französisch, regulärer Beginn in Jahrgang 6;F;Französisch, regulärer Beginn in Jahrgang 6;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;06;1;0;0;0;0;0;1;;
+F7;Französisch, regulärer Beginn in Jahrgang 7;F;Französisch, regulärer Beginn in Jahrgang 7;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;07;1;0;0;0;0;0;1;;
+F8;Französisch, regulärer Beginn in Jahrgang 8;F;Französisch, regulärer Beginn in Jahrgang 8;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;08;1;0;0;0;0;0;1;;
+F9;Französisch, regulärer Beginn in Jahrgang 9;F;Französisch, regulärer Beginn in Jahrgang 9;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;09;1;0;0;0;0;0;1;;
 FB;Fächer des berufsbezogenen Bereichs;FB;Fächer des berufsbezogenen Bereichs;;;BK,SB;;;;0;0;0;0;0;0;1;;
 FK;Fremdsprachliche Kommunikation;FK;Fremdsprachliche Kommunikation;;;BK,SB;;;;0;0;0;0;0;0;1;;
 FP;Fachpraxis;FP;Fachpraxis;;;BK,SB;;;;0;0;0;0;0;0;1;;
@@ -61,10 +65,12 @@ FQ;Französisch, außerhalb des regulären Fachunterrichts;F;Französisch, auße
 FU;Förderunterricht;FU;Förderunterricht;;;BK,G,PS,SB,V;;;;0;0;0;0;0;0;1;;
 G;Altgriechisch;G;Altgriechisch;;3;FW,S,WB;;;;1;0;0;0;0;0;1;;
 G0;Altgriechisch, regulärer Beginn in der Einführungsphase;G;Altgriechisch, regulärer Beginn in der Einführungsphase;;3;GE,GM,GY,PS,SG;;;EF;1;0;0;0;0;1;1;;
-G5;Altgriechisch, regulärer Beginn in Jahrgang 5;G;Altgriechisch, regulärer Beginn in Jahrgang 5;;3;GE,GM,GY,PS,SG,SK;;;5;1;0;0;0;0;0;1;;
-G6;Altgriechisch, regulärer Beginn in Jahrgang 6;G;Altgriechisch, regulärer Beginn in Jahrgang 6;;3;GE,GM,GY,PS,SG,SK;;;6;1;0;0;0;0;0;1;;
-G7;Altgriechisch, regulärer Beginn in Jahrgang 7;G;Altgriechisch, regulärer Beginn in Jahrgang 7;;3;GE,GM,GY,PS,SG,SK;;;7;1;0;0;0;0;0;1;;
-G8;Altgriechisch, regulärer Beginn in Jahrgang 8;G;Altgriechisch, regulärer Beginn in Jahrgang 8;;3;GE,GM,GY,PS,SG,SK;;;8;1;0;0;0;0;0;1;;
+G1;Altgriechisch, regulärer Beginn in Jahrgang 11;G;Altgriechisch, regulärer Beginn in Jahrgang 11;;3;GE,GM,GY,PS,SG;;2012;11;1;0;0;0;0;1;1;;2012
+G5;Altgriechisch, regulärer Beginn in Jahrgang 5;G;Altgriechisch, regulärer Beginn in Jahrgang 5;;3;GE,GM,GY,PS,SG,SK;;;05;1;0;0;0;0;0;1;;
+G6;Altgriechisch, regulärer Beginn in Jahrgang 6;G;Altgriechisch, regulärer Beginn in Jahrgang 6;;3;GE,GM,GY,PS,SG,SK;;;06;1;0;0;0;0;0;1;;
+G7;Altgriechisch, regulärer Beginn in Jahrgang 7;G;Altgriechisch, regulärer Beginn in Jahrgang 7;;3;GE,GM,GY,PS,SG,SK;;;07;1;0;0;0;0;0;1;;
+G8;Altgriechisch, regulärer Beginn in Jahrgang 8;G;Altgriechisch, regulärer Beginn in Jahrgang 8;;3;GE,GM,GY,PS,SG,SK;;;08;1;0;0;0;0;0;1;;
+G9;Altgriechisch, regulärer Beginn in Jahrgang 9;G;Altgriechisch, regulärer Beginn in Jahrgang 9;;3;GE,GM,GY,PS,SG,SK;;;09;1;0;0;0;0;0;1;;
 GA;Geräte- und Maschinenlehre;GA;Geräte- und Maschinenlehre;;;BK,SB;;;;0;0;0;0;0;0;1;;
 GB;Grundbildung;GB;Grundbildung;;;BK,SB;;;;0;0;0;0;0;0;1;;
 GE;Geschichte;GE;Geschichte;2;6;BK,GE,GM,GY,H,PS,R,S,SB,SG,SK,SR,V,WB;;;;0;0;0;0;0;0;1;;
@@ -79,10 +85,12 @@ GU;Gesamtunterricht  (Förderschulkindergarten);GU;Gesamtunterricht  (Fördersch
 GW;Geschichte und Sozialwissenschaft;GW;Geschichte und Sozialwissenschaft;;6;WB;;;;0;0;0;0;0;0;1;;
 H;Hebräisch;H;Hebräisch;;3;S,WB;;;;1;0;0;0;0;0;1;;
 H0;Hebräisch, regulärer Beginn in der Einführungsphase;H;Hebräisch, regulärer Beginn in der Einführungsphase;;3;GE,GM,GY,PS,SG;;;EF;1;0;0;0;0;1;1;;
-H5;Hebräisch, regulärer Beginn in Jahrgang 5;H;Hebräisch, regulärer Beginn in Jahrgang 5;;3;GE,GM,GY,PS,SG,SK;;;5;1;0;0;0;0;0;1;;
-H6;Hebräisch, regulärer Beginn in Jahrgang 6;H;Hebräisch, regulärer Beginn in Jahrgang 6;;3;GE,GM,GY,PS,SG,SK;;;6;1;0;0;0;0;0;1;;
-H7;Hebräisch, regulärer Beginn in Jahrgang 7;H;Hebräisch, regulärer Beginn in Jahrgang 7;;3;GE,GM,GY,PS,SG,SK;;;7;1;0;0;0;0;0;1;;
-H8;Hebräisch, regulärer Beginn in Jahrgang 8;H;Hebräisch, regulärer Beginn in Jahrgang 8;;3;GE,GM,GY,PS,SG,SK;;;8;1;0;0;0;0;0;1;;
+H1;Hebräisch, regulärer Beginn in Jahrgang 11;H;Hebräisch, regulärer Beginn in Jahrgang 11;;3;GE,GM,GY,PS,SG;;2012;11;1;0;0;0;0;1;1;;2012
+H5;Hebräisch, regulärer Beginn in Jahrgang 5;H;Hebräisch, regulärer Beginn in Jahrgang 5;;3;GE,GM,GY,PS,SG,SK;;;05;1;0;0;0;0;0;1;;
+H6;Hebräisch, regulärer Beginn in Jahrgang 6;H;Hebräisch, regulärer Beginn in Jahrgang 6;;3;GE,GM,GY,PS,SG,SK;;;06;1;0;0;0;0;0;1;;
+H7;Hebräisch, regulärer Beginn in Jahrgang 7;H;Hebräisch, regulärer Beginn in Jahrgang 7;;3;GE,GM,GY,PS,SG,SK;;;07;1;0;0;0;0;0;1;;
+H8;Hebräisch, regulärer Beginn in Jahrgang 8;H;Hebräisch, regulärer Beginn in Jahrgang 8;;3;GE,GM,GY,PS,SG,SK;;;08;1;0;0;0;0;0;1;;
+H9;Hebräisch, regulärer Beginn in Jahrgang 9;H;Hebräisch, regulärer Beginn in Jahrgang 9;;3;GE,GM,GY,PS,SG,SK;;;09;1;0;0;0;0;0;1;;
 HH;Herkunftssprache anstelle einer Pflichtfremdsprache - Kroatisch;HH;Herkunftssprache anstelle einer Pflichtfremdsprache - Kroatisch;;;GE,GM,GY,(H,R),PS,R,S,SG,SK,SR;;;;1;1;0;1;0;0;1;;
 HQ;Hebräisch, außerhalb des regulären Fachunterrichts;H;Hebräisch, außerhalb des regulären Fachunterrichts;;;GE,GM,GY,PS,SG,SK;;;;1;0;1;0;0;0;1;;
 HR;Jüdische Religionslehre;HR;Jüdische Religionslehre;;8;BK,G,GE,GM,GY,H,PS,R,S,SB,SG,SK,SR,V,WB;;;;0;0;0;0;0;0;1;;
@@ -90,11 +98,13 @@ HU;Hausunterricht;HU;Hausunterricht;;;BK,G,GE,GM,GY,H,PS,R,S,SB,SG,SK,SR,V,WB;;;
 HW;Hauswirtschaft (einschl. Ernährungslehre);HW;Hauswirtschaft (einschl. Ernährungslehre);;;GE,GM,GY,H,PS,R,S,SG,SK,SR,WB;;;;0;0;0;0;0;0;1;;
 HY;Hygiene;HY;Hygiene;;;BK,SB;;;;0;0;0;0;0;0;1;;
 I;Italienisch;I;Italienisch;1;3;BK,FW,(H,R),S,SB,WB;;;;1;0;0;0;0;0;1;;
-I0;Italienisch,  regulärer Beginn in der Einführungsphase;I;Italienisch,  regulärer Beginn in der Einführungsphase;1;3;GE,GM,GY,PS,SG;;;EF;1;0;0;0;0;1;1;;
-I5;Italienisch, regulärer Beginn in Jahrgang 5;I;Italienisch, regulärer Beginn in Jahrgang 5;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;5;1;0;0;0;0;0;1;;
-I6;Italienisch, regulärer Beginn in Jahrgang 6;I;Italienisch, regulärer Beginn in Jahrgang 6;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;6;1;0;0;0;0;0;1;;
-I7;Italienisch, regulärer Beginn in Jahrgang 7;I;Italienisch, regulärer Beginn in Jahrgang 7;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;7;1;0;0;0;0;0;1;;
-I8;Italienisch, regulärer Beginn in Jahrgang 8;I;Italienisch, regulärer Beginn in Jahrgang 8;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;8;1;0;0;0;0;0;1;;
+I0;Italienisch, regulärer Beginn in der Einführungsphase;I;Italienisch, regulärer Beginn in der Einführungsphase;1;3;GE,GM,GY,PS,SG;;;EF;1;0;0;0;0;1;1;;
+I1;Italienisch, regulärer Beginn in Jahrgang 11;I;Italienisch, regulärer Beginn in Jahrgang 11;1;3;GE,GM,GY,PS,SG;;2012;11;1;0;0;0;0;1;1;;2012
+I5;Italienisch, regulärer Beginn in Jahrgang 5;I;Italienisch, regulärer Beginn in Jahrgang 5;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;05;1;0;0;0;0;0;1;;
+I6;Italienisch, regulärer Beginn in Jahrgang 6;I;Italienisch, regulärer Beginn in Jahrgang 6;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;06;1;0;0;0;0;0;1;;
+I7;Italienisch, regulärer Beginn in Jahrgang 7;I;Italienisch, regulärer Beginn in Jahrgang 7;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;07;1;0;0;0;0;0;1;;
+I8;Italienisch, regulärer Beginn in Jahrgang 8;I;Italienisch, regulärer Beginn in Jahrgang 8;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;08;1;0;0;0;0;0;1;;
+I9;Italienisch, regulärer Beginn in Jahrgang 9;I;Italienisch, regulärer Beginn in Jahrgang 9;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;09;1;0;0;0;0;0;1;;
 IE;Individuelles Lernen (Ergänzungsstunden, Ganztag- und Betreuungsangebote);IE;Individuelles Lernen ;;;GE,GM,GY,H,PS,R,S,SG,SK,SR,V;;;;0;0;0;0;0;0;1;;
 IF;Informatik;IF;Informatik;3;11;BK,GE,GM,GY,H,PS,R,S,SB,SG,SK,SR,V,WB;;;;0;0;0;0;0;0;1;;
 IH;Herkunftssprache anstelle einer Pflichtfremdsprache - Italienisch;IH;Herkunftssprache anstelle einer Pflichtfremdsprache - Italienisch;;;GE,GM,GY,(H,R),PS,R,S,SG,SK,SR;;;;1;1;0;1;0;0;1;;
@@ -106,10 +116,12 @@ IQ;Italienisch, außerhalb des regulären Fachunterrichts;I;Italienisch, außerh
 JH;Herkunftssprache anstelle einer Pflichtfremdsprache – Niederländisch;N;Herkunftssprache anstelle einer Pflichtfremdsprache – Niederländisch;;;GE,GM,GY,H,PS,R,S,SG,SK,SR;;;;1;1;0;1;0;0;1;;
 K;Japanisch;K;Japanisch;1;3;BK,SB,WB;;;;1;0;0;0;0;0;1;;
 K0;Japanisch, regulärer Beginn in der Einführungsphase;K;Japanisch, regulärer Beginn in der Einführungsphase;1;3;GE,GM,GY,PS,SG;;;EF;1;0;0;0;0;1;1;;
-K5;Japanisch, regulärer Beginn in Jahrgang 5;K;Japanisch, regulärer Beginn in Jahrgang 5;1;3;GE,GM,GY,PS,SG,SK;;;5;1;0;0;0;0;0;1;;
-K6;Japanisch, regulärer Beginn in Jahrgang 6;K;Japanisch, regulärer Beginn in Jahrgang 6;1;3;GE,GM,GY,PS,SG,SK;;;6;1;0;0;0;0;0;1;;
-K7;Japanisch, regulärer Beginn in Jahrgang 7;K;Japanisch, regulärer Beginn in Jahrgang 7;1;3;GE,GM,GY,PS,SG,SK;;;7;1;0;0;0;0;0;1;;
-K8;Japanisch, regulärer Beginn in Jahrgang 8;K;Japanisch, regulärer Beginn in Jahrgang 8;1;3;GE,GM,GY,PS,SG,SK;;;8;1;0;0;0;0;0;1;;
+K1;Japanisch, regulärer Beginn in Jahrgang 11;K;Japanisch, regulärer Beginn in Jahrgang 11;1;3;GE,GM,GY,PS,SG;;2012;11;1;0;0;0;0;1;1;;2012
+K5;Japanisch, regulärer Beginn in Jahrgang 5;K;Japanisch, regulärer Beginn in Jahrgang 5;1;3;GE,GM,GY,PS,SG,SK;;;05;1;0;0;0;0;0;1;;
+K6;Japanisch, regulärer Beginn in Jahrgang 6;K;Japanisch, regulärer Beginn in Jahrgang 6;1;3;GE,GM,GY,PS,SG,SK;;;06;1;0;0;0;0;0;1;;
+K7;Japanisch, regulärer Beginn in Jahrgang 7;K;Japanisch, regulärer Beginn in Jahrgang 7;1;3;GE,GM,GY,PS,SG,SK;;;07;1;0;0;0;0;0;1;;
+K8;Japanisch, regulärer Beginn in Jahrgang 8;K;Japanisch, regulärer Beginn in Jahrgang 8;1;3;GE,GM,GY,PS,SG,SK;;;08;1;0;0;0;0;0;1;;
+K9;Japanisch, regulärer Beginn in Jahrgang 9;K;Japanisch, regulärer Beginn in Jahrgang 9;1;3;GE,GM,GY,PS,SG,SK;;;09;1;0;0;0;0;0;1;;
 KN;Katholische Religionslehre (konfessionell kooperativ);KR;Katholische Religionslehre (konfessionell kooperativ);;;BK,G,GE,GM,GY,H,PS,R,S,SB,SG,SK,SR,V,WB;;;;0;0;0;0;1;0;1;;
 KO;Kommunikation;KO;Kommunikation;;;BK,SB;;;;0;0;0;0;0;0;1;;
 KQ;Japanisch, außerhalb des regulären Fachunterrichts;K;Japanisch, außerhalb des regulären Fachunterrichts;;;GE,GM,GY,PS,SG,SK;;;;1;0;1;0;0;0;1;;
@@ -118,10 +130,12 @@ KS;Kurzschrift;KS;Kurzschrift;;;BK,SB;;;;0;0;0;0;0;0;1;;
 KU;Kunst;KU;Kunst;1;4;BK,G,GE,GM,GY,H,PS,R,S,SB,SG,SK,SR,V,WB;;;;0;0;0;0;0;0;1;;
 L;Lateinisch;L;Lateinisch;1;3;BK,FW,H,S,SB,WB;;;;1;0;0;0;0;0;1;;
 L0;Lateinisch, regulärer Beginn in der Einführungsphase;L;Lateinisch, regulärer Beginn in der Einführungsphase;1;3;GE,GM,GY,PS,SG;;;EF;1;0;0;0;0;1;1;;
-L5;Lateinisch, regulärer Beginn in Jahrgang 5;L;Lateinisch, regulärer Beginn in Jahrgang 5;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;5;1;0;0;0;0;0;1;;
-L6;Lateinisch, regulärer Beginn in Jahrgang 6;L;Lateinisch, regulärer Beginn in Jahrgang 6;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;6;1;0;0;0;0;0;1;;
-L7;Lateinisch, regulärer Beginn in Jahrgang 7;L;Lateinisch, regulärer Beginn in Jahrgang 7;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;7;1;0;0;0;0;0;1;;
-L8;Lateinisch, regulärer Beginn in Jahrgang 8;L;Lateinisch, regulärer Beginn in Jahrgang 8;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;8;1;0;0;0;0;0;1;;
+L1;Lateinisch, regulärer Beginn in Jahrgang 11;L;Lateinisch, regulärer Beginn in Jahrgang 11;1;3;GE,GM,GY,PS,SG;;2012;11;1;0;0;0;0;1;1;;2012
+L5;Lateinisch, regulärer Beginn in Jahrgang 5;L;Lateinisch, regulärer Beginn in Jahrgang 5;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;05;1;0;0;0;0;0;1;;
+L6;Lateinisch, regulärer Beginn in Jahrgang 6;L;Lateinisch, regulärer Beginn in Jahrgang 6;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;06;1;0;0;0;0;0;1;;
+L7;Lateinisch, regulärer Beginn in Jahrgang 7;L;Lateinisch, regulärer Beginn in Jahrgang 7;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;07;1;0;0;0;0;0;1;;
+L8;Lateinisch, regulärer Beginn in Jahrgang 8;L;Lateinisch, regulärer Beginn in Jahrgang 8;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;08;1;0;0;0;0;0;1;;
+L9;Lateinisch, regulärer Beginn in Jahrgang 9;L;Lateinisch, regulärer Beginn in Jahrgang 9;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;09;1;0;0;0;0;0;1;;
 LH;Herkunftssprache anstelle einer Pflichtfremdsprache - Albanisch;LH;Herkunftssprache anstelle einer Pflichtfremdsprache - Albanisch;;;GE,GM,GY,(H,R),PS,R,S,SG,SK,SR;;;;1;1;0;1;0;0;1;;
 LI;Literatur;LI;Literatur;;5;BK,GE,GM,GY,PS,SB,SG,WB;;;;0;0;0;0;0;0;1;;
 LM;Unterricht in der Herkunftssprache - Albanisch;LM;Unterricht in der Herkunftssprache - Albanisch;;;G,GE,GM,GY,H,PS,R,S,SG,SK,SR,V;;;;1;1;0;0;0;0;1;;
@@ -139,20 +153,24 @@ MX;Spezielle sonderpädagogische Maßnahme;MX;Spezielle sonderpädagogische Maß
 MY;Fächerübergreifender Unterricht in der Sekundarstufe I;MY;Fächerübergreifender Unterricht in der Sekundarstufe I;;;S;;;;0;0;0;0;0;0;1;;
 N;Niederländisch;N;Niederländisch;1;3;BK,H,SB,SK,V;;;;1;0;0;0;0;0;1;;
 N0;Niederländisch, regulärer Beginn in der Einführungsphase;N;Niederländisch, regulärer Beginn in der Einführungsphase;1;3;GE,GM,GY,PS,SG;;;EF;1;0;0;0;0;1;1;;
-N5;Niederländisch, regulärer Beginn in Jahrgang 5;N;Niederländisch, regulärer Beginn in Jahrgang 5;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;5;1;0;0;0;0;0;1;;
-N6;Niederländisch, regulärer Beginn in Jahrgang 6;N;Niederländisch, regulärer Beginn in Jahrgang 6;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;6;1;0;0;0;0;0;1;;
-N7;Niederländisch, regulärer Beginn in Jahrgang 7;N;Niederländisch, regulärer Beginn in Jahrgang 7;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;7;1;0;0;0;0;0;1;;
-N8;Niederländisch, regulärer Beginn in Jahrgang 8;N;Niederländisch, regulärer Beginn in Jahrgang 8;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;8;1;0;0;0;0;0;1;;
+N1;Niederländisch, regulärer Beginn in Jahrgang 11;N;Niederländisch, regulärer Beginn in Jahrgang 11;1;3;GE,GM,GY,PS,SG;;2012;11;1;0;0;0;0;1;1;;2012
+N5;Niederländisch, regulärer Beginn in Jahrgang 5;N;Niederländisch, regulärer Beginn in Jahrgang 5;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;05;1;0;0;0;0;0;1;;
+N6;Niederländisch, regulärer Beginn in Jahrgang 6;N;Niederländisch, regulärer Beginn in Jahrgang 6;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;06;1;0;0;0;0;0;1;;
+N7;Niederländisch, regulärer Beginn in Jahrgang 7;N;Niederländisch, regulärer Beginn in Jahrgang 7;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;07;1;0;0;0;0;0;1;;
+N8;Niederländisch, regulärer Beginn in Jahrgang 8;N;Niederländisch, regulärer Beginn in Jahrgang 8;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;08;1;0;0;0;0;0;1;;
+N9;Niederländisch, regulärer Beginn in Jahrgang 9;N;Niederländisch, regulärer Beginn in Jahrgang 9;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;09;1;0;0;0;0;0;1;;
 NH;Herkunftssprache anstelle einer Pflichtfremdsprache - Polnisch;NH;Herkunftssprache anstelle einer Pflichtfremdsprache - Polnisch;;;GE,GM,GY,H,PS,R,S,SG,SK,SR;;;;1;1;0;1;0;0;1;;
 NM;Unterricht in der Herkunftssprache – Niederländisch;NM;Unterricht in der Herkunftssprache – Niederländisch;;;BK,G,GE,GM,GY,H,PS,R,S,SG,SK,SR,V;;;;1;1;0;0;0;0;1;;
 NQ;Niederländisch, außerhalb des regulären Fachunterrichts;N;Niederländisch, außerhalb des regulären Fachunterrichts;;;GE,GM,GY,PS,R,SG,SK,SR;;;;1;0;1;0;0;0;1;;
 NW;Naturwissenschaften;NW;Naturwissenschaften;;10;BK,GE,GM,PS,S,SB,SG,SK,SR;;;;0;0;0;0;0;0;1;;
 O;Portugiesisch;O;Portugiesisch;1;3;(H,R),WB;;;;1;0;0;0;0;0;1;;
 O0;Portugiesisch, regulärer Beginn in der Einführungsphase;O;Portugiesisch, regulärer Beginn in der Einführungsphase;1;3;GE,GM,GY,PS,SG;;;EF;1;0;0;0;0;1;1;;
-O5;Portugiesisch, regulärer Beginn in Jahrgang 5;O;Portugiesisch, regulärer Beginn in Jahrgang 5;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;5;1;0;0;0;0;0;1;;
-O6;Portugiesisch, regulärer Beginn in Jahrgang 6;O;Portugiesisch, regulärer Beginn in Jahrgang 6;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;6;1;0;0;0;0;0;1;;
-O7;Portugiesisch, regulärer Beginn in Jahrgang 7;O;Portugiesisch, regulärer Beginn in Jahrgang 7;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;7;1;0;0;0;0;0;1;;
-O8;Portugiesisch, regulärer Beginn in Jahrgang 8;O;Portugiesisch, regulärer Beginn in Jahrgang 8;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;8;1;0;0;0;0;0;1;;
+O1;Portugiesisch, regulärer Beginn in Jahrgang 11;O;Portugiesisch, regulärer Beginn in Jahrgang 11;1;3;GE,GM,GY,PS,SG;;2012;11;1;0;0;0;0;1;1;;2012
+O5;Portugiesisch, regulärer Beginn in Jahrgang 5;O;Portugiesisch, regulärer Beginn in Jahrgang 5;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;05;1;0;0;0;0;0;1;;
+O6;Portugiesisch, regulärer Beginn in Jahrgang 6;O;Portugiesisch, regulärer Beginn in Jahrgang 6;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;06;1;0;0;0;0;0;1;;
+O7;Portugiesisch, regulärer Beginn in Jahrgang 7;O;Portugiesisch, regulärer Beginn in Jahrgang 7;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;07;1;0;0;0;0;0;1;;
+O8;Portugiesisch, regulärer Beginn in Jahrgang 8;O;Portugiesisch, regulärer Beginn in Jahrgang 8;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;08;1;0;0;0;0;0;1;;
+O9;Portugiesisch, regulärer Beginn in Jahrgang 9;O;Portugiesisch, regulärer Beginn in Jahrgang 9;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;09;1;0;0;0;0;0;1;;
 OH;Herkunftssprache anstelle einer Pflichtfremdsprache - Portugiesisch;OH;Herkunftssprache anstelle einer Pflichtfremdsprache - Portugiesisch;;;GE,GM,GY,(H,R),PS,R,S,SG,SK,SR;;;;1;1;0;1;0;0;1;;
 OL;Organisationslehre/Büroorganisation;OL;Organisationslehre/Büroorganisation;;;BK,SB;;;;0;0;0;0;0;0;1;;
 OM;Unterricht in der Herkunftssprache - Portugiesisch;OM;Unterricht in der Herkunftssprache - Portugiesisch;;;G,GE,GM,GY,H,PS,R,S,SG,SK,SR,V;;;;1;1;0;0;0;0;1;;
@@ -173,10 +191,12 @@ QH;Herkunftssprache anstelle einer Pflichtfremdsprache - Farsi;QH;Herkunftssprac
 QM;Unterricht in der Herkunftssprache - Farsi;QM;Unterricht in der Herkunftssprache - Farsi;;;BK,G,GE,GM,GY,H,PS,R,S,SG,SK,SR,V;;;;1;1;0;0;0;0;1;;
 R;Russisch;R;Russisch;1;3;BK,FW,H,S,SB,(SK,H),WB;;;;1;0;0;0;0;0;1;;
 R0;Russisch, regulärer Beginn in der Einführungsphase;R;Russisch, regulärer Beginn in der Einführungsphase;1;3;GE,GM,GY,PS,SG;;;EF;1;0;0;0;0;1;1;;
-R5;Russisch, regulärer Beginn in Jahrgang 5;R;Russisch, regulärer Beginn in Jahrgang 5;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;5;1;0;0;0;0;0;1;;
-R6;Russisch, regulärer Beginn in Jahrgang 6;R;Russisch, regulärer Beginn in Jahrgang 6;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;6;1;0;0;0;0;0;1;;
-R7;Russisch, regulärer Beginn in Jahrgang 7;R;Russisch, regulärer Beginn in Jahrgang 7;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;7;1;0;0;0;0;0;1;;
-R8;Russisch, regulärer Beginn in Jahrgang 8;R;Russisch, regulärer Beginn in Jahrgang 8;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;8;1;0;0;0;0;0;1;;
+R1;Russisch, regulärer Beginn in Jahrgang 11;R;Russisch, regulärer Beginn in Jahrgang 11;1;3;GE,GM,GY,PS,SG;;2012;11;1;0;0;0;0;1;1;;2012
+R5;Russisch, regulärer Beginn in Jahrgang 5;R;Russisch, regulärer Beginn in Jahrgang 5;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;05;1;0;0;0;0;0;1;;
+R6;Russisch, regulärer Beginn in Jahrgang 6;R;Russisch, regulärer Beginn in Jahrgang 6;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;06;1;0;0;0;0;0;1;;
+R7;Russisch, regulärer Beginn in Jahrgang 7;R;Russisch, regulärer Beginn in Jahrgang 7;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;07;1;0;0;0;0;0;1;;
+R8;Russisch, regulärer Beginn in Jahrgang 8;R;Russisch, regulärer Beginn in Jahrgang 8;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;08;1;0;0;0;0;0;1;;
+R9;Russisch, regulärer Beginn in Jahrgang 9;R;Russisch, regulärer Beginn in Jahrgang 9;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;09;1;0;0;0;0;0;1;;
 RE;Rechnungswesen;RE;Rechnungswesen;;;BK,SB;;;;0;0;0;0;0;0;1;;
 RH;Herkunftssprache anstelle einer Pflichtfremdsprache - Arabisch;RH;Herkunftssprache anstelle einer Pflichtfremdsprache - Arabisch;;;GE,GM,GY,(H,R),PS,R,S,SG,SK,SR;;;;1;1;0;1;0;0;1;;
 RK;Rechtskunde;RK;Rechtskunde;2;6;GE,GY,SG,SK,WB;;;;0;0;0;0;0;0;1;;
@@ -185,12 +205,14 @@ RQ;Russisch, außerhalb des regulären Fachunterrichts;R;Russisch, außerhalb de
 RW;Recht und Verwaltung;RW;Recht und Verwaltung;;;BK,SB;;;;0;0;0;0;0;0;1;;
 S;Spanisch;S;Spanisch;1;3;BK,(H,R),S,SB,WB;;;;1;0;0;0;0;0;1;;
 S0;Spanisch, regulärer Beginn in der Einführungsphase;S;Spanisch, regulärer Beginn in der Einführungsphase;1;3;GE,GM,GY,PS,SG;;;EF;1;0;0;0;0;1;1;;
+S1;Spanisch, regulärer Beginn in Jahrgang 11;S;Spanisch, regulärer Beginn in Jahrgang 11;1;3;GE,GM,GY,PS,SG;;2012;11;1;0;0;0;0;1;1;;2012
 S3;Sport für Jungen;S3;Sport für Jungen;;12;G,GE,GM,GY,H,PS,R,S,SG,SK,SR,V;;;;0;0;0;0;0;0;1;;
 S4;Sport für Mädchen;S4;Sport für Mädchen;;12;G,GE,GM,GY,H,PS,R,S,SG,SK,SR,V;;;;0;0;0;0;0;0;1;;
-S5;Spanisch, regulärer Beginn in Jahrgang 5;S;Spanisch, regulärer Beginn in Jahrgang 5;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;5;1;0;0;0;0;0;1;;
-S6;Spanisch, regulärer Beginn in Jahrgang 6;S;Spanisch, regulärer Beginn in Jahrgang 6;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;6;1;0;0;0;0;0;1;;
-S7;Spanisch, regulärer Beginn in Jahrgang 7;S;Spanisch, regulärer Beginn in Jahrgang 7;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;7;1;0;0;0;0;0;1;;
-S8;Spanisch, regulärer Beginn in Jahrgang 8;S;Spanisch, regulärer Beginn in Jahrgang 8;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;8;1;0;0;0;0;0;1;;
+S5;Spanisch, regulärer Beginn in Jahrgang 5;S;Spanisch, regulärer Beginn in Jahrgang 5;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;05;1;0;0;0;0;0;1;;
+S6;Spanisch, regulärer Beginn in Jahrgang 6;S;Spanisch, regulärer Beginn in Jahrgang 6;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;06;1;0;0;0;0;0;1;;
+S7;Spanisch, regulärer Beginn in Jahrgang 7;S;Spanisch, regulärer Beginn in Jahrgang 7;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;07;1;0;0;0;0;0;1;;
+S8;Spanisch, regulärer Beginn in Jahrgang 8;S;Spanisch, regulärer Beginn in Jahrgang 8;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;08;1;0;0;0;0;0;1;;
+S9;Spanisch, regulärer Beginn in Jahrgang 9;S;Spanisch, regulärer Beginn in Jahrgang 9;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;09;1;0;0;0;0;0;1;;
 SE;Softwareentwicklung und -engineering;SE;Softwareentwicklung und -engineering;;;BK,SB;;;;0;0;0;0;0;0;1;;
 SG;sonderpädag. Förderung für Schüler/-innen mit sonderpädag. Förderbedarf;SG;sonderpädag. Förderung für Schüler/-innen mit sonderpädag. Förderbedarf;;;BK,G,GE,GM,GY,H,PS,R,S,SB,SG,SK,SR,V;;;;0;0;0;0;0;0;1;;
 SH;Herkunftssprache anstelle einer Pflichtfremdsprache - Spanisch;SH;Herkunftssprache anstelle einer Pflichtfremdsprache - Spanisch;;;GE,GM,GY,(H,R),PS,R,S,SG,SK,SR;;;;1;1;0;1;0;0;1;;
@@ -205,10 +227,12 @@ SW;Sozialwissenschaften;SW;Sozialwissenschaften;2;6;BK,GE,GM,GY,H,PS,R,S,SB,SG,S
 SZ;Sozialwissenschaften/Wirtschaft;SZ;Sozialwissenschaften/Wirtschaft;;;GE,GM,GY,PS,SG,SK,WB;;;;0;0;0;0;0;0;1;;
 T;Türkisch;T;Türkisch;1;3;BK,H,SB,(SK,H),WB;;;;1;0;0;0;0;0;1;;
 T0;Türkisch, regulärer Beginn in der Einführungsphase;T;Türkisch, regulärer Beginn in der Einführungsphase;1;3;GE,GM,GY,PS,SG;;;EF;0;0;0;0;0;1;1;;
-T5;Türkisch, regulärer Beginn in Jahrgang 5;T;Türkisch, regulärer Beginn in Jahrgang 5;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;5;0;0;0;0;0;0;1;;
-T6;Türkisch, regulärer Beginn in Jahrgang 6;T;Türkisch, regulärer Beginn in Jahrgang 6;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;6;0;0;0;0;0;0;1;;
-T7;Türkisch, regulärer Beginn in Jahrgang 7;T;Türkisch, regulärer Beginn in Jahrgang 7;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;7;0;0;0;0;0;0;1;;
-T8;Türkisch, regulärer Beginn in Jahrgang 8;T;Türkisch, regulärer Beginn in Jahrgang 8;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;8;0;0;0;0;0;0;1;;
+T1;Türkisch, regulärer Beginn in Jahrgang 11;T;Türkisch, regulärer Beginn in Jahrgang 11;1;3;GE,GM,GY,PS,SG;;2012;11;0;0;0;0;0;1;1;;2012
+T5;Türkisch, regulärer Beginn in Jahrgang 5;T;Türkisch, regulärer Beginn in Jahrgang 5;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;05;0;0;0;0;0;0;1;;
+T6;Türkisch, regulärer Beginn in Jahrgang 6;T;Türkisch, regulärer Beginn in Jahrgang 6;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;06;0;0;0;0;0;0;1;;
+T7;Türkisch, regulärer Beginn in Jahrgang 7;T;Türkisch, regulärer Beginn in Jahrgang 7;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;07;0;0;0;0;0;0;1;;
+T8;Türkisch, regulärer Beginn in Jahrgang 8;T;Türkisch, regulärer Beginn in Jahrgang 8;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;08;0;0;0;0;0;0;1;;
+T9;Türkisch, regulärer Beginn in Jahrgang 9;T;Türkisch, regulärer Beginn in Jahrgang 9;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;09;0;0;0;0;0;0;1;;
 TC;Technik;TC;Technik;3;11;GE,(GM,R),(GM,GY8),(GM,GY9),GY,(H,R),PS,R,S,SG,SK,SR,WB;;;;0;0;0;0;0;0;1;;
 TG;Technische Grundbildung;TG;Technische Grundbildung;;;BK,SB;;;;0;0;0;0;0;0;1;;
 TH;Herkunftssprache anstelle einer Pflichtfremdsprache - Türkisch;TH;Herkunftssprache anstelle einer Pflichtfremdsprache - Türkisch;;;GE,GM,GY,(H,R),PS,R,S,SG,SK,SR;;;;1;1;0;1;0;0;1;;
@@ -245,10 +269,12 @@ YM;Unterricht in der Herkunftssprache - Koreanisch;YM;Unterricht in der Herkunft
 YR;orthodoxe Religionslehre (Syrisch);YR;orthodoxe Religionslehre (Syrisch);;8;BK,G,GE,GM,GY,H,PS,R,S,SB,SG,SK,SR,V,WB;;;;0;0;0;0;0;0;1;;
 Z;Neugriechisch;Z;Neugriechisch;1;3;BK,(H,R),SB,WB;;;;1;0;0;0;0;0;1;;
 Z0;Neugriechisch, regulärer Beginn in der Einführungsphase;Z;Neugriechisch, regulärer Beginn in der Einführungsphase;1;3;GE,GM,GY,PS,SG;;;EF;1;0;0;0;0;1;1;;
-Z5;Neugriechisch, regulärer Beginn in Jahrgang 5;Z;Neugriechisch, regulärer Beginn in Jahrgang 5;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;5;1;0;0;0;0;0;1;;
-Z6;Neugriechisch, regulärer Beginn in Jahrgang 6;Z;Neugriechisch, regulärer Beginn in Jahrgang 6;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;6;1;0;0;0;0;0;1;;
-Z7;Neugriechisch, regulärer Beginn in Jahrgang 7;Z;Neugriechisch, regulärer Beginn in Jahrgang 7;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;7;1;0;0;0;0;0;1;;
-Z8;Neugriechisch, regulärer Beginn in Jahrgang 8;Z;Neugriechisch, regulärer Beginn in Jahrgang 8;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;8;1;0;0;0;0;0;1;;
+Z1;Neugriechisch, regulärer Beginn in Jahrgang 11;Z;Neugriechisch, regulärer Beginn in Jahrgang 11;1;3;GE,GM,GY,PS,SG;;2012;11;1;0;0;0;0;1;1;;2012
+Z5;Neugriechisch, regulärer Beginn in Jahrgang 5;Z;Neugriechisch, regulärer Beginn in Jahrgang 5;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;05;1;0;0;0;0;0;1;;
+Z6;Neugriechisch, regulärer Beginn in Jahrgang 6;Z;Neugriechisch, regulärer Beginn in Jahrgang 6;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;06;1;0;0;0;0;0;1;;
+Z7;Neugriechisch, regulärer Beginn in Jahrgang 7;Z;Neugriechisch, regulärer Beginn in Jahrgang 7;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;07;1;0;0;0;0;0;1;;
+Z8;Neugriechisch, regulärer Beginn in Jahrgang 8;Z;Neugriechisch, regulärer Beginn in Jahrgang 8;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;08;1;0;0;0;0;0;1;;
+Z9;Neugriechisch, regulärer Beginn in Jahrgang 9;Z;Neugriechisch, regulärer Beginn in Jahrgang 9;1;3;GE,GM,GY,PS,R,SG,SK,SR;;;09;1;0;0;0;0;0;1;;
 ZF;Zusätzliche Förderung;ZF;Zusätzliche Förderung;;;G,PS,S,V;;;;0;0;0;0;0;0;1;;
 ZH;Herkunftssprache anstelle einer Pflichtfremdsprache - Kurdische Sprachen;ZH;Herkunftssprache anstelle einer Pflichtfremdsprache - Kurdische Sprachen;;;GE,GM,GY,H,PS,R,S,SG,SK,SR;;;;1;1;0;1;0;0;1;;
 ZM;Unterricht in der Herkunftssprache - Kurdische Sprachen (Sorani, Komanci, Zaza);ZM;Unterricht in der Herkunftssprache - Kurdische Sprachen (Sorani, Komanci, Zaza);;;G,GE,GM,GY,H,PS,R,S,SG,SK,SR,V;;;;1;1;0;0;0;0;1;;

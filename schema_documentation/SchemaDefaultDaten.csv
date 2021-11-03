@@ -28,6 +28,7 @@ Schildintern_UnicodeUmwandlung;0;Initialisierung
 Schildintern_VerfImportFelder;0;Initialisierung
 Schildintern_VerfImportTabellen;0;Initialisierung
 Schildintern_Zusatzinfos;0;Initialisierung
+SchulleitungFunktion;0;Initialisierung
 Schulver_DBS;0;Initialisierung
 Schulver_Schulformen;0;Initialisierung
 Schulver_Schultraeger;0;Initialisierung
@@ -52,7 +53,6 @@ Statkue_LehrerLehramt;0;Initialisierung
 Statkue_LehrerLehramtAnerkennung;0;Initialisierung
 Statkue_LehrerLehrbefaehigung;0;Initialisierung
 Statkue_LehrerLehrbefAnerkennung;0;Initialisierung
-Statkue_LehrerLeitung;0;Initialisierung
 Statkue_LehrerMehrleistung;0;Initialisierung
 Statkue_LehrerMinderleistung;0;Initialisierung
 Statkue_LehrerRechtsverhaeltnis;0;Initialisierung
@@ -71,6 +71,7 @@ Statkue_Strassen;0;Initialisierung
 Statkue_SVWS_BKAnlagen;0;Initialisierung
 Statkue_SVWS_Fachgruppen;0;Initialisierung
 Statkue_SVWS_Schulgliederungen;0;Initialisierung
+Statkue_SVWS_SprachpruefungNiveaus;0;Initialisierung
 Statkue_SVWS_ZulaessigeFaecher;0;Initialisierung
 Statkue_SVWS_ZulaessigeJahrgaenge;0;Initialisierung
 Statkue_SVWS_ZulaessigeKursarten;0;Initialisierung

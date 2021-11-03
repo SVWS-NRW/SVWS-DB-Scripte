@@ -8,11 +8,10 @@ EigeneSchule_Abteilungen;ID;1
 EigeneSchule_Fachklassen;ID;1
 EigeneSchule_FachTeilleistungen;Fach_ID;0
 EigeneSchule_FachTeilleistungen;Kursart;0
-EigeneSchule_FachTeilleistungen;SchulNrEigner;0
 EigeneSchule_FachTeilleistungen;Teilleistung_ID;0
 EigeneSchule_Faecher;ID;1
 EigeneSchule_Jahrgaenge;ID;1
-EigeneSchule_KAoADaten;SchulNrEigner;0
+EigeneSchule_KAoADaten;ID;1
 EigeneSchule_Kursart;ID;1
 EigeneSchule_Merkmale;ID;1
 EigeneSchule_Schulformen;ID;1
@@ -65,13 +64,10 @@ K_Schule;ID;1
 K_Schulfunktionen;ID;1
 K_Schwerpunkt;ID;1
 K_Sportbefreiung;ID;1
-K_Staat;ID;1
 K_TelefonArt;ID;1
 K_Textdateien;ID;1
-K_Verkehrssprachen;ID;1
 K_Vermerkart;ID;1
 K_Zertifikate;Kuerzel;0
-K_Zertifikate;SchulNrEigner;0
 Katalog_Aufsichtsbereich;ID;1
 Katalog_Pausenzeiten;ID;1
 Katalog_Raeume;ID;1
@@ -122,7 +118,6 @@ Logins;LI_UserID;0
 NichtMoeglAbiFachKombi;PK;0
 Personengruppen;ID;1
 Personengruppen_Personen;ID;1
-PrfSemAbschl;Nr;0
 Schild_Verwaltung;GU_ID;0
 SchildFilter;ID;1
 Schildintern_AbiturInfos;AbiFach;0
@@ -204,12 +199,15 @@ SchuelerMerkmale;Schueler_ID;0
 SchuelerReportvorlagen;User_ID;0
 SchuelerReportvorlagen;Reportvorlage;0
 SchuelerSprachenfolge;ID;1
+SchuelerSprachpruefungen;ID;1
 SchuelerTelefone;ID;1
 SchuelerVermerke;ID;1
 SchuelerWiedervorlage;ID;1
 SchuelerZuweisungen;Abschnitt_ID;0
 SchuelerZuweisungen;Fach_ID;0
 SchuleCredentials;Schulnummer;0
+Schulleitung;ID;1
+SchulleitungFunktion;ID;1
 Schulver_DBS;SchulNr;0
 Schulver_Schulformen;Schulform;0
 Schulver_Schultraeger;SchulNr;0
@@ -249,7 +247,6 @@ Statkue_LehrerLehramt;ID;0
 Statkue_LehrerLehramtAnerkennung;ID;0
 Statkue_LehrerLehrbefaehigung;ID;0
 Statkue_LehrerLehrbefAnerkennung;ID;0
-Statkue_LehrerLeitung;ID;0
 Statkue_LehrerMehrleistung;ID;0
 Statkue_LehrerMinderleistung;ID;0
 Statkue_LehrerRechtsverhaeltnis;ID;0
@@ -273,6 +270,7 @@ Statkue_Schulformen;SF;0
 Statkue_SVWS_BKAnlagen;BKAnlage;0
 Statkue_SVWS_Fachgruppen;ID;0
 Statkue_SVWS_Schulgliederungen;SGL;0
+Statkue_SVWS_SprachpruefungNiveaus;ID;0
 Statkue_SVWS_ZulaessigeFaecher;Fach;0
 Statkue_SVWS_ZulaessigeJahrgaenge;ID;0
 Statkue_SVWS_ZulaessigeKursarten;ID;0
@@ -313,7 +311,6 @@ SVWS_Client_Konfiguration_Global;AppName;0
 SVWS_Client_Konfiguration_Global;Schluessel;0
 SVWS_DB_AutoInkremente;NameTabelle;0
 SVWS_DB_Version;Revision;0
-TextExportVorlagen;SchulNrEigner;0
 TextExportVorlagen;VorlageName;0
 Usergroups;UG_ID;0
 Users;ID;1

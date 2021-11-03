@@ -53,10 +53,8 @@ K_Schule;0;-1;1;DTOSchuleNRW;schild.katalog;Interner Katalog der verwendeten Sch
 K_Schulfunktionen;0;-1;1;DTOSchulfunktion;schild.katalog;frei definierbarer Katalog für Schulfunktionen, die dann im Lehrerkatalog den Lehrern zugewiesen werden können
 K_Schwerpunkt;0;-1;1;DTOSchwerpunkt;schild.katalog;Schwerpunkte, die einem Schüler auf Individualdaten I zugeordnet werden können (z.B. RS und GY)
 K_Sportbefreiung;0;-1;1;DTOSportbefreiung;schild.schueler;Liste der Sportbefreiungen kann frei definiert werden 
-K_Staat;0;-1;1;DTOStaatsangehoerigkeit;schild.katalog;DEPRECATED: Liste der verwendeten Nationalitäten – Wird aus der Statkue gespeist
 K_TelefonArt;0;-1;1;DTOTelefonArt;schild.erzieher;Liste der intern verwendeten Telefonnummern-Bezeichnungen kann frei definiert werden
 K_Textdateien;0;-1;1;DTOTextDateien;schild.katalog;Katalog für TXT-Dateien, diese werden ab Schild3.0 intern verwaltet (z.B für Email-Texte)
-K_Verkehrssprachen;0;-1;1;DTOVerkehrssprache;schild.katalog;Liste der verwendeten Verkehrssprachen – wird aus der Statkue gespeist
 K_Vermerkart;0;-1;1;DTOVermerkArt;schild.katalog;Liste der verwendeten Vermerkarten – kann unter Schulverwaltung frei ergänzt werden
 K_Zertifikate;0;-1;1;DTOKatalogZertifikate;schild.berufskolleg;Liste der Zertifikate nur BK
 Katalog_Aufsichtsbereich;5;-1;0;DTOKatalogAufsichtsbereich;schild.katalog;Enthält eine aktuelle Liste von Aufsichtsbereichen, die an der Schule für Pausenzeiten vereinbart sind.
@@ -85,7 +83,6 @@ Logins;0;-1;1;DTOProtokollLogin;schild.benutzer;Tabelle zur Speicherung der LogI
 NichtMoeglAbiFachKombi;0;-1;1;DTOFaecherNichtMoeglicheKombination;schild.gost;Nicht mögliche Abiturfach-Kombinationen unter Fächer der Oberstufe bearbeiten
 Personengruppen;0;-1;1;DTOPersonengruppen;schild.personengruppen;Katalog der definierten Personengruppen
 Personengruppen_Personen;0;-1;1;DTOPersonengruppenPersonen;schild.personengruppen;Zuordnung von Personen zur den Einträgen in der Tabelle Personengruppen
-PrfSemAbschl;0;-1;1;DTOVersetzungsvermerk;schild.katalog;gültige Versetzungsvermerke mit ASD-Schlüsseln
 Schild_Verwaltung;0;-1;1;DTOSchildVerwaltung;schild;Verwaltung von Versionsnummern, Datum, teilweise veraltet oder nie verwendet
 SchildFilter;0;-1;1;DTOSchildAuswahlFilter;schild;Gespeicherte Filter aus Filter I
 Schildintern_AbiturInfos;0;-1;0;DTOInternAbiturInfos;schild.intern;Abfragen für die Algorithmen der alten Abitur-Prüfungsordnungen (ausgelaufen???)
@@ -105,7 +102,7 @@ Schildintern_KAoA_Merkmal;0;-1;0;DTOKAoAMerkmal;schild.intern;KAOA-Defaultdaten 
 Schildintern_KAoA_Zusatzmerkmal;0;-1;0;DTOKAoAZusatzmerkmal;schild.intern;KAOA-Defaultdaten werden vom MSB geliefert
 Schildintern_KAoA_SBO_Ebene4;0;-1;0;DTOKAoASBOEB4;schild.intern;KAOA-Defaultdaten werden vom MSB geliefert
 Schildintern_Laender;0;-1;0;DTOInternLaender;schild.intern;Liste der Bundesländer
-Schildintern_PrfSemAbschl;0;-1;0;DTOInternPrfSemesterAbschluss;schild.intern;Liste der Versetzungsvermerke Schulformbezogen ??? (doppelt zur Schild-Tabelle)
+Schildintern_PrfSemAbschl;0;-1;0;DTOInternPrfSemesterAbschluss;schild.intern;Liste der Versetzungsvermerke Schulformbezogen
 Schildintern_PruefOrd_Optionen;0;-1;0;DTOInternPruefungsOrdnungOptionen;schild.intern;Eintragungen der möglichen Abschlüsse und deren Texte für Schildintern_PruefungsOrdnung
 Schildintern_PruefungsOrdnung;0;-1;0;DTOInternPruefungsOrdnung;schild.intern;Auflistung der Prüfungsordnungen zu Schulformen und Jahrgängen
 Schildintern_SchuelerImpExp;0;-1;0;DTOInternSchuelerImportExport;schild.intern;"Wird in SchILD2.0 beim ""Katalog-Export"" und (""Datenaustausch>>Kataloge exportieren"") verwendet. Frage: Wird das in Zukunft noch benötigt?"
@@ -143,11 +140,14 @@ SchuelerListe_Inhalt;0;-1;1;DTOSchuelerIndividuelleGruppeSchueler;schild;Schüle
 SchuelerMerkmale;0;-1;1;DTOSchuelerMerkmale;schild.schueler;Einträge der Merkmale (Individualdaten II) zum Schüler
 SchuelerReportvorlagen;0;-1;1;DTOSchuelerReportvorlagen;schild;"Wird im Gruppenprozess ""Zugeordnete Zeugnisformulare drucken"" verwendet. Die Tabelle wird temporär mit den IDs der Schüler gefüllt, die im Gruppenprozess berücksichtigt werden müssen."
 SchuelerSprachenfolge;0;-1;1;DTOSchuelerSprachenfolge;schild.schueler;Einträge zur Sprachenfolge zum Schüler
+SchuelerSprachpruefungen;0;-1;0;DTOSchuelerSprachpruefungen;schild.schueler;Einträge zu Sprachprüfungen des Schülers
 SchuelerTelefone;0;-1;1;DTOSchuelerTelefon;schild.erzieher;Telefonnummern zum Schüler
 SchuelerVermerke;0;-1;1;DTOSchuelerVermerke;schild.schueler;Vermerke zum Schüler
 SchuelerWiedervorlage;0;-1;1;DTOSchuelerWiedervorlage;schild;Einträge zur Wiedervorlage zum Schüler
 SchuelerZuweisungen;0;-1;1;DTOSchuelerZuweisung;schild.berufskolleg;Lernabscnittsbezogene Zuweisungen für Gesamt- und Sekundarschulen
 SchuleCredentials;0;-1;1;DTOSchuleCredentials;svws.auth;Tabelle für die Zugangsdaten von Schulen (PublicKey) und den Keys der eingenene Schule
+Schulleitung;0;-1;0;DTOSchulleitung;schild.lehrer;Tabelle für die Zuweisung von Schulleitungsfunktionen zu Lehrern
+SchulleitungFunktion;0;-1;0;DTOSchulleitungFunktion;schild.lehrer;Tabelle für die Definition von Schulleitungsfunktionen
 Schulver_DBS;0;-1;0;DTOSchulverDBS;schulver;IT.NRW Liste der Schulen mit Schulnummern und Adressen
 Schulver_Schulformen;0;-1;0;DTOSchulverSchulformen;schulver;IT.NRW Liste der Schulformen
 Schulver_Schultraeger;0;-1;0;DTOSchulverSchultraeger;schulver;IT.NRW Liste der Schulträger (wird in Schild-Zentral verwendet)
@@ -172,7 +172,6 @@ Statkue_LehrerLehramt;0;-1;0;DTOStatkueLehrerLehramt;statkue;Statkue von IT.NRW 
 Statkue_LehrerLehramtAnerkennung;0;-1;0;DTOStatkueLehrerLehramtAnerkennung;statkue;Statkue von IT.NRW  Lehramt Anerkennung
 Statkue_LehrerLehrbefaehigung;0;-1;0;DTOStatkueLehrerLehrbefaehigung;statkue;Statkue von IT.NRW  Lehrbefähigung
 Statkue_LehrerLehrbefAnerkennung;0;-1;0;DTOStatkueLehrerLehrbefaehigungAnerkennung;statkue;Statkue von IT.NRW  Lehrbefähigung Anerkennung
-Statkue_LehrerLeitung;0;-1;0;DTOStatkueLehrerLeitung;statkue;Statkue von IT.NRW 
 Statkue_LehrerMehrleistung;0;-1;0;DTOStatkueLehrerMehrleistung;statkue;Statkue von IT.NRW Schlüssel für die LehrerMehrleistuung
 Statkue_LehrerMinderleistung;0;-1;0;DTOStatkueLehrerMinderleistung;statkue;Statkue von IT.NRW Schlüssel für die LehrerMinderleistuung
 Statkue_LehrerRechtsverhaeltnis;0;-1;0;DTOStatkueLehrerRechtsverhaeltnis;statkue;Statkue von IT.NRW Schlüssel für die Lehrer Rechtsverhältnisse
@@ -191,6 +190,7 @@ Statkue_Strassen;0;-1;0;DTOStatkueStrassen;statkue;Statkue von IT.NRW gültiger 
 Statkue_SVWS_BKAnlagen;0;-1;0;DTOSVWSBKAnlagen;statkue;Statkue SVWS selbst generierte Informationen zu den BK Anlagen
 Statkue_SVWS_Fachgruppen;0;-1;0;DTOSVWSFachgruppen;statkue;Statkue SVWS selbst generierte Fachgruppen
 Statkue_SVWS_Schulgliederungen;0;-1;0;DTOSVWSSchulgliederungen;statkue;Statkue SVWS selbst generierte Tabelle für die Schulgliederungen
+Statkue_SVWS_SprachpruefungNiveaus;0;-1;0;DTOSVWSSprachpruefungNiveaus;statkue;Statkue SVWS selbst generierte Tabelle für die Sprachprüfungsniveaus
 Statkue_SVWS_ZulaessigeFaecher;0;-1;0;DTOSVWSZulaessigeFaecherMapping;statkue;Statkue SVWS selbst generierte Tabelle die das Mapping zu atomarisierten Felden zu den Fächern herstellt
 Statkue_SVWS_ZulaessigeJahrgaenge;0;-1;0;DTOSVWSZulaessigeJahrgaenge;statkue;Statkue SVWS von ITNRW generierte bereinigte Tabelle für Jahgänge
 Statkue_SVWS_ZulaessigeKursarten;0;-1;0;DTOSVWSZulaessigeKursartenMapping;statkue;Statkue SVWS selbst generierte Mappingtabelle um die Kursarten eindeutig darstellen zu können

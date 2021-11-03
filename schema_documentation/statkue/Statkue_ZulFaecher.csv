@@ -140,6 +140,16 @@ PS;;***;C0;Chinesisch, regulärer Beginn in der Einführungsphase;0;1;3;5;2016-0
 PS;;***;C0;Chinesisch, regulärer Beginn in der Einführungsphase;0;2;3;5;2016-02-22 15:59:58
 SG;;***;C0;Chinesisch, regulärer Beginn in der Einführungsphase;0;1;3;1;2016-02-22 13:32:27
 SG;;***;C0;Chinesisch, regulärer Beginn in der Einführungsphase;0;2;3;1;2016-02-22 13:32:28
+GE;;***;C1;Chinesisch, regulärer Beginn in Jahrgang 11;0;1;3;5;
+GE;;***;C1;Chinesisch, regulärer Beginn in Jahrgang 11;0;2;3;5;
+GM;;***;C1;Chinesisch, regulärer Beginn in Jahrgang 11;0;1;3;5;
+GM;;***;C1;Chinesisch, regulärer Beginn in Jahrgang 11;0;2;3;5;
+GY;;***;C1;Chinesisch, regulärer Beginn in Jahrgang 11;0;1;3;5;
+GY;;***;C1;Chinesisch, regulärer Beginn in Jahrgang 11;0;2;3;5;
+PS;;***;C1;Chinesisch, regulärer Beginn in Jahrgang 11;0;1;3;5;
+PS;;***;C1;Chinesisch, regulärer Beginn in Jahrgang 11;0;2;3;5;
+SG;;***;C1;Chinesisch, regulärer Beginn in Jahrgang 11;0;1;3;1;
+SG;;***;C1;Chinesisch, regulärer Beginn in Jahrgang 11;0;2;3;1;
 GE;;***;C5;Chinesisch, regulärer Beginn in Jahrgang 5;0;1;3;1;2016-02-22 15:01:31
 GE;;***;C5;Chinesisch, regulärer Beginn in Jahrgang 5;0;2;3;1;2016-02-22 15:01:32
 GM;;***;C5;Chinesisch, regulärer Beginn in Jahrgang 5;0;1;3;1;2016-02-22 15:47:00
@@ -186,6 +196,18 @@ SG;;***;C8;Chinesisch, regulärer Beginn in Jahrgang 8;0;1;3;5;2020-08-13 09:18:
 SG;;***;C8;Chinesisch, regulärer Beginn in Jahrgang 8;0;2;3;5;2020-08-13 09:18:00
 SK;;***;C8;Chinesisch, regulärer Beginn in Jahrgang 8;0;1;3;4;2016-02-22 13:16:23
 SK;;***;C8;Chinesisch, regulärer Beginn in Jahrgang 8;0;2;3;4;2016-02-22 13:16:27
+GE;;***;C9;Chinesisch, regulärer Beginn in Jahrgang 9;0;1;3;4;
+GE;;***;C9;Chinesisch, regulärer Beginn in Jahrgang 9;0;2;3;4;
+GM;;***;C9;Chinesisch, regulärer Beginn in Jahrgang 9;0;1;3;4;
+GM;;***;C9;Chinesisch, regulärer Beginn in Jahrgang 9;0;2;3;4;
+GY;;***;C9;Chinesisch, regulärer Beginn in Jahrgang 9;;1;3;4;
+GY;;***;C9;Chinesisch, regulärer Beginn in Jahrgang 9;0;2;3;4;
+PS;;***;C9;Chinesisch, regulärer Beginn in Jahrgang 9;0;1;3;4;
+PS;;***;C9;Chinesisch, regulärer Beginn in Jahrgang 9;0;2;3;5;
+SG;;***;C9;Chinesisch, regulärer Beginn in Jahrgang 9;0;1;3;5;
+SG;;***;C9;Chinesisch, regulärer Beginn in Jahrgang 9;0;2;3;5;
+SK;;***;C9;Chinesisch, regulärer Beginn in Jahrgang 9;0;1;3;4;
+SK;;***;C9;Chinesisch, regulärer Beginn in Jahrgang 9;0;2;3;4;
 BK;;***;CH;Chemie;-1;1;3;0;
 GE;;***;CH;Chemie;;1;3;7;2020-08-13 10:26:38
 GM;;***;CH;Chemie;0;1;3;7;2017-02-07 10:40:14
@@ -367,6 +389,16 @@ PS;;***;F0;Französisch, regulärer Beginn in der Einführungsphase;0;1;6;4;2016
 PS;;***;F0;Französisch, regulärer Beginn in der Einführungsphase;0;2;6;4;2016-02-22 16:00:23
 SG;;***;F0;Französisch, regulärer Beginn in der Einführungsphase;0;1;6;1;2016-02-22 13:33:07
 SG;;***;F0;Französisch, regulärer Beginn in der Einführungsphase;0;2;6;1;2016-02-22 13:33:08
+GE;;***;F1;Französisch, regulärer Beginn in Jahrgang 11;0;1;6;5;
+GE;;***;F1;Französisch, regulärer Beginn in Jahrgang 11;0;2;6;5;
+GM;;***;F1;Französisch, regulärer Beginn in Jahrgang 11;0;1;6;5;
+GM;;***;F1;Französisch, regulärer Beginn in Jahrgang 11;0;2;6;5;
+GY;;***;F1;Französisch, regulärer Beginn in Jahrgang 11;0;1;6;5;
+GY;;***;F1;Französisch, regulärer Beginn in Jahrgang 11;0;2;6;5;
+PS;;***;F1;Französisch, regulärer Beginn in Jahrgang 11;0;1;6;4;
+PS;;***;F1;Französisch, regulärer Beginn in Jahrgang 11;0;2;6;4;
+SG;;***;F1;Französisch, regulärer Beginn in Jahrgang 11;0;1;6;1;
+SG;;***;F1;Französisch, regulärer Beginn in Jahrgang 11;0;2;6;1;
 GE;;***;F5;Französisch, regulärer Beginn in Jahrgang 5;;1;6;1;2016-02-22 15:02:02
 GE;;***;F5;Französisch, regulärer Beginn in Jahrgang 5;0;2;6;1;2016-02-22 15:02:03
 GM;;***;F5;Französisch, regulärer Beginn in Jahrgang 5;0;1;6;1;2016-02-22 15:47:28
@@ -427,6 +459,22 @@ SK;;***;F8;Französisch, regulärer Beginn in Jahrgang 8;0;1;6;4;2016-02-23 11:0
 SK;;***;F8;Französisch, regulärer Beginn in Jahrgang 8;0;2;6;4;2016-02-23 11:07:36
 SR;;***;F8;Französisch, regulärer Beginn in Jahrgang 8;0;1;6;3;2018-03-06 14:11:33
 SR;;***;F8;Französisch, regulärer Beginn in Jahrgang 8;0;2;6;4;2018-03-06 14:11:24
+GE;;***;F9;Französisch, regulärer Beginn in Jahrgang 9;;1;6;4;
+GE;;***;F9;Französisch, regulärer Beginn in Jahrgang 9;0;2;6;4;
+GM;;***;F9;Französisch, regulärer Beginn in Jahrgang 9;0;1;6;4;
+GM;;***;F9;Französisch, regulärer Beginn in Jahrgang 9;0;2;6;4;
+GY;;***;F9;Französisch, regulärer Beginn in Jahrgang 9;;1;6;4;
+GY;;***;F9;Französisch, regulärer Beginn in Jahrgang 9;0;2;6;4;
+PS;;***;F9;Französisch, regulärer Beginn in Jahrgang 9;0;1;6;3;
+PS;;***;F9;Französisch, regulärer Beginn in Jahrgang 9;0;2;6;3;
+R;;***;F9;Französisch, regulärer Beginn in Jahrgang 9;0;1;6;4;
+R;;***;F9;Französisch, regulärer Beginn in Jahrgang 9;0;2;6;4;
+SG;;***;F9;Französisch, regulärer Beginn in Jahrgang 9;0;1;6;5;
+SG;;***;F9;Französisch, regulärer Beginn in Jahrgang 9;0;2;6;5;
+SK;;***;F9;Französisch, regulärer Beginn in Jahrgang 9;0;1;6;4;
+SK;;***;F9;Französisch, regulärer Beginn in Jahrgang 9;0;2;6;4;
+SR;;***;F9;Französisch, regulärer Beginn in Jahrgang 9;0;1;6;3;
+SR;;***;F9;Französisch, regulärer Beginn in Jahrgang 9;0;2;6;4;
 BK;;***;FB;Fächer des berufsbezogenen Bereichs;;1;6;0;
 SB;;***;FB;Fächer des berufsbezogenen Bereichs;;1;6;0;
 BK;;***;FK;Fremdsprachliche Kommunikation;0;1;6;0;2012-04-17 10:23:34
@@ -459,6 +507,16 @@ PS;;***;G0;Altgriechisch, regulärer Beginn in der Einführungsphase;0;1;7;4;201
 PS;;***;G0;Altgriechisch, regulärer Beginn in der Einführungsphase;0;2;7;4;2016-02-22 16:00:41
 SG;;***;G0;Altgriechisch, regulärer Beginn in der Einführungsphase;0;1;7;1;2016-02-22 13:33:19
 SG;;***;G0;Altgriechisch, regulärer Beginn in der Einführungsphase;0;2;7;1;2016-02-22 13:33:20
+GE;;***;G1;Altgriechisch, regulärer Beginn in Jahrgang 11;0;1;7;5;
+GE;;***;G1;Altgriechisch, regulärer Beginn in Jahrgang 11;0;2;7;5;
+GM;;***;G1;Altgriechisch, regulärer Beginn in Jahrgang 11;0;1;7;5;
+GM;;***;G1;Altgriechisch, regulärer Beginn in Jahrgang 11;0;2;7;5;
+GY;;***;G1;Altgriechisch, regulärer Beginn in Jahrgang 11;0;1;7;5;
+GY;;***;G1;Altgriechisch, regulärer Beginn in Jahrgang 11;0;2;7;5;
+PS;;***;G1;Altgriechisch, regulärer Beginn in Jahrgang 11;0;1;7;4;
+PS;;***;G1;Altgriechisch, regulärer Beginn in Jahrgang 11;0;2;7;4;
+SG;;***;G1;Altgriechisch, regulärer Beginn in Jahrgang 11;0;1;7;1;
+SG;;***;G1;Altgriechisch, regulärer Beginn in Jahrgang 11;0;2;7;1;
 GE;;***;G5;Altgriechisch, regulärer Beginn in Jahrgang 5;;1;7;1;2016-02-22 15:02:13
 GE;;***;G5;Altgriechisch, regulärer Beginn in Jahrgang 5;0;2;7;1;2016-02-22 15:02:15
 GM;;***;G5;Altgriechisch, regulärer Beginn in Jahrgang 5;0;1;7;1;2016-02-22 15:47:41
@@ -505,6 +563,18 @@ SG;;***;G8;Altgriechisch, regulärer Beginn in Jahrgang 8;0;1;7;5;2020-08-13 09:
 SG;;***;G8;Altgriechisch, regulärer Beginn in Jahrgang 8;0;2;7;5;2020-08-13 09:18:35
 SK;;***;G8;Altgriechisch, regulärer Beginn in Jahrgang 8;0;1;7;4;2016-02-22 13:18:25
 SK;;***;G8;Altgriechisch, regulärer Beginn in Jahrgang 8;0;2;7;4;2016-02-22 13:18:28
+GE;;***;G9;Altgriechisch, regulärer Beginn in Jahrgang 9;;1;7;4;
+GE;;***;G9;Altgriechisch, regulärer Beginn in Jahrgang 9;0;2;7;4;
+GM;;***;G9;Altgriechisch, regulärer Beginn in Jahrgang 9;0;1;7;4;
+GM;;***;G9;Altgriechisch, regulärer Beginn in Jahrgang 9;0;2;7;4;
+GY;;***;G9;Altgriechisch, regulärer Beginn in Jahrgang 9;;1;7;4;
+GY;;***;G9;Altgriechisch, regulärer Beginn in Jahrgang 9;0;2;7;4;
+PS;;***;G9;Altgriechisch, regulärer Beginn in Jahrgang 9;0;1;7;3;
+PS;;***;G9;Altgriechisch, regulärer Beginn in Jahrgang 9;0;2;7;3;
+SG;;***;G9;Altgriechisch, regulärer Beginn in Jahrgang 9;0;1;7;5;
+SG;;***;G9;Altgriechisch, regulärer Beginn in Jahrgang 9;0;2;7;5;
+SK;;***;G9;Altgriechisch, regulärer Beginn in Jahrgang 9;0;1;7;4;
+SK;;***;G9;Altgriechisch, regulärer Beginn in Jahrgang 9;0;2;7;4;
 BK;;***;GA;Geräte- und Maschinenlehre;-1;1;7;0;
 SB;;***;GA;Geräte- und Maschinenlehre;;1;7;0;
 BK;;***;GB;Grundbildung;0;1;7;0;
@@ -575,6 +645,16 @@ PS;;***;H0;Hebräisch, regulärer Beginn in der Einführungsphase;0;1;8;4;2016-0
 PS;;***;H0;Hebräisch, regulärer Beginn in der Einführungsphase;0;2;8;4;2016-02-22 16:01:18
 SG;;***;H0;Hebräisch, regulärer Beginn in der Einführungsphase;0;1;8;1;2016-02-22 13:33:38
 SG;;***;H0;Hebräisch, regulärer Beginn in der Einführungsphase;0;2;8;1;2016-02-22 13:33:39
+GE;;***;H1;Hebräisch, regulärer Beginn in Jahrgang 11;0;1;8;5;
+GE;;***;H1;Hebräisch, regulärer Beginn in Jahrgang 11;0;2;8;5;
+GM;;***;H1;Hebräisch, regulärer Beginn in Jahrgang 11;0;1;8;5;
+GM;;***;H1;Hebräisch, regulärer Beginn in Jahrgang 11;0;2;8;5;
+GY;;***;H1;Hebräisch, regulärer Beginn in Jahrgang 11;0;1;8;5;
+GY;;***;H1;Hebräisch, regulärer Beginn in Jahrgang 11;0;2;8;5;
+PS;;***;H1;Hebräisch, regulärer Beginn in Jahrgang 11;0;1;8;4;
+PS;;***;H1;Hebräisch, regulärer Beginn in Jahrgang 11;0;2;8;4;
+SG;;***;H1;Hebräisch, regulärer Beginn in Jahrgang 11;0;1;8;1;
+SG;;***;H1;Hebräisch, regulärer Beginn in Jahrgang 11;0;2;8;1;
 GE;;***;H5;Hebräisch, regulärer Beginn in Jahrgang 5;;1;8;1;2020-08-13 10:28:30
 GE;;***;H5;Hebräisch, regulärer Beginn in Jahrgang 5;0;2;8;1;2020-08-13 10:28:29
 GM;;***;H5;Hebräisch, regulärer Beginn in Jahrgang 5;0;1;8;1;2016-02-22 15:48:04
@@ -621,6 +701,18 @@ SG;;***;H8;Hebräisch, regulärer Beginn in Jahrgang 8;0;1;8;5;2020-08-13 09:18:
 SG;;***;H8;Hebräisch, regulärer Beginn in Jahrgang 8;0;2;8;5;2020-08-13 09:18:41
 SK;;***;H8;Hebräisch, regulärer Beginn in Jahrgang 8;0;1;8;4;2016-02-22 13:19:04
 SK;;***;H8;Hebräisch, regulärer Beginn in Jahrgang 8;0;2;8;4;2016-02-22 13:19:07
+GE;;***;H9;Hebräisch, regulärer Beginn in Jahrgang 9;;1;8;4;
+GE;;***;H9;Hebräisch, regulärer Beginn in Jahrgang 9;0;2;8;4;
+GM;;***;H9;Hebräisch, regulärer Beginn in Jahrgang 9;0;1;8;4;
+GM;;***;H9;Hebräisch, regulärer Beginn in Jahrgang 9;0;2;8;4;
+GY;;***;H9;Hebräisch, regulärer Beginn in Jahrgang 9;;1;8;4;
+GY;;***;H9;Hebräisch, regulärer Beginn in Jahrgang 9;0;2;8;4;
+PS;;***;H9;Hebräisch, regulärer Beginn in Jahrgang 9;0;1;8;3;
+PS;;***;H9;Hebräisch, regulärer Beginn in Jahrgang 9;0;2;8;3;
+SG;;***;H9;Hebräisch, regulärer Beginn in Jahrgang 9;0;1;8;5;
+SG;;***;H9;Hebräisch, regulärer Beginn in Jahrgang 9;0;2;8;5;
+SK;;***;H9;Hebräisch, regulärer Beginn in Jahrgang 9;0;1;8;4;
+SK;;***;H9;Hebräisch, regulärer Beginn in Jahrgang 9;0;2;8;4;
 GE;;***;HH;Herkunftssprache anstelle einer Pflichtfremdsprache - Kroatisch;;1;8;7;2020-08-13 10:28:58
 GM;;***;HH;Herkunftssprache anstelle einer Pflichtfremdsprache - Kroatisch;0;1;8;7;2017-02-07 10:41:05
 GY;;***;HH;Herkunftssprache anstelle einer Pflichtfremdsprache - Kroatisch;;1;8;7;2016-02-22 15:52:37
@@ -695,6 +787,16 @@ PS;;***;I0;Italienisch, regulärer Beginn in der Einführungsphase;0;1;9;4;2016-
 PS;;***;I0;Italienisch, regulärer Beginn in der Einführungsphase;0;2;9;4;2016-02-22 16:01:32
 SG;;***;I0;Italienisch, regulärer Beginn in der Einführungsphase;0;1;9;1;2016-02-22 13:33:55
 SG;;***;I0;Italienisch, regulärer Beginn in der Einführungsphase;0;2;9;1;2016-02-22 13:33:56
+GE;;***;I1;Italienisch, regulärer Beginn in Jahrgang 11;0;1;9;5;
+GE;;***;I1;Italienisch, regulärer Beginn in Jahrgang 11;0;2;9;5;
+GM;;***;I1;Italienisch, regulärer Beginn in Jahrgang 11;0;1;9;5;
+GM;;***;I1;Italienisch, regulärer Beginn in Jahrgang 11;0;2;9;5;
+GY;;***;I1;Italienisch, regulärer Beginn in Jahrgang 11;0;1;9;5;
+GY;;***;I1;Italienisch, regulärer Beginn in Jahrgang 11;0;2;9;5;
+PS;;***;I1;Italienisch, regulärer Beginn in Jahrgang 11;0;1;9;4;
+PS;;***;I1;Italienisch, regulärer Beginn in Jahrgang 11;0;2;9;4;
+SG;;***;I1;Italienisch, regulärer Beginn in Jahrgang 11;0;1;9;1;
+SG;;***;I1;Italienisch, regulärer Beginn in Jahrgang 11;0;2;9;1;
 GE;;***;I5;Italienisch, regulärer Beginn in Jahrgang 5;;1;9;1;2016-02-22 15:03:02
 GE;;***;I5;Italienisch, regulärer Beginn in Jahrgang 5;0;2;9;1;2016-02-22 15:03:03
 GM;;***;I5;Italienisch, regulärer Beginn in Jahrgang 5;0;1;9;1;2016-02-22 15:48:15
@@ -755,6 +857,22 @@ SK;;***;I8;Italienisch, regulärer Beginn in Jahrgang 8;0;1;9;4;2016-02-23 11:08
 SK;;***;I8;Italienisch, regulärer Beginn in Jahrgang 8;0;2;9;4;2016-02-23 11:08:18
 SR;;***;I8;Italienisch, regulärer Beginn in Jahrgang 8;0;1;9;3;2016-03-23 11:25:23
 SR;;***;I8;Italienisch, regulärer Beginn in Jahrgang 8;0;2;9;4;2016-03-23 12:59:46
+GE;;***;I9;Italienisch, regulärer Beginn in Jahrgang 9;;1;9;4;
+GE;;***;I9;Italienisch, regulärer Beginn in Jahrgang 9;0;2;9;4;
+GM;;***;I9;Italienisch, regulärer Beginn in Jahrgang 9;0;1;9;4;
+GM;;***;I9;Italienisch, regulärer Beginn in Jahrgang 9;0;2;9;4;
+GY;;***;I9;Italienisch, regulärer Beginn in Jahrgang 9;;1;9;4;
+GY;;***;I9;Italienisch, regulärer Beginn in Jahrgang 9;0;2;9;4;
+PS;;***;I9;Italienisch, regulärer Beginn in Jahrgang 9;0;1;9;3;
+PS;;***;I9;Italienisch, regulärer Beginn in Jahrgang 9;0;2;9;3;
+R;;***;I9;Italienisch, regulärer Beginn in Jahrgang 9;0;1;9;4;
+R;;***;I9;Italienisch, regulärer Beginn in Jahrgang 9;0;2;9;4;
+SG;;***;I9;Italienisch, regulärer Beginn in Jahrgang 9;0;1;9;5;
+SG;;***;I9;Italienisch, regulärer Beginn in Jahrgang 9;0;2;9;5;
+SK;;***;I9;Italienisch, regulärer Beginn in Jahrgang 9;0;1;9;4;
+SK;;***;I9;Italienisch, regulärer Beginn in Jahrgang 9;0;2;9;4;
+SR;;***;I9;Italienisch, regulärer Beginn in Jahrgang 9;0;1;9;3;
+SR;;***;I9;Italienisch, regulärer Beginn in Jahrgang 9;0;2;9;4;
 GE;;***;IE;Individuelles Lernen (Ergänzungsstunden, Ganztag- und Betreuungsangebote);0;1;9;7;2020-08-13 10:29:46
 GM;;***;IE;Individuelles Lernen (Ergänzungsstunden, Ganztag- und Betreuungsangebote);0;1;9;7;2019-04-08 11:30:09
 GY;;***;IE;Individuelles Lernen (Ergänzungsstunden, Ganztag- und Betreuungsangebote);0;1;9;7;2019-04-08 10:57:35
@@ -862,6 +980,16 @@ PS;;***;K0;Japanisch, regulärer Beginn in der Einführungsphase;0;1;11;4;2016-0
 PS;;***;K0;Japanisch, regulärer Beginn in der Einführungsphase;0;2;11;4;2016-02-22 16:01:52
 SG;;***;K0;Japanisch, regulärer Beginn in der Einführungsphase;0;1;11;1;2016-02-22 13:34:17
 SG;;***;K0;Japanisch, regulärer Beginn in der Einführungsphase;0;2;11;1;2016-02-22 13:34:18
+GE;;***;K1;Japanisch, regulärer Beginn in Jahrgang 11;0;1;11;5;
+GE;;***;K1;Japanisch, regulärer Beginn in Jahrgang 11;0;2;11;5;
+GM;;***;K1;Japanisch, regulärer Beginn in Jahrgang 11;0;1;11;5;
+GM;;***;K1;Japanisch, regulärer Beginn in Jahrgang 11;0;2;11;5;
+GY;;***;K1;Japanisch, regulärer Beginn in Jahrgang 11;0;1;11;5;
+GY;;***;K1;Japanisch, regulärer Beginn in Jahrgang 11;0;2;11;5;
+PS;;***;K1;Japanisch, regulärer Beginn in Jahrgang 11;0;1;11;4;
+PS;;***;K1;Japanisch, regulärer Beginn in Jahrgang 11;0;2;11;4;
+SG;;***;K1;Japanisch, regulärer Beginn in Jahrgang 11;0;1;11;1;
+SG;;***;K1;Japanisch, regulärer Beginn in Jahrgang 11;0;2;11;1;
 GE;;***;K5;Japanisch, regulärer Beginn in Jahrgang 5;0;1;11;1;2016-02-22 15:03:30
 GE;;***;K5;Japanisch, regulärer Beginn in Jahrgang 5;0;2;11;1;2016-02-22 15:03:31
 GM;;***;K5;Japanisch, regulärer Beginn in Jahrgang 5;0;1;11;1;2016-02-22 15:48:32
@@ -908,6 +1036,18 @@ SG;;***;K8;Japanisch, regulärer Beginn in Jahrgang 8;0;1;11;5;2020-08-13 09:19:
 SG;;***;K8;Japanisch, regulärer Beginn in Jahrgang 8;0;2;11;5;2020-08-13 09:19:32
 SK;;***;K8;Japanisch, regulärer Beginn in Jahrgang 8;0;1;11;4;2016-02-22 13:20:16
 SK;;***;K8;Japanisch, regulärer Beginn in Jahrgang 8;0;2;11;4;2016-02-22 13:20:17
+GE;;***;K9;Japanisch, regulärer Beginn in Jahrgang 9;0;1;11;4;
+GE;;***;K9;Japanisch, regulärer Beginn in Jahrgang 9;0;2;11;4;
+GM;;***;K9;Japanisch, regulärer Beginn in Jahrgang 9;0;1;11;4;
+GM;;***;K9;Japanisch, regulärer Beginn in Jahrgang 9;0;2;11;4;
+GY;;***;K9;Japanisch, regulärer Beginn in Jahrgang 9;;1;11;4;
+GY;;***;K9;Japanisch, regulärer Beginn in Jahrgang 9;0;2;11;4;
+PS;;***;K9;Japanisch, regulärer Beginn in Jahrgang 9;0;1;11;3;
+PS;;***;K9;Japanisch, regulärer Beginn in Jahrgang 9;0;2;11;3;
+SG;;***;K9;Japanisch, regulärer Beginn in Jahrgang 9;0;1;11;5;
+SG;;***;K9;Japanisch, regulärer Beginn in Jahrgang 9;0;2;11;5;
+SK;;***;K9;Japanisch, regulärer Beginn in Jahrgang 9;0;1;11;4;
+SK;;***;K9;Japanisch, regulärer Beginn in Jahrgang 9;0;2;11;4;
 BK;;***;KN;Katholische Religionslehre (konfessionell kooperativ);0;1;11;0;2018-06-06 14:26:37
 G;;***;KN;Katholische Religionslehre (konfessionell kooperativ);0;1;11;2;2018-04-04 15:35:53
 GE;;***;KN;Katholische Religionslehre (konfessionell kooperativ);0;1;11;8;2020-08-13 10:30:40
@@ -979,6 +1119,16 @@ PS;;***;L0;Lateinisch, regulärer Beginn in der Einführungsphase;0;1;12;4;2016-
 PS;;***;L0;Lateinisch, regulärer Beginn in der Einführungsphase;0;2;12;4;2016-02-22 16:02:06
 SG;;***;L0;Lateinisch, regulärer Beginn in der Einführungsphase;0;1;12;1;2016-02-22 13:34:40
 SG;;***;L0;Lateinisch, regulärer Beginn in der Einführungsphase;0;2;12;1;2016-02-22 13:34:41
+GE;;***;L1;Lateinisch, regulärer Beginn in Jahrgang 11;0;1;12;5;
+GE;;***;L1;Lateinisch, regulärer Beginn in Jahrgang 11;0;2;12;5;
+GM;;***;L1;Lateinisch, regulärer Beginn in Jahrgang 11;0;1;12;5;
+GM;;***;L1;Lateinisch, regulärer Beginn in Jahrgang 11;0;2;12;5;
+GY;;***;L1;Lateinisch, regulärer Beginn in Jahrgang 11;0;1;12;5;
+GY;;***;L1;Lateinisch, regulärer Beginn in Jahrgang 11;0;2;12;5;
+PS;;***;L1;Lateinisch, regulärer Beginn in Jahrgang 11;0;1;12;4;
+PS;;***;L1;Lateinisch, regulärer Beginn in Jahrgang 11;0;2;12;4;
+SG;;***;L1;Lateinisch, regulärer Beginn in Jahrgang 11;0;1;12;1;
+SG;;***;L1;Lateinisch, regulärer Beginn in Jahrgang 11;0;2;12;1;
 GE;;***;L5;Lateinisch, regulärer Beginn in Jahrgang 5;;1;12;1;2016-02-22 15:03:44
 GE;;***;L5;Lateinisch, regulärer Beginn in Jahrgang 5;0;2;12;1;2016-02-22 15:03:45
 GM;;***;L5;Lateinisch, regulärer Beginn in Jahrgang 5;0;1;12;1;2016-02-22 15:48:42
@@ -1039,6 +1189,22 @@ SK;;***;L8;Lateinisch, regulärer Beginn in Jahrgang 8;0;1;12;4;2016-02-23 11:08
 SK;;***;L8;Lateinisch, regulärer Beginn in Jahrgang 8;0;2;12;4;2016-02-23 11:08:36
 SR;;***;L8;Lateinisch, regulärer Beginn in Jahrgang 8;0;1;12;3;2016-03-23 11:25:46
 SR;;***;L8;Lateinisch, regulärer Beginn in Jahrgang 8;0;2;12;4;2016-03-23 12:59:48
+GE;;***;L9;Lateinisch, regulärer Beginn in Jahrgang 9;;1;12;4;
+GE;;***;L9;Lateinisch, regulärer Beginn in Jahrgang 9;0;2;12;4;
+GM;;***;L9;Lateinisch, regulärer Beginn in Jahrgang 9;0;1;12;4;
+GM;;***;L9;Lateinisch, regulärer Beginn in Jahrgang 9;0;2;12;4;
+GY;;***;L9;Lateinisch, regulärer Beginn in Jahrgang 9;;1;12;4;
+GY;;***;L9;Lateinisch, regulärer Beginn in Jahrgang 9;0;2;12;4;
+PS;;***;L9;Lateinisch, regulärer Beginn in Jahrgang 9;0;1;12;3;
+PS;;***;L9;Lateinisch, regulärer Beginn in Jahrgang 9;0;2;12;3;
+R;;***;L9;Lateinisch, regulärer Beginn in Jahrgang 9;0;1;12;4;
+R;;***;L9;Lateinisch, regulärer Beginn in Jahrgang 9;0;2;12;4;
+SG;;***;L9;Lateinisch, regulärer Beginn in Jahrgang 9;0;1;12;5;
+SG;;***;L9;Lateinisch, regulärer Beginn in Jahrgang 9;0;2;12;5;
+SK;;***;L9;Lateinisch, regulärer Beginn in Jahrgang 9;0;1;12;4;
+SK;;***;L9;Lateinisch, regulärer Beginn in Jahrgang 9;0;2;12;4;
+SR;;***;L9;Lateinisch, regulärer Beginn in Jahrgang 9;0;1;12;3;
+SR;;***;L9;Lateinisch, regulärer Beginn in Jahrgang 9;0;2;12;4;
 GE;;***;LH;Herkunftssprache anstelle einer Pflichtfremdsprache - Albanisch;;1;12;7;2020-08-13 10:31:07
 GM;;***;LH;Herkunftssprache anstelle einer Pflichtfremdsprache - Albanisch;0;1;12;7;2017-02-07 10:42:40
 GY;;***;LH;Herkunftssprache anstelle einer Pflichtfremdsprache - Albanisch;;1;12;7;2016-02-22 15:53:30
@@ -1158,6 +1324,16 @@ PS;;***;N0;Niederländisch, regulärer Beginn in der Einführungsphase;0;1;14;4;
 PS;;***;N0;Niederländisch, regulärer Beginn in der Einführungsphase;0;2;14;4;2016-02-22 16:02:26
 SG;;***;N0;Niederländisch, regulärer Beginn in der Einführungsphase;;1;14;1;2016-02-22 13:35:03
 SG;;***;N0;Niederländisch, regulärer Beginn in der Einführungsphase;0;2;14;1;2016-02-22 13:35:04
+GE;;***;N1;Niederländisch, regulärer Beginn in Jahrgang 11;0;1;14;5;
+GE;;***;N1;Niederländisch, regulärer Beginn in Jahrgang 11;0;2;14;5;
+GM;;***;N1;Niederländisch, regulärer Beginn in Jahrgang 11;0;1;14;5;
+GM;;***;N1;Niederländisch, regulärer Beginn in Jahrgang 11;0;2;14;5;
+GY;;***;N1;Niederländisch, regulärer Beginn in Jahrgang 11;0;1;14;5;
+GY;;***;N1;Niederländisch, regulärer Beginn in Jahrgang 11;0;2;14;5;
+PS;;***;N1;Niederländisch, regulärer Beginn in Jahrgang 11;0;1;14;4;
+PS;;***;N1;Niederländisch, regulärer Beginn in Jahrgang 11;0;2;14;4;
+SG;;***;N1;Niederländisch, regulärer Beginn in Jahrgang 11;;1;14;1;
+SG;;***;N1;Niederländisch, regulärer Beginn in Jahrgang 11;0;2;14;1;
 GE;;***;N5;Niederländisch, regulärer Beginn in Jahrgang 5;;1;14;1;2016-02-22 15:04:33
 GE;;***;N5;Niederländisch, regulärer Beginn in Jahrgang 5;0;2;14;1;2016-02-22 15:04:33
 GM;;***;N5;Niederländisch, regulärer Beginn in Jahrgang 5;0;1;14;1;2016-02-22 15:49:00
@@ -1218,6 +1394,22 @@ SK;;***;N8;Niederländisch, regulärer Beginn in Jahrgang 8;0;1;14;4;2016-02-23 
 SK;;***;N8;Niederländisch, regulärer Beginn in Jahrgang 8;0;2;14;4;2016-02-23 11:08:54
 SR;;***;N8;Niederländisch, regulärer Beginn in Jahrgang 8;0;1;14;3;2016-03-23 11:26:04
 SR;;***;N8;Niederländisch, regulärer Beginn in Jahrgang 8;0;2;14;4;2016-03-23 12:59:51
+GE;;***;N9;Niederländisch, regulärer Beginn in Jahrgang 9;;1;14;4;
+GE;;***;N9;Niederländisch, regulärer Beginn in Jahrgang 9;0;2;14;4;
+GM;;***;N9;Niederländisch, regulärer Beginn in Jahrgang 9;0;1;14;4;
+GM;;***;N9;Niederländisch, regulärer Beginn in Jahrgang 9;0;2;14;4;
+GY;;***;N9;Niederländisch, regulärer Beginn in Jahrgang 9;;1;14;4;
+GY;;***;N9;Niederländisch, regulärer Beginn in Jahrgang 9;0;2;14;4;
+PS;;***;N9;Niederländisch, regulärer Beginn in Jahrgang 9;0;1;14;3;
+PS;;***;N9;Niederländisch, regulärer Beginn in Jahrgang 9;0;2;14;3;
+R;;***;N9;Niederländisch, regulärer Beginn in Jahrgang 9;0;1;14;4;
+R;;***;N9;Niederländisch, regulärer Beginn in Jahrgang 9;0;2;14;4;
+SG;;***;N9;Niederländisch, regulärer Beginn in Jahrgang 9;0;1;14;5;
+SG;;***;N9;Niederländisch, regulärer Beginn in Jahrgang 9;0;2;14;5;
+SK;;***;N9;Niederländisch, regulärer Beginn in Jahrgang 9;0;1;14;4;
+SK;;***;N9;Niederländisch, regulärer Beginn in Jahrgang 9;0;2;14;4;
+SR;;***;N9;Niederländisch, regulärer Beginn in Jahrgang 9;0;1;14;3;
+SR;;***;N9;Niederländisch, regulärer Beginn in Jahrgang 9;0;2;14;4;
 GE;;***;NH;Herkunftssprache anstelle einer Pflichtfremdsprache - Polnisch;;1;14;8;2020-08-13 10:31:30
 GM;;***;NH;Herkunftssprache anstelle einer Pflichtfremdsprache - Polnisch;0;1;14;8;2018-04-04 14:01:40
 GY;;***;NH;Herkunftssprache anstelle einer Pflichtfremdsprache - Polnisch;;1;14;8;2018-04-04 16:38:30
@@ -1270,6 +1462,16 @@ PS;;***;O0;Portugiesisch, regulärer Beginn in der Einführungsphase;0;1;15;4;20
 PS;;***;O0;Portugiesisch, regulärer Beginn in der Einführungsphase;0;2;15;4;2016-02-22 16:02:38
 SG;;***;O0;Portugiesisch, regulärer Beginn in der Einführungsphase;0;1;15;1;2016-02-22 13:35:20
 SG;;***;O0;Portugiesisch, regulärer Beginn in der Einführungsphase;0;2;15;1;2016-02-22 13:35:21
+GE;;***;O1;Portugiesisch, regulärer Beginn in Jahrgang 11;0;1;15;5;
+GE;;***;O1;Portugiesisch, regulärer Beginn in Jahrgang 11;0;2;15;5;
+GM;;***;O1;Portugiesisch, regulärer Beginn in Jahrgang 11;0;1;15;5;
+GM;;***;O1;Portugiesisch, regulärer Beginn in Jahrgang 11;0;2;15;5;
+GY;;***;O1;Portugiesisch, regulärer Beginn in Jahrgang 11;0;1;15;5;
+GY;;***;O1;Portugiesisch, regulärer Beginn in Jahrgang 11;0;2;15;5;
+PS;;***;O1;Portugiesisch, regulärer Beginn in Jahrgang 11;0;1;15;4;
+PS;;***;O1;Portugiesisch, regulärer Beginn in Jahrgang 11;0;2;15;4;
+SG;;***;O1;Portugiesisch, regulärer Beginn in Jahrgang 11;0;1;15;1;
+SG;;***;O1;Portugiesisch, regulärer Beginn in Jahrgang 11;0;2;15;1;
 GE;;***;O5;Portugiesisch, regulärer Beginn in Jahrgang 5;0;1;15;1;2016-02-22 15:05:18
 GE;;***;O5;Portugiesisch, regulärer Beginn in Jahrgang 5;0;2;15;1;2016-02-22 15:05:19
 GM;;***;O5;Portugiesisch, regulärer Beginn in Jahrgang 5;0;1;15;1;2016-02-22 15:49:11
@@ -1330,6 +1532,22 @@ SK;;***;O8;Portugiesisch, regulärer Beginn in Jahrgang 8;0;1;15;4;2016-02-23 11
 SK;;***;O8;Portugiesisch, regulärer Beginn in Jahrgang 8;0;2;15;4;2016-02-23 11:09:07
 SR;;***;O8;Portugiesisch, regulärer Beginn in Jahrgang 8;0;1;15;3;2016-03-23 11:26:17
 SR;;***;O8;Portugiesisch, regulärer Beginn in Jahrgang 8;0;2;15;4;2016-03-23 12:59:53
+GE;;***;O9;Portugiesisch, regulärer Beginn in Jahrgang 9;0;1;15;4;
+GE;;***;O9;Portugiesisch, regulärer Beginn in Jahrgang 9;0;2;15;4;
+GM;;***;O9;Portugiesisch, regulärer Beginn in Jahrgang 9;0;1;15;4;
+GM;;***;O9;Portugiesisch, regulärer Beginn in Jahrgang 9;0;2;15;4;
+GY;;***;O9;Portugiesisch, regulärer Beginn in Jahrgang 9;0;1;15;4;
+GY;;***;O9;Portugiesisch, regulärer Beginn in Jahrgang 9;0;2;15;4;
+PS;;***;O9;Portugiesisch, regulärer Beginn in Jahrgang 9;0;1;15;3;
+PS;;***;O9;Portugiesisch, regulärer Beginn in Jahrgang 9;0;2;15;3;
+R;;***;O9;Portugiesisch, regulärer Beginn in Jahrgang 9;0;1;15;4;
+R;;***;O9;Portugiesisch, regulärer Beginn in Jahrgang 9;0;2;15;4;
+SG;;***;O9;Portugiesisch, regulärer Beginn in Jahrgang 9;0;1;15;5;
+SG;;***;O9;Portugiesisch, regulärer Beginn in Jahrgang 9;0;2;15;5;
+SK;;***;O9;Portugiesisch, regulärer Beginn in Jahrgang 9;0;1;15;4;
+SK;;***;O9;Portugiesisch, regulärer Beginn in Jahrgang 9;0;2;15;4;
+SR;;***;O9;Portugiesisch, regulärer Beginn in Jahrgang 9;0;1;15;3;
+SR;;***;O9;Portugiesisch, regulärer Beginn in Jahrgang 9;0;2;15;4;
 GE;;***;OH;Herkunftssprache anstelle einer Pflichtfremdsprache - Portugiesisch;;1;15;7;2020-08-13 10:31:46
 GM;;***;OH;Herkunftssprache anstelle einer Pflichtfremdsprache - Portugiesisch;0;1;15;7;2017-02-07 10:43:40
 GY;;***;OH;Herkunftssprache anstelle einer Pflichtfremdsprache - Portugiesisch;;1;15;7;2016-02-22 15:54:14
@@ -1522,6 +1740,16 @@ PS;;***;R0;Russisch, regulärer Beginn in der Einführungsphase;0;1;18;4;2016-02
 PS;;***;R0;Russisch, regulärer Beginn in der Einführungsphase;0;2;18;4;2016-02-22 16:03:02
 SG;;***;R0;Russisch, regulärer Beginn in der Einführungsphase;0;1;18;1;2016-02-22 13:35:51
 SG;;***;R0;Russisch, regulärer Beginn in der Einführungsphase;0;2;18;1;2016-02-22 13:35:52
+GE;;***;R1;Russisch, regulärer Beginn in Jahrgang 11;0;1;18;5;
+GE;;***;R1;Russisch, regulärer Beginn in Jahrgang 11;0;2;18;5;
+GM;;***;R1;Russisch, regulärer Beginn in Jahrgang 11;0;1;18;5;
+GM;;***;R1;Russisch, regulärer Beginn in Jahrgang 11;0;2;18;5;
+GY;;***;R1;Russisch, regulärer Beginn in Jahrgang 11;0;1;18;5;
+GY;;***;R1;Russisch, regulärer Beginn in Jahrgang 11;0;2;18;5;
+PS;;***;R1;Russisch, regulärer Beginn in Jahrgang 11;0;1;18;4;
+PS;;***;R1;Russisch, regulärer Beginn in Jahrgang 11;0;2;18;4;
+SG;;***;R1;Russisch, regulärer Beginn in Jahrgang 11;0;1;18;1;
+SG;;***;R1;Russisch, regulärer Beginn in Jahrgang 11;0;2;18;1;
 GE;;***;R5;Russisch, regulärer Beginn in Jahrgang 5;;1;18;1;2016-02-22 15:06:18
 GE;;***;R5;Russisch, regulärer Beginn in Jahrgang 5;0;2;18;1;2016-02-22 15:06:19
 GM;;***;R5;Russisch, regulärer Beginn in Jahrgang 5;0;1;18;1;2016-02-22 15:49:32
@@ -1582,18 +1810,34 @@ SK;;***;R8;Russisch, regulärer Beginn in Jahrgang 8;0;1;18;4;2016-02-23 11:09:2
 SK;;***;R8;Russisch, regulärer Beginn in Jahrgang 8;0;2;18;4;2016-02-23 11:09:24
 SR;;***;R8;Russisch, regulärer Beginn in Jahrgang 8;0;1;18;3;2018-03-07 12:00:41
 SR;;***;R8;Russisch, regulärer Beginn in Jahrgang 8;0;2;18;4;2018-03-07 12:00:45
+GE;;***;R9;Russisch, regulärer Beginn in Jahrgang 9;;1;18;4;
+GE;;***;R9;Russisch, regulärer Beginn in Jahrgang 9;0;2;18;4;
+GM;;***;R9;Russisch, regulärer Beginn in Jahrgang 9;0;1;18;4;
+GM;;***;R9;Russisch, regulärer Beginn in Jahrgang 9;0;2;18;4;
+GY;;***;R9;Russisch, regulärer Beginn in Jahrgang 9;;1;18;4;
+GY;;***;R9;Russisch, regulärer Beginn in Jahrgang 9;0;2;18;4;
+PS;;***;R9;Russisch, regulärer Beginn in Jahrgang 9;0;1;18;3;
+PS;;***;R9;Russisch, regulärer Beginn in Jahrgang 9;0;2;18;3;
+R;;***;R9;Russisch, regulärer Beginn in Jahrgang 9;0;1;18;4;
+R;;***;R9;Russisch, regulärer Beginn in Jahrgang 9;0;2;18;4;
+SG;;***;R9;Russisch, regulärer Beginn in Jahrgang 9;0;1;18;5;
+SG;;***;R9;Russisch, regulärer Beginn in Jahrgang 9;0;2;18;5;
+SK;;***;R9;Russisch, regulärer Beginn in Jahrgang 9;0;1;18;4;
+SK;;***;R9;Russisch, regulärer Beginn in Jahrgang 9;0;2;18;4;
+SR;;***;R9;Russisch, regulärer Beginn in Jahrgang 9;0;1;18;3;
+SR;;***;R9;Russisch, regulärer Beginn in Jahrgang 9;0;2;18;4;
 BK;;***;RE;Rechnungswesen;-1;1;18;0;
 SB;;***;RE;Rechnungswesen;;1;18;0;
-GE;;***;RH;Herkunftssprache anstelle einer Pflichtfremdsprache - Arabisch;;1;18;7;2020-08-13 10:32:05
-GM;;***;RH;Herkunftssprache anstelle einer Pflichtfremdsprache - Arabisch;0;1;18;7;2017-02-07 10:44:07
-GY;;***;RH;Herkunftssprache anstelle einer Pflichtfremdsprache - Arabisch;;1;18;7;2016-02-22 15:55:09
-H;;R;RH;Herkunftssprache anstelle einer Pflichtfremdsprache - Arabisch;0;1;18;2;2016-02-22 15:57:58
-PS;;***;RH;Herkunftssprache anstelle einer Pflichtfremdsprache - Arabisch;0;1;18;6;2016-02-22 16:03:06
-R;;***;RH;Herkunftssprache anstelle einer Pflichtfremdsprache - Arabisch;;1;18;6;2016-03-23 11:04:44
-S;;***;RH;Herkunftssprache anstelle einer Pflichtfremdsprache - Arabisch;0;1;18;2;2016-02-22 14:29:38
-SG;;***;RH;Herkunftssprache anstelle einer Pflichtfremdsprache - Arabisch;;1;18;7;2020-08-13 09:20:59
-SK;;***;RH;Herkunftssprache anstelle einer Pflichtfremdsprache - Arabisch;0;1;18;7;2016-02-22 13:22:31
-SR;;***;RH;Herkunftssprache anstelle einer Pflichtfremdsprache - Arabisch;;1;18;5;2016-03-23 11:26:47
+GE;;***;RH;Herkunftssprache anstelle einer Pflichtfremdsprache - Russisch;;1;18;7;2020-08-13 10:32:05
+GM;;***;RH;Herkunftssprache anstelle einer Pflichtfremdsprache - Russisch;0;1;18;7;2017-02-07 10:44:07
+GY;;***;RH;Herkunftssprache anstelle einer Pflichtfremdsprache - Russisch;;1;18;7;2016-02-22 15:55:09
+H;;R;RH;Herkunftssprache anstelle einer Pflichtfremdsprache - Russisch;0;1;18;2;2016-02-22 15:57:58
+PS;;***;RH;Herkunftssprache anstelle einer Pflichtfremdsprache - Russisch;0;1;18;6;2016-02-22 16:03:06
+R;;***;RH;Herkunftssprache anstelle einer Pflichtfremdsprache - Russisch;;1;18;6;2016-03-23 11:04:44
+S;;***;RH;Herkunftssprache anstelle einer Pflichtfremdsprache - Russisch;0;1;18;2;2016-02-22 14:29:38
+SG;;***;RH;Herkunftssprache anstelle einer Pflichtfremdsprache - Russisch;;1;18;7;2020-08-13 09:20:59
+SK;;***;RH;Herkunftssprache anstelle einer Pflichtfremdsprache - Russisch;0;1;18;7;2016-02-22 13:22:31
+SR;;***;RH;Herkunftssprache anstelle einer Pflichtfremdsprache - Russisch;;1;18;5;2016-03-23 11:26:47
 GE;;***;RK;Rechtskunde;;1;18;8;2020-08-13 10:32:05
 GY;;***;RK;Rechtskunde;;1;18;8;2020-05-06 09:46:32
 SG;;***;RK;Rechtskunde;;1;18;8;2020-08-13 09:21:00
@@ -1636,6 +1880,16 @@ PS;;***;S0;Spanisch, regulärer Beginn in der Einführungsphase;0;1;19;4;2016-02
 PS;;***;S0;Spanisch, regulärer Beginn in der Einführungsphase;0;2;19;4;2016-02-22 16:03:28
 SG;;***;S0;Spanisch, regulärer Beginn in der Einführungsphase;0;1;19;1;2016-02-22 13:36:10
 SG;;***;S0;Spanisch, regulärer Beginn in der Einführungsphase;0;2;19;1;2016-02-22 13:36:12
+GE;;***;S1;Spanisch, regulärer Beginn in Jahrgang 11;0;1;19;5;
+GE;;***;S1;Spanisch, regulärer Beginn in Jahrgang 11;0;2;19;5;
+GM;;***;S1;Spanisch, regulärer Beginn in Jahrgang 11;0;1;19;5;
+GM;;***;S1;Spanisch, regulärer Beginn in Jahrgang 11;0;2;19;5;
+GY;;***;S1;Spanisch, regulärer Beginn in Jahrgang 11;0;1;19;5;
+GY;;***;S1;Spanisch, regulärer Beginn in Jahrgang 11;0;2;19;5;
+PS;;***;S1;Spanisch, regulärer Beginn in Jahrgang 11;0;1;19;4;
+PS;;***;S1;Spanisch, regulärer Beginn in Jahrgang 11;0;2;19;4;
+SG;;***;S1;Spanisch, regulärer Beginn in Jahrgang 11;0;1;19;1;
+SG;;***;S1;Spanisch, regulärer Beginn in Jahrgang 11;0;2;19;1;
 G;;***;S3;Sport für Jungen;;1;19;4;2016-02-22 15:00:18
 GE;;***;S3;Sport für Jungen;;1;19;11;2020-08-13 10:35:29
 GM;;***;S3;Sport für Jungen;0;1;19;11;2017-02-07 10:44:30
@@ -1720,6 +1974,22 @@ SK;;***;S8;Spanisch, regulärer Beginn in Jahrgang 8;0;1;19;4;2016-02-23 11:09:3
 SK;;***;S8;Spanisch, regulärer Beginn in Jahrgang 8;0;2;19;4;2016-02-23 11:09:42
 SR;;***;S8;Spanisch, regulärer Beginn in Jahrgang 8;0;1;19;3;2016-03-23 11:27:08
 SR;;***;S8;Spanisch, regulärer Beginn in Jahrgang 8;0;2;19;4;2016-03-23 12:59:59
+GE;;***;S9;Spanisch, regulärer Beginn in Jahrgang 9;;1;19;4;
+GE;;***;S9;Spanisch, regulärer Beginn in Jahrgang 9;0;2;19;4;
+GM;;***;S9;Spanisch, regulärer Beginn in Jahrgang 9;0;1;19;4;
+GM;;***;S9;Spanisch, regulärer Beginn in Jahrgang 9;0;2;19;4;
+GY;;***;S9;Spanisch, regulärer Beginn in Jahrgang 9;;1;19;4;
+GY;;***;S9;Spanisch, regulärer Beginn in Jahrgang 9;0;2;19;4;
+PS;;***;S9;Spanisch, regulärer Beginn in Jahrgang 9;0;1;19;3;
+PS;;***;S9;Spanisch, regulärer Beginn in Jahrgang 9;0;2;19;3;
+R;;***;S9;Spanisch, regulärer Beginn in Jahrgang 9;0;1;19;4;
+R;;***;S9;Spanisch, regulärer Beginn in Jahrgang 9;0;2;19;4;
+SG;;***;S9;Spanisch, regulärer Beginn in Jahrgang 9;0;1;19;5;
+SG;;***;S9;Spanisch, regulärer Beginn in Jahrgang 9;0;2;19;5;
+SK;;***;S9;Spanisch, regulärer Beginn in Jahrgang 9;0;1;19;4;
+SK;;***;S9;Spanisch, regulärer Beginn in Jahrgang 9;0;2;19;4;
+SR;;***;S9;Spanisch, regulärer Beginn in Jahrgang 9;0;1;19;3;
+SR;;***;S9;Spanisch, regulärer Beginn in Jahrgang 9;0;2;19;4;
 BK;;***;SE;Softwareentwicklung und -engineering;0;1;19;0;2020-06-03 11:41:33
 SB;;***;SE;Softwareentwicklung und -engineering;0;1;19;0;2020-06-03 11:47:13
 BK;;***;SG;sonderpädag. Förderung für Schüler/-innen mit sonderpädag. Förderbedarf;0;1;19;0;2012-03-28 08:43:22
@@ -1842,6 +2112,16 @@ PS;;***;T0;Türkisch, regulärer Beginn in der Einführungsphase;0;1;20;4;2016-0
 PS;;***;T0;Türkisch, regulärer Beginn in der Einführungsphase;0;2;20;4;2016-02-22 16:04:11
 SG;;***;T0;Türkisch, regulärer Beginn in der Einführungsphase;0;1;20;1;2016-02-22 13:36:45
 SG;;***;T0;Türkisch, regulärer Beginn in der Einführungsphase;0;2;20;1;2016-02-22 13:36:46
+GE;;***;T1;Türkisch, regulärer Beginn in Jahrgang 11;0;1;20;5;
+GE;;***;T1;Türkisch, regulärer Beginn in Jahrgang 11;0;2;20;5;
+GM;;***;T1;Türkisch, regulärer Beginn in Jahrgang 11;0;1;20;5;
+GM;;***;T1;Türkisch, regulärer Beginn in Jahrgang 11;0;2;20;5;
+GY;;***;T1;Türkisch, regulärer Beginn in Jahrgang 11;0;1;20;5;
+GY;;***;T1;Türkisch, regulärer Beginn in Jahrgang 11;0;2;20;5;
+PS;;***;T1;Türkisch, regulärer Beginn in Jahrgang 11;0;1;20;4;
+PS;;***;T1;Türkisch, regulärer Beginn in Jahrgang 11;0;2;20;4;
+SG;;***;T1;Türkisch, regulärer Beginn in Jahrgang 11;0;1;20;1;
+SG;;***;T1;Türkisch, regulärer Beginn in Jahrgang 11;0;2;20;1;
 GE;;***;T5;Türkisch, regulärer Beginn in Jahrgang 5;;1;20;1;2016-02-22 15:07:15
 GE;;***;T5;Türkisch, regulärer Beginn in Jahrgang 5;0;2;20;1;2016-02-22 15:07:16
 GM;;***;T5;Türkisch, regulärer Beginn in Jahrgang 5;0;1;20;1;2016-02-22 15:50:25
@@ -1902,6 +2182,22 @@ SK;;***;T8;Türkisch, regulärer Beginn in Jahrgang 8;0;1;20;4;2016-02-23 11:09:
 SK;;***;T8;Türkisch, regulärer Beginn in Jahrgang 8;0;2;20;4;2016-02-23 11:09:57
 SR;;***;T8;Türkisch, regulärer Beginn in Jahrgang 8;0;1;20;3;2016-03-23 11:27:43
 SR;;***;T8;Türkisch, regulärer Beginn in Jahrgang 8;0;2;20;4;2016-03-23 13:00:01
+GE;;***;T9;Türkisch, regulärer Beginn in Jahrgang 9;;1;20;4;
+GE;;***;T9;Türkisch, regulärer Beginn in Jahrgang 9;0;2;20;4;
+GM;;***;T9;Türkisch, regulärer Beginn in Jahrgang 9;0;1;20;4;
+GM;;***;T9;Türkisch, regulärer Beginn in Jahrgang 9;0;2;20;4;
+GY;;***;T9;Türkisch, regulärer Beginn in Jahrgang 9;;1;20;4;
+GY;;***;T9;Türkisch, regulärer Beginn in Jahrgang 9;0;2;20;4;
+PS;;***;T9;Türkisch, regulärer Beginn in Jahrgang 9;0;1;20;3;
+PS;;***;T9;Türkisch, regulärer Beginn in Jahrgang 9;0;2;20;3;
+R;;***;T9;Türkisch, regulärer Beginn in Jahrgang 9;0;1;20;4;
+R;;***;T9;Türkisch, regulärer Beginn in Jahrgang 9;0;2;20;4;
+SG;;***;T9;Türkisch, regulärer Beginn in Jahrgang 9;0;1;20;5;
+SG;;***;T9;Türkisch, regulärer Beginn in Jahrgang 9;0;2;20;5;
+SK;;***;T9;Türkisch, regulärer Beginn in Jahrgang 9;0;1;20;4;
+SK;;***;T9;Türkisch, regulärer Beginn in Jahrgang 9;0;2;20;4;
+SR;;***;T9;Türkisch, regulärer Beginn in Jahrgang 9;0;1;20;3;
+SR;;***;T9;Türkisch, regulärer Beginn in Jahrgang 9;0;2;20;4;
 GE;;***;TC;Technik;;1;20;7;2020-08-13 10:35:58
 GM;;R;TC;Technik;0;1;20;7;2017-02-07 10:44:41
 GM;;GY;TC;Technik;0;1;20;7;2017-02-07 10:44:41
@@ -2154,6 +2450,16 @@ PS;;***;Z0;Neugriechisch, regulärer Beginn in der Einführungsphase;0;1;26;4;20
 PS;;***;Z0;Neugriechisch, regulärer Beginn in der Einführungsphase;0;2;26;4;2016-02-22 16:05:40
 SG;;***;Z0;Neugriechisch, regulärer Beginn in der Einführungsphase;0;1;26;1;2016-02-22 13:37:23
 SG;;***;Z0;Neugriechisch, regulärer Beginn in der Einführungsphase;0;2;26;1;2016-02-22 13:37:24
+GE;;***;Z1;Neugriechisch, regulärer Beginn in Jahrgang 11;0;1;26;5;
+GE;;***;Z1;Neugriechisch, regulärer Beginn in Jahrgang 11;0;2;26;5;
+GM;;***;Z1;Neugriechisch, regulärer Beginn in Jahrgang 11;0;1;26;5;
+GM;;***;Z1;Neugriechisch, regulärer Beginn in Jahrgang 11;0;2;26;5;
+GY;;***;Z1;Neugriechisch, regulärer Beginn in Jahrgang 11;0;1;26;5;
+GY;;***;Z1;Neugriechisch, regulärer Beginn in Jahrgang 11;0;2;26;5;
+PS;;***;Z1;Neugriechisch, regulärer Beginn in Jahrgang 11;0;1;26;4;
+PS;;***;Z1;Neugriechisch, regulärer Beginn in Jahrgang 11;0;2;26;4;
+SG;;***;Z1;Neugriechisch, regulärer Beginn in Jahrgang 11;0;1;26;1;
+SG;;***;Z1;Neugriechisch, regulärer Beginn in Jahrgang 11;0;2;26;1;
 GE;;***;Z5;Neugriechisch, regulärer Beginn in Jahrgang 5;0;1;26;1;2016-02-22 15:07:59
 GE;;***;Z5;Neugriechisch, regulärer Beginn in Jahrgang 5;0;2;26;1;2016-02-22 15:08:00
 GM;;***;Z5;Neugriechisch, regulärer Beginn in Jahrgang 5;0;1;26;1;2016-02-22 15:50:48
@@ -2214,6 +2520,22 @@ SK;;***;Z8;Neugriechisch, regulärer Beginn in Jahrgang 8;0;1;26;4;2016-02-23 11
 SK;;***;Z8;Neugriechisch, regulärer Beginn in Jahrgang 8;0;2;26;4;2016-02-23 11:10:15
 SR;;***;Z8;Neugriechisch, regulärer Beginn in Jahrgang 8;0;1;26;3;2016-03-23 11:28:00
 SR;;***;Z8;Neugriechisch, regulärer Beginn in Jahrgang 8;0;2;26;3;2018-04-05 11:59:47
+GE;;***;Z9;Neugriechisch, regulärer Beginn in Jahrgang 9;0;1;26;4;
+GE;;***;Z9;Neugriechisch, regulärer Beginn in Jahrgang 9;0;2;26;4;
+GM;;***;Z9;Neugriechisch, regulärer Beginn in Jahrgang 9;0;1;26;4;
+GM;;***;Z9;Neugriechisch, regulärer Beginn in Jahrgang 9;0;2;26;4;
+GY;;***;Z9;Neugriechisch, regulärer Beginn in Jahrgang 9;;1;26;4;
+GY;;***;Z9;Neugriechisch, regulärer Beginn in Jahrgang 9;0;2;26;4;
+PS;;***;Z9;Neugriechisch, regulärer Beginn in Jahrgang 9;0;1;26;3;
+PS;;***;Z9;Neugriechisch, regulärer Beginn in Jahrgang 9;0;2;26;3;
+R;;***;Z9;Neugriechisch, regulärer Beginn in Jahrgang 9;0;1;26;4;
+R;;***;Z9;Neugriechisch, regulärer Beginn in Jahrgang 9;0;2;26;4;
+SG;;***;Z9;Neugriechisch, regulärer Beginn in Jahrgang 9;0;1;26;5;
+SG;;***;Z9;Neugriechisch, regulärer Beginn in Jahrgang 9;0;2;26;5;
+SK;;***;Z9;Neugriechisch, regulärer Beginn in Jahrgang 9;0;1;26;4;
+SK;;***;Z9;Neugriechisch, regulärer Beginn in Jahrgang 9;0;2;26;4;
+SR;;***;Z9;Neugriechisch, regulärer Beginn in Jahrgang 9;0;1;26;3;
+SR;;***;Z9;Neugriechisch, regulärer Beginn in Jahrgang 9;0;2;26;3;
 G;;***;ZF;Zusätzliche Förderung;0;1;26;1;2020-04-07 13:13:21
 PS;;***;ZF;Zusätzliche Förderung;0;1;26;6;2020-04-07 13:14:10
 S;;***;ZF;Zusätzliche Förderung;0;1;26;1;2020-04-07 13:13:46
