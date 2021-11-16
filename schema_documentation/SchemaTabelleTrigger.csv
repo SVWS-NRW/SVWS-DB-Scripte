@@ -1,4 +1,213 @@
 Name;Revision;Veraltet;dbms;NameTabelle;NameTabelle2;sql_drop;sql_create
+t_INSERT_EIGENESCHULE_ABSCHNITTE;0;1;MARIA_DB;SchuelerLernabschnittsdaten;EigeneSchule;"DROP TRIGGER IF EXISTS t_INSERT_EIGENESCHULE_ABSCHNITTE;";"CREATE TRIGGER t_INSERT_EIGENESCHULE_ABSCHNITTE
+BEFORE INSERT ON EigeneSchule FOR EACH ROW
+BEGIN
+    DECLARE id INTEGER;
+    IF NEW.Schuljahr IS NOT NULL AND NEW.SchuljahrAbschnitt IS NOT NULL THEN
+      SET id := (SELECT Schuljahresabschnitte.ID FROM Schuljahresabschnitte WHERE Schuljahresabschnitte.Jahr = NEW.Schuljahr AND Schuljahresabschnitte.Abschnitt = NEW.SchuljahrAbschnitt);
+      IF id IS NULL THEN
+          INSERT INTO Schuljahresabschnitte(Jahr, Abschnitt) VALUES (NEW.Schuljahr, NEW.SchuljahrAbschnitt);
+          SET id := (SELECT Schuljahresabschnitte.ID FROM Schuljahresabschnitte WHERE Schuljahresabschnitte.Jahr = NEW.Schuljahr AND Schuljahresabschnitte.Abschnitt = NEW.SchuljahrAbschnitt);
+      END IF;
+      SET NEW.Schuljahresabschnitts_ID = id;
+    END IF;
+END"
+t_INSERT_SCHUELER_ABSCHNITTE;0;1;MARIA_DB;Schueler;Schuljahresabschnitte;"DROP TRIGGER IF EXISTS t_INSERT_SCHUELER_ABSCHNITTE;";"CREATE TRIGGER t_INSERT_SCHUELER_ABSCHNITTE
+BEFORE INSERT ON Schueler FOR EACH ROW
+BEGIN
+    DECLARE id INTEGER;
+    IF NEW.AktSchuljahr IS NOT NULL AND NEW.AktAbschnitt IS NOT NULL THEN
+      SET id := (SELECT Schuljahresabschnitte.ID FROM Schuljahresabschnitte WHERE Schuljahresabschnitte.Jahr = NEW.AktSchuljahr AND Schuljahresabschnitte.Abschnitt = NEW.AktAbschnitt);
+      IF id IS NULL THEN
+          INSERT INTO Schuljahresabschnitte(Jahr, Abschnitt) VALUES (NEW.AktSchuljahr, NEW.AktAbschnitt);
+          SET id := (SELECT Schuljahresabschnitte.ID FROM Schuljahresabschnitte WHERE Schuljahresabschnitte.Jahr = NEW.AktSchuljahr AND Schuljahresabschnitte.Abschnitt = NEW.AktAbschnitt);
+      END IF;
+      SET NEW.Schuljahresabschnitts_ID = id;
+    END IF;
+END"
+t_INSERT_SCHUELERLERNABSCHNITTDATEN_ABSCHNITTE;0;1;MARIA_DB;SchuelerLernabschnittsdaten;Schuljahresabschnitte;"DROP TRIGGER IF EXISTS t_INSERT_SCHUELERLERNABSCHNITTDATEN_ABSCHNITTE;";"CREATE TRIGGER t_INSERT_SCHUELERLERNABSCHNITTDATEN_ABSCHNITTE
+BEFORE INSERT ON SchuelerLernabschnittsdaten FOR EACH ROW
+BEGIN
+    DECLARE id INTEGER;
+    IF NEW.Jahr IS NOT NULL AND NEW.Abschnitt IS NOT NULL THEN
+      SET id := (SELECT Schuljahresabschnitte.ID FROM Schuljahresabschnitte WHERE Schuljahresabschnitte.Jahr = NEW.Jahr AND Schuljahresabschnitte.Abschnitt = NEW.Abschnitt);
+      IF id IS NULL THEN
+          INSERT INTO Schuljahresabschnitte(Jahr, Abschnitt) VALUES (NEW.Jahr, NEW.Abschnitt);
+          SET id := (SELECT Schuljahresabschnitte.ID FROM Schuljahresabschnitte WHERE Schuljahresabschnitte.Jahr = NEW.Jahr AND Schuljahresabschnitte.Abschnitt = NEW.Abschnitt);
+      END IF;
+      SET NEW.Schuljahresabschnitts_ID = id;
+    END IF;
+END"
+t_INSERT_SCHUELERABITUR_ABSCHNITTE;0;1;MARIA_DB;SchuelerAbitur;Schuljahresabschnitte;"DROP TRIGGER IF EXISTS t_INSERT_SCHUELERABITUR_ABSCHNITTE;";"CREATE TRIGGER t_INSERT_SCHUELERABITUR_ABSCHNITTE
+BEFORE INSERT ON SchuelerAbitur FOR EACH ROW
+BEGIN
+    DECLARE id INTEGER;
+    IF NEW.Jahr IS NOT NULL AND NEW.Abschnitt IS NOT NULL THEN
+      SET id := (SELECT Schuljahresabschnitte.ID FROM Schuljahresabschnitte WHERE Schuljahresabschnitte.Jahr = NEW.Jahr AND Schuljahresabschnitte.Abschnitt = NEW.Abschnitt);
+      IF id IS NULL THEN
+          INSERT INTO Schuljahresabschnitte(Jahr, Abschnitt) VALUES (NEW.Jahr, NEW.Abschnitt);
+          SET id := (SELECT Schuljahresabschnitte.ID FROM Schuljahresabschnitte WHERE Schuljahresabschnitte.Jahr = NEW.Jahr AND Schuljahresabschnitte.Abschnitt = NEW.Abschnitt);
+      END IF;
+      SET NEW.Schuljahresabschnitts_ID = id;
+    END IF;
+END"
+t_INSERT_SCHUELERANKREUZFLOSKELN_ABSCHNITTE;0;1;MARIA_DB;SchuelerAnkreuzfloskeln;Schuljahresabschnitte;"DROP TRIGGER IF EXISTS t_INSERT_SCHUELERANKREUZFLOSKELN_ABSCHNITTE;";"CREATE TRIGGER t_INSERT_SCHUELERANKREUZFLOSKELN_ABSCHNITTE
+BEFORE INSERT ON SchuelerAnkreuzfloskeln FOR EACH ROW
+BEGIN
+    DECLARE id INTEGER;
+    IF NEW.Jahr IS NOT NULL AND NEW.Abschnitt IS NOT NULL THEN
+      SET id := (SELECT Schuljahresabschnitte.ID FROM Schuljahresabschnitte WHERE Schuljahresabschnitte.Jahr = NEW.Jahr AND Schuljahresabschnitte.Abschnitt = NEW.Abschnitt);
+      IF id IS NULL THEN
+          INSERT INTO Schuljahresabschnitte(Jahr, Abschnitt) VALUES (NEW.Jahr, NEW.Abschnitt);
+      END IF;
+      SET id := (SELECT SchuelerLernabschnittsdaten.ID FROM SchuelerLernabschnittsdaten WHERE SchuelerLernabschnittsdaten.Schueler_ID = NEW.Schueler_ID AND SchuelerLernabschnittsdaten.Jahr = NEW.Jahr AND SchuelerLernabschnittsdaten.Abschnitt = NEW.Abschnitt);
+      IF id IS NOT NULL THEN
+          SET NEW.Abschnitt_ID = id;
+      END IF;
+    END IF;
+END"
+t_INSERT_SCHUELERBKABSCHLUSS_ABSCHNITTE;0;1;MARIA_DB;SchuelerBKAbschluss;Schuljahresabschnitte;"DROP TRIGGER IF EXISTS t_INSERT_SCHUELERBKABSCHLUSS_ABSCHNITTE;";"CREATE TRIGGER t_INSERT_SCHUELERBKABSCHLUSS_ABSCHNITTE
+BEFORE INSERT ON SchuelerBKAbschluss FOR EACH ROW
+BEGIN
+    DECLARE id INTEGER;
+    IF NEW.Jahr IS NOT NULL AND NEW.Abschnitt IS NOT NULL THEN
+      SET id := (SELECT Schuljahresabschnitte.ID FROM Schuljahresabschnitte WHERE Schuljahresabschnitte.Jahr = NEW.Jahr AND Schuljahresabschnitte.Abschnitt = NEW.Abschnitt);
+      IF id IS NULL THEN
+          INSERT INTO Schuljahresabschnitte(Jahr, Abschnitt) VALUES (NEW.Jahr, NEW.Abschnitt);
+          SET id := (SELECT Schuljahresabschnitte.ID FROM Schuljahresabschnitte WHERE Schuljahresabschnitte.Jahr = NEW.Jahr AND Schuljahresabschnitte.Abschnitt = NEW.Abschnitt);
+      END IF;
+      SET NEW.Schuljahresabschnitts_ID = id;
+    END IF;
+END"
+t_INSERT_SCHUELERBKFAECHER_ABSCHNITTE;0;1;MARIA_DB;SchuelerBKFaecher;Schuljahresabschnitte;"DROP TRIGGER IF EXISTS t_INSERT_SCHUELERBKFAECHER_ABSCHNITTE;";"CREATE TRIGGER t_INSERT_SCHUELERBKFAECHER_ABSCHNITTE
+BEFORE INSERT ON SchuelerBKFaecher FOR EACH ROW
+BEGIN
+    DECLARE id INTEGER;
+    IF NEW.Jahr IS NOT NULL AND NEW.Abschnitt IS NOT NULL THEN
+      SET id := (SELECT Schuljahresabschnitte.ID FROM Schuljahresabschnitte WHERE Schuljahresabschnitte.Jahr = NEW.Jahr AND Schuljahresabschnitte.Abschnitt = NEW.Abschnitt);
+      IF id IS NULL THEN
+          INSERT INTO Schuljahresabschnitte(Jahr, Abschnitt) VALUES (NEW.Jahr, NEW.Abschnitt);
+          SET id := (SELECT Schuljahresabschnitte.ID FROM Schuljahresabschnitte WHERE Schuljahresabschnitte.Jahr = NEW.Jahr AND Schuljahresabschnitte.Abschnitt = NEW.Abschnitt);
+      END IF;
+      SET NEW.Schuljahresabschnitts_ID = id;
+    END IF;
+END"
+t_INSERT_SCHUELERFOERDEREMPFEHLUNGEN_ABSCHNITTE;0;1;MARIA_DB;SchuelerFoerderempfehlungen;Schuljahresabschnitte;"DROP TRIGGER IF EXISTS t_INSERT_SCHUELERFOERDEREMPFEHLUNGEN_ABSCHNITTE;";"CREATE TRIGGER t_INSERT_SCHUELERFOERDEREMPFEHLUNGEN_ABSCHNITTE
+BEFORE INSERT ON SchuelerFoerderempfehlungen FOR EACH ROW
+BEGIN
+    DECLARE id INTEGER;
+    IF NEW.Jahr IS NOT NULL AND NEW.Abschnitt IS NOT NULL THEN
+      SET id := (SELECT Schuljahresabschnitte.ID FROM Schuljahresabschnitte WHERE Schuljahresabschnitte.Jahr = NEW.Jahr AND Schuljahresabschnitte.Abschnitt = NEW.Abschnitt);
+      IF id IS NULL THEN
+          INSERT INTO Schuljahresabschnitte(Jahr, Abschnitt) VALUES (NEW.Jahr, NEW.Abschnitt);
+      END IF;
+      SET id := (SELECT SchuelerLernabschnittsdaten.ID FROM SchuelerLernabschnittsdaten WHERE SchuelerLernabschnittsdaten.Schueler_ID = NEW.Schueler_ID AND SchuelerLernabschnittsdaten.Jahr = NEW.Jahr AND SchuelerLernabschnittsdaten.Abschnitt = NEW.Abschnitt);
+      IF id IS NOT NULL THEN
+          SET NEW.Abschnitt_ID = id;
+      END IF;
+    END IF;
+END"
+t_INSERT_SCHUELERKAOADATEN_ABSCHNITTE;0;1;MARIA_DB;SchuelerKAoADaten;Schuljahresabschnitte;"DROP TRIGGER IF EXISTS t_INSERT_SCHUELERKAOADATEN_ABSCHNITTE;";"CREATE TRIGGER t_INSERT_SCHUELERKAOADATEN_ABSCHNITTE
+BEFORE INSERT ON SchuelerKAoADaten FOR EACH ROW
+BEGIN
+    DECLARE id INTEGER;
+    IF NEW.Jahr IS NOT NULL AND NEW.Abschnitt IS NOT NULL THEN
+      SET id := (SELECT Schuljahresabschnitte.ID FROM Schuljahresabschnitte WHERE Schuljahresabschnitte.Jahr = NEW.Jahr AND Schuljahresabschnitte.Abschnitt = NEW.Abschnitt);
+      IF id IS NULL THEN
+          INSERT INTO Schuljahresabschnitte(Jahr, Abschnitt) VALUES (NEW.Jahr, NEW.Abschnitt);
+      END IF;
+      SET id := (SELECT SchuelerLernabschnittsdaten.ID FROM SchuelerLernabschnittsdaten WHERE SchuelerLernabschnittsdaten.Schueler_ID = NEW.Schueler_ID AND SchuelerLernabschnittsdaten.Jahr = NEW.Jahr AND SchuelerLernabschnittsdaten.Abschnitt = NEW.Abschnitt);
+      IF id IS NOT NULL THEN
+          SET NEW.Abschnitt_ID = id;
+      END IF;
+    END IF;
+END"
+t_INSERT_LEHRERLERNABSCHNITTSDATEN_ABSCHNITTE;0;1;MARIA_DB;LehrerAbschnittsdaten;Schuljahresabschnitte;"DROP TRIGGER IF EXISTS t_INSERT_LEHRERLERNABSCHNITTSDATEN_ABSCHNITTE;";"CREATE TRIGGER t_INSERT_LEHRERLERNABSCHNITTSDATEN_ABSCHNITTE
+BEFORE INSERT ON LehrerAbschnittsdaten FOR EACH ROW
+BEGIN
+    DECLARE id INTEGER;
+    IF NEW.Jahr IS NOT NULL AND NEW.Abschnitt IS NOT NULL THEN
+      SET id := (SELECT Schuljahresabschnitte.ID FROM Schuljahresabschnitte WHERE Schuljahresabschnitte.Jahr = NEW.Jahr AND Schuljahresabschnitte.Abschnitt = NEW.Abschnitt);
+      IF id IS NULL THEN
+          INSERT INTO Schuljahresabschnitte(Jahr, Abschnitt) VALUES (NEW.Jahr, NEW.Abschnitt);
+          SET id := (SELECT Schuljahresabschnitte.ID FROM Schuljahresabschnitte WHERE Schuljahresabschnitte.Jahr = NEW.Jahr AND Schuljahresabschnitte.Abschnitt = NEW.Abschnitt);
+      END IF;
+      SET NEW.Schuljahresabschnitts_ID = id;
+    END IF;
+END"
+t_INSERT_LEHRERANRECHNUNG_ABSCHNITTE;0;1;MARIA_DB;LehrerAnrechnung;Schuljahresabschnitte;"DROP TRIGGER IF EXISTS t_INSERT_LEHRERANRECHNUNG_ABSCHNITTE;";"CREATE TRIGGER t_INSERT_LEHRERANRECHNUNG_ABSCHNITTE
+BEFORE INSERT ON LehrerAnrechnung FOR EACH ROW
+BEGIN
+    DECLARE id INTEGER;
+    IF NEW.Jahr IS NOT NULL AND NEW.Abschnitt IS NOT NULL THEN
+      SET id := (SELECT Schuljahresabschnitte.ID FROM Schuljahresabschnitte WHERE Schuljahresabschnitte.Jahr = NEW.Jahr AND Schuljahresabschnitte.Abschnitt = NEW.Abschnitt);
+      IF id IS NULL THEN
+          INSERT INTO Schuljahresabschnitte(Jahr, Abschnitt) VALUES (NEW.Jahr, NEW.Abschnitt);
+      END IF;
+      SET id := (SELECT LehrerAbschnittsdaten.ID FROM LehrerAbschnittsdaten WHERE LehrerAbschnittsdaten.Lehrer_ID = NEW.Lehrer_ID AND LehrerAbschnittsdaten.Jahr = NEW.Jahr AND LehrerAbschnittsdaten.Abschnitt = NEW.Abschnitt);
+      IF id IS NOT NULL THEN
+          SET NEW.Abschnitt_ID = id;
+      END IF;
+    END IF;
+END"
+t_INSERT_LEHRERENTLASTUNG_ABSCHNITTE;0;1;MARIA_DB;LehrerEntlastung;Schuljahresabschnitte;"DROP TRIGGER IF EXISTS t_INSERT_LEHRERENTLASTUNG_ABSCHNITTE;";"CREATE TRIGGER t_INSERT_LEHRERENTLASTUNG_ABSCHNITTE
+BEFORE INSERT ON LehrerEntlastung FOR EACH ROW
+BEGIN
+    DECLARE id INTEGER;
+    IF NEW.Jahr IS NOT NULL AND NEW.Abschnitt IS NOT NULL THEN
+      SET id := (SELECT Schuljahresabschnitte.ID FROM Schuljahresabschnitte WHERE Schuljahresabschnitte.Jahr = NEW.Jahr AND Schuljahresabschnitte.Abschnitt = NEW.Abschnitt);
+      IF id IS NULL THEN
+          INSERT INTO Schuljahresabschnitte(Jahr, Abschnitt) VALUES (NEW.Jahr, NEW.Abschnitt);
+      END IF;
+      SET id := (SELECT LehrerAbschnittsdaten.ID FROM LehrerAbschnittsdaten WHERE LehrerAbschnittsdaten.Lehrer_ID = NEW.Lehrer_ID AND LehrerAbschnittsdaten.Jahr = NEW.Jahr AND LehrerAbschnittsdaten.Abschnitt = NEW.Abschnitt);
+      IF id IS NOT NULL THEN
+          SET NEW.Abschnitt_ID = id;
+      END IF;
+    END IF;
+END"
+t_INSERT_LEHRERFUNKTIONEN_ABSCHNITTE;0;1;MARIA_DB;LehrerFunktionen;Schuljahresabschnitte;"DROP TRIGGER IF EXISTS t_INSERT_LEHRERFUNKTIONEN_ABSCHNITTE;";"CREATE TRIGGER t_INSERT_LEHRERFUNKTIONEN_ABSCHNITTE
+BEFORE INSERT ON LehrerFunktionen FOR EACH ROW
+BEGIN
+    DECLARE id INTEGER;
+    IF NEW.Jahr IS NOT NULL AND NEW.Abschnitt IS NOT NULL THEN
+      SET id := (SELECT Schuljahresabschnitte.ID FROM Schuljahresabschnitte WHERE Schuljahresabschnitte.Jahr = NEW.Jahr AND Schuljahresabschnitte.Abschnitt = NEW.Abschnitt);
+      IF id IS NULL THEN
+          INSERT INTO Schuljahresabschnitte(Jahr, Abschnitt) VALUES (NEW.Jahr, NEW.Abschnitt);
+      END IF;
+      SET id := (SELECT LehrerAbschnittsdaten.ID FROM LehrerAbschnittsdaten WHERE LehrerAbschnittsdaten.Lehrer_ID = NEW.Lehrer_ID AND LehrerAbschnittsdaten.Jahr = NEW.Jahr AND LehrerAbschnittsdaten.Abschnitt = NEW.Abschnitt);
+      IF id IS NOT NULL THEN
+          SET NEW.Abschnitt_ID = id;
+      END IF;
+    END IF;
+END"
+t_INSERT_LEHRERMEHRLEISTUNG_ABSCHNITTE;0;1;MARIA_DB;LehrerMehrleistung;Schuljahresabschnitte;"DROP TRIGGER IF EXISTS t_INSERT_LEHRERMEHRLEISTUNG_ABSCHNITTE;";"CREATE TRIGGER t_INSERT_LEHRERMEHRLEISTUNG_ABSCHNITTE
+BEFORE INSERT ON LehrerMehrleistung FOR EACH ROW
+BEGIN
+    DECLARE id INTEGER;
+    IF NEW.Jahr IS NOT NULL AND NEW.Abschnitt IS NOT NULL THEN
+      SET id := (SELECT Schuljahresabschnitte.ID FROM Schuljahresabschnitte WHERE Schuljahresabschnitte.Jahr = NEW.Jahr AND Schuljahresabschnitte.Abschnitt = NEW.Abschnitt);
+      IF id IS NULL THEN
+          INSERT INTO Schuljahresabschnitte(Jahr, Abschnitt) VALUES (NEW.Jahr, NEW.Abschnitt);
+      END IF;
+      SET id := (SELECT LehrerAbschnittsdaten.ID FROM LehrerAbschnittsdaten WHERE LehrerAbschnittsdaten.Lehrer_ID = NEW.Lehrer_ID AND LehrerAbschnittsdaten.Jahr = NEW.Jahr AND LehrerAbschnittsdaten.Abschnitt = NEW.Abschnitt);
+      IF id IS NOT NULL THEN
+          SET NEW.Abschnitt_ID = id;
+      END IF;
+    END IF;
+END"
+t_INSERT_KURSE_ABSCHNITTE;0;1;MARIA_DB;Kurse;Schuljahresabschnitte;"DROP TRIGGER IF EXISTS t_INSERT_KURSE_ABSCHNITTE;";"CREATE TRIGGER t_INSERT_KURSE_ABSCHNITTE
+BEFORE INSERT ON Kurse FOR EACH ROW
+BEGIN
+    DECLARE id INTEGER;
+    IF NEW.Jahr IS NOT NULL AND NEW.Abschnitt IS NOT NULL THEN
+      SET id := (SELECT Schuljahresabschnitte.ID FROM Schuljahresabschnitte WHERE Schuljahresabschnitte.Jahr = NEW.Jahr AND Schuljahresabschnitte.Abschnitt = NEW.Abschnitt);
+      IF id IS NULL THEN
+          INSERT INTO Schuljahresabschnitte(Jahr, Abschnitt) VALUES (NEW.Jahr, NEW.Abschnitt);
+          SET id := (SELECT Schuljahresabschnitte.ID FROM Schuljahresabschnitte WHERE Schuljahresabschnitte.Jahr = NEW.Jahr AND Schuljahresabschnitte.Abschnitt = NEW.Abschnitt);
+      END IF;
+      SET NEW.Schuljahresabschnitts_ID = id;
+    END IF;
+END"
 t_INSERT_SCHUELERLEISTUNGSDATEN_KURS_SCHUELER;2;-1;MARIA_DB;SchuelerLeistungsdaten;Kurs_Schueler;"DROP TRIGGER IF EXISTS t_INSERT_SCHUELERLEISTUNGSDATEN_KURS_SCHUELER;";"CREATE TRIGGER t_INSERT_SCHUELERLEISTUNGSDATEN_KURS_SCHUELER
 AFTER INSERT
 	ON SchuelerLeistungsdaten FOR EACH ROW

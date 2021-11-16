@@ -63,10 +63,11 @@ Katalog_Raeume;5;-1;0;DTOKatalogRaum;schild.katalog;Enthält eine aktuelle Liste
 Katalog_Zeitraster;5;-1;0;DTOKatalogZeitraster;schild.stundenplan;Enthält das aktuelle Zeitraster für Stundenpläne.
 Kompetenzen;0;-1;0;DTOBenutzerKompetenz;schild.benutzer;Rechte für die Benutzerverwaltung von Schild-NRW
 Kompetenzgruppen;0;-1;0;DTOBenutzerKompetenzGruppe;schild.benutzer;definierte Usergruppen, die wiederum die Kompetenzen enthält
+Klassen;0;-1;0;DTOKlassen;schild.klassen;Tabelle für die Schuljahresabschnitts-spezifische Klassen-/Versetzungstabelle
+KlassenLehrer;0;-1;0;DTOKlassenLehrer;schild.klassen;Tabelle für die Schuljahresabschnitts-spezifische Zuordnung von Klassen-Lehrern zu den Klassen 
 Kurs_Schueler;1;-1;0;DTOKursSchueler;schild.kurse;Tabelle mit KursSchueler-Zuordnungen wird ab Schild3.0 getriggert für performanteren Druck
 Kurse;0;-1;1;DTOKurs;schild.kurse;Tabelle der Kurse
 KursLehrer;0;-1;1;DTOKursLehrer;schild.kurse;Zusätzliche Lehrkräfte in den Kursen
-Lehrer_IMEI;0;-1;1;DTOLehrerIMEI;schild.schildapp;Lehrer zu IMEI Tabelle in der IMEI-Nummern von Endgeräten für den Zugang von SchildAPP hinterlegt werden können
 LehrerAbschnittsdaten;0;-1;1;DTOLehrerAbschnittsdaten;schild.lehrer;Lehrerdaten, die Abschnittsweise gespeichert werden
 LehrerAnrechnung;0;-1;1;DTOLehrerAnrechnungsstunde;schild.lehrer;Anrechnungsstunden für Lehrkräfte gültige ASD-Schlüssel
 LehrerDatenschutz;0;-1;1;DTOLehrerDatenschutz;schild.lehrer;Einwilligungen Datenschutz für die Lehrer
@@ -123,7 +124,6 @@ SchuelerBKFaecher;0;-1;1;DTOSchuelerBKFach;schild.berufskolleg;Fächer zum Schü
 SchuelerDatenschutz;0;-1;1;DTOSchuelerDatenschutz;schild.schueler;Tabelle für die zum Schüler zugeordneten DSGVO Merkmale
 SchuelerEinzelleistungen;0;-1;1;DTOSchuelerTeilleistung;schild.schueler;Teilleistungen zu Fach und Schüler
 SchuelerErzAdr;0;-1;1;DTOSchuelerErzieherAdresse;schild.erzieher;Erziehereinträge zum Schüler
-SchuelerErzFunktion;0;-1;1;DTOSchuelerErzieherFunktion;schild.erzieher;Erzieherfunktionen zu den Erziehereinträgen
 SchuelerFehlstunden;0;-1;1;DTOSchuelerFehlstunden;schild.schueler;Tagebezogene Fehlzeiten (wenn diese erfasst werden) zum SchülerLernabschnitt
 SchuelerFHR;0;-1;1;DTOSchuelerFHR;schild.schueler.fhr;Tabelle der FHR-Daten zum Schüler
 SchuelerFHRFaecher;0;-1;1;DTOSchuelerFHRFach;schild.schueler.fhr;Liste der Fächer zu SchuelerFHR
@@ -144,8 +144,10 @@ SchuelerSprachpruefungen;0;-1;0;DTOSchuelerSprachpruefungen;schild.schueler;Eint
 SchuelerTelefone;0;-1;1;DTOSchuelerTelefon;schild.erzieher;Telefonnummern zum Schüler
 SchuelerVermerke;0;-1;1;DTOSchuelerVermerke;schild.schueler;Vermerke zum Schüler
 SchuelerWiedervorlage;0;-1;1;DTOSchuelerWiedervorlage;schild;Einträge zur Wiedervorlage zum Schüler
+SchuelerZP10;0;-1;0;DTOSchuelerZP10;schild.schueler;Die fachspezifischen Abschluss-Daten für die ZP10-Prüfungen
 SchuelerZuweisungen;0;-1;1;DTOSchuelerZuweisung;schild.berufskolleg;Lernabscnittsbezogene Zuweisungen für Gesamt- und Sekundarschulen
 SchuleCredentials;0;-1;1;DTOSchuleCredentials;svws.auth;Tabelle für die Zugangsdaten von Schulen (PublicKey) und den Keys der eingenene Schule
+Schuljahresabschnitte;0;-1;0;DTOSchuljahresabschnitte;schild.schule;Tabelle mit den in der DB angelegten Schuljahresabschnitten 
 Schulleitung;0;-1;0;DTOSchulleitung;schild.lehrer;Tabelle für die Zuweisung von Schulleitungsfunktionen zu Lehrern
 SchulleitungFunktion;0;-1;0;DTOSchulleitungFunktion;schild.lehrer;Tabelle für die Definition von Schulleitungsfunktionen
 Schulver_DBS;0;-1;0;DTOSchulverDBS;schulver;IT.NRW Liste der Schulen mit Schulnummern und Adressen
@@ -217,5 +219,5 @@ SVWS_DB_Version;0;-1;0;DTODBVersion;svws.db;Diese Tabelle enthält die Versionsi
 TextExportVorlagen;0;-1;1;DTOTextExportVorlagen;schild;gespeicherte Vorlagen für den Datenaustausch > Text-/Excel-Export
 Usergroups;0;-1;1;DTOUserGroups;schild.benutzer;Usergruppen mit Berechtigungen
 Users;0;-1;1;DTOUsers;schild.benutzer;Tabelle der Schild-User
-Versetzung;0;-1;1;DTOKlassen;schild.klassen;Tabelle für die Klassen-/Versetzungstabelle
+Versetzung;0;1;1;DTOVersetzung;schild.klassen;Tabelle für die Klassen-/Versetzungstabelle
 ZuordnungReportvorlagen;0;-1;1;DTOZuordnungReportvorlagen;schild;Zuordnungen von Reports für den Zeugnisdruck (automatisierter Druck)

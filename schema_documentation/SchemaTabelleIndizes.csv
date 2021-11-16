@@ -13,5 +13,10 @@ SchuelerErzAdr_IDX1;;;SchuelerErzAdr;Schueler_ID
 SchuelerLeistungsdaten_IDX1;;;SchuelerLeistungsdaten;Kurs_ID
 SchuelerLeistungsdaten_IDX2;;;SchuelerLeistungsdaten;Fach_ID
 SchuelerLeistungsdaten_IDX3;;;SchuelerLeistungsdaten;Fachlehrer
+SchuelerSprachenfolge_IDX1;;;SchuelerSprachenfolge;Schueler_ID
 SchuelerTelefone_IDX1;;;SchuelerTelefone;Schueler_ID
 SchuelerVermerke_IDX1;;;SchuelerVermerke;Schueler_ID
+SchuelerZP10_IDX1;;;SchuelerZP10;Schueler_ID
+SchuelerZP10_IDX2;;;SchuelerZP10;Schuljahresabschnitts_ID
+SchuelerZP10_IDX3;;;SchuelerZP10;Fach_ID
+SchuelerZP10_IDX4;;;SchuelerZP10;Fachlehrer_ID

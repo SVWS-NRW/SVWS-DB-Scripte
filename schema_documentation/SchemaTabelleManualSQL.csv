@@ -110,7 +110,7 @@ HAVING
 1;;29;ALL;Schueler;Korrektur für den Fremdschluessel auf die Spalte Jahrgang_ID der Tabelle Schueler;1;UPDATE Schueler SET Jahrgang_ID=null WHERE Jahrgang_ID NOT IN (SELECT ID FROM EigeneSchule_Jahrgaenge)
 1;;30;ALL;Schueler;Korrektur für den Fremdschluessel auf die Spalte Kindergarten_ID der Tabelle Schueler;1;UPDATE Schueler SET Kindergarten_ID=null WHERE Kindergarten_ID NOT IN (SELECT ID FROM K_Kindergarten)
 1;;31;ALL;Schueler;Korrektur für den Fremdschluessel auf die Spalte Klasse der Tabelle Schueler;1;UPDATE Schueler SET Klasse=null WHERE Klasse NOT IN (SELECT Klasse FROM Versetzung)
-1;;32;ALL;Schueler;Korrektur für den Fremdschluessel auf die Spalte Lehrer der Tabelle Schueler;1;UPDATE Schueler SET Lehrer = NULL WHERE Lehrer NOT IN (SELECT Kuerzel FROM K_Lehrer)
+1;;32;ALL;Kurse;Entferne Datensätze aus der Tabelle Kurse, bei denen keine gültige Fach_ID gesetzt ist;1;DELETE FROM Kurse WHERE Fach_ID NOT IN (SELECT ID FROM EigeneSchule_Faecher)
 1;;33;ALL;Schueler;Korrektur für den Fremdschluessel auf die Spalte Ortsteil_ID der Tabelle Schueler;1;UPDATE Schueler SET Ortsteil_ID = NULL WHERE Ortsteil_ID NOT IN (SELECT ID FROM K_Ortsteil)
 1;;34;ALL;Schueler;Korrektur für den Fremdschluessel auf die Spalte Religion_ID der Tabelle Schueler;1;UPDATE Schueler SET Religion_ID = NULL WHERE Religion_ID NOT IN (SELECT ID FROM K_Religion)
 1;;35;ALL;Schueler;Korrektur für den Fremdschluessel auf die Spalte StaatKrz der Tabelle Schueler;1;UPDATE Schueler SET StaatKrz = NULL WHERE StaatKrz NOT IN (SELECT Schluessel FROM Statkue_Nationalitaeten)
@@ -250,12 +250,6 @@ WHERE ssf.Sprache = 'G'"
 UPDATE SchuelerSprachenfolge ssf INNER JOIN SchuelerAbitur sabi ON ssf.Schueler_ID = sabi.Schueler_ID
 SET ssf.HebraicumErreicht = CASE WHEN sabi.Hebraicum = '+' THEN 1 ELSE 0 END
 WHERE ssf.Sprache = 'H'"
-1;;98;MARIA_DB;SchuelerAbitur;Entferne die nicht mehr notwendigen Spalten für Latinum usw. in der Tabelle SchuelerAbitur;1;"
-ALTER TABLE SchuelerAbitur
-DROP COLUMN KlLatinum,
-DROP COLUMN Latinum,
-DROP COLUMN Graecum,
-DROP COLUMN Hebraicum"
 1;;82;MYSQL;SchuelerSprachenfolge;Eintragung des atomaren Sprachenkürzels und der vorhandenen Jahrgänge in die ASD-Jahrgännge;1;"
 UPDATE SchuelerSprachenfolge ssf INNER JOIN EigeneSchule_Faecher esf ON ssf.Fach_ID = esf.ID INNER JOIN Statkue_SVWS_ZulaessigeFaecher sszf ON esf.StatistikKrz = sszf.Fach
 SET ssf.Sprache = sszf.FachkuerzelAtomar,
@@ -346,12 +340,6 @@ WHERE ssf.Sprache = 'G'"
 UPDATE SchuelerSprachenfolge ssf INNER JOIN SchuelerAbitur sabi ON ssf.Schueler_ID = sabi.Schueler_ID
 SET ssf.HebraicumErreicht = CASE WHEN sabi.Hebraicum = '+' THEN 1 ELSE 0 END
 WHERE ssf.Sprache = 'H'"
-1;;98;MYSQL;SchuelerAbitur;Entferne die nicht mehr notwendigen Spalten für Latinum usw. in der Tabelle SchuelerAbitur;1;"
-ALTER TABLE schuelerabitur
-DROP COLUMN KlLatinum,
-DROP COLUMN Latinum,
-DROP COLUMN Graecum,
-DROP COLUMN Hebraicum"
 1;;100;MSSQL;SchuelerLeistungsdaten;Entferne fehlerhafte doppelte Datensätze in Bezug auf die Unique-Constraint SchuelerLeistungsdaten_UC1 aus den Leistungsdaten;1;"DELETE FROM SchuelerLeistungsdaten
 WHERE ID IN (
   SELECT a.ID FROM SchuelerLeistungsdaten a 
@@ -483,6 +471,14 @@ SET
 1;;138;ALL;K_Lehrer;Überprüfung des Personal-Typs (1);1;UPDATE K_Lehrer SET PersonTyp = 'LEHRKRAFT' WHERE PersonTyp IS NULL
 1;;139;ALL;K_Lehrer;Überprüfung des Personal-Typs (2);1;UPDATE K_Lehrer SET PersonTyp = 'SONSTIGE' WHERE PersonTyp NOT IN ('LEHRKRAFT','SEKRETARIAT','PERSONAL','EXTERN','SONSTIGE')
 1;;140;ALL;Schueler;Überprüfung des Schüler-Status;1;UPDATE Schueler SET Status = 2 WHERE Status NOT IN (0,1,2,3,6,8,9,10)
+1;;141;ALL;SchuelerAbiFaecher;Tabelle SchuelerAbiFaecher - Q1.1: Umwandeln von L in S bei der Schriftlichkeit;1;UPDATE SchuelerAbiFaecher SET S12_1='S' WHERE S12_1='L'
+1;;141;ALL;SchuelerAbiFaecher;Tabelle SchuelerAbiFaecher - Q1.2: Umwandeln von L in S bei der Schriftlichkeit;1;UPDATE SchuelerAbiFaecher SET S12_2='S' WHERE S12_2='L'
+1;;141;ALL;SchuelerAbiFaecher;Tabelle SchuelerAbiFaecher - Q2.1: Umwandeln von L in S bei der Schriftlichkeit;1;UPDATE SchuelerAbiFaecher SET S13_1='S' WHERE S13_1='L'
+1;;141;ALL;SchuelerAbiFaecher;Tabelle SchuelerAbiFaecher - Q2.2: Umwandeln von L in S bei der Schriftlichkeit;1;UPDATE SchuelerAbiFaecher SET S13_2='S' WHERE S13_2='L'
+1;;141;ALL;SchuelerAbiFaecher;Tabelle SchuelerAbiFaecher - Q1.1: Umwandeln von Z in M bei der Schriftlichkeit;1;UPDATE SchuelerAbiFaecher SET S12_1='M' WHERE S12_1='Z'
+1;;141;ALL;SchuelerAbiFaecher;Tabelle SchuelerAbiFaecher - Q1.2: Umwandeln von Z in M bei der Schriftlichkeit;1;UPDATE SchuelerAbiFaecher SET S12_2='M' WHERE S12_2='Z'
+1;;141;ALL;SchuelerAbiFaecher;Tabelle SchuelerAbiFaecher - Q2.1: Umwandeln von Z in M bei der Schriftlichkeit;1;UPDATE SchuelerAbiFaecher SET S13_1='M' WHERE S13_1='Z'
+1;;141;ALL;SchuelerAbiFaecher;Tabelle SchuelerAbiFaecher - Q2.2: Umwandeln von Z in M bei der Schriftlichkeit;1;UPDATE SchuelerAbiFaecher SET S13_2='M' WHERE S13_2='Z'
 1;;141;ALL;SchuelerAbiFaecher;Überprüfung der Belegungsart S11_1;1;UPDATE SchuelerAbiFaecher SET S11_1 = '-' WHERE S11_1 IS NULL OR S11_1 NOT IN ('-','M','S')
 1;;142;ALL;SchuelerAbiFaecher;Überprüfung der Belegungsart S11_2;1;UPDATE SchuelerAbiFaecher SET S11_2 = '-' WHERE S11_2 IS NULL OR S11_2 NOT IN ('-','M','S')
 1;;143;ALL;SchuelerAbiFaecher;Überprüfung der Belegungsart S12_1;1;UPDATE SchuelerAbiFaecher SET S12_1 = '-' WHERE S12_1 IS NULL OR S12_1 NOT IN ('-','M','S')
@@ -498,6 +494,113 @@ SET
 1;;153;ALL;SchuelerAbiFaecher;Überprüfung der allgemeinen Kurs-Art der Abiturfächer;1;UPDATE SchuelerAbiFaecher SET KursartAllg = null WHERE KursartAllg IS NOT NULL AND KursartAllg NOT IN ('LK','GK','ZK','PJK','VTF')
 1;;154;ALL;EigeneSchule_Jahrgaenge;Überprüfung der Schulgliederung;1;UPDATE EigeneSchule_Jahrgaenge SET SGL = '***' WHERE SGL NOT IN (SELECT SGL FROM Statkue_SVWS_Schulgliederungen)
 1;;155;ALL;Schueler;Überprüfung der Schulgliederung;1;UPDATE Schueler SET ASDSchulform = '***' WHERE ASDSchulform NOT IN (SELECT SGL FROM Statkue_SVWS_Schulgliederungen)
+1;;156;ALL;K_AllgAdresse;Anpassen des Fremdschlüssels für den Fremdschluessel von K_AllgAdresse auf die ID von K_AdressArt statt der Bezeichnung;1;UPDATE K_AllgAdresse SET AdressArt_ID = (SELECT K_Adressart.ID FROM K_Adressart WHERE K_Adressart.Bezeichnung=K_AllgAdresse.AllgAdrAdressArt LIMIT 1)
+1;;157;ALL;SchuelerEinzelleistungen;Entferne Einzelleistung, wenn diese nicht auf einen Leistungsdatensatz verweist;1;DELETE FROM SchuelerEinzelleistungen WHERE Leistung_ID NOT IN (SELECT ID FROM SchuelerLeistungsdaten)
+1;;158;ALL;SchuelerEinzelleistungen;Setze die Art der Einzelleistung auf NULL, wenn diese nicht auf einen Datensatz der Tabelle K_Einzelleistungen verweist;1;DELETE FROM SchuelerEinzelleistungen WHERE Art_ID NOT IN (SELECT ID FROM K_Einzelleistungen)
+1;;159;ALL;SchuelerEinzelleistungen;Setze den Lehrer, welcher der Einzelleistung zugeordnet ist auf NULL, wenn dieser nicht in der Tabelle K_Lehrer vorkommt;1;DELETE FROM SchuelerEinzelleistungen WHERE Lehrer_ID NOT IN (SELECT ID FROM K_Lehrer)
+1;;160;ALL;SchuelerLernabschnittsdaten;Ändere den Eintrag WechselNr von 999 auf NULL für den aktuellen Abschnitt (ggf. nach dem letzten Wechsel);1;UPDATE SchuelerLernabschnittsdaten SET WechselNr = NULL WHERE WechselNr=999
+1;;161;ALL;Klassen;Tabelle Klassen: Erstellung der aktuellen Einträge aus der Versetzungstabelle;1;"INSERT INTO Klassen(ID, Schuljahresabschnitts_ID, Bezeichnung, ASDKlasse, Klasse, Jahrgang_ID, FKlasse, VKlasse, OrgFormKrz, ASDSchulformNr,
+    Fachklasse_ID, PruefOrdnung, Sichtbar, Sortierung, Klassenart, SommerSem, NotenGesperrt, AdrMerkmal, KoopKlasse, Ankreuzzeugnisse)
+SELECT
+	Versetzung.ID,
+	EigeneSchule.Schuljahresabschnitts_ID,
+    Versetzung.Bezeichnung,
+    Versetzung.ASDKlasse,
+    Versetzung.Klasse,
+    Versetzung.Jahrgang_ID,
+    Versetzung.FKlasse,
+    Versetzung.VKlasse,
+    Versetzung.OrgFormKrz,
+    Versetzung.ASDSchulformNr,
+    Versetzung.Fachklasse_ID,
+    Versetzung.PruefOrdnung,
+    Versetzung.Sichtbar,
+    Versetzung.Sortierung,
+    Versetzung.Klassenart,
+    Versetzung.SommerSem,
+    Versetzung.NotenGesperrt,
+    Versetzung.AdrMerkmal,
+    Versetzung.KoopKlasse,
+    Versetzung.Ankreuzzeugnisse
+FROM 
+    Versetzung JOIN EigeneSchule"
+1;;162;ALL;KlassenLehrer;Tabelle KlassenLehrer: Erstellung der aktuellen Einträge aus der Versetzungstabelle;1;"INSERT INTO KlassenLehrer(Klassen_ID, Lehrer_ID)
+((SELECT
+	Versetzung.ID AS Klassen_ID,
+	K_Lehrer.ID AS Lehrer_ID
+FROM 
+    Versetzung JOIN K_Lehrer ON Versetzung.KlassenlehrerKrz = K_Lehrer.Kuerzel
+WHERE
+    Versetzung.KlassenlehrerKrz IS NOT NULL
+)UNION(    
+SELECT
+	Versetzung.ID AS Klassen_ID,
+	K_Lehrer.ID AS Lehrer_ID
+FROM 
+    Versetzung JOIN K_Lehrer ON Versetzung.StvKlassenlehrerKrz = K_Lehrer.Kuerzel
+WHERE
+    Versetzung.StvKlassenlehrerKrz IS NOT NULL
+))"
+1;;163;ALL;Klassen;Tabelle Klassen: Erstellung Einträge für die übrigen Schuljahresabschnitte basierend auf der Versetzungstabelle;1;"INSERT INTO Klassen(Schuljahresabschnitts_ID, Bezeichnung, ASDKlasse, Klasse, Jahrgang_ID, FKlasse, VKlasse, OrgFormKrz, ASDSchulformNr,
+    Fachklasse_ID, PruefOrdnung, Sichtbar, Sortierung, Klassenart, SommerSem, NotenGesperrt, AdrMerkmal, KoopKlasse, Ankreuzzeugnisse)
+SELECT
+	Schuljahresabschnitte.ID,
+    Versetzung.Bezeichnung,
+    Versetzung.ASDKlasse,
+    Versetzung.Klasse,
+    Versetzung.Jahrgang_ID,
+    Versetzung.FKlasse,
+    Versetzung.VKlasse,
+    Versetzung.OrgFormKrz,
+    Versetzung.ASDSchulformNr,
+    Versetzung.Fachklasse_ID,
+    Versetzung.PruefOrdnung,
+    Versetzung.Sichtbar,
+    Versetzung.Sortierung,
+    Versetzung.Klassenart,
+    Versetzung.SommerSem,
+    Versetzung.NotenGesperrt,
+    Versetzung.AdrMerkmal,
+    Versetzung.KoopKlasse,
+    Versetzung.Ankreuzzeugnisse
+FROM 
+    Versetzung, Schuljahresabschnitte
+WHERE
+    Schuljahresabschnitte.ID NOT IN (SELECT Schuljahresabschnitts_ID FROM EigeneSchule)"
+1;;164;ALL;KlassenLehrer;Tabelle KlassenLehrer: Erstellung Einträge für die übrigen Schuljahresabschnitte basierend auf den Schüler-Abschnittsdaten;1;"INSERT INTO KlassenLehrer(Klassen_ID, Lehrer_ID)
+SELECT DISTINCT
+  Klassen_ID,
+  Lehrer_ID
+FROM 
+((SELECT DISTINCT
+  Klassen.ID AS Klassen_ID,
+  K_Lehrer.ID AS Lehrer_ID
+FROM
+  SchuelerLernabschnittsdaten
+    JOIN Klassen ON SchuelerLernabschnittsdaten.Schuljahresabschnitts_ID = Klassen.Schuljahresabschnitts_ID AND SchuelerLernabschnittsdaten.Klasse = Klassen.Klasse 
+    JOIN K_Lehrer ON SchuelerLernabschnittsdaten.Klassenlehrer = K_Lehrer.Kuerzel  
+WHERE SchuelerLernabschnittsdaten.Schuljahresabschnitts_ID NOT IN (SELECT Schuljahresabschnitts_ID FROM EigeneSchule)
+) UNION (SELECT DISTINCT
+  Klassen.ID AS Klassen_ID,
+  SchuelerLernabschnittsdaten.StvKlassenlehrer_ID 
+FROM
+  SchuelerLernabschnittsdaten
+    JOIN Klassen ON SchuelerLernabschnittsdaten.Schuljahresabschnitts_ID = Klassen.Schuljahresabschnitts_ID AND SchuelerLernabschnittsdaten.Klasse = Klassen.Klasse 
+WHERE
+  SchuelerLernabschnittsdaten.StvKlassenlehrer_ID IS NOT NULL AND
+  SchuelerLernabschnittsdaten.Schuljahresabschnitts_ID NOT IN (SELECT Schuljahresabschnitts_ID FROM EigeneSchule))) a"    
+1;;165;ALL;Kurse;Tabelle Kurse: Umstellen von Lehrer-Kürzel auf Lehrer-ID;1;"UPDATE Kurse JOIN K_Lehrer ON Kurse.LehrerKrz = K_Lehrer.Kuerzel SET Kurse.Lehrer_ID = K_Lehrer.ID"    
+1;;166;ALL;SchuelerAbiFaecher;Tabelle SchuelerAbiFaecher: Umstellen von Lehrer-Kürzel auf Lehrer-ID;1;"UPDATE SchuelerAbiFaecher JOIN K_Lehrer ON SchuelerAbiFaecher.Fachlehrer = K_Lehrer.Kuerzel SET SchuelerAbiFaecher.Fachlehrer_ID = K_Lehrer.ID"    
+1;;167;ALL;SchuelerBKFaecher;Tabelle SchuelerBKFaecher: Umstellen von Lehrer-Kürzel auf Lehrer-ID;1;"UPDATE SchuelerBKFaecher JOIN K_Lehrer ON SchuelerBKFaecher.Fachlehrer = K_Lehrer.Kuerzel SET SchuelerBKFaecher.Fachlehrer_ID = K_Lehrer.ID"    
+1;;168;ALL;SchuelerLeistungsdaten;Tabelle SchuelerLeistungsdaten: Umstellen von Lehrer-Kürzel auf Lehrer-ID (1);1;"UPDATE SchuelerLeistungsdaten JOIN K_Lehrer ON SchuelerLeistungsdaten.Fachlehrer = K_Lehrer.Kuerzel SET SchuelerLeistungsdaten.Fachlehrer_ID = K_Lehrer.ID"    
+1;;169;ALL;SchuelerLeistungsdaten;Tabelle SchuelerLeistungsdaten: Umstellen von Lehrer-Kürzel auf Lehrer-ID (2) - Zusatzkraft;1;"UPDATE SchuelerLeistungsdaten JOIN K_Lehrer ON SchuelerLeistungsdaten.Zusatzkraft = K_Lehrer.Kuerzel SET SchuelerLeistungsdaten.Zusatzkraft_ID = K_Lehrer.ID"    
+1;;170;ALL;Stundentafel_Faecher;Tabelle Stundentafel_Faecher: Umstellen von Lehrer-Kürzel auf Lehrer-ID;1;"UPDATE Stundentafel_Faecher JOIN K_Lehrer ON Stundentafel_Faecher.LehrerKrz = K_Lehrer.Kuerzel SET Stundentafel_Faecher.Lehrer_ID = K_Lehrer.ID"    
+1;;171;ALL;EigeneSchule_Abteilungen;Tabelle EigeneSchule_Abteilungen: Umstellen von Lehrer-Kürzel auf Lehrer-ID;1;"UPDATE EigeneSchule_Abteilungen JOIN K_Lehrer ON EigeneSchule_Abteilungen.AbteilungsLeiter = K_Lehrer.Kuerzel SET EigeneSchule_Abteilungen.AbteilungsLeiter_ID = K_Lehrer.ID"
+1;;172;ALL;SchuelerZP10;ZP10: Kopiere Daten aus SchuelerBKFaecher nach SchuelerZP10;1;"INSERT INTO SchuelerZP10 (ID, Schueler_ID, Schuljahresabschnitts_ID, Fach_ID, Vornote, NoteSchriftlich, MdlPruefung, MdlPruefungFW, NoteMuendlich, NoteAbschluss, Fachlehrer_ID)
+SELECT SchuelerBKFaecher.ID, SchuelerBKFaecher.Schueler_ID, SchuelerBKFaecher.Schuljahresabschnitts_ID, SchuelerBKFaecher.Fach_ID, SchuelerBKFaecher.Vornote, SchuelerBKFaecher.NoteSchriftlich, SchuelerBKFaecher.MdlPruefung, SchuelerBKFaecher.MdlPruefungFW, SchuelerBKFaecher.NoteMuendlich, SchuelerBKFaecher.NoteAbschluss, SchuelerBKFaecher.Fachlehrer_ID FROM 
+SchuelerBKFaecher JOIN EigeneSchule ON EigeneSchule.SchulformKrz NOT IN ('BK','SB')"    
+1;;173;ALL;SchuelerBKFaecher;BKFaecher: Leere die Tabelle, falls die Schulform nicht BK oder SB ist;1;"DELETE FROM SchuelerBKFaecher WHERE (SELECT ID FROM EigeneSchule WHERE EigeneSchule.SchulformKrz NOT IN ('BK','SB'))"
+1;;174;ALL;SchuelerBKAbschluss;BKAbschluss: Leere die Tabelle, falls die Schulform nicht BK oder SB ist;1;"DELETE FROM SchuelerBKAbschluss WHERE (SELECT ID FROM EigeneSchule WHERE EigeneSchule.SchulformKrz NOT IN ('BK','SB'))"
 2;;1;ALL;Kurs_Schueler;Initialisierung Kurs_Schueler: ggf. leeren;0;DELETE FROM Kurs_Schueler
 2;;2;MSSQL;Kurs_Schueler;Entfernen fehlerhafter Kurs-Einträge in den Leistungsdaten (Zuordnung zu Lernabschnitten);0;"UPDATE SchuelerLeistungsdaten SET Kurs_ID = NULL WHERE ID IN (
 SELECT DISTINCT
@@ -522,13 +625,13 @@ WHERE
 SET 
   Kurs_ID = NULL 
 WHERE
-  (SELECT Jahr,Abschnitt FROM Kurse WHERE ID = a.Kurs_ID) <> (SELECT Jahr,Abschnitt FROM SchuelerLernabschnittsdaten WHERE ID = a.Abschnitt_ID)"
+  (SELECT Schuljahresabschnitts_ID FROM Kurse WHERE ID = a.Kurs_ID) <> (SELECT Schuljahresabschnitts_ID FROM SchuelerLernabschnittsdaten WHERE ID = a.Abschnitt_ID)"
 2;;2;MYSQL;Kurs_Schueler;Entfernen fehlerhafter Kurs-Einträge in den Leistungsdaten (Zuordnung zu Lernabschnitten);0;"UPDATE 
   SchuelerLeistungsdaten a 
 SET 
   Kurs_ID = NULL 
 WHERE
-  (SELECT Jahr,Abschnitt FROM Kurse WHERE ID = a.Kurs_ID) <> (SELECT Jahr,Abschnitt FROM SchuelerLernabschnittsdaten WHERE ID = a.Abschnitt_ID)"
+  (SELECT Schuljahresabschnitts_ID FROM Kurse WHERE ID = a.Kurs_ID) <> (SELECT Schuljahresabschnitts_ID FROM SchuelerLernabschnittsdaten WHERE ID = a.Abschnitt_ID)"
 2;;3;ALL;Kurs_Schueler;Initialisierung Kurs_Schueler: befüllen;0;"INSERT INTO Kurs_Schueler
 SELECT DISTINCT
   Kurse.ID AS Kurs_ID,
