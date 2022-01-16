@@ -9,7 +9,8 @@ AllgAdr;Adresse_ID;Name1;S;;;AllgAdrName1;SELECT AllgAdrName1 FROM K_AllgAdresse
 AllgAdr;Adresse_ID;Name2;S;;;AllgAdrName2;SELECT AllgAdrName2 FROM K_AllgAdresse WHERE ID=%;ALLE
 AllgAdr;Adresse_ID;Ortsname;S;;;Bezeichnung;SELECT O.Bezeichnung FROM K_Ort O, K_AllgAdresse AA WHERE O.PLZ=AA.AllgAdrPLZ AND AA.ID=% AND (O.SchulnrEigner=# OR O.SchulnrEigner=0);ALLE
 AllgAdr;Adresse_ID;Postleitzahl;S;;;AllgAdrPLZ;SELECT AllgAdrPLZ FROM K_AllgAdresse WHERE ID=%;ALLE
-AllgAdr;Adresse_ID;Straße;S;;;AllgAdrStrasse;SELECT AllgAdrStrasse FROM K_AllgAdresse WHERE ID=%;ALLE
+AllgAdr;Adresse_ID;Straßenname;S;;;AllgAdrStrassenname;SELECT AllgAdrStrasse FROM K_AllgAdresse WHERE ID=%;ALLE
+AllgAdr;Adresse_ID;Hausnummer;S;;;AllgAdrHausNr;SELECT AllgAdrHausNr FROM K_AllgAdresse WHERE ID=%;ALLE
 AllgAdr;Adresse_ID;Telefon-Nr. 1;S;;;AllgAdrTelefon1;SELECT AllgAdrTelefon1 FROM K_AllgAdresse WHERE ID=%;ALLE
 AllgAdr;Adresse_ID;Telefon-Nr. 2;S;;;AllgAdrTelefon2;SELECT AllgAdrTelefon2 FROM K_AllgAdresse WHERE ID=%;ALLE
 AllgAdr;Adresse_ID;Zusatz1;S;;;AllgAdrZusatz1;SELECT AllgAdrZusatz1 FROM K_AllgAdresse WHERE ID=%;ALLE
@@ -58,7 +59,8 @@ Lehrer;PANr;Personalnummer;S;;;;;ALLE
 Lehrer;PLZ;Ortsname;S;;;Bezeichnung;SELECT Bezeichnung FROM K_Ort WHERE PLZ=%;ALLE
 Lehrer;PLZ;Postleitzahl;S;;;;;ALLE
 Lehrer;Sichtbar;Sichtbar?;S;;;;;ALLE
-Lehrer;Strasse;Straße;S;;;;;ALLE
+Lehrer;Strassenname;Straßenname;S;;;;;ALLE
+Lehrer;HausNr;Hausnummer;S;;;;;ALLE
 Lehrer;Tel;Telefon (Festnetz);S;;;;;ALLE
 Lehrer;Titel;Titel;S;;;;;ALLE
 Lehrer;Vorname;Vorname;S;;;;;ALLE
@@ -232,7 +234,7 @@ Schueler;StaatKrz;Staatsangehörigkeit (Klartext);S;;;Bezeichnung;SELECT Bezeich
 Schueler;StaatKrz;Staatsangehörigkeit (Klartext, Adjektiv);S;;;Bezeichnung2;SELECT Bezeichnung2 FROM K_Staat WHERE StatistikKrz=% AND (SchulnrEigner=# OR SchulnrEigner=0);ALLE
 Schueler;StaatKrz;Staatsangehörigkeit (Schlüssel);S;;;;;ALLE
 Schueler;Status;Status;I;;;;;ALLE
-Schueler;Strasse;Straße;S;;;;;ALLE
+Schueler;ID;Straße;S;;;Strasse;SELECT CONCAT(Strassenname, HausNr) AS Strasse FROM Schueler WHERE ID=%;ALLE
 Schueler;Strassenname;Straßenname;S;;;;;ALLE
 Schueler;Telefon;Telefon-Nr.;S;;;;;ALLE
 Schueler;Uebergangsempfehlung_JG5;Übergangsempfehlung;S;;;;;ALLE

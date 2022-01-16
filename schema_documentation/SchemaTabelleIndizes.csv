@@ -12,7 +12,7 @@ SchuelerAbgaenge_IDX1;;;SchuelerAbgaenge;LSSchulEntlassDatum
 SchuelerErzAdr_IDX1;;;SchuelerErzAdr;Schueler_ID
 SchuelerLeistungsdaten_IDX1;;;SchuelerLeistungsdaten;Kurs_ID
 SchuelerLeistungsdaten_IDX2;;;SchuelerLeistungsdaten;Fach_ID
-SchuelerLeistungsdaten_IDX3;;;SchuelerLeistungsdaten;Fachlehrer
+SchuelerLeistungsdaten_IDX3;;;SchuelerLeistungsdaten;Fachlehrer_ID
 SchuelerSprachenfolge_IDX1;;;SchuelerSprachenfolge;Schueler_ID
 SchuelerTelefone_IDX1;;;SchuelerTelefone;Schueler_ID
 SchuelerVermerke_IDX1;;;SchuelerVermerke;Schueler_ID

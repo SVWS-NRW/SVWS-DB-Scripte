@@ -1,5 +1,15 @@
 NameTabelle;NameSpalte;hatAutoIncrement
 AllgAdrAnsprechpartner;ID;1
+Benutzer;ID;1 
+BenutzerAllgemein;ID;1
+BenutzerEmail;Benutzer_ID;0
+Benutzergruppen;ID;1
+BenutzergruppenKompetenzen;Gruppe_ID;0
+BenutzergruppenKompetenzen;Kompetenz_ID;0
+BenutzergruppenMitglieder;Gruppe_ID;0
+BenutzergruppenMitglieder;Benutzer_ID;0
+BenutzerKompetenzen;Benutzer_ID;0
+BenutzerKompetenzen;Kompetenz_ID;0
 Credentials;ID;1
 CredentialsLernplattformen;ID;1
 EigeneSchule;ID;0
