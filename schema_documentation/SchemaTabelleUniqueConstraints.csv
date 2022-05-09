@@ -2,15 +2,13 @@ Name;Revision;Veraltet;NameTabelle;NameSpalte
 Credentials_UC1;;;Credentials;Benutzername
 CredentialsLernplattformen_UC1;;;CredentialsLernplattformen;Benutzername
 CredentialsLernplattformen_UC1;;;CredentialsLernplattformen;LernplattformID
-EigeneSchule_Fachklassen_UC1;;;EigeneSchule_Fachklassen;AP
-EigeneSchule_Fachklassen_UC1;;;EigeneSchule_Fachklassen;BKIndexTyp
-EigeneSchule_Fachklassen_UC1;;;EigeneSchule_Fachklassen;FKS
 EigeneSchule_Faecher_UC1;;;EigeneSchule_Faecher;FachKrz
 EigeneSchule_Jahrgaenge_UC1;;;EigeneSchule_Jahrgaenge;InternKrz
 EigeneSchule_Kursart_UC1;;;EigeneSchule_Kursart;Kursart
 EigeneSchule_Kursart_UC1;;;EigeneSchule_Kursart;KursartAllg
 EigeneSchule_Schulformen_UC1;;;EigeneSchule_Schulformen;SGL
 EigeneSchule_Zertifikate_UC1;;;EigeneSchule_Zertifikate;Kuerzel
+Fachgruppen_UC1;;;Fachgruppen;SchildFgID
 K_Adressart_UC1;;;K_Adressart;Bezeichnung
 K_BeschaeftigungsArt_UC1;;;K_BeschaeftigungsArt;Bezeichnung
 K_EinschulungsArt_UC1;;;K_EinschulungsArt;Bezeichnung
@@ -47,6 +45,7 @@ Kurse_UC1;1;;Kurse;KursartAllg
 Kurse_UC1;1;;Kurse;KurzBez
 Kurse_UC1;1;;Kurse;Lehrer_ID
 Kurse_UC1;1;;Kurse;WochenStd
+KursFortschreibungsarten_UC1;;;KursFortschreibungsarten;Kuerzel
 LehrerAbschnittsdaten_UC1;2;;LehrerAbschnittsdaten;Lehrer_ID
 LehrerAbschnittsdaten_UC1;2;;LehrerAbschnittsdaten;Schuljahresabschnitts_ID
 LehrerAnrechnung_UC1;2;;LehrerAnrechnung;Abschnitt_ID
@@ -57,6 +56,8 @@ LehrerFunktionen_UC1;2;;LehrerFunktionen;Abschnitt_ID
 LehrerFunktionen_UC1;2;;LehrerFunktionen;Funktion_ID
 LehrerMehrleistung_UC1;2;;LehrerMehrleistung;Abschnitt_ID
 LehrerMehrleistung_UC1;2;;LehrerMehrleistung;MehrleistungsgrundKrz
+Noten_UC1;;;Noten;Kuerzel
+PersonalTypen_UC1;;;PersonalTypen;Kuerzel
 SchildFilter_UC1;;;SchildFilter;Name
 Schueler_UC1;;;Schueler;GU_ID
 SchuelerAbitur_UC1;;;SchuelerAbitur;Schueler_ID
@@ -71,6 +72,7 @@ SchuelerLernabschnittsdaten_UC1;1;;SchuelerLernabschnittsdaten;Schuljahresabschn
 SchuelerLernabschnittsdaten_UC1;1;;SchuelerLernabschnittsdaten;Schueler_ID
 SchuelerLernabschnittsdaten_UC1;1;;SchuelerLernabschnittsdaten;WechselNr
 SchuelerListe_UC1;;;SchuelerListe;Bezeichnung
+SchuelerStatus_UC1;;;SchuelerStatus;Bezeichnung
 SchuelerZP10_UC1;;;SchuelerZP10;Schueler_ID
 SchuelerZP10_UC1;;;SchuelerZP10;Schuljahresabschnitts_ID
 SchuelerZP10_UC1;;;SchuelerZP10;Fach_ID

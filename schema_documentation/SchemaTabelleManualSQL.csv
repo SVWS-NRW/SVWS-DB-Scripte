@@ -125,9 +125,7 @@ HAVING
 1;;46;ALL;SchuelerErzAdr;Korrektur für den Fremdschluessel auf die Spalte Erz2StaatKrz der Tabelle SchuelerErzAdr;1;UPDATE SchuelerErzAdr SET Erz2StaatKrz = NULL WHERE Erz2StaatKrz NOT IN (SELECT Schluessel FROM Statkue_Nationalitaeten)
 1;;47;ALL;SchuelerFehlstunden;Korrektur für den Fremdschluessel auf die Spalte Fach_ID der Tabelle SchuelerFehlstunden;1;UPDATE SchuelerFehlstunden SET Fach_ID = null WHERE Fach_ID NOT IN (SELECT ID FROM EigeneSchule_Faecher)
 1;;48;ALL;SchuelerFehlstunden;Korrektur für den Fremdschluessel auf die Spalte Lehrer_ID der Tabelle SchuelerFehlstunden;1;UPDATE SchuelerFehlstunden SET Lehrer_ID = NULL WHERE Lehrer_ID NOT IN (SELECT ID FROM K_Lehrer)
-1;;49;ALL;SchuelerFoerderempfehlungen;Korrektur für den Fremdschluessel auf die Spalte Fach_ID der Tabelle SchuelerFoerderempfehlungen;1;UPDATE SchuelerFoerderempfehlungen SET Fach_ID = null WHERE Fach_ID NOT IN (SELECT ID FROM EigeneSchule_Faecher)
 1;;50;ALL;SchuelerFoerderempfehlungen;Korrektur für den Fremdschluessel auf die Spalte Lehrer_ID der Tabelle SchuelerFoerderempfehlungen;1;UPDATE SchuelerFoerderempfehlungen SET Lehrer_ID = NULL WHERE Lehrer_ID NOT IN (SELECT ID FROM K_Lehrer)
-1;;51;ALL;SchuelerFoerderempfehlungen;Korrektur für den Fremdschluessel auf die Spalte Kurs_ID der Tabelle SchuelerFoerderempfehlungen;1;UPDATE SchuelerFoerderempfehlungen SET Kurs_ID = NULL WHERE Kurs_ID NOT IN (SELECT ID FROM Kurse)
 1;;52;ALL;SchuelerKAoADaten;Korrektur für den Fremdschluessel auf die Spalte MerkmalID der Tabelle SchuelerKAoADaten;1;UPDATE SchuelerKAoADaten SET MerkmalID = NULL WHERE MerkmalID NOT IN (SELECT ID FROM Schildintern_KAoA_Merkmal)
 1;;53;ALL;SchuelerKAoADaten;Korrektur für den Fremdschluessel auf die Spalte ZusatzmerkmalID der Tabelle SchuelerKAoADaten;1;UPDATE SchuelerKAoADaten SET ZusatzmerkmalID = NULL WHERE ZusatzmerkmalID NOT IN (SELECT ID FROM Schildintern_KAoA_Zusatzmerkmal)
 1;;54;ALL;SchuelerKAoADaten;Korrektur für den Fremdschluessel auf die Spalte AnschlussoptionID der Tabelle SchuelerKAoADaten;1;UPDATE SchuelerKAoADaten SET AnschlussoptionID = NULL WHERE AnschlussoptionID NOT IN (SELECT ID FROM Schildintern_KAoA_Anschlussoption)
@@ -447,57 +445,57 @@ SELECT 2, 'Stellvertretende Schulleitung', ID FROM K_Lehrer WHERE (Nachname, Vor
 1;;113;ALL;Schueler;Aufteilung der Straße mit Hausnummer in Straße und Hausnummer getrennt bei der Tabelle Schuler;1;"UPDATE
 	Schueler
 SET
-	Strassenname = REGEXP_REPLACE(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$', ''),
-	HausNr = trim(REGEXP_SUBSTR(REGEXP_SUBSTR(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+')), 
-	HausNrZusatz = trim(REGEXP_REPLACE(REGEXP_SUBSTR(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+', ''))"
+	Strassenname = SUBSTR(REGEXP_REPLACE(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$', ''), 0, 55),
+	HausNr = SUBSTR(trim(REGEXP_SUBSTR(REGEXP_SUBSTR(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+')), 0, 10), 
+	HausNrZusatz = SUBSTR(trim(REGEXP_REPLACE(REGEXP_SUBSTR(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+', '')), 0, 30)"
 1;;114;ALL;K_Lehrer;Aufteilung der Straße mit Hausnummer in Straße und Hausnummer getrennt bei der Tabelle K-Lehrer;1;"UPDATE
 	K_Lehrer
 SET
-	Strassenname = REGEXP_REPLACE(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$', ''),
-	HausNr = trim(REGEXP_SUBSTR(REGEXP_SUBSTR(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+')), 
-	HausNrZusatz = trim(REGEXP_REPLACE(REGEXP_SUBSTR(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+', ''))"
+	Strassenname = SUBSTR(REGEXP_REPLACE(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$', ''), 0, 55),
+	HausNr = SUBSTR(trim(REGEXP_SUBSTR(REGEXP_SUBSTR(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+')), 0, 10), 
+	HausNrZusatz = SUBSTR(trim(REGEXP_REPLACE(REGEXP_SUBSTR(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+', '')), 0, 30)"
 1;;115;ALL;SchuelerErzAdr;Aufteilung der Straße mit Hausnummer in Straße und Hausnummer getrennt bei der Tabelle SchuelerErzAdr;1;"UPDATE
 	SchuelerErzAdr
 SET
-	ErzStrassenname = REGEXP_REPLACE(replace(replace(replace(replace(trim(ErzStrasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$', ''),
-	ErzHausNr = trim(REGEXP_SUBSTR(REGEXP_SUBSTR(replace(replace(replace(replace(trim(ErzStrasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+')), 
-	ErzHausNrZusatz = trim(REGEXP_REPLACE(REGEXP_SUBSTR(replace(replace(replace(replace(trim(ErzStrasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+', ''))"
+	ErzStrassenname = SUBSTR(REGEXP_REPLACE(replace(replace(replace(replace(trim(ErzStrasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$', ''), 0, 55),
+	ErzHausNr = SUBSTR(trim(REGEXP_SUBSTR(REGEXP_SUBSTR(replace(replace(replace(replace(trim(ErzStrasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+')), 0, 10), 
+	ErzHausNrZusatz = SUBSTR(trim(REGEXP_REPLACE(REGEXP_SUBSTR(replace(replace(replace(replace(trim(ErzStrasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+', '')), 0, 30)"
 1;;116;ALL;EigeneSchule;Aufteilung der Straße mit Hausnummer in Straße und Hausnummer getrennt bei der Tabelle EigeneSchule;1;"UPDATE
 	EigeneSchule
 SET
-	Strassenname = REGEXP_REPLACE(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$', ''),
-	HausNr = trim(REGEXP_SUBSTR(REGEXP_SUBSTR(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+')), 
-	HausNrZusatz = trim(REGEXP_REPLACE(REGEXP_SUBSTR(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+', ''))"
+	Strassenname = SUBSTR(REGEXP_REPLACE(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$', ''), 0, 55),
+	HausNr = SUBSTR(trim(REGEXP_SUBSTR(REGEXP_SUBSTR(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+')), 0, 10), 
+	HausNrZusatz = SUBSTR(trim(REGEXP_REPLACE(REGEXP_SUBSTR(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+', '')), 0, 30)"
 1;;117;ALL;EigeneSchule_Teilstandorte;Aufteilung der Straße mit Hausnummer in Straße und Hausnummer getrennt bei der Tabelle EigeneSchule_Teilstandorte;1;"UPDATE
 	EigeneSchule_Teilstandorte
 SET
-	Strassenname = REGEXP_REPLACE(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$', ''),
-	HausNr = trim(REGEXP_SUBSTR(REGEXP_SUBSTR(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+')), 
-	HausNrZusatz = trim(REGEXP_REPLACE(REGEXP_SUBSTR(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+', ''))"
+	Strassenname = SUBSTR(REGEXP_REPLACE(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$', ''), 0, 55),
+	HausNr = SUBSTR(trim(REGEXP_SUBSTR(REGEXP_SUBSTR(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+')), 0, 10), 
+	HausNrZusatz = SUBSTR(trim(REGEXP_REPLACE(REGEXP_SUBSTR(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+', '')), 0, 30)"
 1;;118;ALL;K_Schule;Aufteilung der Straße mit Hausnummer in Straße und Hausnummer getrennt bei der Tabelle K_Schule;1;"UPDATE
 	K_Schule
 SET
-	Strassenname = REGEXP_REPLACE(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$', ''),
-	HausNr = trim(REGEXP_SUBSTR(REGEXP_SUBSTR(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+')), 
-	HausNrZusatz = trim(REGEXP_REPLACE(REGEXP_SUBSTR(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+', ''))"
+	Strassenname = SUBSTR(REGEXP_REPLACE(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$', ''), 0, 55),
+	HausNr = SUBSTR(trim(REGEXP_SUBSTR(REGEXP_SUBSTR(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+')), 0, 10), 
+	HausNrZusatz = SUBSTR(trim(REGEXP_REPLACE(REGEXP_SUBSTR(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+', '')), 0, 30)"
 1;;119;ALL;K_AllgAdresse;Aufteilung der Straße mit Hausnummer in Straße und Hausnummer getrennt bei der Tabelle K_AllgAdresse;1;"UPDATE
 	K_AllgAdresse
 SET
-	AllgAdrStrassenname = REGEXP_REPLACE(replace(replace(replace(replace(trim(AllgAdrStrasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$', ''),
-	AllgAdrHausNr = trim(REGEXP_SUBSTR(REGEXP_SUBSTR(replace(replace(replace(replace(trim(AllgAdrStrasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+')), 
-	AllgAdrHausNrZusatz = trim(REGEXP_REPLACE(REGEXP_SUBSTR(replace(replace(replace(replace(trim(AllgAdrStrasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+', ''))"
+	AllgAdrStrassenname = SUBSTR(REGEXP_REPLACE(replace(replace(replace(replace(trim(AllgAdrStrasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$', ''), 0, 55),
+	AllgAdrHausNr = SUBSTR(trim(REGEXP_SUBSTR(REGEXP_SUBSTR(replace(replace(replace(replace(trim(AllgAdrStrasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+')), 0, 10), 
+	AllgAdrHausNrZusatz = SUBSTR(trim(REGEXP_REPLACE(REGEXP_SUBSTR(replace(replace(replace(replace(trim(AllgAdrStrasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+', '')), 0, 30)"
 1;;120;ALL;Personengruppen_Personen;Aufteilung der Straße mit Hausnummer in Straße und Hausnummer getrennt bei der Tabelle Personengruppen_Personen;1;"UPDATE
 	Personengruppen_Personen
 SET
-	PersonStrassenname = REGEXP_REPLACE(replace(replace(replace(replace(trim(PersonStrasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$', ''),
-	PersonHausNr = trim(REGEXP_SUBSTR(REGEXP_SUBSTR(replace(replace(replace(replace(trim(PersonStrasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+')), 
-	PersonHausNrZusatz = trim(REGEXP_REPLACE(REGEXP_SUBSTR(replace(replace(replace(replace(trim(PersonStrasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+', ''))"
+	PersonStrassenname = SUBSTR(REGEXP_REPLACE(replace(replace(replace(replace(trim(PersonStrasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$', ''), 0, 55),
+	PersonHausNr = SUBSTR(trim(REGEXP_SUBSTR(REGEXP_SUBSTR(replace(replace(replace(replace(trim(PersonStrasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+')), 0, 10), 
+	PersonHausNrZusatz = SUBSTR(trim(REGEXP_REPLACE(REGEXP_SUBSTR(replace(replace(replace(replace(trim(PersonStrasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+', '')), 0, 30)"
 1;;121;ALL;K_Kindergarten;Aufteilung der Straße mit Hausnummer in Straße und Hausnummer getrennt bei der Tabelle K_Kindergarten;1;"UPDATE
 	K_Kindergarten
 SET
-	Strassenname = REGEXP_REPLACE(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$', ''),
-	HausNr = trim(REGEXP_SUBSTR(REGEXP_SUBSTR(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+')), 
-	HausNrZusatz = trim(REGEXP_REPLACE(REGEXP_SUBSTR(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+', ''))"
+	Strassenname = SUBSTR(REGEXP_REPLACE(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$', ''), 0, 55),
+	HausNr = SUBSTR(trim(REGEXP_SUBSTR(REGEXP_SUBSTR(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+')), 0, 10), 
+	HausNrZusatz = SUBSTR(trim(REGEXP_REPLACE(REGEXP_SUBSTR(replace(replace(replace(replace(trim(Strasse),'  ',' '),'  ',' '),' -','-'),'- ','-'), '([0-9]+-)*[0-9]+\\D*$'), '([0-9]+-)*[0-9]+', '')), 0, 30)"
 1;;122;ALL;Schueler;Überprüfung des Eintrages des Geschlechtes;1;UPDATE Schueler SET Geschlecht = 6 WHERE Geschlecht NOT IN (3,4,5,6)
 1;;123;ALL;K_Lehrer;Überprüfung des Eintrages des Geschlechtes;1;UPDATE K_Lehrer SET Geschlecht = '6' WHERE Geschlecht NOT IN ('3','4','5','6')
 1;;124;ALL;Kurse;Überprüfung des Eintrages zur Fortschreibungsart;1;UPDATE Kurse SET Fortschreibungsart = 'K' WHERE Fortschreibungsart NOT IN ('N','D','B','K')
@@ -585,7 +583,7 @@ SELECT
 	K_Lehrer.ID AS Lehrer_ID,
 	2 AS Reihenfolge
 FROM 
-    Versetzung JOIN K_Lehrer ON Versetzung.StvKlassenlehrerKrz = K_Lehrer.Kuerzel
+    Versetzung JOIN K_Lehrer ON Versetzung.StvKlassenlehrerKrz = K_Lehrer.Kuerzel AND Versetzung.StvKlassenlehrerKrz <> Versetzung.KlassenlehrerKrz
 WHERE
     Versetzung.StvKlassenlehrerKrz IS NOT NULL
 ))"
@@ -811,7 +809,7 @@ SELECT ID, 0, ID FROM Users WHERE US_LoginName NOT IN (SELECT Kuerzel FROM K_Leh
 SELECT Users.ID, 1, K_Lehrer.ID FROM Users JOIN K_Lehrer ON Users.US_LoginName = K_Lehrer.Kuerzel"
 1;;198;ALL;BenutzerEmail;BenutzerEmail: Kopiere Email-Informationen aus der Users-Tabelle;1;"INSERT INTO BenutzerEmail(Benutzer_ID, Email, EmailName, SMTPUsername, SMTPPassword, EMailSignature, HeartbeatDate, ComputerName)
 SELECT ID AS Benutzer_ID, Email, EmailName, SMTPUsername, SMTPPassword, EmailSignature, HeartbeatDate, ComputerName FROM Users WHERE Email IS NOT NULL AND EmailName IS NOT NULL"
-1;;199;ALL;Benutzergruppen;Benutzergruppen: Übertrage die Benutzergruppen aus der Tabelle Usergroups;1;INSERT INTO Benutzergruppen(ID, Bezeichnung) SELECT UG_ID, UG_Bezeichnung FROM Usergroups
+1;;199;ALL;Benutzergruppen;Benutzergruppen: Übertrage die Benutzergruppen aus der Tabelle Usergroups;1;INSERT INTO Benutzergruppen(ID, Bezeichnung) SELECT UG_ID, UG_Bezeichnung FROM Usergroups WHERE UG_ID IS NOT NULL AND UG_Bezeichnung IS NOT NULL
 1;;200;ALL;BenutzergruppenKompetenzen;BenutzergruppenKompetenzen: Übertrage die Kompetenzen der Benutzergruppen aus der Tabelle Usergroups;1;"INSERT INTO BenutzergruppenKompetenzen(Gruppe_ID, Kompetenz_ID)
 SELECT DISTINCT * FROM JSON_TABLE(
 (SELECT
@@ -826,7 +824,8 @@ SELECT DISTINCT * FROM JSON_TABLE(
   CONCAT('[', GROUP_CONCAT('{""Gruppe_ID"":',REPLACE(REPLACE(US_UserGroups,'$','-1'),';',CONCAT(', ""Benutzer_ID"": ', ID, '}, {""Gruppe_ID"":')), ', ""Benutzer_ID"":', ID, '}'),']')
 FROM Users WHERE US_UserGroups IS NOT NULL AND TRIM(US_UserGroups) <> """")
 , '$[*]' columns(Gruppe_ID bigint path '$.Gruppe_ID', Benutzer_ID bigint path '$.Benutzer_ID')) AS GruppenMitglieder"
-1;;204;ALL;BenutzerKompetenzen;BenutzerKompetenzen: Übertrage die Kompetenzen der Benutzer aus der Tabelle Users;1;"INSERT INTO BenutzerKompetenzen(Benutzer_ID, Kompetenz_ID)
+1;;204;ALL;BenutzergruppenMitglieder;BenutzergruppenMitglieder: Entferne fehlerhafte Einträge für Gruppen, die nicht existieren;1;DELETE FROM BenutzergruppenMitglieder WHERE Gruppe_ID NOT IN (SELECT ID FROM Benutzergruppen)
+1;;205;ALL;BenutzerKompetenzen;BenutzerKompetenzen: Übertrage die Kompetenzen der Benutzer aus der Tabelle Users;1;"INSERT INTO BenutzerKompetenzen(Benutzer_ID, Kompetenz_ID)
 SELECT DISTINCT * FROM JSON_TABLE(
 (SELECT
   CONCAT('[', GROUP_CONCAT('{""Benutzer_ID"":', ID, ', ""Kompetenz_ID"":', REPLACE(REPLACE(US_Privileges,'$','-1'),';',CONCAT('}, {""Benutzer_ID"":', ID, ', ""Kompetenz_ID"":')), '}'),']')
@@ -834,12 +833,14 @@ FROM Users WHERE US_Privileges IS NOT NULL AND TRIM(US_Privileges) <> """"
 )
 , '$[*]' columns(Benutzer_ID bigint path '$.Benutzer_ID', Kompetenz_ID bigint path '$.Kompetenz_ID')) AS BenutzerKompetenzen
 "
-1;;205;ALL;Benutzer;Benutzer: Setze das Flag IstAdmin für administrative Benutzer;1;UPDATE Benutzer JOIN BenutzerKompetenzen ON Benutzer.ID = BenutzerKompetenzen.Benutzer_ID AND BenutzerKompetenzen.Kompetenz_ID = -1 SET Benutzer.IstAdmin = 1
-1;;206;ALL;BenutzerKompetenzen;BenutzerKompetenzen: Entferne alte Admin-Einträge, da diese keine Verweise auf die Kompetenztabelle besitzen;1;DELETE FROM BenutzerKompetenzen WHERE Kompetenz_ID = -1
-1;;207;ALL;Benutzer;Benutzer: Setze das Flag IstAdmin für administrative Benutzer, falls es von einer Gruppenzuweisung geerbt wird;1;"UPDATE Benutzer JOIN BenutzergruppenMitglieder ON Benutzer.ID = BenutzergruppenMitglieder.Benutzer_ID
+1;;206;ALL;Benutzer;Benutzer: Setze das Flag IstAdmin für administrative Benutzer;1;UPDATE Benutzer JOIN BenutzerKompetenzen ON Benutzer.ID = BenutzerKompetenzen.Benutzer_ID AND BenutzerKompetenzen.Kompetenz_ID = -1 SET Benutzer.IstAdmin = 1
+1;;207;ALL;BenutzerKompetenzen;BenutzerKompetenzen: Entferne alte Admin-Einträge, da diese keine Verweise auf die Kompetenztabelle besitzen;1;DELETE FROM BenutzerKompetenzen WHERE Kompetenz_ID = -1
+1;;208;ALL;Benutzer;Benutzer: Setze das Flag IstAdmin für administrative Benutzer, falls es von einer Gruppenzuweisung geerbt wird;1;"UPDATE Benutzer JOIN BenutzergruppenMitglieder ON Benutzer.ID = BenutzergruppenMitglieder.Benutzer_ID
 JOIN Benutzergruppen ON BenutzergruppenMitglieder.Gruppe_ID = Benutzergruppen.ID AND Benutzergruppen.IstAdmin = 1
 SET Benutzer.IstAdmin = 1"
-1;;208;ALL;EigeneSchule_Faecher;EigeneSchule_Faecher: Kopieren der Daten aus dem Feld Fachgruppe_ID in das Feld Zeugnisdatenquelle_ID;1;UPDATE EigeneSchule_Faecher SET Zeugnisdatenquelle_ID = Fachgruppe_ID WHERE Fachgruppe_ID IN (SELECT FG_ID FROM Schildintern_Fachgruppen)
+1;;209;ALL;EigeneSchule_Faecher;EigeneSchule_Faecher: Kopieren der Daten aus dem Feld Fachgruppe_ID in das Feld Zeugnisdatenquelle_ID;1;UPDATE EigeneSchule_Faecher SET Zeugnisdatenquelle_ID = Fachgruppe_ID WHERE Fachgruppe_ID IN (SELECT SchildFgID FROM Fachgruppen)
+1;;210;ALL;BenutzerKompetenzen;BenutzerKompetenzen: Entferne alle Benutzerkompetenzen, die nicht in der Tabelle Kompetenzen definiert sind.;1;DELETE FROM BenutzerKompetenzen WHERE Kompetenz_ID NOT IN (SELECT KO_ID FROM Kompetenzen)
+1;;211;ALL;BenutzergruppenKompetenzen;BenutzergruppenKompetenzen: Entferne alle Gruppenkompetenzen, die nicht in der Tabelle Kompetenzen definiert sind.;1;DELETE FROM BenutzergruppenKompetenzen WHERE Kompetenz_ID NOT IN (SELECT KO_ID FROM Kompetenzen)
 2;;1;ALL;Kurs_Schueler;Initialisierung Kurs_Schueler: ggf. leeren;1;DELETE FROM Kurs_Schueler
 2;;2;MSSQL;Kurs_Schueler;Entfernen fehlerhafter Kurs-Einträge in den Leistungsdaten (Zuordnung zu Lernabschnitten);1;"UPDATE SchuelerLeistungsdaten SET Kurs_ID = NULL WHERE ID IN (
 SELECT DISTINCT
@@ -899,30 +900,3 @@ FROM
 3;;3;SQLITE;Schueler;Fremdschlüssel auf K_Ort;1;UPDATE Schueler SET Ort_ID = (SELECT K_Ort.ID FROM K_Ort WHERE K_Ort.PLZ=Schueler.PLZ LIMIT 1)
 3;;4;SQLITE;SchuelerErzAdr;Fremdschlüssel auf K_Ort;1;UPDATE SchuelerErzAdr SET ErzOrt_ID = (SELECT K_Ort.ID FROM K_Ort WHERE K_Ort.PLZ=SchuelerErzAdr.ErzPLZ LIMIT 1)
 3;;5;SQLITE;K_Ortsteil;Fremdschlüssel auf K_Ort;1;UPDATE K_Ortsteil SET Ort_ID = (SELECT K_Ort.ID FROM K_Ort WHERE K_Ort.PLZ=K_Ortsteil.PLZ LIMIT 1)
-6;;1;ALL;Benutzer;Erstelle View V_Benutzer: Eine Benutzerliste mit Benutzernamen und Password-Hash von allen Benutzern, die eine Berechtigung zum Zugang zum SVWS-Server haben;0;"CREATE VIEW IF NOT EXISTS V_Benutzer AS
-SELECT creds.ID, creds.AnzeigeName, creds.Benutzername, creds.PasswordHash, admins.IstAdmin FROM (
-SELECT Benutzer.ID, BenutzerAllgemein.AnzeigeName AS AnzeigeName, Credentials.Benutzername, Credentials.PasswordHash FROM Benutzer JOIN BenutzerAllgemein ON Benutzer.Allgemein_ID = BenutzerAllgemein.ID JOIN Credentials ON BenutzerAllgemein.CredentialID = Credentials.ID
-UNION
-SELECT Benutzer.ID, Concat(K_Lehrer.Vorname, ' ', K_Lehrer.Nachname) AS AnzeigeName, Credentials.Benutzername, Credentials.PasswordHash FROM Benutzer JOIN K_Lehrer ON Benutzer.Lehrer_ID = K_Lehrer.ID JOIN Credentials ON K_Lehrer.CredentialID = Credentials.ID
-UNION
-SELECT Benutzer.ID, Concat(Schueler.Vorname, ' ', Schueler.Name) AS AnzeigeName, Credentials.Benutzername, Credentials.PasswordHash FROM Benutzer JOIN Schueler ON Benutzer.Schueler_ID = Schueler.ID JOIN Credentials ON Schueler.CredentialID = Credentials.ID
-UNION
-SELECT Benutzer.ID, Concat(SchuelerErzAdr.Vorname1, ' ', SchuelerErzAdr.Name1) AS AnzeigeName, Credentials.Benutzername, Credentials.PasswordHash FROM Benutzer JOIN SchuelerErzAdr ON Benutzer.Erzieher_ID = SchuelerErzAdr.ID JOIN Credentials ON SchuelerErzAdr.CredentialID = Credentials.ID
-) creds JOIN 
-(SELECT Benutzer.ID, CASE WHEN max(Benutzer.IstAdmin) = 1 OR max(Benutzergruppen.IstAdmin) = 1 THEN 1 ELSE 0 END AS IstAdmin FROM Benutzer LEFT JOIN BenutzergruppenMitglieder ON Benutzer.ID = BenutzergruppenMitglieder.Benutzer_ID JOIN Benutzergruppen ON Benutzergruppen.ID = BenutzergruppenMitglieder.Gruppe_ID
-GROUP BY Benutzer.ID) admins
-ON creds.ID = admins.ID"
-6;;2;ALL;BenutzerKompetenzen;Erstelle View V_Benutzerkompetenzen: Eine Liste von den effektiven Kompetenzen, die den Benutzern entweder direkt oder über Benutzergruppen zugewiesen wurden;0;"CREATE VIEW IF NOT EXISTS V_Benutzerkompetenzen AS
-SELECT DISTINCT Benutzer_ID, Kompetenz_ID FROM (
-SELECT Benutzer.ID AS Benutzer_ID, Kompetenz_ID FROM Benutzer JOIN BenutzerKompetenzen ON Benutzer.ID = BenutzerKompetenzen.Benutzer_ID
-UNION
-SELECT Benutzer.ID AS Benutzer_ID, Kompetenz_ID FROM Benutzer 
-JOIN BenutzergruppenMitglieder ON Benutzer.ID = BenutzergruppenMitglieder.Benutzer_ID 
-JOIN BenutzergruppenKompetenzen ON BenutzergruppenMitglieder.Gruppe_ID = BenutzergruppenKompetenzen.Gruppe_ID) effkomp"
-6;;3;ALL;Schueler;Erstelle View V_Gost_Schueler_Abiturjahrgang: Eine Schülerliste mit der Zuordnung Abiturjahrgängen für die gymnasiale Oberstufe. Die View sollte nur bei Schulformen mit gymnasialer Oberstufe genutzt werden;0;"CREATE VIEW IF NOT EXISTS V_Gost_Schueler_Abiturjahrgang AS
-SELECT Schueler.ID, Schueler.Status, EigeneSchule.SchulformKrz, SchuelerLernabschnittsdaten.ASDSchulgliederung, (EigeneSchule_Jahrgaenge.Restabschnitte / EigeneSchule.AnzahlAbschnitte) + Schuljahresabschnitte.Jahr AS Abiturjahr
-FROM Schueler 
-JOIN Schuljahresabschnitte ON Schueler.Schuljahresabschnitts_ID = Schuljahresabschnitte.ID
-JOIN SchuelerLernabschnittsdaten ON Schueler.Schuljahresabschnitts_ID = SchuelerLernabschnittsdaten.Schuljahresabschnitts_ID AND Schueler.ID = SchuelerLernabschnittsdaten.Schueler_ID
-JOIN EigeneSchule_Jahrgaenge ON SchuelerLernabschnittsdaten.Jahrgang_ID = EigeneSchule_Jahrgaenge.ID
-JOIN EigeneSchule"

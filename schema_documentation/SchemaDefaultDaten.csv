@@ -5,12 +5,11 @@ Schildintern_AbiturInfos;0;Initialisierung
 Schildintern_Berufsebene;0;Initialisierung
 Schildintern_Datenart;0;Initialisierung
 Schildintern_DQR_Niveaus;0;Initialisierung
-Schildintern_Fachgruppen;0;Initialisierung
 Schildintern_FaecherSortierung;0;Initialisierung
 Schildintern_FilterFehlendeEintraege;0;Initialisierung
+Schildintern_FilterFehlendeEintraegeSchild3;0;Initialisierung
 Schildintern_FilterFeldListe;0;Initialisierung
 Schildintern_HSchStatus;0;Initialisierung
-Schildintern_K_Schulnote;0;Initialisierung
 Schildintern_KAoA_Anschlussoption;0;Initialisierung
 Schildintern_KAoA_Berufsfeld;0;Initialisierung
 Schildintern_KAoA_Kategorie;0;Initialisierung
@@ -43,7 +42,6 @@ Statkue_Foerderschwerpunkt;0;Initialisierung
 Statkue_Gliederung;0;Initialisierung
 Statkue_Herkunftsart;0;Initialisierung
 Statkue_Herkunftsschulform;0;Initialisierung
-Statkue_LehrerAbgang;0;Initialisierung
 Statkue_LehrerAnrechnung;0;Initialisierung
 Statkue_LehrerBeschaeftigungsart;0;Initialisierung
 Statkue_LehrerEinsatzstatus;0;Initialisierung
@@ -67,9 +65,7 @@ Statkue_SchuelerKindergartenbesuch;0;Initialisierung
 Statkue_SchuelerUebergangsempfehlung5Jg;0;Initialisierung
 Statkue_SchuelerVerkehrssprache;0;Initialisierung
 Statkue_Schulformen;0;Initialisierung
-Statkue_Strassen;0;Initialisierung
 Statkue_SVWS_BKAnlagen;0;Initialisierung
-Statkue_SVWS_Fachgruppen;0;Initialisierung
 Statkue_SVWS_Schulgliederungen;0;Initialisierung
 Statkue_SVWS_SprachpruefungNiveaus;0;Initialisierung
 Statkue_SVWS_ZulaessigeFaecher;0;Initialisierung

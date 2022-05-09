@@ -11,11 +11,11 @@ AllgAdrAnsprechpartner;SchulnrEigner;;1;9;int;;;0;;;;;Die Schulnummer zu welcher
 AllgAdrAnsprechpartner;Titel;;;10;varchar;15;;0;;;;;Titel des Ansprechpartners im Betrieb
 AllgAdrAnsprechpartner;GU_ID;;;11;varchar;40;;0;;;;;GU_ID des Ansprechpartners im Betrieb
 Benutzer;ID;;;1;bigint;;;1;;;;;Die ID des Benutzers
-Benutzer;Typ;;;2;smallint;;0;1;;;;;Der Typ des Benutzers (0 = Allgemeiner Benutzer, 1 = Lehrer bzw. Personal aus K_Lehrer, 2 = Schueler, 3 = Erzieher)
-Benutzer;Allgemein_ID;;;3;bigint;;;0;;;;;Die Lehrer-ID des Benutzers, falls der Benutzer es sich um einen allgemeinen Benutzer handelt
+Benutzer;Typ;;;2;smallint;;0;1;;BenutzerTypConverter;1;;Der Typ des Benutzers (0 = Allgemeiner Benutzer, 1 = Lehrer bzw. Personal aus K_Lehrer, 2 = Schueler, 3 = Erzieher)
+Benutzer;Allgemein_ID;;;3;bigint;;;0;;;;;Die ID des allgemeinen Benutzers, falls der Benutzer es sich um einen allgemeinen Benutzer handelt
 Benutzer;Lehrer_ID;;;4;bigint;;;0;;;;;Die Lehrer-ID des Benutzers, falls der Benutzer es sich um einen Lehrer handelt
-Benutzer;Schueler_ID;;;5;bigint;;;0;;;;;Die Lehrer-ID des Benutzers, falls der Benutzer es sich um einen Schüler handelt
-Benutzer;Erzieher_ID;;;6;bigint;;;0;;;;;Die Lehrer-ID des Benutzers, falls der Benutzer es sich um einen Erzieher handelt
+Benutzer;Schueler_ID;;;5;bigint;;;0;;;;;Die Schüler-ID des Benutzers, falls der Benutzer es sich um einen Schüler handelt
+Benutzer;Erzieher_ID;;;6;bigint;;;0;;;;;Die erzieher-ID des Benutzers, falls der Benutzer es sich um einen Erzieher handelt
 Benutzer;IstAdmin;;;7;int;;0;1;;Boolean01Converter;;;Gibt an, ob der Benutzer Administrator-Rechte hat (1) oder nicht (0)
 BenutzerAllgemein;ID;;;1;bigint;;;1;;;;;Die ID des allgemeinen Benutzers
 BenutzerAllgemein;AnzeigeName;;;2;varchar;255;;0;;;;;Der Anzeigename für den allgemeinen Benutzer
@@ -294,6 +294,19 @@ Fach_Gliederungen;ZeugnisBez;;;10;varchar;130;;0;;;;;Zeugnisbezeihnung für die 
 Fach_Gliederungen;Lernfelder;;;11;text;;;0;;;;;Lernfelder für die gliederungsbezogenen Einstellungen zum Fach (BK)
 Fach_Gliederungen;Fachklasse_ID;;;12;bigint;;0;1;;;;;Fachklassen ID für die gliederungsbezogenen Einstellungen zum Fach (BK)
 Fach_Gliederungen;Sortierung;;;13;int;;32000;0;;;;;Sortierung dfür die gliederungsbezogenen Einstellungen zum Fach (BK)
+Fachgruppen;ID;;;1;bigint;;;1;;;;;ID des Fachgruppen-Core-Type, welcher auch ein Mapping zu den Fachgruppen von SchildNRW und Lupo bereitstellt
+Fachgruppen;Fachbereich;;;2;int;;;0;;;;;Fachbereich (Nr) der Fachgruppe aus Lupo
+Fachgruppen;SchildFgID;;;3;bigint;;;0;;;;;Fachgruppen ID aus SchildNRW
+Fachgruppen;FG_Bezeichnung;;;4;varchar;80;;1;;;;;Bezeichnung der Fachgruppe
+Fachgruppen;FG_Kuerzel;;;5;varchar;10;;0;;;;;Kürzel der Fachgruppe
+Fachgruppen;Schulformen;;;6;varchar;255;;0;;;;;Gibt an in welchen Schulformen die Fachgruppe zulässig ist
+Fachgruppen;FarbeR;;;7;int;;;0;;;;;Default-Fachgruppenfarbe (Rot-Wert)
+Fachgruppen;FarbeG;;;8;int;;;0;;;;;Default-Fachgruppenfarbe (Grün-Wert)
+Fachgruppen;FarbeB;;;9;int;;;0;;;;;Default-Fachgruppenfarbe (Blau-Wert)
+Fachgruppen;Sortierung;;;10;int;;;0;;;;;Eine Standard-Sortierreihenfolge für die Fachgruppen
+Fachgruppen;FuerZeugnis;;;11;int;;;1;;Boolean01Converter;;;Gibt an, ob die Fachgruppe für Unterteilungen auf Zeugnissen verwendet wird
+Fachgruppen;gueltigVon;;;12;int;;;0;;;;;Das Schuljahr, ab dem die Fachgruppe eingeführt wurde
+Fachgruppen;gueltigBis;;;13;int;;;0;;;;;Das Schuljahr, bis wann die Fachgruppe gültig ist
 Floskelgruppen;Kuerzel;;;1;varchar;10;;1;;;;;Kürzel der Floskelgruppe
 Floskelgruppen;Hauptgruppe;;;2;varchar;4;;0;;;;;Hauptgruppe der Floskelgruppe ermöglich es Floskel Unterkategorien zuzuordnen
 Floskelgruppen;Bezeichnung;;;3;varchar;50;;1;;;;;Bezeichnung der Floskelgruppe
@@ -306,6 +319,46 @@ Floskeln;FloskelFach;;;4;varchar;20;;0;;;;;Fach bei Fachfloskeln
 Floskeln;FloskelNiveau;;;5;varchar;2;;0;;;;;Niveau bei Fachfloskeln
 Floskeln;FloskelJahrgang;;;6;varchar;2;;0;;;;;Jahrgang bei Fachfloskeln
 Floskeln;SchulnrEigner;;1;7;int;;;1;;;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
+Gost_Blockung;ID;;;1;bigint;;;1;;;;;Kursblockung der Gymnasialen Oberstufe: ID der Blockung (generiert)
+Gost_Blockung;Name;;;2;varchar;255;Neue Blockung;1;;;;;Kursblockung der Gymnasialen Oberstufe: Textuelle Bezeichnung der Blockung
+Gost_Blockung;Abi_Jahrgang;;;3;int;;;1;;;;;Kursblockung der Gymnasialen Oberstufe: Der Abiturjahrgang, dem die Blockung zugeordnet ist
+Gost_Blockung;Halbjahr;;;4;int;;;1;;GOStHalbjahrConverter;;;Kursblockung der Gymnasialen Oberstufe: Das Halbjahr, welchem die Kursblockung zugeordnet ist (0=EF.1, 1=EF.2, 2=Q1.1, 3=Q1.2, 4=Q2.1, 5=Q2.2)
+Gost_Blockung_Kurse;ID;;;1;bigint;;;1;;;;;Kursblockung der Gymnasialen Oberstufe - Kurse der Blockung: ID des Kurses in der Blockung (generiert)
+Gost_Blockung_Kurse;Blockung_ID;;;2;bigint;;;1;;;;;Kursblockung der Gymnasialen Oberstufe - Kurse der Blockung: ID der Blockung
+Gost_Blockung_Kurse;Fach_ID;;;3;bigint;;;1;;;;;Kursblockung der Gymnasialen Oberstufe - Kurse der Blockung: ID des Faches
+Gost_Blockung_Kurse;Kursart;;;4;varchar;5;GK;1;;GOStKursartConverter;;;Kursblockung der Gymnasialen Oberstufe - Kurse der Blockung: ID der Kursart (siehe ID des Core-Types GostKursart)
+Gost_Blockung_Kurse;Kursnummer;;;5;int;;;1;;;;;Kursblockung der Gymnasialen Oberstufe - Kurse der Blockung: Die Nummer des Kurses in Bezug auf das Fach (Kurse eines Faches sind in einer Blockung üblicherweise von 1 ab durchnummeriert)
+Gost_Blockung_Kurse;IstKoopKurs;;;6;int;;0;1;;Boolean01Converter;;;Kursblockung der Gymnasialen Oberstufe - Kurse der Blockung: Gibt an, ob es sich um einen Kooperations-Kurs mit einer anderen Schule handelt oder nicht: 1 - true, 0 - false 
+Gost_Blockung_Kurse;BezeichnungSuffix;;;7;varchar;255;;0;;;;;Kursblockung der Gymnasialen Oberstufe - Kurse der Blockung: Ein Suffix, welches der Kursbezeichnung ggf. angehangen wird (kann z.B. zum Kennzeichnen von Kooperationskursen verwendet werden)
+Gost_Blockung_Kurse;Wochenstunden;;;8;int;;3;1;;;;;Kursblockung der Gymnasialen Oberstufe - Kurse der Blockung: Die Anzahl der Wochenstunden für den Kurs
+Gost_Blockung_Kurslehrer;Blockung_Kurs_ID;;;1;bigint;;;1;;;;;Kursblockung der Gymnasialen Oberstufe - Kurslehrer der Blockung: ID des Kurses
+Gost_Blockung_Kurslehrer;Lehrer_ID;;;2;bigint;;;0;;;;;Kursblockung der Gymnasialen Oberstufe - Kurslehrer der Blockung: ID des Lehrers, welcher dem Kurs zugeordnet ist - sofern einer zugeordnet wurde
+Gost_Blockung_Kurslehrer;Reihenfolge;;;3;int;;1;1;;;;;Kursblockung der Gymnasialen Oberstufe - Kurslehrer der Blockung: Eine Reihenfolge für die Lehrer, z.B. zur Unterscheidung des eigentlichen Kurslehrer (z.B. 1) und einer Zusatzkraft (z.B. 2)
+Gost_Blockung_Kurslehrer;Wochenstunden;;;4;int;;3;1;;;;;Kursblockung der Gymnasialen Oberstufe - Kurslehrer der Blockung: Die Anzahl der Wochenstunden für die der Lehrer in dem Kurs eingesetzt wird
+Gost_Blockung_Regeln;ID;;;1;bigint;;;1;;;;;Kursblockung der Gymnasialen Oberstufe - Regeldefinition der Blockung: ID der Regel (generiert)
+Gost_Blockung_Regeln;Blockung_ID;;;2;bigint;;;1;;;;;Kursblockung der Gymnasialen Oberstufe - Regeldefinition der Blockung: ID der Blockung
+Gost_Blockung_Regeln;Typ;;;3;int;;;1;;GostKursblockungRegelTypConverter;;;Kursblockung der Gymnasialen Oberstufe - Regeldefinition der Blockung: Die ID des Typs der Regeldefinition (siehe Core-Type GostKursblockungRegeltyp)
+Gost_Blockung_Regelparameter;Regel_ID;;;1;bigint;;;1;;;;;Kursblockung der Gymnasialen Oberstufe - Parameterdefinition für Regeln der Blockung: ID der Regel
+Gost_Blockung_Regelparameter;Nummer;;;2;int;;;1;;;;;Kursblockung der Gymnasialen Oberstufe - Regeldefinition der Blockung: Die Nummer des Parameters der Regel, beginnend bei 1
+Gost_Blockung_Regelparameter;Parameter;;;3;bigint;;;1;;;;;Kursblockung der Gymnasialen Oberstufe - Regeldefinition der Blockung: Der Wert des Parameters der Regel (hängt vom Typ der Regel ab)
+Gost_Blockung_Schienen;ID;;;1;bigint;;;1;;;;;Kursblockung der Gymnasialen Oberstufe - Schienen der Blockung: ID der Schiene in der Blockung (generiert)
+Gost_Blockung_Schienen;Blockung_ID;;;2;bigint;;;1;;;;;Kursblockung der Gymnasialen Oberstufe - Schienen der Blockung: ID der Blockung
+Gost_Blockung_Schienen;Nummer;;;3;int;;;1;;;;;Kursblockung der Gymnasialen Oberstufe - Schienen der Blockung: Die Nummer der Schiene, beginnend bei 1
+Gost_Blockung_Schienen;Bezeichnung;;;4;varchar;255;Schiene;1;;;;;Kursblockung der Gymnasialen Oberstufe - Schienen der Blockung: Bezeichnung der Schiene (z.B. LK Schiene 1)
+Gost_Blockung_Schienen;Wochenstunden;;;5;int;;3;1;;;;;Kursblockung der Gymnasialen Oberstufe - Schienen der Blockung: Die Anzahl der Wochenstunden, welche der Schiene zugeordnet sind
+Gost_Blockung_Zwischenergebnisse;ID;;;1;bigint;;;1;;;;;Kursblockung der Gymnasialen Oberstufe - Zwischenergebnis einer Blockung: ID der Zwischenergebnisses (generiert)
+Gost_Blockung_Zwischenergebnisse;Blockung_ID;;;2;bigint;;;1;;;;;Kursblockung der Gymnasialen Oberstufe - Zwischenergebnis einer Blockung: ID der Blockung
+Gost_Blockung_Zwischenergebnisse;AnzahlUmwaehler;;;3;int;;0;1;;;;;Kursblockung der Gymnasialen Oberstufe - Zwischenergebnis einer Blockung: Die Anzahl der Umwähler
+Gost_Blockung_Zwischenergebnisse;Bewertung;;;4;bigint;;-1;1;;;;;Kursblockung der Gymnasialen Oberstufe - Zwischenergebnis einer Blockung: Ein Wert zur Bewertung der Blockung
+Gost_Blockung_Zwischenergebnisse;IstMarkiert;;;5;int;;0;1;;Boolean01Converter;;;Kursblockung der Gymnasialen Oberstufe - Zwischenergebnis einer Blockung: Gibt an, ob das Zwichenergebnis von einem Benutzer markiert wurde oder nicht: 1 - true, 0 - false 
+Gost_Blockung_Zwischenergebnisse_Kurs_Schienen;Zwischenergebnis_ID;;;1;bigint;;;1;;;;;Kursblockung der Gymnasialen Oberstufe - Kurs-Schienen-Zuordnung eines Zwischenergebnisses einer Blockung: ID des Zwischenergebnisses
+Gost_Blockung_Zwischenergebnisse_Kurs_Schienen;Blockung_Kurs_ID;;;2;bigint;;;1;;;;;Kursblockung der Gymnasialen Oberstufe - Kurs-Schienen-Zuordnung eines Zwischenergebnisses einer Blockung: ID des Kurses
+Gost_Blockung_Zwischenergebnisse_Kurs_Schienen;Schienen_ID;;;3;bigint;;;1;;;;;Kursblockung der Gymnasialen Oberstufe - Kurs-Schienen-Zuordnung eines Zwischenergebnisses einer Blockung: ID der Schiene aus der Blockung
+Gost_Blockung_Zwischenergebnisse_Kurs_Schienen;HatKollision;;;4;int;;0;1;;Boolean01Converter;;;Kursblockung der Gymnasialen Oberstufe - Kurs-Schienen-Zuordnung eines Zwischenergebnisses einer Blockung: Gibt an, ob bei der Schiene eine Kollision in der Zuordnung mindestens eines Schülers vorliegt oder nicht: 1 - true, 0 - false 
+Gost_Blockung_Zwischenergebnisse_Kurs_Schueler;Zwischenergebnis_ID;;;1;bigint;;;1;;;;;Kursblockung der Gymnasialen Oberstufe - Kurs-Schüler-Zuordnung eines Zwischenergebnisses einer Blockung: ID des Zwischenergebnisses
+Gost_Blockung_Zwischenergebnisse_Kurs_Schueler;Blockung_Kurs_ID;;;2;bigint;;;1;;;;;Kursblockung der Gymnasialen Oberstufe - Kurs-Schüler-Zuordnung eines Zwischenergebnisses einer Blockung: ID des Kurses
+Gost_Blockung_Zwischenergebnisse_Kurs_Schueler;Schueler_ID;;;3;bigint;;;1;;;;;Kursblockung der Gymnasialen Oberstufe - Kurs-Schüler-Zuordnung eines Zwischenergebnisses einer Blockung: ID des Schülers
+Gost_Blockung_Zwischenergebnisse_Kurs_Schueler;IstKollision;;;4;int;;0;1;;Boolean01Converter;;;Kursblockung der Gymnasialen Oberstufe - Kurs-Schüler-Zuordnung eines Zwischenergebnisses einer Blockung: Gibt an, ob bei dieser Schülerzuordnung zu einem Kurs eine Kollision mit der Zuordnung zu einem anderen Kurs vorliegt oder nicht: 1 - true, 0 - false 
 Gost_Jahrgang_Beratungslehrer;Abi_Jahrgang;;;1;int;;;1;;;;;Gymnasiale Oberstufe - Jahrgangsdaten: Schuljahr, in welchem der Jahrgang das Abitur macht 
 Gost_Jahrgang_Beratungslehrer;Lehrer_ID;;;2;bigint;;;1;;;;;Gymnasiale Oberstufe - Jahrgangsdaten: ID des Beratungslehrers in der Lehrertabelle
 Gost_Jahrgang_Faecher;Abi_Jahrgang;;;1;int;;;1;;;;;Gymnasiale Oberstufe - Jahrgangsdaten: Schuljahr, in welchem der Jahrgang das Abitur macht
@@ -434,7 +487,7 @@ K_AllgAdresse;AllgAdrStrassenname;;;7;varchar;55;;0;strassenname;;;;Straßenname
 K_AllgAdresse;AllgAdrHausNr;;;8;varchar;10;;0;hausnr;;;;Hausnummer wenn getrennt gespeichert
 K_AllgAdresse;AllgAdrHausNrZusatz;;;9;varchar;30;;0;hausnrzusatz;;;;Zusatz zur Hausnummer wenn Hausnummern getrennt gespeichert werden
 K_AllgAdresse;AllgAdrOrt_ID;;;10;bigint;;;0;ort_id;;;;OrtID des Betriebs
-K_AllgAdresse;AllgAdrPLZ;;;11;varchar;10;;0;plz;;;;PLZ des Betriebs
+K_AllgAdresse;AllgAdrPLZ;;3;11;varchar;10;;0;plz;;;;DEPRECATED: PLZ des Betriebs
 K_AllgAdresse;AllgAdrTelefon1;;;12;varchar;20;;0;telefon1;;;;Telefonnummer1 des Betriebs
 K_AllgAdresse;AllgAdrTelefon2;;;13;varchar;20;;0;telefon2;;;;Telefonnummer2 des Betriebs
 K_AllgAdresse;AllgAdrFax;;;14;varchar;20;;0;fax;;;;Faxnummer des Betriebs
@@ -571,7 +624,7 @@ K_Lehrer;Strassenname;;;15;varchar;55;;0;;;;;Straßenname der Lehrkraft
 K_Lehrer;HausNr;;;16;varchar;10;;0;;;;;Hausnummer wenn getrennt gespeichert
 K_Lehrer;HausNrZusatz;;;17;varchar;30;;0;;;;;Zusatz zur Hausnummer wenn Hausnummern getrennt gespeichert werden
 K_Lehrer;Ort_ID;;;18;bigint;;;0;;;;;Adressdaten des Lehrers: Fremdschlüssel auf die Katalog-Tabelle mit den Orten
-K_Lehrer;PLZ;;;19;varchar;10;;0;;;;;Adressdaten des Lehrers: Postleitzahl - TODO Ort als Spalte in der Tabelle ergänzen, ähnlich wie bei Schüler, wichtig da ansonsten Probleme auftauchen, wenn ein PLZ ? Ortsname nicht eindeutig ist, was gelegentlich vorkommt
+K_Lehrer;PLZ;;3;19;varchar;10;;0;;;;;DEPRECATED: Adressdaten des Lehrers: Postleitzahl - Ort als Spalte in der Tabelle ergänzen, ähnlich wie bei Schüler, wichtig da ansonsten Probleme auftauchen, wenn ein PLZ ? Ortsname nicht eindeutig ist, was gelegentlich vorkommt
 K_Lehrer;Ortsteil_ID;;;20;bigint;;;0;;;;;Adressdaten des Lehrers: Fremdschlüssel auf die Katalog-Tabelle mit den Ortsteilen
 K_Lehrer;Tel;;;21;varchar;20;;0;telefon;;;;Adressdaten des Lehrers: Telefonnummer
 K_Lehrer;Handy;;;22;varchar;20;;0;telefonMobil;;;;Adressdaten des Lehrers: Mobilnummer oder Faxnummer
@@ -628,7 +681,7 @@ K_Ort;SchulnrEigner;;1;9;int;;;0;;;;;Die Schulnummer zu welcher der Datensatz ge
 K_Ortsteil;ID;;;1;bigint;;;1;;;;;ID des Ortsteils
 K_Ortsteil;Bezeichnung;;;2;varchar;30;;1;;;;;Bezeichnung des Ortsteils
 K_Ortsteil;Ort_ID;;;3;bigint;;;0;;;;;Fremdschlüssel auf den Ort, dem der Ortsteil zugeordnet ist
-K_Ortsteil;PLZ;;;4;varchar;10;;0;;;;;PLZ des Ortsteils
+K_Ortsteil;PLZ;;3;4;varchar;10;;0;;;;;PLZ des Ortsteils
 K_Ortsteil;Sortierung;;;5;int;;32000;0;;;;;Sortierung des Ortsteils
 K_Ortsteil;Sichtbar;;;6;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;;;Sichbarkeit des Ortsteils
 K_Ortsteil;Aenderbar;;;7;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;;;Änderbarkeit des Ortsteils
@@ -775,6 +828,11 @@ Kurse;Jahrgaenge;;;19;varchar;50;;0;;;;;Auflistung der Jahrgänge wenn Kurs übe
 Kurse;Jahr;;1;20;int;;;1;;;;;Schuljahr des Kurses
 Kurse;Abschnitt;;1;21;int;;;1;;;;;Abschnitt des Kurses
 Kurse;LehrerKrz;;1;9;varchar;22;;0;;;;;DEPRECATED: Lehrerkürzel des unterrichtenden Lehrers des Kurses
+KursFortschreibungsarten;ID;;;1;bigint;;;1;;;;;ID der Kurs-Fortschreibungsart
+KursFortschreibungsarten;Kuerzel;;;2;varchar;20;N;1;;;1;;Das Kürzel der Kurs-Fortschreibungsart
+KursFortschreibungsarten;Bezeichnung;;;3;varchar;255;;0;;;1;;Die Bezeichnung der Kurs-Fortschreibungsart
+KursFortschreibungsarten;gueltigVon;;;4;int;;;0;;;;;Der Datensatz ist gültig ab dem Schuljahr
+KursFortschreibungsarten;gueltigBis;;;5;int;;;0;;;;;Der Datensatz ist gültig bis zu dem Schuljahr
 KursLehrer;Kurs_ID;;;1;bigint;;;1;;;;;ID des Kurses zu denen der Lehrer gehört
 KursLehrer;Lehrer_ID;;;2;bigint;;;1;;;;;ID des Lehrers
 KursLehrer;Anteil;;;3;float;;;0;;;;;Wochenstunden für die Zusatzkraft
@@ -871,6 +929,22 @@ NichtMoeglAbiFachKombi;PK;;;6;varchar;30;;1;;;;;Primärschlüssel aus FachIDs un
 NichtMoeglAbiFachKombi;Sortierung;;;7;int;;;0;;;;;Sortierung der nicht möglichen Kombination
 NichtMoeglAbiFachKombi;Phase;;;8;varchar;10;;0;;;;;Über welche Jahrgangsstufen geht die Kombination nicht
 NichtMoeglAbiFachKombi;Typ;;;9;varchar;1;;0;;;;;Nicht mögliche Fächerkombination (-) oder Fächerprofil (+)
+Noten;ID;;;1;bigint;;;1;;;;;ID der Noten
+Noten;Kuerzel;;;2;varchar;2;;1;;;;;Das Kürzel der Note
+Noten;IstTendenznote;;;3;int;;0;1;;Boolean01Converter;;;Gibt an, ob es sich um eine Tendenznote (plus) oder (minus) handelt
+Noten;Text;;;4;varchar;255;;0;;;;;Die Bezeichnung der Note
+Noten;AufZeugnis;;;5;int;;0;1;;Boolean01Converter;;;Gibt an, ob die Note auf einem Zeugnis als erteilte Note gedruckt wird oder nicht.
+Noten;Notenpunkte;;;6;int;;;0;;;;;Die Notenpunkte der Note in der Sekundarstufe II
+Noten;TextLaufbahnSII;;;7;varchar;2;;0;;;;;Die Bezeichnung der Note in der Sekundarstufe II, die für die Laufbahn zum Abitur verwendet wird
+Noten;AufLaufbahnSII;;;8;int;;0;1;;Boolean01Converter;;;Gibt an, ob die Note bei der Laufbahn in der Sekundarstufe II gedruckt wird oder nicht.
+Noten;Sortierung;;;9;int;;;1;;;;;Eine Default-Sortierung der Noten
+Noten;gueltigVon;;;10;int;;;0;;;;;Der Datensatz ist gültig ab dem Schuljahr
+Noten;gueltigBis;;;11;int;;;0;;;;;Der Datensatz ist gültig bis zu dem Schuljahr
+PersonalTypen;ID;;;1;bigint;;;1;;;;;ID des Personal-Typs
+PersonalTypen;Kuerzel;;;2;varchar;20;;0;;;1;;Das Kürzel des Personal-Typs
+PersonalTypen;Bezeichnung;;;3;varchar;255;;0;;;1;;Die (Lang-)Bezeichnung des Personal-Typs
+PersonalTypen;gueltigVon;;;4;int;;;0;;;;;Der Datensatz ist gültig ab dem Schuljahr
+PersonalTypen;gueltigBis;;;5;int;;;0;;;;;Der Datensatz ist gültig bis zu dem Schuljahr
 Personengruppen;ID;;;1;bigint;;;1;;;;;ID der Personengruppe
 Personengruppen;SchulnrEigner;;1;2;int;;;1;;;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
 Personengruppen;Gruppenname;;;3;varchar;100;;1;;;;;Gruppenname der Personengruppe
@@ -948,15 +1022,6 @@ Schildintern_DQR_Niveaus;FKS;;;2;varchar;8;;1;;;;;Schildintern Tabelle: DQR-Nive
 Schildintern_DQR_Niveaus;DQR_Niveau;;;3;int;;;1;;;;;Schildintern Tabelle: DQR-Niveau als Nummer
 Schildintern_DQR_Niveaus;gueltigVon;;;4;int;;;0;;;;;Schildintern Tabelle: Gültig ab Schuljahr
 Schildintern_DQR_Niveaus;gueltigBis;;;5;int;;;0;;;;;Schildintern Tabelle: Gültig bis Schuljahr
-Schildintern_Fachgruppen;FG_ID;;;1;bigint;;;1;;;;;Schildintern Tabelle: ID der Fachgruppe
-Schildintern_Fachgruppen;FG_SF;;;2;varchar;50;;0;;;;;Schildintern Tabelle: Schulform der Fachgruppe
-Schildintern_Fachgruppen;FG_Bezeichnung;;;3;varchar;50;;0;;;;;Schildintern Tabelle: Bezeichnung der Fachgruppe
-Schildintern_Fachgruppen;FG_Farbe;;;4;int;;;0;;;;;Schildintern Tabelle: Farbe der Fachgruppe DEPRECATED
-Schildintern_Fachgruppen;FG_Sortierung;;;5;int;;;0;;;;;Schildintern Tabelle: Sortierung  der Fachgruppe DEPRECATED
-Schildintern_Fachgruppen;FG_Kuerzel;;;6;varchar;5;;0;;;;;Schildintern Tabelle: Kürzel der Fachgruppe
-Schildintern_Fachgruppen;FG_Zeugnis;;;7;varchar;1;;0;;;;;Schildintern Tabelle: Wahrscheinlich DEPRECATED
-Schildintern_Fachgruppen;gueltigVon;;;8;int;;;0;;;;;Schildintern Tabelle: Gültig ab Schuljahr
-Schildintern_Fachgruppen;gueltigBis;;;9;int;;;0;;;;;Schildintern Tabelle: Gültig bis Schuljahr
 Schildintern_FaecherSortierung;Fach;;;1;varchar;2;;1;;;;;Schildintern Tabelle: Fächerkürzel der Sortierung
 Schildintern_FaecherSortierung;Bezeichnung;;;2;varchar;80;;0;;;;;Schildintern Tabelle: Bezeichnung der Sortierung
 Schildintern_FaecherSortierung;Sortierung1;;;3;int;;;0;;;;;Schildintern Tabelle: DEPRECATED: 
@@ -971,6 +1036,13 @@ Schildintern_FilterFehlendeEintraege;Tabellen;;;4;varchar;50;;0;;;;;Schildintern
 Schildintern_FilterFehlendeEintraege;SQLText;;;5;varchar;100;;0;;;;;Schildintern Tabelle: Abfrage die zur Prüfung des Feldes führt.
 Schildintern_FilterFehlendeEintraege;Schulform;;;6;varchar;50;;0;;;;;Schildintern Tabelle: ggf Schulform für bestimmte Schulformen
 Schildintern_FilterFehlendeEintraege;Feldtyp;;;7;varchar;1;;0;;;;;Schildintern Tabelle: Feldty des zu prüfenden Feldes
+Schildintern_FilterFehlendeEintraegeSchild3;ID;;;1;bigint;;;1;;;;;Schildintern Tabelle: ID des Eintrags die bei der Prüfung auf fehlende Einträge genutzt werden
+Schildintern_FilterFehlendeEintraegeSchild3;Beschreibung;;;2;varchar;100;;0;;;;;Schildintern Tabelle: Beschreibung des Eintrags die bei der Prüfung auf fehlende Einträge genutzt werden
+Schildintern_FilterFehlendeEintraegeSchild3;Feldname;;;3;varchar;30;;0;;;;;Schildintern Tabelle: Feldname des zu prüfenden Feldes
+Schildintern_FilterFehlendeEintraegeSchild3;Tabellen;;;4;varchar;50;;0;;;;;Schildintern Tabelle: Tabellenname des zu prüfenden Feldes
+Schildintern_FilterFehlendeEintraegeSchild3;SQLText;;;5;varchar;100;;0;;;;;Schildintern Tabelle: Abfrage die zur Prüfung des Feldes führt.
+Schildintern_FilterFehlendeEintraegeSchild3;Schulform;;;6;varchar;50;;0;;;;;Schildintern Tabelle: ggf Schulform für bestimmte Schulformen
+Schildintern_FilterFehlendeEintraegeSchild3;Feldtyp;;;7;varchar;1;;0;;;;;Schildintern Tabelle: Feldty des zu prüfenden Feldes
 Schildintern_FilterFeldListe;ID;;;1;bigint;;;1;;;;;Schildintern Tabelle: ID für den Eintrag welche Felder iim Attributsfilter zur Verfügung stehen.
 Schildintern_FilterFeldListe;Bezeichnung;;;2;varchar;50;;0;;;;;Schildintern Tabelle: Bezeichnung im Attributsfilter
 Schildintern_FilterFeldListe;DBFeld;;;3;varchar;50;;0;;;;;Schildintern Tabelle: Datenbankfeld im Attributsfilter
@@ -984,17 +1056,6 @@ Schildintern_HSchStatus;Bezeichnung;;;2;varchar;255;;0;;;;;Schildintern Tabelle:
 Schildintern_HSchStatus;Sortierung;;;3;int;;;0;;;;;Schildintern Tabelle: Sortierung des Schülerstatus
 Schildintern_HSchStatus;InSimExp;;;4;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;;;Schildintern Tabelle: DEPRECATED: 
 Schildintern_HSchStatus;SIMAbschnitt;;;5;varchar;1;;0;;;;;Schildintern Tabelle: DEPRECATED: 
-Schildintern_K_Schulnote;ID;;;1;bigint;;;1;;;;;Schildintern Tabelle: ID der zur Verfügung stehenden Noten
-Schildintern_K_Schulnote;Krz;;;2;varchar;2;;0;;;;;Schildintern Tabelle: Kürzel der Schulnote
-Schildintern_K_Schulnote;Art;;;3;varchar;1;;0;;;;;Schildintern Tabelle: Art der Note
-Schildintern_K_Schulnote;Bezeichnung;;;4;varchar;40;;0;;;;;Schildintern Tabelle: Klartext der Note
-Schildintern_K_Schulnote;Zeugnisnotenbez;;;5;varchar;40;;0;;;;;Schildintern Tabelle: Zeugnisbezeichnung der Note
-Schildintern_K_Schulnote;Punkte;;;6;varchar;2;;0;;;;;Schildintern Tabelle: Note in Punkten für SII
-Schildintern_K_Schulnote;Sortierung;;;7;int;;;0;;;;;Schildintern Tabelle: Sortierung der Note
-Schildintern_K_Schulnote;Sichtbar;;;8;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;;;Schildintern Tabelle: Sichtbarkeit der Note
-Schildintern_K_Schulnote;Aenderbar;;;9;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;;;Schildintern Tabelle: gibt an ob die Note änderbar ist
-Schildintern_K_Schulnote;gueltigVon;;;10;int;;;0;;;;;Schildintern Tabelle: Gültig ab Schuljahr
-Schildintern_K_Schulnote;gueltigBis;;;11;int;;;0;;;;;Schildintern Tabelle: Gültig bis Schuljahr
 Schildintern_KAoA_Anschlussoption;ID;;;1;bigint;;;1;;;;;Schildintern Tabelle: Eindeutige ID für den Datensatz
 Schildintern_KAoA_Anschlussoption;gueltigVon;;;2;int;;;0;;;;;Schildintern Tabelle: Der Datensatz ist gültig ab dem Datum
 Schildintern_KAoA_Anschlussoption;gueltigBis;;;3;int;;;0;;;;;Schildintern Tabelle: Der Datensatz ist gültig bis zu dem Datum
@@ -1164,7 +1225,7 @@ Schueler;Strassenname;;;12;varchar;55;;0;;;;;Straßenname des Schülers
 Schueler;HausNr;;;13;varchar;10;;0;;;;;Hausnummer wenn getrennt gespeichert
 Schueler;HausNrZusatz;;;14;varchar;30;;0;;;;;Zusatz zur Hausnummer wenn Hausnummern getrennt gespeichert werden
 Schueler;Ort_ID;;;15;bigint;;;0;;;;;ID des Orts des Schülers
-Schueler;PLZ;;;16;varchar;10;;0;;;;;PLZ des Schülers
+Schueler;PLZ;;3;16;varchar;10;;0;;;;;DEPRECATED: PLZ des Schülers
 Schueler;OrtAbk;;1;17;varchar;50;;0;;;;;DEPRECATED: Klartext des Orts des Schülers
 Schueler;Ortsteil_ID;;;18;bigint;;;0;;;;;ID des Ortsteils des Schülers
 Schueler;Telefon;;;19;varchar;20;;0;;;;;Telefonnummer des Schülers
@@ -1299,6 +1360,7 @@ Schueler;CredentialID;;;147;bigint;;;0;;;;;Die ID des Credential-Eintrags
 Schueler;AktSchuljahr;;1;148;smallint;;;0;;;;;DEPRECATED: Aktuelles Schuljahr des Schülers
 Schueler;AktAbschnitt;;1;149;smallint;;;0;;;;;DEPRECATED: Aktueller Abschnitt des Schülers
 Schueler;Klasse;;1;150;varchar;15;;0;;;;;DEPRECATED: Klartext Klasse des Schülers
+Schueler;NeuZugewandert;;;151;int;;0;1;;Boolean01Converter;;;Gibt an, ob der Schueler neu zugewandert ist (1) oder nicht (0). Wurde in der Ukraine Krise im Migrationshintergrund geschaffen.
 Schueler_AllgAdr;ID;;;1;bigint;;;1;;;;;ID des Betriebeeintrags beim Schüler
 Schueler_AllgAdr;Schueler_ID;;;2;bigint;;;1;;;;;SchülerID des Betriebeeintrags beim Schüler
 Schueler_AllgAdr;Adresse_ID;;;3;bigint;;;1;;;;;AdressID des Betriebeeintrags beim Schüler
@@ -1505,7 +1567,7 @@ SchuelerErzAdr;ErzStrassenname;;;13;varchar;55;;0;;;;;Straßenname des Erzieherd
 SchuelerErzAdr;ErzHausNr;;;14;varchar;10;;0;;;;;Hausnummer wenn getrennt gespeichert
 SchuelerErzAdr;ErzHausNrZusatz;;;15;varchar;30;;0;;;;;Zusatz zur Hausnummer wenn Hausnummern getrennt gespeichert werden
 SchuelerErzAdr;ErzOrt_ID;;;13;bigint;;;0;;;;;OrtID zum Erzieherdatensatz
-SchuelerErzAdr;ErzPLZ;;;14;varchar;10;;0;;;;;PLZ zum Erzieherdatensatz
+SchuelerErzAdr;ErzPLZ;;3;14;varchar;10;;0;;;;;DEPRECATED: PLZ zum Erzieherdatensatz
 SchuelerErzAdr;ErzOrtsteil_ID;;;15;bigint;;;0;;;;;OrtsteilID zum Erzieherdatensatz
 SchuelerErzAdr;ErzAnschreiben;;;16;varchar;1;+;0;;BooleanPlusMinusDefaultPlusConverter;;;Erhältanschreiben Ja Nein zum Erzieherdatensatz
 SchuelerErzAdr;Sortierung;;;17;int;;;0;;;;;Sortierung zum Erzieherdatensatz
@@ -1612,32 +1674,28 @@ SchuelerFoerderempfehlungen;Schueler_ID;;1;2;bigint;;;1;;;;;DEPRECATED: Schüler
 SchuelerFoerderempfehlungen;Abschnitt_ID;;;3;bigint;;;0;;;;;ID der zugehörigen Schülerlernabschnittsdaten
 SchuelerFoerderempfehlungen;DatumAngelegt;;;4;date;;;1;;DatumConverter;;;Anlegedatum der Förderempfehlung
 SchuelerFoerderempfehlungen;Klassen_ID;;;5;bigint;;;0;;;;;Klassen-ID der Förderempfehlung
-SchuelerFoerderempfehlungen;Fach_ID;;;6;bigint;;;0;;;;;FachID der Förderempfehlung
-SchuelerFoerderempfehlungen;Lehrer_ID;;;7;bigint;;;0;;;;;LehrerID der Förderempfehlung
-SchuelerFoerderempfehlungen;DatumAenderungSchild;;;8;datetime;;;0;;;;;Änderungsdatum in Schild-NRW der Förderempfehlung
-SchuelerFoerderempfehlungen;DatumAenderungSchildWeb;;;9;datetime;;;0;;;;;Änderungsdatum in SchildWeb der Förderempfehlung
-SchuelerFoerderempfehlungen;Kurs;;;10;varchar;20;;0;;;;;Kursbezeichnung der Förderempfehlung
-SchuelerFoerderempfehlungen;Inhaltl_Prozessbez_Komp;;;11;text;;;0;;;;;Inhalt Prozessbezogene Kompetenzen der Förderempfehlung
-SchuelerFoerderempfehlungen;Methodische_Komp;;;12;text;;;0;;;;;Inhalte methodische Kompetenzen der Förderempfehlung
-SchuelerFoerderempfehlungen;Lern_Arbeitsverhalten;;;13;text;;;0;;;;;Inhalt Lern und Arbeitsverhalten der Förderempfehlung
-SchuelerFoerderempfehlungen;Massn_Inhaltl_Prozessbez_Komp;;;14;text;;;0;;;;;Inhalt Maßnahmen Prozessbezogenen Kompetenzen der Förderempfehlung
-SchuelerFoerderempfehlungen;Massn_Methodische_Komp;;;15;text;;;0;;;;;Inhalt Maßnahmen methodische Kompetenzen der Förderempfehlung
-SchuelerFoerderempfehlungen;Massn_Lern_Arbeitsverhalten;;;16;text;;;0;;;;;Inhalt Maßnahmen Lern und Arbeitsverhalten der Förderempfehlung
-SchuelerFoerderempfehlungen;Verantwortlichkeit_Eltern;;;17;text;;;0;;;;;Inhalt Verantwortlichkeit der Eltern der Förderempfehlung
-SchuelerFoerderempfehlungen;Verantwortlichkeit_Schueler;;;18;text;;;0;;;;;Inhalt Verantwortlichkeit des Schülers der Förderempfehlung
-SchuelerFoerderempfehlungen;Zeitrahmen_von_Datum;;;19;date;;;0;;DatumConverter;;;Zeitrahmen Datum von der Förderempfehlung
-SchuelerFoerderempfehlungen;Zeitrahmen_bis_Datum;;;20;date;;;0;;DatumConverter;;;Zeitrahmen Datum bis der Förderempfehlung
-SchuelerFoerderempfehlungen;Ueberpruefung_Datum;;;21;date;;;0;;DatumConverter;;;Datum der Überprüfung der Förderempfehlung
-SchuelerFoerderempfehlungen;Naechstes_Beratungsgespraech;;;22;date;;;0;;DatumConverter;;;Datum nächstes Beratungsgespräch der Förderempfehlung
-SchuelerFoerderempfehlungen;Leistung_ID;;;23;bigint;;;0;;;;;IDLeistungsdaten  der Förderempfehlung
-SchuelerFoerderempfehlungen;Kurs_ID;;;24;bigint;;;0;;;;;IDKurs  der Förderempfehlung
-SchuelerFoerderempfehlungen;EingabeFertig;;;25;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;;;Eingabe abgeschlossen Ja Nein  der Förderempfehlung
-SchuelerFoerderempfehlungen;Faecher;;;26;varchar;255;;0;;;;;Fächer der Förderempfehlung im Kürzel komma getrennt
-SchuelerFoerderempfehlungen;Abgeschlossen;;;27;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;;;Datum Abgeschlossen der Förderempfehlung
-SchuelerFoerderempfehlungen;Jahr;;1;28;int;;;0;;;;;Schuljahr der Förderempfehlung
-SchuelerFoerderempfehlungen;Abschnitt;;1;29;int;;;0;;;;;Abschnitt der Förderempfehlung
-SchuelerFoerderempfehlungen;SchulnrEigner;;1;30;int;;;1;;;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
-SchuelerFoerderempfehlungen;Klasse;;1;5;varchar;15;;0;;;;;DEPRECATED: Klassen-Bezeichnung der Förderempfehlung
+SchuelerFoerderempfehlungen;Lehrer_ID;;;6;bigint;;;0;;;;;LehrerID der Förderempfehlung
+SchuelerFoerderempfehlungen;DatumAenderungSchild;;;7;datetime;;;0;;;;;Änderungsdatum in Schild-NRW der Förderempfehlung
+SchuelerFoerderempfehlungen;DatumAenderungSchildWeb;;;8;datetime;;;0;;;;;Änderungsdatum in SchildWeb der Förderempfehlung
+SchuelerFoerderempfehlungen;Inhaltl_Prozessbez_Komp;;;9;text;;;0;;;;;Inhalt Prozessbezogene Kompetenzen der Förderempfehlung
+SchuelerFoerderempfehlungen;Methodische_Komp;;;10;text;;;0;;;;;Inhalte methodische Kompetenzen der Förderempfehlung
+SchuelerFoerderempfehlungen;Lern_Arbeitsverhalten;;;11;text;;;0;;;;;Inhalt Lern und Arbeitsverhalten der Förderempfehlung
+SchuelerFoerderempfehlungen;Massn_Inhaltl_Prozessbez_Komp;;;12;text;;;0;;;;;Inhalt Maßnahmen Prozessbezogenen Kompetenzen der Förderempfehlung
+SchuelerFoerderempfehlungen;Massn_Methodische_Komp;;;13;text;;;0;;;;;Inhalt Maßnahmen methodische Kompetenzen der Förderempfehlung
+SchuelerFoerderempfehlungen;Massn_Lern_Arbeitsverhalten;;;14;text;;;0;;;;;Inhalt Maßnahmen Lern und Arbeitsverhalten der Förderempfehlung
+SchuelerFoerderempfehlungen;Verantwortlichkeit_Eltern;;;15;text;;;0;;;;;Inhalt Verantwortlichkeit der Eltern der Förderempfehlung
+SchuelerFoerderempfehlungen;Verantwortlichkeit_Schueler;;;16;text;;;0;;;;;Inhalt Verantwortlichkeit des Schülers der Förderempfehlung
+SchuelerFoerderempfehlungen;Zeitrahmen_von_Datum;;;17;date;;;0;;DatumConverter;;;Zeitrahmen Datum von der Förderempfehlung
+SchuelerFoerderempfehlungen;Zeitrahmen_bis_Datum;;;18;date;;;0;;DatumConverter;;;Zeitrahmen Datum bis der Förderempfehlung
+SchuelerFoerderempfehlungen;Ueberpruefung_Datum;;;19;date;;;0;;DatumConverter;;;Datum der Überprüfung der Förderempfehlung
+SchuelerFoerderempfehlungen;Naechstes_Beratungsgespraech;;;20;date;;;0;;DatumConverter;;;Datum nächstes Beratungsgespräch der Förderempfehlung
+SchuelerFoerderempfehlungen;EingabeFertig;;;21;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;;;Eingabe abgeschlossen Ja Nein  der Förderempfehlung
+SchuelerFoerderempfehlungen;Faecher;;;22;varchar;255;;0;;;;;Fächer der Förderempfehlung im Kürzel komma getrennt
+SchuelerFoerderempfehlungen;Abgeschlossen;;;23;varchar;1;-;0;;BooleanPlusMinusDefaultMinusConverter;;;Datum Abgeschlossen der Förderempfehlung
+SchuelerFoerderempfehlungen;Jahr;;1;24;int;;;0;;;;;Schuljahr der Förderempfehlung
+SchuelerFoerderempfehlungen;Abschnitt;;1;25;int;;;0;;;;;Abschnitt der Förderempfehlung
+SchuelerFoerderempfehlungen;SchulnrEigner;;1;26;int;;;1;;;;;Die Schulnummer zu welcher der Datensatz gehört – wird benötigt, wenn mehrere Schulen in einem Schema der Datenbank gespeichert werden
+SchuelerFoerderempfehlungen;Klasse;;1;27;varchar;15;;0;;;;;DEPRECATED: Klassen-Bezeichnung der Förderempfehlung
 SchuelerFotos;Schueler_ID;;;1;bigint;;;1;;;;;SchülerID zum Foto
 SchuelerFotos;Foto;;1;2;longblob;;;0;;;;;Schülerfoto im binär-Format
 SchuelerFotos;FotoBase64;;;3;text;;;0;;;;;Schülerfoto im Base64-Format
@@ -1838,7 +1896,7 @@ SchuelerSprachpruefungen;ID;;;1;bigint;;;1;;;;;ID des Sprachprüfungseintrags
 SchuelerSprachpruefungen;Schueler_ID;;;2;bigint;;;1;;;;;ID des Schülers des Sprachprüfungseintrags
 SchuelerSprachpruefungen;Sprache;;;3;varchar;2;;1;;;;;Atomares Sprachkürzel aus StatKue_SVWS_ZulaessigeFaecher
 SchuelerSprachpruefungen;ASDJahrgang;;;4;varchar;2;;0;;;;;ASDJahrgangsbezeichnung, in der die Sprachprüfung abgelegt wurde
-SchuelerSprachpruefungen;Anspruchsniveau_ID;;;5;bigint;;;0;;;;;Das Anspruchsniveau der Sprachprüfung (angelehnt an einen entsprechenden Schulabschluss)
+SchuelerSprachpruefungen;Anspruchsniveau_ID;;;5;bigint;;;0;Anspruchsniveau;SprachpruefungniveauConverter;1;;Das Anspruchsniveau der Sprachprüfung (angelehnt an einen entsprechenden Schulabschluss)
 SchuelerSprachpruefungen;Pruefungsdatum;;;6;date;;;0;;;;;Datum der Sprachprüfung
 SchuelerSprachpruefungen;ErsetzteSprache;;;7;varchar;2;;0;;;;;Atomares Sprachkürzel aus StatKue_SVWS_ZulaessigeFaecher für die ersetzte Sprache
 SchuelerSprachpruefungen;IstHSUPruefung;;;8;int;;;0;;Boolean01Converter;;;Gibt an, dass die Prüfung eine Prüfung in der Herkunftssprache ist (BASS 13-61 Nr. 2). Entspricht dem Eintrag P in Schild 2
@@ -1846,8 +1904,13 @@ SchuelerSprachpruefungen;IstFeststellungspruefung;;;9;int;;;0;;Boolean01Converte
 SchuelerSprachpruefungen;KannErstePflichtfremdspracheErsetzen;;;10;int;;;0;;Boolean01Converter;;;Gibt an, ob die Sprachprüfung an die Stelle der ersten Fremdsprache bzw. einer fortgeführten Fremdsprache treten kann
 SchuelerSprachpruefungen;KannZweitePflichtfremdspracheErsetzen;;;11;int;;;0;;Boolean01Converter;;;Gibt an, ob die Sprachprüfung an die Stelle der zweiten Fremdsprache bzw. einer fortgeführten Fremdsprache treten kann
 SchuelerSprachpruefungen;KannWahlpflichtfremdspracheErsetzen;;;12;int;;;0;;Boolean01Converter;;;Gibt an, ob die Sprachprüfung an die Stelle einer Wahlpflichtfremdsprache bzw. einer fortgeführten Fremdsprache treten kann
-SchuelerSprachpruefungen;Referenzniveau;;;13;varchar;5;;0;;SprachreferenzniveauConverter;1;;Das Sprachreferenzniveau der Sprachprüfung gemäß GeR
-SchuelerSprachpruefungen;NotePruefung;;;14;int;;;0;;NoteConverterFromInteger;1;;Note der Sprachprüfung, die herangezogen werden kann, falls die Note der Sprachprüfung an die Stelle einer Fremdsprachennote tritt
+SchuelerSprachpruefungen;KannBelegungAlsFortgefuehrteSpracheErlauben;;;13;int;;;0;;Boolean01Converter;;;Gibt an, ob die Sprachprüfung nachweist, dass die Sprache als fortgeführte Fremdsprache in der Oberstufe belegt werden kann (BASS 13-61 Nr. 1 Abs. 11)
+SchuelerSprachpruefungen;Referenzniveau;;;14;varchar;5;;0;;SprachreferenzniveauConverter;1;;Das Sprachreferenzniveau der Sprachprüfung gemäß GeR
+SchuelerSprachpruefungen;NotePruefung;;;15;int;;;0;;NoteConverterFromInteger;1;;Note der Sprachprüfung, die herangezogen werden kann, falls die Note der Sprachprüfung an die Stelle einer Fremdsprachennote tritt
+SchuelerStatus;ID;;;1;int;;;1;;;;;ID des Schüler-Status
+SchuelerStatus;Bezeichnung;;;2;varchar;255;;0;;;1;;Die Bezeichnung des Schüler-Status
+SchuelerStatus;gueltigVon;;;3;int;;;0;;;;;Der Datensatz ist gültig ab dem Schuljahr
+SchuelerStatus;gueltigBis;;;4;int;;;0;;;;;Der Datensatz ist gültig bis zu dem Schuljahr
 SchuelerTelefone;ID;;;1;bigint;;;1;;;;;ID des Telefonnummerneintrags
 SchuelerTelefone;Schueler_ID;;;2;bigint;;;1;;;;;SchülerID des Telefonnummerneintrags
 SchuelerTelefone;TelefonArt_ID;;;3;bigint;;;0;;;;;Art des Telefonnummerneintrags
@@ -2289,27 +2352,10 @@ Statkue_Schulformen;geaendert;;;5;datetime;;;0;;;;;Statkue Tabelle IT.NRW:  Datu
 Statkue_Schulformen;Sortierung;;;6;int;;0;0;;;;;Statkue Tabelle IT.NRW: Sortierung der Schulformen
 Statkue_Schulformen;gueltigVon;;;7;int;;;0;;;;;Statkue Tabelle IT.NRW: Gibt die Gültigkeit ab welchem Schuljahr an
 Statkue_Schulformen;gueltigBis;;;8;int;;;0;;;;;Statkue Tabelle IT.NRW: Gibt die Gültigkeit bis zu welchem Schuljahr an
-Statkue_Strassen;Ort;;;1;varchar;50;;1;;;;;Katalog von ITNRW Straßen: zugehörige Ort
-Statkue_Strassen;RegSchl;;;2;varchar;8;;1;;;;;Katalog von ITNRW Straßen: zugehöriger Regionalschlüssel
-Statkue_Strassen;Strasse;;;3;varchar;75;;1;;;;;Katalog von ITNRW Straßen: Straßenname
-Statkue_Strassen;Stand;;;4;varchar;20;;0;;;;;Katalog von ITNRW Straßen: aktueller Stand
-Statkue_Strassen;gueltigVon;;;5;int;;;0;;;;;Statkue Tabelle IT.NRW: Gibt die Gültigkeit ab welchem Schuljahr an
-Statkue_Strassen;gueltigBis;;;6;int;;;0;;;;;Statkue Tabelle IT.NRW: Gibt die Gültigkeit bis zu welchem Schuljahr an
 Statkue_SVWS_BKAnlagen;BKAnlage;;;1;varchar;1;;1;;;;;Einstelliges Kürzel der BK-Anlage (A,B,C,D,E)
 Statkue_SVWS_BKAnlagen;Beschreibung;;;2;varchar;120;;1;;;;;Textuelle Beschreibung der BK-Anlage
 Statkue_SVWS_BKAnlagen;gueltigVon;;;3;int;;;0;;;;;Statkue Tabelle IT.NRW: Gibt die Gültigkeit ab welchem Schuljahr an
 Statkue_SVWS_BKAnlagen;gueltigBis;;;4;int;;;0;;;;;Statkue Tabelle IT.NRW: Gibt die Gültigkeit bis zu welchem Schuljahr an
-Statkue_SVWS_Fachgruppen;ID;;;1;bigint;;;1;;;;;ID in der von SVWS erstellten Tabelle mit Fachgruppen die zu SchildNRW und Lupo passen Mapping
-Statkue_SVWS_Fachgruppen;Fachbereich;;;2;int;;;0;;;;;Fachbereich (Nr) der Fachgruppe aus Lupo
-Statkue_SVWS_Fachgruppen;SchildFgID;;;3;bigint;;;0;;;;;Fachgruppen ID aus SchildNRW
-Statkue_SVWS_Fachgruppen;FG_Bezeichnung;;;4;varchar;80;;1;;;;;Bezeichnung der Fachgruppe
-Statkue_SVWS_Fachgruppen;FG_Kuerzel;;;5;varchar;10;;0;;;;;Kürzel der Fachgruppe
-Statkue_SVWS_Fachgruppen;Schulformen;;;6;varchar;255;;0;;;;;Gibt an in welchen Schulformen die Fachgruppe zulässig ist
-Statkue_SVWS_Fachgruppen;FarbeR;;;7;int;;;0;;;;;RotWert der Fachgruppenfarbe
-Statkue_SVWS_Fachgruppen;FarbeG;;;8;int;;;0;;;;;GrünWert der Fachgruppenfarbe
-Statkue_SVWS_Fachgruppen;FarbeB;;;9;int;;;0;;;;;BlauWert der Fachgruppenfarbe
-Statkue_SVWS_Fachgruppen;gueltigVon;;;10;int;;;0;;;;;Das Schuljahr, ab dem die Fachgruppe eingeführt wurde
-Statkue_SVWS_Fachgruppen;gueltigBis;;;11;int;;;0;;;;;Das Schuljahr, bis wann die Fachgruppe gültig ist
 Statkue_SVWS_Schulgliederungen;SGL;;;1;varchar;3;;1;;;;;Das dreistellige Kürzel der Schulgliederung bzw. des Bildungsganges
 Statkue_SVWS_Schulgliederungen;istBK;;;2;int;;0;1;;Boolean01Converter;;;Boolscher Wert ob es sich um eine Schulgliederung einer BK-Anlage handelt
 Statkue_SVWS_Schulgliederungen;Schulformen;;;3;varchar;120;;1;;;;;eine Komma-separierte Liste der Schulform-Kürzel, bei denen der Bildungsgang vorhanden ist
@@ -2483,6 +2529,9 @@ SVWS_Client_Konfiguration_Benutzer;Wert;;;4;text;;;1;;;;;Der Wert des Konfigurat
 SVWS_Client_Konfiguration_Global;AppName;;;1;varchar;100;;1;;;;;Der Name der Client-Anwendung, für die der Konfigurationsdatensatz gespeichert ist
 SVWS_Client_Konfiguration_Global;Schluessel;;;2;varchar;255;;1;;;;;Der Schlüsselname des Konfigurationsdatensatzes
 SVWS_Client_Konfiguration_Global;Wert;;;3;text;;;1;;;;;Der Wert des Konfigurationsdatensatzes
+SVWS_Core_Type_Versionen;NameTabelle;;;1;varchar;200;;1;;;;;Gibt den Namen der Tabelle an, wo die Daten des Core-Types hinterlegt werden.
+SVWS_Core_Type_Versionen;Name;;;2;varchar;200;;1;;;;;Gibt den Namen des Core-Types an.
+SVWS_Core_Type_Versionen;Version;;;3;bigint;;1;1;;;;;Die Version, in welcher der Core-Type in der DB vorliegt
 SVWS_DB_AutoInkremente;NameTabelle;;;1;varchar;200;;1;;;;;Gibt den Tabellennamen an, für dessen Auto-Inkrement der ID-Wert verwendet werden soll.
 SVWS_DB_AutoInkremente;MaxID;;;2;bigint;;1;1;;;;;Die ID des höchsten jemals in die DB geschriebenen ID-Wertes bei der zugehörigen Tabelle
 SVWS_DB_Version;Revision;;;1;int;;0;1;;;;;Die Revision des Datenbankschemas der SVWS-DB

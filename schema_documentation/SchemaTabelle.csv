@@ -1,12 +1,12 @@
 Name;Revision;Veraltet;Migration;ImpExp;JavaKlasse;JavaPackage;JavaKommentar
 AllgAdrAnsprechpartner;0;-1;1;1;DTOAnsprechpartnerAllgemeineAdresse;schild.katalog;Ansprechpartner-Daten die einem Betrieb/Adresse in K_AllgAdresse zugeordnet werden können
-Benutzer;0;-1;1;1;DTOBenutzer;schild.benutzer;Die Benutzer, welchen sich am Server anmelden können (verweist auf allgemeine Benutzer, Lehrer bzw. Personal, Schüler und Erzieher). 
-BenutzerAllgemein;0;-1;1;1;DTOBenutzerAllgemein;schild.benutzer;Die Definition von Benutzern, welchen sich am Server anmelden können, aber nicht als Lehrer bzw. Personal, Schüler oder Erzieher erfasst sind
-BenutzerEmail;0;-1;1;1;DTOBenutzerMail;schild.benutzer;Die Informationen zu einem E-Mail-Zugang des Benutzers, damit Emails versendet werden können.
-Benutzergruppen;0;-1;1;1;DTOBenutzergruppe;schild.benutzer;Die Definition von Benutzergruppen (Rollen). Diese dienen als Vorlage für die Rechtezuweisung an Benutzer.
-BenutzergruppenKompetenzen;0;-1;1;1;DTOBenutzergruppenKompetenz;schild.benutzer;Die Kompetenzen, welche der Benutzergruppe - also der Vorlage - zugeordnet wurden.
-BenutzergruppenMitglieder;0;-1;1;1;DTOBenutzergruppenMitglied;schild.benutzer;Die Zuordnung von Benutzern zu Benutzergruppen
-BenutzerKompetenzen;0;-1;1;1;DTOBenutzerKompetenz;schild.benutzer;Die Kompetenzen, welchem dem Benutzer insgesamt zugeordnet wurden - über eien Gruppe oder individuell
+Benutzer;0;-1;0;1;DTOBenutzer;schild.benutzer;Die Benutzer, welchen sich am Server anmelden können (verweist auf allgemeine Benutzer, Lehrer bzw. Personal, Schüler und Erzieher). 
+BenutzerAllgemein;0;-1;0;1;DTOBenutzerAllgemein;schild.benutzer;Die Definition von Benutzern, welchen sich am Server anmelden können, aber nicht als Lehrer bzw. Personal, Schüler oder Erzieher erfasst sind
+BenutzerEmail;0;-1;0;1;DTOBenutzerMail;schild.benutzer;Die Informationen zu einem E-Mail-Zugang des Benutzers, damit Emails versendet werden können.
+Benutzergruppen;0;-1;0;1;DTOBenutzergruppe;schild.benutzer;Die Definition von Benutzergruppen (Rollen). Diese dienen als Vorlage für die Rechtezuweisung an Benutzer.
+BenutzergruppenKompetenzen;0;-1;0;1;DTOBenutzergruppenKompetenz;schild.benutzer;Die Kompetenzen, welche der Benutzergruppe - also der Vorlage - zugeordnet wurden.
+BenutzergruppenMitglieder;0;-1;0;1;DTOBenutzergruppenMitglied;schild.benutzer;Die Zuordnung von Benutzern zu Benutzergruppen
+BenutzerKompetenzen;0;-1;0;1;DTOBenutzerKompetenz;schild.benutzer;Die Kompetenzen, welchem dem Benutzer insgesamt zugeordnet wurden - über eien Gruppe oder individuell
 Credentials;0;-1;1;1;DTOCredentials;svws.auth;Daten für die Zugänge zu SVWS internen Systemen für SingleSignOn-Lösungen
 CredentialsLernplattformen;0;-1;1;1;DTOCredentialsLernplattformen;svws.auth;Daten für die Zugänge zu anderen Systemen (Lernplattformen)
 EigeneSchule;0;-1;1;1;DTOEigeneSchule;schild.schule;Tabelle in der die Daten der Schule verwaltet werden, diese Tabelle darf in einer Einzelinstallation nur eine Zeile haben
@@ -26,8 +26,18 @@ EigeneSchule_Zertifikate;0;-1;1;1;DTOZertifikate;schild.berufskolleg;Liste von Z
 ErzieherLernplattform;0;-1;1;1;DTOErzieherLernplattform;schild.erzieher;Tabelle zur Speicherung der CredentialID und den Einwilligungen zu den Lernplattformen bei den Erziehern
 ErzieherDatenschutz;0;-1;1;1;DTOErzieherDatenschutz;schild.erzieher;Tabelle zur Speicherung der Einwilligungen zu Datenschutz bei den Erziehern
 Fach_Gliederungen;0;-1;1;1;DTOFachgliederungen;schild.berufskolleg;Gliederungsspezifische Einstellungen zu den Unterrichtsfächern (nur BK)
+Fachgruppen;0;-1;0;0;DTOFachgruppen;schild.faecher;Tabelle für den Core-Type der Fachgruppen
 Floskelgruppen;0;-1;1;1;DTOFloskelgruppen;schild.katalog;Liste der Floskelgruppen, diese Liste kann erweitert werden um Textbausteinen zu verwalten und die Anzeige in den Editoren zu steuern
 Floskeln;0;-1;1;1;DTOFloskeln;schild.katalog;Textbausteine, die in den Editoren angezeigt und ausgewählt werden können
+Gost_Blockung;7;-1;0;1;DTOGostBlockung;gost.kursblockung;Tabelle für die Definition einer Kursblockung der gymnasialen Oberstufe
+Gost_Blockung_Kurse;7;-1;0;1;DTOGostBlockungKurs;gost.kursblockung;Tabelle für die Kurse, welche einer Kursblockung der gymnasialen Oberstufe zugeordnet sind
+Gost_Blockung_Kurslehrer;7;-1;0;1;DTOGostBlockungKurslehrer;gost.kursblockung;Tabelle für die Lehrer, welche einem Kurs einer Kursblockung der gymnasialen Oberstufe zugeordnet sind
+Gost_Blockung_Regeln;7;-1;0;1;DTOGostBlockungRegel;gost.kursblockung;Tabelle für die Regeln, welche als Bedingungen zu einer Kursblockung der gymnasialen Oberstufe zugeordnet sind
+Gost_Blockung_Regelparameter;7;-1;0;1;DTOGostBlockungRegelParameter;gost.kursblockung;Tabelle für die Parameter von Regeln, welche als Bedingungen zu einer Kursblockung der gymnasialen Oberstufe zugeordnet sind
+Gost_Blockung_Schienen;7;-1;0;1;DTOGostBlockungSchiene;gost.kursblockung;Tabelle für die Schienen, welche einer Kursblockung der gymnasialen Oberstufe zugeordnet sind
+Gost_Blockung_Zwischenergebnisse;7;-1;0;1;DTOGostBlockungZwischenergebnis;gost.kursblockung;Tabelle für Zwischenergebnisse, welche einer Kursblockung der gymnasialen Oberstufe zugeordnet sind
+Gost_Blockung_Zwischenergebnisse_Kurs_Schienen;7;-1;0;1;DTOGostBlockungZwischenergebnisKursSchiene;gost.kursblockung;Tabelle für die Zuordnung von Kursen zu Schienen bei Zwischenergebnissen, welche einer Kursblockung der gymnasialen Oberstufe zugeordnet sind
+Gost_Blockung_Zwischenergebnisse_Kurs_Schueler;7;-1;0;1;DTOGostBlockungZwischenergebnisKursSchueler;gost.kursblockung;Tabelle für die Zuordnung von Schüler zu Kursen bei Zwischenergebnissen, welche einer Kursblockung der gymnasialen Oberstufe zugeordnet sind
 Gost_Jahrgang_Beratungslehrer;4;-1;0;1;DTOGostJahrgangBeratungslehrer;gost;Gymnasiale Oberstufe - Jahrgangsdaten: Die Beratungslehrer in den einzelnen Jahrgängen
 Gost_Jahrgang_Faecher;4;-1;0;1;DTOGostJahrgangFaecher;gost;Gymnasiale Oberstufe - Jahrgangsdaten: Informationen zu den wählbaren Fächern der einzelnen Jahrgänge
 Gost_Jahrgangsdaten;4;-1;0;1;DTOGostJahrgangsdaten;gost;Gymnasiale Oberstufe - Allgemeine Informationen zu den Jahrgängen
@@ -71,9 +81,10 @@ Katalog_Zeitraster;5;-1;0;1;DTOKatalogZeitraster;schild.stundenplan;Enthält das
 Kompetenzen;0;-1;0;0;DTOKatalogBenutzerKompetenz;schild.benutzer;Rechte für die Benutzerverwaltung von Schild-NRW
 Kompetenzgruppen;0;-1;0;0;DTOKatalogBenutzerKompetenzGruppe;schild.benutzer;definierte Usergruppen, die wiederum die Kompetenzen enthält
 Klassen;0;-1;0;1;DTOKlassen;schild.klassen;Tabelle für die Schuljahresabschnitts-spezifische Klassen-/Versetzungstabelle
-KlassenLehrer;0;-1;0;1;DTOKlassenLehrer;schild.klassen;Tabelle für die Schuljahresabschnitts-spezifische Zuordnung von Klassen-Lehrern zu den Klassen 
+KlassenLehrer;0;-1;0;1;DTOKlassenLeitung;schild.klassen;Tabelle für die Schuljahresabschnitts-spezifische Zuordnung von Klassenleitungen zu den Klassen 
 Kurs_Schueler;1;-1;0;0;DTOKursSchueler;schild.kurse;Tabelle mit KursSchueler-Zuordnungen wird ab Schild3.0 getriggert für performanteren Druck
 Kurse;0;-1;1;1;DTOKurs;schild.kurse;Tabelle der Kurse
+KursFortschreibungsarten;0;-1;0;0;DTOKursFortschreibungsart;coretypes;Tabelle für den Core-Type der Kurs-Fortschreibungsarten
 KursLehrer;0;-1;1;1;DTOKursLehrer;schild.kurse;Zusätzliche Lehrkräfte in den Kursen
 LehrerAbschnittsdaten;0;-1;1;1;DTOLehrerAbschnittsdaten;schild.lehrer;Lehrerdaten, die Abschnittsweise gespeichert werden
 LehrerAnrechnung;0;-1;1;1;DTOLehrerAnrechnungsstunde;schild.lehrer;Anrechnungsstunden für Lehrkräfte gültige ASD-Schlüssel
@@ -88,7 +99,9 @@ LehrerLernplattform;0;-1;1;1;DTOLehrerLernplattform;schild.lehrer;Tabelle zur Sp
 LehrerMehrleistung;0;-1;1;1;DTOLehrerMehrleistung;schild.lehrer;gültige Schlüssel zur Lehrkraft für die Mehrleistungsstunden
 Lernplattformen;0;-1;1;1;DTOLernplattformen;svws.auth;Tabelle mit Lernplattformen die die Schule nutzt und zu denen Credentials existieren
 Logins;0;-1;1;1;DTOProtokollLogin;schild.benutzer;Tabelle zur Speicherung der LogIns mit Benutzernamen und Zeit für die Datenbank-User
+Noten;0;-1;0;0;DTONote;coretypes;Tabelle für den Core-Type der Noten
 NichtMoeglAbiFachKombi;0;-1;1;1;DTOFaecherNichtMoeglicheKombination;schild.gost;Nicht mögliche Abiturfach-Kombinationen unter Fächer der Oberstufe bearbeiten
+PersonalTypen;0;-1;0;0;DTOPersonalTyp;coretypes;Katalog-Tabelle mit den möglichen Personal-Typen in der Lehrer-Tabelle, damit auch Nicht-Lehrer in der Lehrer-Liste aufgenommen und unterschieden werden können
 Personengruppen;0;-1;1;1;DTOPersonengruppen;schild.personengruppen;Katalog der definierten Personengruppen
 Personengruppen_Personen;0;-1;1;1;DTOPersonengruppenPersonen;schild.personengruppen;Zuordnung von Personen zur den Einträgen in der Tabelle Personengruppen
 Schild_Verwaltung;0;-1;1;1;DTOSchildVerwaltung;schild;Verwaltung von Versionsnummern, Datum, teilweise veraltet oder nie verwendet
@@ -97,12 +110,11 @@ Schildintern_AbiturInfos;0;-1;0;0;DTOInternAbiturInfos;schild.intern;Abfragen f�
 Schildintern_Berufsebene;0;-1;0;0;DTOInternBerufsebene;schild.intern;Berufsebenen für die Fachklassen an BK – Zeugnisdruck
 Schildintern_Datenart;0;-1;0;0;DTOInternDatenart;schild.intern;Wird beim Export in Text/Excel-Dateien verwendet. Definiert die für den Export zur Verfügung stehenden Datenarten
 Schildintern_DQR_Niveaus;0;-1;0;0;DTOInternDQRNiveaus;schild.intern;DQR Referenzniveaus für Fachklassen am BK (Zeugnisdruck)
-Schildintern_Fachgruppen;0;-1;0;0;DTOInternFachgruppen;schild.intern;Fächergruppen Schulformbezogen für Eintragungen bei den Unterrichtsfächern
 Schildintern_FaecherSortierung;0;-1;0;0;DTOInternFaecherSortierung;schild.intern;Wird in diversen Algorithmen verwendet, um zu ermitteln, zu welcher Fachgruppe ein Fach (ASD-Bezeichnung) gehört.
-Schildintern_FilterFehlendeEintraege;0;-1;0;0;DTOInternFilterFehlendeEintraege;schild.intern;Liste mit Feldern, die für den Filter auf fehlende Einträge verwendet werden können
+Schildintern_FilterFehlendeEintraege;0;-1;0;0;DTOInternFilterFehlendeEintraege;schild.intern;Schild2: Liste mit Feldern, die für den Filter auf fehlende Einträge verwendet werden können
+Schildintern_FilterFehlendeEintraegeSchild3;0;-1;0;0;DTOInternFilterFehlendeEintraegeSchild3;schild.intern;Schild3: Liste mit Feldern, die für den Filter auf fehlende Einträge verwendet werden können
 Schildintern_FilterFeldListe;0;-1;0;0;DTOInternFilterFeldListe;schild.intern;"Wird im ""Attributsfilter"" verwendet (für die Ja/Nein-Auswahl)"
 Schildintern_HSchStatus;0;-1;0;0;DTOInternSchuelerStatus;schild.intern;Liste der möglichen Schüler Status-Werte
-Schildintern_K_Schulnote;0;-1;0;0;DTOInternSchulnote;schild.intern;Liste der möglichen Noteneinträge in den Leistungsdaten
 Schildintern_KAoA_Anschlussoption;0;-1;0;0;DTOKAoAAnschlussoption;schild.intern;KAOA-Defaultdaten werden vom MSB geliefert
 Schildintern_KAoA_Berufsfeld;0;-1;0;0;DTOKAoABerufsfeld;schild.intern;KAOA-Defaultdaten werden vom MSB geliefert
 Schildintern_KAoA_Kategorie;0;-1;0;0;DTOKAoAKategorie;schild.intern;KAOA-Defaultdaten werden vom MSB geliefert
@@ -148,6 +160,7 @@ SchuelerMerkmale;0;-1;1;1;DTOSchuelerMerkmale;schild.schueler;Einträge der Merk
 SchuelerReportvorlagen;0;-1;1;1;DTOSchuelerReportvorlagen;schild;"Wird im Gruppenprozess ""Zugeordnete Zeugnisformulare drucken"" verwendet. Die Tabelle wird temporär mit den IDs der Schüler gefüllt, die im Gruppenprozess berücksichtigt werden müssen."
 SchuelerSprachenfolge;0;-1;1;1;DTOSchuelerSprachenfolge;schild.schueler;Einträge zur Sprachenfolge zum Schüler
 SchuelerSprachpruefungen;0;-1;0;1;DTOSchuelerSprachpruefungen;schild.schueler;Einträge zu Sprachprüfungen des Schülers
+SchuelerStatus;0;-1;0;0;DTOSchuelerStatus;coretypes;Tabelle für den Core-Type des Schüler-Status
 SchuelerTelefone;0;-1;1;1;DTOSchuelerTelefon;schild.erzieher;Telefonnummern zum Schüler
 SchuelerVermerke;0;-1;1;1;DTOSchuelerVermerke;schild.schueler;Vermerke zum Schüler
 SchuelerWiedervorlage;0;-1;1;1;DTOSchuelerWiedervorlage;schild;Einträge zur Wiedervorlage zum Schüler
@@ -195,9 +208,7 @@ Statkue_SchuelerKindergartenbesuch;0;-1;0;0;DTOStatkueSchuelerKindergartenbesuch
 Statkue_SchuelerUebergangsempfehlung5Jg;0;-1;0;0;DTOStatkueSchuelerUebergangsempfehlung5Jg;statkue;Statkue von IT.NRW Schlüssel für die Schulformempfehlungen
 Statkue_SchuelerVerkehrssprache;0;-1;0;0;DTOStatkueSchuelerVerkehrssprache;statkue;Statkue von IT.NRW gültige Verkehrsprachen
 Statkue_Schulformen;0;-1;0;0;DTOStatkueSchulform;statkue;Statkue von IT.NRW gültige Schulformen und Schulformnummern
-Statkue_Strassen;0;-1;0;0;DTOStatkueStrassen;statkue;Statkue von IT.NRW gültiger Straßenkatalog
 Statkue_SVWS_BKAnlagen;0;-1;0;0;DTOSVWSBKAnlagen;statkue;Statkue SVWS selbst generierte Informationen zu den BK Anlagen
-Statkue_SVWS_Fachgruppen;0;-1;0;0;DTOSVWSFachgruppen;statkue;Statkue SVWS selbst generierte Fachgruppen
 Statkue_SVWS_Schulgliederungen;0;-1;0;0;DTOSVWSSchulgliederungen;statkue;Statkue SVWS selbst generierte Tabelle für die Schulgliederungen
 Statkue_SVWS_SprachpruefungNiveaus;0;-1;0;0;DTOSVWSSprachpruefungNiveaus;statkue;Statkue SVWS selbst generierte Tabelle für die Sprachprüfungsniveaus
 Statkue_SVWS_ZulaessigeFaecher;0;-1;0;0;DTOSVWSZulaessigeFaecherMapping;statkue;Statkue SVWS selbst generierte Tabelle die das Mapping zu atomarisierten Felden zu den Fächern herstellt
@@ -221,10 +232,11 @@ Stundentafel;0;-1;1;1;DTOStundentafel;schild.schule;Katalog der angelegten Stund
 Stundentafel_Faecher;0;-1;1;1;DTOStundentafelFaecher;schild.schule;Fächereinträge zu den Stundentafeln
 SVWS_Client_Konfiguration_Benutzer;0;-1;0;1;DTOClientKonfigurationBenutzer;svws.client;Tabelle für das Speichern von Client-Konfigurationen als Key-Value-Paare. Dabei werden über das Feld App unterschiedliche Client-Anwendungen unterstützt und über das Feld Benutzer eine Benutzerspezifische Speicherung.
 SVWS_Client_Konfiguration_Global;0;-1;0;1;DTOClientKonfigurationGlobal;svws.client;Tabelle für das Speichern von Client-Konfigurationen als Key-Value-Paare. Dabei werden über das Feld App unterschiedliche Client-Anwendungen unterstützt. Die Konfigurationen in dieser Tabelle gelten global für den Client.
+SVWS_Core_Type_Versionen;0;-1;0;0;DTOCoreTypeVersion;svws.db;Tabelle für das Speichern, in welcher Version die Core-Type-Daten in den Datenbank-Tabellen vorliegen
 SVWS_DB_AutoInkremente;0;-1;0;0;DTODBAutoInkremente;svws.db;Tabelle für das Zwischenspeichern der bisherigen Maximalwerte beim Einfügen, damit eine DBMS-unabhängige Auto-Inkrement-Funktion realisiert werden kann.
 SVWS_DB_Version;0;-1;0;0;DTODBVersion;svws.db;Diese Tabelle enthält die Versionsinformationen zu der SVWS-DB
 TextExportVorlagen;0;-1;1;1;DTOTextExportVorlagen;schild;gespeicherte Vorlagen für den Datenaustausch > Text-/Excel-Export
-Usergroups;0;-1;1;1;DTOUserGroups;schild.benutzer;Usergruppen mit Berechtigungen
-Users;0;-1;1;1;DTOUsers;schild.benutzer;Tabelle der Schild-User
+Usergroups;0;1;1;1;DTOUserGroups;schild.benutzer;Usergruppen mit Berechtigungen
+Users;0;1;1;1;DTOUsers;schild.benutzer;Tabelle der Schild-User
 Versetzung;0;1;1;1;DTOVersetzung;schild.klassen;Tabelle für die Klassen-/Versetzungstabelle
 ZuordnungReportvorlagen;0;-1;1;1;DTOZuordnungReportvorlagen;schild;Zuordnungen von Reports für den Zeugnisdruck (automatisierter Druck)

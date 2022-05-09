@@ -19,7 +19,7 @@ EigeneSchule_Abt_Kl_Klassen_FK;2;;EigeneSchule_Abt_Kl;Klassen_ID;Klassen;ID;CASC
 EigeneSchule_Abteilungen_Leiter_FK;2;;EigeneSchule_Abteilungen;AbteilungsLeiter_ID;K_Lehrer;ID;CASCADE;SET NULL
 EigeneSchule_Abteilungen_Schuljahreabschnitt_FK;2;;EigeneSchule_Abteilungen;Schuljahresabschnitts_ID;Schuljahresabschnitte;ID;CASCADE;CASCADE
 EigeneSchule_FachTeilleistungen_Fach_FK;;;EigeneSchule_FachTeilleistungen;Fach_ID;EigeneSchule_Faecher;ID;CASCADE;CASCADE
-EigeneSchule_Faecher_Zeugnisdatenquellen_FK;;;EigeneSchule_Faecher;Zeugnisdatenquelle_ID;Schildintern_Fachgruppen;FG_ID;CASCADE;SET NULL
+EigeneSchule_Faecher_Zeugnisdatenquellen_FK;;;EigeneSchule_Faecher;Zeugnisdatenquelle_ID;Fachgruppen;SchildFgID;CASCADE;SET NULL
 EigeneSchule_Jahrgaenge_GueltigVon_FK;;;EigeneSchule_Jahrgaenge;GueltigVon;Schuljahresabschnitte;ID;CASCADE;SET NULL
 EigeneSchule_Jahrgaenge_GueltigBis_FK;;;EigeneSchule_Jahrgaenge;GueltigBis;Schuljahresabschnitte;ID;CASCADE;SET NULL
 EigeneSchule_Jahrgaenge_Schulgliederung_FK;;;EigeneSchule_Jahrgaenge;SGL;Statkue_SVWS_Schulgliederungen;SGL;CASCADE;SET NULL
@@ -29,6 +29,21 @@ ErzieherLernplattform_Erzieher_FK;;;ErzieherLernplattform;ErzieherID;SchuelerErz
 ErzieherLernplattform_Lernplattform_FK;;;ErzieherLernplattform;LernplattformID;Lernplattformen;ID;CASCADE;CASCADE
 ErzieherLernplattform_Credential_FK;;;ErzieherLernplattform;CredentialID;CredentialsLernplattformen;ID;CASCADE;SET NULL
 Floskeln_Floskelgruppe_Floskelgruppen_FK;2;;Floskeln;FloskelGruppe;Floskelgruppen;Kuerzel;CASCADE;SET NULL
+Gost_Blockung_Abi_Jahrgang_FK;7;;Gost_Blockung;Abi_Jahrgang;Gost_Jahrgangsdaten;Abi_Jahrgang;CASCADE;CASCADE
+Gost_Blockung_Kurse_Blockung_FK;7;;Gost_Blockung_Kurse;Blockung_ID;Gost_Blockung;ID;CASCADE;CASCADE
+Gost_Blockung_Kurse_Fach_FK;7;;Gost_Blockung_Kurse;Fach_ID;EigeneSchule_Faecher;ID;CASCADE;CASCADE
+Gost_Blockung_Kurslehrer_Kurs_FK;7;;Gost_Blockung_Kurslehrer;Blockung_Kurs_ID;Gost_Blockung_Kurse;ID;CASCADE;CASCADE
+Gost_Blockung_Kurslehrer_Lehrer_FK;7;;Gost_Blockung_Kurslehrer;Lehrer_ID;K_Lehrer;ID;CASCADE;CASCADE
+Gost_Blockung_Regeln_Blockung_FK;7;;Gost_Blockung_Regeln;Blockung_ID;Gost_Blockung;ID;CASCADE;CASCADE
+Gost_Blockung_Regelparameter_Regel_FK;7;;Gost_Blockung_Regelparameter;Regel_ID;Gost_Blockung_Regeln;ID;CASCADE;CASCADE
+Gost_Blockung_Schienen_Blockung_FK;7;;Gost_Blockung_Schienen;Blockung_ID;Gost_Blockung;ID;CASCADE;CASCADE
+Gost_Blockung_Zwischenergebnisse_Blockung_FK;7;;Gost_Blockung_Zwischenergebnisse;Blockung_ID;Gost_Blockung;ID;CASCADE;CASCADE
+Gost_Blockung_Zwischenergebnisse_Kurs_Schienen_ErgID_FK;7;;Gost_Blockung_Zwischenergebnisse_Kurs_Schienen;Zwischenergebnis_ID;Gost_Blockung_Zwischenergebnisse;ID;CASCADE;CASCADE
+Gost_Blockung_Zwischenergebnisse_Kurs_Schienen_Kurs_FK;7;;Gost_Blockung_Zwischenergebnisse_Kurs_Schienen;Blockung_Kurs_ID;Gost_Blockung_Kurse;ID;CASCADE;CASCADE
+Gost_Blockung_Zwischenergebnisse_Kurs_Schienen_Schiene_FK;7;;Gost_Blockung_Zwischenergebnisse_Kurs_Schienen;Schienen_ID;Gost_Blockung_Schienen;ID;CASCADE;CASCADE
+Gost_Blockung_Zwischenergebnisse_Kurs_Schueler_ErgID_FK;7;;Gost_Blockung_Zwischenergebnisse_Kurs_Schueler;Zwischenergebnis_ID;Gost_Blockung_Zwischenergebnisse;ID;CASCADE;CASCADE
+Gost_Blockung_Zwischenergebnisse_Kurs_Schueler_Kurs_FK;7;;Gost_Blockung_Zwischenergebnisse_Kurs_Schueler;Blockung_Kurs_ID;Gost_Blockung_Kurse;ID;CASCADE;CASCADE
+Gost_Blockung_Zwischenergebnisse_Kurs_Schueler_Schueler_FK;7;;Gost_Blockung_Zwischenergebnisse_Kurs_Schueler;Schueler_ID;Schueler;ID;CASCADE;CASCADE
 Gost_Jahrgang_Beratungslehrer_Abi_Jahrgang_FK;;;Gost_Jahrgang_Beratungslehrer;Abi_Jahrgang;Gost_Jahrgangsdaten;Abi_Jahrgang;CASCADE;CASCADE
 Gost_Jahrgang_Beratungslehrer_Lehrer_ID_FK;;;Gost_Jahrgang_Beratungslehrer;Lehrer_ID;K_Lehrer;ID;CASCADE;CASCADE
 Gost_Jahrgang_Faecher_Abi_Jahrgang_FK;;;Gost_Jahrgang_Faecher;Abi_Jahrgang;Gost_Jahrgangsdaten;Abi_Jahrgang;CASCADE;CASCADE
@@ -45,6 +60,7 @@ K_Ankreuzfloskeln_Fach_ID_FK;2;;K_Ankreuzfloskeln;Fach_ID;EigeneSchule_Faecher;I
 K_Lehrer_Credentials_FK;;;K_Lehrer;CredentialID;Credentials;ID;CASCADE;SET NULL
 K_Lehrer_Ort_FK;;;K_Lehrer;Ort_ID;K_Ort;ID;CASCADE;SET NULL
 K_Lehrer_Ortsteil_FK;;;K_Lehrer;Ortsteil_ID;K_Ortsteil;ID;CASCADE;SET NULL
+K_Lehrer_PersonTyp_FK;;;K_Lehrer;PersonTyp;PersonalTypen;Kuerzel;CASCADE;SET NULL
 K_Lehrer_Statkue_Nationalitaeten_FK;2;;K_Lehrer;StaatKrz;Statkue_Nationalitaeten;Schluessel;CASCADE;SET NULL
 K_Ortsteil_Ort_FK;;;K_Ortsteil;Ort_ID;K_Ort;ID;CASCADE;CASCADE
 Klassen_Fachklasse_FK;2;;Klassen;Fachklasse_ID;EigeneSchule_Fachklassen;ID;CASCADE;SET NULL
@@ -57,6 +73,7 @@ KursSchueler_Schueler_FK;;;Kurs_Schueler;Schueler_ID;Schueler;ID;CASCADE;CASCADE
 Kurse_Schuljahreabschnitt_FK;;;Kurse;Schuljahresabschnitts_ID;Schuljahresabschnitte;ID;CASCADE;CASCADE
 Kurse_Jahrgang_FK;2;;Kurse;Jahrgang_ID;EigeneSchule_Jahrgaenge;ID;CASCADE;SET NULL
 Kurse_Fach_FK;2;;Kurse;Fach_ID;EigeneSchule_Faecher;ID;CASCADE;CASCADE
+Kurse_Fortschreibungsart_FK;2;;Kurse;Fortschreibungsart;KursFortschreibungsarten;Kuerzel;CASCADE;SET NULL
 KursLehrer_Kurs_FK;;;KursLehrer;Kurs_ID;Kurse;ID;CASCADE;CASCADE
 KursLehrer_Lehrer_FK;;;KursLehrer;Lehrer_ID;K_Lehrer;ID;CASCADE;CASCADE
 LehrerAbschnittsdaten_Schuljahreabschnitt_FK;;;LehrerAbschnittsdaten;Schuljahresabschnitts_ID;Schuljahresabschnitte;ID;CASCADE;CASCADE
@@ -79,11 +96,12 @@ LehrerLernplattform_Lernplattform_FK;;;LehrerLernplattform;LernplattformID;Lernp
 LehrerLernplattform_Credential_FK;;;LehrerLernplattform;CredentialID;CredentialsLernplattformen;ID;CASCADE;SET NULL
 LehrerMehrleistung_Abschnitt_FK;;;LehrerMehrleistung;Abschnitt_ID;LehrerAbschnittsdaten;ID;CASCADE;CASCADE
 LehrerMehrleistung_Lehrer_FK;;1;LehrerMehrleistung;Lehrer_ID;K_Lehrer;ID;CASCADE;CASCADE
-Logins_Users_FK;;;Logins;LI_UserID;Users;ID;CASCADE;CASCADE
+Logins_Users_FK;;1;Logins;LI_UserID;Users;ID;CASCADE;CASCADE
+Logins_Benutzer_FK;2;;Logins;LI_UserID;Benutzer;ID;CASCADE;CASCADE
 NichtMoeglAbiFachKombi_Fach1_FK;;;NichtMoeglAbiFachKombi;Fach1_ID;EigeneSchule_Faecher;ID;CASCADE;CASCADE
 NichtMoeglAbiFachKombi_Fach2_FK;;;NichtMoeglAbiFachKombi;Fach2_ID;EigeneSchule_Faecher;ID;CASCADE;CASCADE
 Personengruppen_Personen_Gruppe;;;Personengruppen_Personen;Gruppe_ID;Personengruppen;ID;CASCADE;CASCADE
-Schild_Verwaltung_Loeschfrist_deaktiviert_durch_User_FK;2;;Schild_Verwaltung;DatumLoeschfristHinweisDeaktiviertUserID;Users;ID;CASCADE;SET NULL
+Schild_Verwaltung_Loeschfrist_deaktiviert_durch_Benutzer_FK;2;;Schild_Verwaltung;DatumLoeschfristHinweisDeaktiviertUserID;Benutzer;ID;CASCADE;SET NULL
 Schildintern_KAoA_Merkmal_Kategorie_FK;;;Schildintern_KAoA_Merkmal;Kategorie_ID;Schildintern_KAoA_Kategorie;ID;CASCADE;CASCADE
 Schildintern_KAoA_Zusatzmerkmal_Merkmal_FK;;;Schildintern_KAoA_Zusatzmerkmal;Merkmal_ID;Schildintern_KAoA_Merkmal;ID;CASCADE;CASCADE
 Schildintern_KAoA_SBO_Ebene4_Zusatzmerkmall_FK;;;Schildintern_KAoA_SBO_Ebene4;Zusatzmerkmal_ID;Schildintern_KAoA_Zusatzmerkmal;ID;CASCADE;CASCADE
@@ -101,6 +119,7 @@ Schueler_Religion_FK;2;;Schueler;Religion_ID;K_Religion;ID;CASCADE;SET NULL
 Schueler_Sportbefreiung_FK;2;;Schueler;Sportbefreiung_ID;K_Sportbefreiung;ID;CASCADE;SET NULL
 Schueler_Statkue_Nationalitaeten_1_FK;2;;Schueler;StaatKrz;Statkue_Nationalitaeten;Schluessel;CASCADE;SET NULL
 Schueler_Statkue_Nationalitaeten_2_FK;2;;Schueler;StaatKrz2;Statkue_Nationalitaeten;Schluessel;CASCADE;SET NULL
+Schueler_Status_FK;2;;Schueler;Status;SchuelerStatus;ID;CASCADE;CASCADE
 SchuelerAllgAdr_Adresse_FK;;;Schueler_AllgAdr;Adresse_ID;K_AllgAdresse;ID;CASCADE;CASCADE
 SchuelerAllgAdr_Ansprech_FK;2;;Schueler_AllgAdr;Ansprechpartner_ID;AllgAdrAnsprechpartner;ID;CASCADE;SET NULL
 SchuelerAllgAdr_Schueler_FK;;;Schueler_AllgAdr;Schueler_ID;Schueler;ID;CASCADE;CASCADE
@@ -139,11 +158,8 @@ SchuelerFHRFaecher_Fach_FK;;;SchuelerFHRFaecher;Fach_ID;EigeneSchule_Faecher;ID;
 SchuelerFHRFaecher_Schueler_FK;;;SchuelerFHRFaecher;Schueler_ID;Schueler;ID;CASCADE;CASCADE
 SchuelerFoerderempfehlungen_Abschnitt_FK;;;SchuelerFoerderempfehlungen;Abschnitt_ID;SchuelerLernabschnittsdaten;ID;CASCADE;CASCADE
 SchuelerFoerderempfehlungen_Schueler_FK;;1;SchuelerFoerderempfehlungen;Schueler_ID;Schueler;ID;CASCADE;CASCADE
-SchuelerFoerderempfehlungen_Fach_FK;2;;SchuelerFoerderempfehlungen;Fach_ID;EigeneSchule_Faecher;ID;CASCADE;SET NULL
 SchuelerFoerderempfehlungen_Lehrer_FK;2;;SchuelerFoerderempfehlungen;Lehrer_ID;K_Lehrer;ID;CASCADE;SET NULL
-SchuelerFoerderempfehlungen_Leistung_FK;;;SchuelerFoerderempfehlungen;Leistung_ID;SchuelerLeistungsdaten;ID;CASCADE;CASCADE
 SchuelerFoerderempfehlungen_Klassen_FK;2;;SchuelerFoerderempfehlungen;Klassen_ID;Klassen;ID;CASCADE;SET NULL
-SchuelerFoerderempfehlungen_Kurs_FK;2;;SchuelerFoerderempfehlungen;Kurs_ID;Kurse;ID;CASCADE;SET NULL
 SchuelerFotos_Schueler_FK;;;SchuelerFotos;Schueler_ID;Schueler;ID;CASCADE;CASCADE
 SchuelerGSDaten_Schueler_FK;;;SchuelerGSDaten;Schueler_ID;Schueler;ID;CASCADE;CASCADE
 SchuelerKAoADaten_Abschnitt_FK;;;SchuelerKAoADaten;Abschnitt_ID;SchuelerLernabschnittsdaten;ID;CASCADE;CASCADE
@@ -179,7 +195,8 @@ SchuelerLernplattform_Credential_FK;;;SchuelerLernplattform;CredentialID;Credent
 SchuelerListeInhalt_Liste_FK;;;SchuelerListe_Inhalt;Liste_ID;SchuelerListe;ID;CASCADE;CASCADE
 SchuelerListeInhalt_Schueler_FK;;;SchuelerListe_Inhalt;Schueler_ID;Schueler;ID;CASCADE;CASCADE
 SchuelerMerkmale_Schueler_FK;;;SchuelerMerkmale;Schueler_ID;Schueler;ID;CASCADE;CASCADE
-SchuelerReportvorlagen_User_FK;;;SchuelerReportvorlagen;User_ID;Users;ID;CASCADE;CASCADE
+SchuelerReportvorlagen_Benutzer_FK;2;;SchuelerReportvorlagen;User_ID;Benutzer;ID;CASCADE;CASCADE
+SchuelerReportvorlagen_User_FK;;1;SchuelerReportvorlagen;User_ID;Users;ID;CASCADE;CASCADE
 SchuelerSprachenfolge_Schueler_FK;;;SchuelerSprachenfolge;Schueler_ID;Schueler;ID;CASCADE;CASCADE
 SchuelerSprachpruefungen_Schueler_FK;1;;SchuelerSprachpruefungen;Schueler_ID;Schueler;ID;CASCADE;CASCADE
 SchuelerTelefone_Schueler_FK;;;SchuelerTelefone;Schueler_ID;Schueler;ID;CASCADE;CASCADE
@@ -187,7 +204,8 @@ SchuelerTelefone_Telefonart_FK;2;;SchuelerTelefone;TelefonArt_ID;K_TelefonArt;ID
 SchuelerVermerke_Schueler_FK;;;SchuelerVermerke;Schueler_ID;Schueler;ID;CASCADE;CASCADE
 SchuelerVermerke_VermerkArt_FK;;;SchuelerVermerke;VermerkArt_ID;K_Vermerkart;ID;CASCADE;CASCADE
 SchuelerWiedervorlage_Schueler_FK;;;SchuelerWiedervorlage;Schueler_ID;Schueler;ID;CASCADE;CASCADE
-SchuelerWiedervorlage_User_FK;;;SchuelerWiedervorlage;User_ID;Users;ID;CASCADE;CASCADE
+SchuelerWiedervorlage_Benutzer_FK;1;;SchuelerWiedervorlage;User_ID;Benutzer;ID;CASCADE;CASCADE
+SchuelerWiedervorlage_User_FK;;1;SchuelerWiedervorlage;User_ID;Users;ID;CASCADE;CASCADE
 SchuelerZP10_Schuljahreabschnitt_FK;;;SchuelerZP10;Schuljahresabschnitts_ID;Schuljahresabschnitte;ID;CASCADE;CASCADE
 SchuelerZP10_Fach_FK;;;SchuelerZP10;Fach_ID;EigeneSchule_Faecher;ID;CASCADE;CASCADE
 SchuelerZP10_Schueler_FK;;;SchuelerZP10;Schueler_ID;Schueler;ID;CASCADE;CASCADE
@@ -214,6 +232,6 @@ Stundenplan_UnterrichtRaum_Unterricht_FK;;;Stundenplan_UnterrichtRaum;Unterricht
 Stundenplan_Zeitraster_Stundenplan_FK;;;Stundenplan_Zeitraster;Stundenplan_ID;Stundenplan;ID;CASCADE;CASCADE
 StundentafelFaecher_Faecher_FK;;;Stundentafel_Faecher;Fach_ID;EigeneSchule_Faecher;ID;CASCADE;CASCADE
 StundentafelFaecher_Stdtafel_FK;;;Stundentafel_Faecher;Stundentafel_ID;Stundentafel;ID;CASCADE;CASCADE
-SVWSClientKonfigurationBenutzer_Users_FK;;;SVWS_Client_Konfiguration_Benutzer;Benutzer_ID;Users;ID;CASCADE;CASCADE
+SVWSClientKonfigurationBenutzer_Benutzer_FK;;;SVWS_Client_Konfiguration_Benutzer;Benutzer_ID;Benutzer;ID;CASCADE;CASCADE
 ZuordnungReportvorlagen_Fachklasse_FK;2;;ZuordnungReportvorlagen;Fachklasse_ID;EigeneSchule_Fachklassen;ID;CASCADE;SET NULL
 ZuordnungReportvorlagen_Jahrgang_FK;2;;ZuordnungReportvorlagen;Jahrgang_ID;EigeneSchule_Jahrgaenge;ID;CASCADE;SET NULL
