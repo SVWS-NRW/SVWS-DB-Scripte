@@ -487,6 +487,7 @@ CREATE TABLE Gost_Blockung_Kurse (
   Kursnummer int NOT NULL, 
   IstKoopKurs int DEFAULT 0 NOT NULL, 
   BezeichnungSuffix varchar(255), 
+  Schienenanzahl int DEFAULT 1 NOT NULL, 
   Wochenstunden int DEFAULT 3 NOT NULL,
   CONSTRAINT PK_Gost_Blockung_Kurse PRIMARY KEY (ID),
   CONSTRAINT Gost_Blockung_Kurse_Blockung_FK FOREIGN KEY (Blockung_ID) REFERENCES Gost_Blockung(ID) ON UPDATE CASCADE ON DELETE CASCADE,
