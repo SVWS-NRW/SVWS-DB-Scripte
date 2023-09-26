@@ -1775,7 +1775,6 @@ CREATE TABLE Schueler (
   OnlineAnmeldung varchar(1) DEFAULT '-', 
   Dokumentenverzeichnis varchar(255), 
   Berufsqualifikation varchar(100), 
-  ZusatzNachname varchar(30), 
   EndeEingliederung date, 
   SchulEmail varchar(100), 
   EndeAnschlussfoerderung date, 
@@ -2115,8 +2114,6 @@ CREATE TABLE SchuelerErzAdr (
   Erz1StaatKrz varchar(3), 
   Erz2StaatKrz varchar(3), 
   ErzEmail2 varchar(100), 
-  Erz1ZusatzNachname varchar(30), 
-  Erz2ZusatzNachname varchar(30), 
   Bemerkungen text, 
   CredentialID bigint,
   CONSTRAINT PK_SchuelerErzAdr PRIMARY KEY (ID),
@@ -3016,8 +3013,13 @@ CREATE TABLE Stundenplan_Kalenderwochen_Zuordnung (
 
 
 CREATE TABLE Stundenplan_Pausenzeit_Klassenzuordnung (
-  ,
-  CONSTRAINT PK_Stundenplan_Pausenzeit_Klassenzuordnung PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Pausenzeit_ID bigint NOT NULL, 
+  Klassen_ID bigint NOT NULL,
+  CONSTRAINT PK_Stundenplan_Pausenzeit_Klassenzuordnung PRIMARY KEY (ID),
+  CONSTRAINT Stundenplan_Pausenzeit_Klassenzuordnung_Klassen_FK FOREIGN KEY (Klassen_ID) REFERENCES Klassen(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_Pausenzeit_Klassenzuordnung_Pausenzeit_FK FOREIGN KEY (Pausenzeit_ID) REFERENCES Stundenplan_Pausenzeit(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_Pausenzeit_Klassenzuordnung_UC1 UNIQUE (Pausenzeit_ID, Klassen_ID)
 );
 
 
@@ -12820,6 +12822,96 @@ BEGIN
 END;
 
 
+CREATE TRIGGER t_AutoIncrement_INSERT_Stundenplan_Pausenzeit_Klassenzuordnung_1 AFTER INSERT ON Stundenplan_Pausenzeit_Klassenzuordnung FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle='Stundenplan_Pausenzeit_Klassenzuordnung') IS NOT NULL AND 
+	  NEW.ID > (SELECT max(MaxID) FROM Schema_AutoInkremente WHERE NameTabelle='Stundenplan_Pausenzeit_Klassenzuordnung')
+BEGIN
+  UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle = 'Stundenplan_Pausenzeit_Klassenzuordnung';
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_Stundenplan_Pausenzeit_Klassenzuordnung_2 AFTER INSERT ON Stundenplan_Pausenzeit_Klassenzuordnung FOR EACH ROW
+	WHEN NEW.ID < 0 AND
+	  (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle='Stundenplan_Pausenzeit_Klassenzuordnung') IS NOT NULL
+BEGIN
+  UPDATE Stundenplan_Pausenzeit_Klassenzuordnung SET ID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle='Stundenplan_Pausenzeit_Klassenzuordnung') + 1 WHERE ID = NEW.ID;
+  UPDATE Schema_AutoInkremente SET MaxID = MaxID + 1 WHERE NameTabelle = 'Stundenplan_Pausenzeit_Klassenzuordnung';
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_Stundenplan_Pausenzeit_Klassenzuordnung_3 AFTER INSERT ON Stundenplan_Pausenzeit_Klassenzuordnung FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle='Stundenplan_Pausenzeit_Klassenzuordnung') IS NULL AND
+	  NEW.ID < coalesce((SELECT max(ID) FROM Stundenplan_Pausenzeit_Klassenzuordnung), 0)
+BEGIN
+  INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Stundenplan_Pausenzeit_Klassenzuordnung', coalesce((SELECT max(ID) FROM Stundenplan_Pausenzeit_Klassenzuordnung), 0));
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_Stundenplan_Pausenzeit_Klassenzuordnung_4 AFTER INSERT ON Stundenplan_Pausenzeit_Klassenzuordnung FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle='Stundenplan_Pausenzeit_Klassenzuordnung') IS NULL AND
+	  NEW.ID >= coalesce((SELECT max(ID) FROM Stundenplan_Pausenzeit_Klassenzuordnung), 0)
+BEGIN
+  INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Stundenplan_Pausenzeit_Klassenzuordnung',  NEW.ID);
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_INSERT_Stundenplan_Pausenzeit_Klassenzuordnung_5 AFTER INSERT ON Stundenplan_Pausenzeit_Klassenzuordnung FOR EACH ROW
+	WHEN NEW.ID < 0 AND
+	  (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle='Stundenplan_Pausenzeit_Klassenzuordnung') IS NULL
+BEGIN
+  UPDATE Stundenplan_Pausenzeit_Klassenzuordnung SET ID = coalesce((SELECT max(ID) FROM Stundenplan_Pausenzeit_Klassenzuordnung), 0) + 1 WHERE ID = NEW.ID;
+  INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Stundenplan_Pausenzeit_Klassenzuordnung',  coalesce((SELECT max(ID) FROM Stundenplan_Pausenzeit_Klassenzuordnung), 0) + 1);
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_Stundenplan_Pausenzeit_Klassenzuordnung_1 AFTER UPDATE ON Stundenplan_Pausenzeit_Klassenzuordnung FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT max(MaxID) FROM Schema_AutoInkremente WHERE NameTabelle='Stundenplan_Pausenzeit_Klassenzuordnung') IS NOT NULL AND 
+	  NEW.ID > (SELECT max(MaxID) FROM Schema_AutoInkremente WHERE NameTabelle='Stundenplan_Pausenzeit_Klassenzuordnung')
+BEGIN
+  UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle = 'Stundenplan_Pausenzeit_Klassenzuordnung';
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_Stundenplan_Pausenzeit_Klassenzuordnung_2 AFTER UPDATE ON Stundenplan_Pausenzeit_Klassenzuordnung FOR EACH ROW
+	WHEN NEW.ID < 0 AND
+	  (SELECT max(MaxID) FROM Schema_AutoInkremente WHERE NameTabelle='Stundenplan_Pausenzeit_Klassenzuordnung') IS NOT NULL
+BEGIN
+  UPDATE Stundenplan_Pausenzeit_Klassenzuordnung SET ID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle='Stundenplan_Pausenzeit_Klassenzuordnung') + 1 WHERE ID = NEW.ID;
+  UPDATE Schema_AutoInkremente SET MaxID = MaxID + 1 WHERE NameTabelle = 'Stundenplan_Pausenzeit_Klassenzuordnung';
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_Stundenplan_Pausenzeit_Klassenzuordnung_3 AFTER UPDATE ON Stundenplan_Pausenzeit_Klassenzuordnung FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT max(MaxID) FROM Schema_AutoInkremente WHERE NameTabelle='Stundenplan_Pausenzeit_Klassenzuordnung') IS NULL AND
+	  NEW.ID < coalesce((SELECT max(ID) FROM Stundenplan_Pausenzeit_Klassenzuordnung), 0)
+BEGIN
+  INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Stundenplan_Pausenzeit_Klassenzuordnung', coalesce((SELECT max(ID) FROM Stundenplan_Pausenzeit_Klassenzuordnung), 0));
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_Stundenplan_Pausenzeit_Klassenzuordnung_4 AFTER UPDATE ON Stundenplan_Pausenzeit_Klassenzuordnung FOR EACH ROW
+	WHEN NEW.ID >= 0 AND 
+	  (SELECT max(MaxID) FROM Schema_AutoInkremente WHERE NameTabelle='Stundenplan_Pausenzeit_Klassenzuordnung') IS NULL AND
+	  NEW.ID >= coalesce((SELECT max(ID) FROM Stundenplan_Pausenzeit_Klassenzuordnung), 0)
+BEGIN
+  INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Stundenplan_Pausenzeit_Klassenzuordnung',  NEW.ID);
+END;
+
+
+CREATE TRIGGER t_AutoIncrement_UPDATE_Stundenplan_Pausenzeit_Klassenzuordnung_5 AFTER UPDATE ON Stundenplan_Pausenzeit_Klassenzuordnung FOR EACH ROW
+	WHEN NEW.ID < 0 AND
+	  (SELECT max(MaxID) FROM Schema_AutoInkremente WHERE NameTabelle='Stundenplan_Pausenzeit_Klassenzuordnung') IS NULL
+BEGIN
+  -- Update der ID in der Tabelle Stundenplan_Pausenzeit_Klassenzuordnung erfolgt durch den Autoinkrement-Trigger 2, daher hier auch kein +1, sondern nur den Max-Wert schreiben
+  INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Stundenplan_Pausenzeit_Klassenzuordnung',  coalesce((SELECT max(ID) FROM Stundenplan_Pausenzeit_Klassenzuordnung), 0));
+END;
+
+
 CREATE TRIGGER t_AutoIncrement_INSERT_Stundentafel_1 AFTER INSERT ON Stundentafel FOR EACH ROW
 	WHEN NEW.ID >= 0 AND 
 	  (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle='Stundentafel') IS NOT NULL AND 
@@ -14081,7 +14173,7 @@ END;
 
 
 
-INSERT INTO Schema_Revision(Revision) VALUES (9);
+INSERT INTO Schema_Revision(Revision) VALUES (10);
 
 INSERT INTO Berufskolleg_Anlagen(ID, Kuerzel, Bezeichnung, gueltigVon, gueltigBis) VALUES (1000,'A','Fachklassen duales System und Ausbildungsvorbereitung',null,null), (2000,'B','Berufsfachschule',null,null), (3000,'C','Berufsfachschule und Fachoberschule',null,null), (4000,'D','Berufliches Gymnasium und Fachoberschule',null,null), (5000,'E','Fachschule',null,null), (6000,'H','Bildungsgänge an freien Waldorfschulen / Hiberniakolleg',null,null), (24000,'X','Ehemalige Kollegschule',null,null), (26000,'Z','Kooperationsklasse Hauptschule',null,null);
 

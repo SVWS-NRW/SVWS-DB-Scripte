@@ -333,6 +333,12 @@ CREATE TABLE Gost_Jahrgangsdaten (
 ) COMMENT 'Gymnasiale Oberstufe - Allgemeine Informationen zu den Jahrgängen';
 
 
+CREATE TABLE Gost_Jahrgang_Fachwahlen (
+  ,
+  CONSTRAINT PK_Gost_Jahrgang_Fachwahlen PRIMARY KEY (Abi_Jahrgang, Fach_ID)
+) COMMENT 'Gymnasiale Oberstufe - Jahrgangsdaten: Informationen zu der jahrgangsspezifischen Vorlage zu von Schülern normalerweise gewählten Fächern';
+
+
 CREATE TABLE Gost_Blockung (
   ,
   CONSTRAINT PK_Gost_Blockung PRIMARY KEY (ID)
@@ -686,6 +692,20 @@ CREATE TABLE K_Ort (
 CREATE INDEX K_Ort_IDX1 ON K_Ort(PLZ);
 
 
+CREATE TABLE K_Ortsteil (
+  ID bigint DEFAULT -1 NOT NULL COMMENT 'ID des Ortsteils', 
+  Bezeichnung varchar(30) NOT NULL COMMENT 'Bezeichnung des Ortsteils', 
+  Ort_ID bigint COMMENT 'Fremdschlüssel auf den Ort, dem der Ortsteil zugeordnet ist', 
+  Sortierung int DEFAULT 32000 COMMENT 'Sortierung des Ortsteils', 
+  Sichtbar varchar(1) DEFAULT '+' COMMENT 'Sichbarkeit des Ortsteils', 
+  Aenderbar varchar(1) DEFAULT '+' COMMENT 'Änderbarkeit des Ortsteils', 
+  OrtsteilSchluessel varchar(30) COMMENT 'Schlüssel des Ortsteils (Regional?)',
+  CONSTRAINT PK_K_Ortsteil PRIMARY KEY (ID),
+  CONSTRAINT K_Ortsteil_Ort_FK FOREIGN KEY (Ort_ID) REFERENCES K_Ort(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT K_Ortsteil_UC1 UNIQUE (Bezeichnung)
+) COMMENT 'Interner Ortsteilkatalog';
+
+
 CREATE TABLE K_AllgAdresse (
   ID bigint DEFAULT -1 NOT NULL COMMENT 'ID der weiteren Adresse (Betriebe)', 
   AdressArt_ID bigint COMMENT 'Adressart des Betriebs, Fremdschlüssel auf die ID in K_Adressart', 
@@ -695,6 +715,7 @@ CREATE TABLE K_AllgAdresse (
   AllgAdrHausNr varchar(10) COMMENT 'Hausnummer wenn getrennt gespeichert', 
   AllgAdrHausNrZusatz varchar(30) COMMENT 'Zusatz zur Hausnummer wenn Hausnummern getrennt gespeichert werden', 
   AllgAdrOrt_ID bigint COMMENT 'OrtID des Betriebs', 
+  AllgOrtsteil_ID bigint COMMENT 'OrtsteilID des Betriebs', 
   AllgAdrTelefon1 varchar(20) COMMENT 'Telefonnummer1 des Betriebs', 
   AllgAdrTelefon2 varchar(20) COMMENT 'Telefonnummer2 des Betriebs', 
   AllgAdrFax varchar(20) COMMENT 'Faxnummer des Betriebs', 
@@ -715,7 +736,8 @@ CREATE TABLE K_AllgAdresse (
   ExtID varchar(50) COMMENT 'Externe ID des Betriebsdatensatzes',
   CONSTRAINT PK_K_AllgAdresse PRIMARY KEY (ID),
   CONSTRAINT K_AllgAdresse_K_Adressart_FK FOREIGN KEY (AdressArt_ID) REFERENCES K_Adressart(ID) ON UPDATE CASCADE ON DELETE SET NULL,
-  CONSTRAINT K_AllgAdresse_Ort_FK FOREIGN KEY (AllgAdrOrt_ID) REFERENCES K_Ort(ID) ON UPDATE CASCADE ON DELETE SET NULL
+  CONSTRAINT K_AllgAdresse_Ort_FK FOREIGN KEY (AllgAdrOrt_ID) REFERENCES K_Ort(ID) ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT K_AllgAdresse_Ortsteil_FK FOREIGN KEY (AllgOrtsteil_ID) REFERENCES K_Ortsteil(ID) ON UPDATE CASCADE ON DELETE SET NULL
 ) COMMENT 'Katalog der weiteren Adressen und Betriebe';
 
 
@@ -723,7 +745,7 @@ CREATE TABLE AllgAdrAnsprechpartner (
   ID bigint DEFAULT -1 NOT NULL COMMENT 'ID des Ansprechpartners der Tabelle AllgAdresse (Betriebe)', 
   Adresse_ID bigint NOT NULL COMMENT 'ID des Betriebs (der Adresse) aus der Tabelle AllgAdresse', 
   Name varchar(120) COMMENT 'Name des Ansprechpartners im Betrieb PAuswG vom 21.6.2019 §5 Abs. 2', 
-  Vorname varchar(80) COMMENT 'Vorname des Ansprechpartners im Betrieb PAuswG vom 21.6.2019 §5 Abs. 2', 
+  Vorname varchar(80) COMMENT 'Vorname des Ansprechpartners im Betrieb PAuswG vom 21.6.2019 §5 Abs. 2. Wird im Client mit Rufname angezeigt.', 
   Anrede varchar(10) COMMENT 'Anrede des Ansprechpartners im Betrieb', 
   Telefon varchar(20) COMMENT 'Telefonnummer des Ansprechpartners im Betrieb', 
   Email varchar(100) COMMENT 'Email-Adresse des Ansprechpartners im Betrieb', 
@@ -733,20 +755,6 @@ CREATE TABLE AllgAdrAnsprechpartner (
   CONSTRAINT PK_AllgAdrAnsprechpartner PRIMARY KEY (ID),
   CONSTRAINT AllgAdrAnsprechpartner_Adr_FK FOREIGN KEY (Adresse_ID) REFERENCES K_AllgAdresse(ID) ON UPDATE CASCADE ON DELETE CASCADE
 ) COMMENT 'Ansprechpartner-Daten die einem Betrieb/Adresse in K_AllgAdresse zugeordnet werden können';
-
-
-CREATE TABLE K_Ortsteil (
-  ID bigint DEFAULT -1 NOT NULL COMMENT 'ID des Ortsteils', 
-  Bezeichnung varchar(30) NOT NULL COMMENT 'Bezeichnung des Ortsteils', 
-  Ort_ID bigint COMMENT 'Fremdschlüssel auf den Ort, dem der Ortsteil zugeordnet ist', 
-  Sortierung int DEFAULT 32000 COMMENT 'Sortierung des Ortsteils', 
-  Sichtbar varchar(1) DEFAULT '+' COMMENT 'Sichbarkeit des Ortsteils', 
-  Aenderbar varchar(1) DEFAULT '+' COMMENT 'Änderbarkeit des Ortsteils', 
-  OrtsteilSchluessel varchar(30) COMMENT 'Schlüssel des Ortsteils (Regional?)',
-  CONSTRAINT PK_K_Ortsteil PRIMARY KEY (ID),
-  CONSTRAINT K_Ortsteil_Ort_FK FOREIGN KEY (Ort_ID) REFERENCES K_Ort(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT K_Ortsteil_UC1 UNIQUE (Bezeichnung)
-) COMMENT 'Interner Ortsteilkatalog';
 
 
 CREATE TABLE K_Religion (
@@ -973,7 +981,7 @@ CREATE TABLE NichtMoeglAbiFachKombi (
   Fach2_ID bigint NOT NULL COMMENT 'FACH2ID für eine nicht mögliche Kombination', 
   Kursart1 varchar(10) COMMENT 'Kursart Fach1', 
   Kursart2 varchar(10) COMMENT 'Kursart Fach2', 
-  PK varchar(30) NOT NULL COMMENT 'Primärschlüssel aus FachIDs und  Minuszeichen', 
+  PK varchar(30) NOT NULL COMMENT 'Primärschlüssel aus FachIDs und Minuszeichen', 
   Sortierung int COMMENT 'Sortierung der nicht möglichen Kombination', 
   Phase varchar(10) COMMENT 'Über welche Jahrgangsstufen geht die Kombination nicht', 
   Typ varchar(1) COMMENT 'Nicht mögliche Fächerkombination (-) oder Fächerprofil (+)',
@@ -1023,7 +1031,7 @@ CREATE TABLE K_Lehrer (
   Kuerzel varchar(10) NOT NULL COMMENT 'Lehrer-Kürzel für eine lesbare eindeutige Identifikation des Lehrers', 
   LIDKrz varchar(4) COMMENT 'Lehrer-Kürzel für eine eindeutige Identifikation des Lehrers – Verwendung für die Statistik - TODO lassen sich kuerzel und LIDKrz nicht sinnvoll zusammenfassen?', 
   Nachname varchar(120) NOT NULL COMMENT 'Der Nachname des Lehrers PAuswG vom 21.6.2019 §5 Abs. 2', 
-  Vorname varchar(80) COMMENT 'Der Vorname des Lehrers PAuswG vom 21.6.2019 §5 Abs. 2', 
+  Vorname varchar(80) COMMENT 'Der Vorname des Lehrers PAuswG vom 21.6.2019 §5 Abs. 2. Wird im Client mit Rufname angezeigt.', 
   PersonTyp varchar(20) DEFAULT 'LEHRKRAFT' COMMENT 'Die Art der Person – wurde nachträglich hinzugefügt, damit auch Nicht-Lehrer in die Liste aufgenommen und unterschieden werden können', 
   Sortierung int DEFAULT 32000 COMMENT 'Eine Nummer, die zur Sortierung der Lehrer-Datensätze verwendet werden kann.', 
   Sichtbar varchar(1) DEFAULT '+' COMMENT 'Gibt an, ob der Lehrer-Datensatz in der Oberfläche sichtbar sein soll und bei einer Auswahl zur Verfügung steht. ', 
@@ -1058,7 +1066,7 @@ CREATE TABLE K_Lehrer (
   PflichtstdSoll float COMMENT 'Das Pflichtstundensoll des Lehrers', 
   Rechtsverhaeltnis varchar(1) COMMENT 'Das Rechtsverhältnis unter welchem der Lehrer beschäftigt ist (z.B. Beamter auf Lebenszeit)', 
   Beschaeftigungsart varchar(2) COMMENT 'Die Art der Beschäftigung (Vollzeit, Teilzeit, etc.)', 
-  Einsatzstatus varchar(1) COMMENT 'Der Einsatzstatus (z.B. Stammschule, nur hier tätig)', 
+  Einsatzstatus varchar(1) COMMENT '[ASD] Der Einsatzstatus (z.B. Stammschule, nur hier tätig)', 
   StammschulNr varchar(6) COMMENT 'Die Schulnummer der Stammschule, sofern diese abweicht', 
   UnterrichtsStd float COMMENT 'Berechnetes Feld: Die Anzahl der unterrichteten Stunden', 
   MehrleistungStd float COMMENT 'Berechnetes Feld: Die Stunden für eine Mehrleistung', 
@@ -1205,34 +1213,34 @@ CREATE TABLE Religionen_Keys (
 ) COMMENT 'Gültige Schlüsselwerte für Fremdschlüssel zu den in der amtlichen Schulstatisik berücksichtigen Religionen / Konfessionen';
 
 
-CREATE TABLE SVWS_Client_Konfiguration_Global (
+CREATE TABLE Client_Konfiguration_Global (
   AppName varchar(100) NOT NULL COMMENT 'Der Name der Client-Anwendung, für die der Konfigurationsdatensatz gespeichert ist', 
   Schluessel varchar(255) NOT NULL COMMENT 'Der Schlüsselname des Konfigurationsdatensatzes', 
   Wert longtext NOT NULL COMMENT 'Der Wert des Konfigurationsdatensatzes',
-  CONSTRAINT PK_SVWS_Client_Konfiguration_Global PRIMARY KEY (AppName, Schluessel)
+  CONSTRAINT PK_Client_Konfiguration_Global PRIMARY KEY (AppName, Schluessel)
 ) COMMENT 'Tabelle für das Speichern von Client-Konfigurationen als Key-Value-Paare. Dabei werden über das Feld App unterschiedliche Client-Anwendungen unterstützt. Die Konfigurationen in dieser Tabelle gelten global für den Client.';
 
 
-CREATE TABLE SVWS_Core_Type_Versionen (
+CREATE TABLE Schema_Core_Type_Versionen (
   NameTabelle varchar(255) NOT NULL COMMENT 'Gibt den Namen der Tabelle an, wo die Daten des Core-Types hinterlegt werden.', 
   Name varchar(1023) NOT NULL COMMENT 'Gibt den Namen des Core-Types an.', 
   Version bigint DEFAULT 1 NOT NULL COMMENT 'Die Version, in welcher der Core-Type in der DB vorliegt',
-  CONSTRAINT PK_SVWS_Core_Type_Versionen PRIMARY KEY (NameTabelle)
+  CONSTRAINT PK_Schema_Core_Type_Versionen PRIMARY KEY (NameTabelle)
 ) COMMENT 'Tabelle für das Speichern, in welcher Version die Core-Type-Daten in den Datenbank-Tabellen vorliegen';
 
 
-CREATE TABLE SVWS_DB_AutoInkremente (
+CREATE TABLE Schema_AutoInkremente (
   NameTabelle varchar(200) NOT NULL COMMENT 'Gibt den Tabellennamen an, für dessen Auto-Inkrement der ID-Wert verwendet werden soll.', 
   MaxID bigint DEFAULT 1 NOT NULL COMMENT 'Die ID des höchsten jemals in die DB geschriebenen ID-Wertes bei der zugehörigen Tabelle',
-  CONSTRAINT PK_SVWS_DB_AutoInkremente PRIMARY KEY (NameTabelle)
+  CONSTRAINT PK_Schema_AutoInkremente PRIMARY KEY (NameTabelle)
 ) COMMENT 'Tabelle für das Zwischenspeichern der bisherigen Maximalwerte beim Einfügen, damit eine DBMS-unabhängige Auto-Inkrement-Funktion realisiert werden kann.';
 
 
-CREATE TABLE SVWS_DB_Version (
+CREATE TABLE Schema_Revision (
   Revision bigint DEFAULT 0 NOT NULL COMMENT 'Die Revision des Datenbankschemas der SVWS-DB', 
   IsTainted int DEFAULT 0 NOT NULL COMMENT 'Gibt an, ob die Datenbank noch für einen Produktivbetrieb zugelassen ist oder durch ein Update auf eine Entwicklerversion eventuell in einem ungültigen Zustand ist',
-  CONSTRAINT PK_SVWS_DB_Version PRIMARY KEY (Revision)
-) COMMENT 'Diese Tabelle enthält die Versionsinformationen zu der SVWS-DB';
+  CONSTRAINT PK_Schema_Revision PRIMARY KEY (Revision)
+) COMMENT 'Diese Tabelle enthält die Informationen zur Revision der SVWS-DB';
 
 
 CREATE TABLE SchildFilter (
@@ -1468,6 +1476,7 @@ CREATE TABLE Klassen (
   KoopKlasse varchar(1) DEFAULT '-' COMMENT 'Gibt an ob die Klasse eine KOOP-Klasse ist', 
   Ankreuzzeugnisse varchar(1) DEFAULT '-' COMMENT 'Gibt an ob in der Klasse Ankreuzeugnisse (GS) oder Kompentenzschreiben (andere) verwendet werden',
   CONSTRAINT PK_Klassen PRIMARY KEY (ID),
+  CONSTRAINT Klassen_Schuljahresabschnitt_FK FOREIGN KEY (Schuljahresabschnitts_ID) REFERENCES Schuljahresabschnitte(ID) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT Klassen_Fachklasse_FK FOREIGN KEY (Fachklasse_ID) REFERENCES EigeneSchule_Fachklassen(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT Klassen_Jahrgang_FK FOREIGN KEY (Jahrgang_ID) REFERENCES EigeneSchule_Jahrgaenge(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT Klassen_UC1 UNIQUE (Schuljahresabschnitts_ID, Klasse)
@@ -1496,7 +1505,7 @@ CREATE TABLE Kurse (
   CONSTRAINT PK_Kurse PRIMARY KEY (ID),
   CONSTRAINT Kurse_Schuljahreabschnitt_FK FOREIGN KEY (Schuljahresabschnitts_ID) REFERENCES Schuljahresabschnitte(ID) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT Kurse_Jahrgang_FK FOREIGN KEY (Jahrgang_ID) REFERENCES EigeneSchule_Jahrgaenge(ID) ON UPDATE CASCADE ON DELETE SET NULL,
-  CONSTRAINT Kurse_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Kurse_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT Kurse_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT Kurse_Fortschreibungsart_FK FOREIGN KEY (Fortschreibungsart) REFERENCES KursFortschreibungsarten(Kuerzel) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT Kurse_UC1 UNIQUE (Schuljahresabschnitts_ID, KurzBez, ASDJahrgang, Fach_ID, KursartAllg, WochenStd, Lehrer_ID, Jahrgaenge)
@@ -1555,7 +1564,7 @@ CREATE TABLE Schueler (
   IDext varchar(30) COMMENT 'externe ID', 
   Status int COMMENT 'Status des Schüler steuert die Einordnung in die Kästen Aktiv Neuaufnahme Abschluss usw.', 
   Name varchar(120) COMMENT 'Name des Schülers PAuswG vom 21.6.2019 §5 Abs. 2', 
-  Vorname varchar(80) COMMENT 'Vorname des Schülers PAuswG vom 21.6.2019 §5 Abs. 2', 
+  Vorname varchar(80) COMMENT 'Vorname des Schülers PAuswG vom 21.6.2019 §5 Abs. 2. Wird im Client mit Rufname angezeigt.', 
   Zusatz varchar(255) COMMENT 'Alle gültigen Vornamen, wenn mehrere vorhanden sind. Ist nur ein Vorname vorhanden bleibt das Feld leer und Vorname wird genutzt.', 
   Geburtsname varchar(120) COMMENT 'Geburtsname des Schülers', 
   Strassenname varchar(55) COMMENT 'Straßenname des Schülers', 
@@ -1746,11 +1755,12 @@ CREATE TABLE KursLehrer (
 
 CREATE TABLE Kurs_Schueler (
   Kurs_ID bigint NOT NULL COMMENT 'Die eindeutige ID des Kurses – verweist auf den Kurs', 
-  Schueler_ID bigint NOT NULL COMMENT 'Die eindeutige ID des Schülers – verweist auf den Schüler',
-  CONSTRAINT PK_Kurs_Schueler PRIMARY KEY (Kurs_ID, Schueler_ID),
+  Schueler_ID bigint NOT NULL COMMENT 'Die eindeutige ID des Schülers – verweist auf den Schüler', 
+  LernabschnittWechselNr smallint DEFAULT 0 COMMENT 'Wird für Wiederholungen im Laufenden Schuljahresabschnitt genutzt 0=aktueller/neuester Lernabschnitt 1=vor dem ersten Wechsel 2=vor dem zweiten Wechsel usw',
+  CONSTRAINT PK_Kurs_Schueler PRIMARY KEY (Kurs_ID, Schueler_ID, LernabschnittWechselNr),
   CONSTRAINT KursSchueler_Kurse_FK FOREIGN KEY (Kurs_ID) REFERENCES Kurse(ID) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT KursSchueler_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
-) COMMENT 'Tabelle mit KursSchueler-Zuordnungen wird ab Schild3.0 getriggert für performanteren Druck';
+) COMMENT 'Tabelle mit KursSchueler-Zuordnungen für performanteren Zugriff, welcher über Trigger befüllt wird.';
 
 
 CREATE TABLE SchuelerAbgaenge (
@@ -1828,7 +1838,7 @@ CREATE TABLE SchuelerAbiFaecher (
   MdlPruefFolge smallint COMMENT 'enthält die Reihenfolge für mündliche Prüfungen in den ersten drei Abiturfächern, falls mehrere angesetzt werden (1, 2, 3)', 
   AbiErgebnis smallint COMMENT 'Die Notenpunkte aus der Abiturprüfung multipliziert mit dem entsprechenden Faktor (hier wird z.B. die besondere Lernleistung) und unter Einbeziehung einer möglichen mündlicher Prüfung',
   CONSTRAINT PK_SchuelerAbiFaecher PRIMARY KEY (ID),
-  CONSTRAINT SchuelerAbiFaecher_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerAbiFaecher_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT SchuelerAbiFaecher_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT SchuelerAbiFaecher_Kurs_FK FOREIGN KEY (Kurs_ID) REFERENCES Kurse(ID) ON UPDATE CASCADE ON DELETE SET NULL
 ) COMMENT 'Abiturfächer zum Schüler';
@@ -1922,7 +1932,7 @@ CREATE TABLE SchuelerBKFaecher (
   Kursart varchar(10) COMMENT 'Kursart des Facheintrags für den BKAbschlussReiter',
   CONSTRAINT PK_SchuelerBKFaecher PRIMARY KEY (ID),
   CONSTRAINT SchuelerBKFaecher_Schuljahreabschnitt_FK FOREIGN KEY (Schuljahresabschnitts_ID) REFERENCES Schuljahresabschnitte(ID) ON UPDATE CASCADE ON DELETE SET NULL,
-  CONSTRAINT SchuelerBKFaecher_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerBKFaecher_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT SchuelerBKFaecher_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
 ) COMMENT 'Fächer zum Schüler in der Tabelle BKAbschluss';
 
@@ -1945,11 +1955,11 @@ CREATE TABLE SchuelerErzAdr (
   Anrede1 varchar(20) COMMENT 'Anrede1 zum Erzieherdatensatz', 
   Titel1 varchar(10) COMMENT 'Titel1 zum Erzieherdatensatz', 
   Name1 varchar(120) COMMENT 'Nachname1 zum Erzieherdatensatz PAuswG vom 21.6.2019 §5 Abs. 2', 
-  Vorname1 varchar(80) COMMENT 'Vorname1 zum Erzieherdatensatz PAuswG vom 21.6.2019 §5 Abs. 2', 
+  Vorname1 varchar(80) COMMENT 'Vorname1 zum Erzieherdatensatz PAuswG vom 21.6.2019 §5 Abs. 2. Wird im Client mit Rufname angezeigt.', 
   Anrede2 varchar(20) COMMENT 'Anrede2 zum Erzieherdatensatz', 
   Titel2 varchar(10) COMMENT 'Titel2 zum Erzieherdatensatz', 
   Name2 varchar(120) COMMENT 'Nachname2 zum Erzieherdatensatz PAuswG vom 21.6.2019 §5 Abs. 2', 
-  Vorname2 varchar(80) COMMENT 'Vorname2 zum Erzieherdatensatz PAuswG vom 21.6.2019 §5 Abs. 2', 
+  Vorname2 varchar(80) COMMENT 'Vorname2 zum Erzieherdatensatz PAuswG vom 21.6.2019 §5 Abs. 2. Wird im Client mit Rufname angezeigt.', 
   ErzOrt_ID bigint COMMENT 'OrtID zum Erzieherdatensatz', 
   ErzStrassenname varchar(55) COMMENT 'Straßenname des Erzieherdatensatzes', 
   ErzHausNr varchar(10) COMMENT 'Hausnummer wenn getrennt gespeichert', 
@@ -2064,7 +2074,7 @@ CREATE TABLE SchuelerFHRFaecher (
   KSII_3_2_W varchar(5) COMMENT 'K: Kursart im betreffenden Abschnitt W: Wiederholter Abschnitt', 
   FSortierung int COMMENT 'K: Kursart im betreffenden Abschnitt ',
   CONSTRAINT PK_SchuelerFHRFaecher PRIMARY KEY (ID),
-  CONSTRAINT SchuelerFHRFaecher_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerFHRFaecher_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT SchuelerFHRFaecher_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
 ) COMMENT 'Liste der Fächer zu SchuelerFHR';
 
@@ -2106,7 +2116,7 @@ CREATE TABLE SchuelerLernabschnittsdaten (
   ID bigint DEFAULT -1 NOT NULL COMMENT 'Eine eindeutige ID für den Lernabschnitt des Schülers', 
   Schueler_ID bigint NOT NULL COMMENT 'Die eindeutige ID des Schülers – verweist auf den Schülers', 
   Schuljahresabschnitts_ID bigint NOT NULL COMMENT 'ID des Schuljahresabschnittes aus der Tabelle Schuljahresabschnitte', 
-  WechselNr smallint COMMENT 'Wird für Wiederholungen im Laufenden Abschnitt genutzt NULL=aktueller Abschnitt 1=vor dem ersten Wechsel 2=vor dem zweiten Wechsel usw', 
+  WechselNr smallint DEFAULT 0 COMMENT 'Wird für Wiederholungen im Laufenden Abschnitt genutzt 0=aktueller/neuester Abschnitt 1=vor dem ersten Wechsel 2=vor dem zweiten Wechsel usw', 
   Schulbesuchsjahre smallint COMMENT 'Schulbesuchsjahre für den Lernabschnitt', 
   Hochrechnung int COMMENT 'Lernabschnitt ist Hochrechnung (nur noch BK)', 
   SemesterWertung varchar(1) DEFAULT '+' COMMENT 'Gewerteter Abschnitt (Ja/Nein)', 
@@ -2238,7 +2248,8 @@ CREATE TABLE SchuelerSprachenfolge (
   GraecumErreicht int COMMENT 'Gibt an, ob der Schüler das Graecum erreicht hat', 
   HebraicumErreicht int COMMENT 'Gibt an, ob der Schüler das Hebraicum erreicht hat',
   CONSTRAINT PK_SchuelerSprachenfolge PRIMARY KEY (ID),
-  CONSTRAINT SchuelerSprachenfolge_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
+  CONSTRAINT SchuelerSprachenfolge_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerSprachenfolge_UC1 UNIQUE (Schueler_ID, Sprache)
 ) COMMENT 'Einträge zur Sprachenfolge zum Schüler';
 
 CREATE INDEX SchuelerSprachenfolge_IDX1 ON SchuelerSprachenfolge(Schueler_ID);
@@ -2311,7 +2322,7 @@ CREATE TABLE SchuelerZP10 (
   Fachlehrer_ID bigint COMMENT 'Die Lehrer-ID zum ZP10-Facheintrag',
   CONSTRAINT PK_SchuelerZP10 PRIMARY KEY (ID),
   CONSTRAINT SchuelerZP10_Schuljahreabschnitt_FK FOREIGN KEY (Schuljahresabschnitts_ID) REFERENCES Schuljahresabschnitte(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerZP10_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerZP10_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT SchuelerZP10_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT SchuelerZP10_UC1 UNIQUE (Schueler_ID, Schuljahresabschnitts_ID, Fach_ID)
 ) COMMENT 'Die fachspezifischen Abschluss-Daten für die ZP10-Prüfungen';
@@ -2520,7 +2531,7 @@ CREATE TABLE SchuelerLeistungsdaten (
   Umfang varchar(1) COMMENT 'Facheigenschaft für Lernstandsberichte (V voller Umfang) (R reduzierter Umfang)',
   CONSTRAINT PK_SchuelerLeistungsdaten PRIMARY KEY (ID),
   CONSTRAINT SchuelerLeistungsdaten_Abschnitt_FK FOREIGN KEY (Abschnitt_ID) REFERENCES SchuelerLernabschnittsdaten(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerLeistungsdaten_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerLeistungsdaten_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT SchuelerLeistungsdaten_Lehrer_FK FOREIGN KEY (Fachlehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT SchuelerLeistungsdaten_Lehrer_Zusatzkraft_FK FOREIGN KEY (Zusatzkraft_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT SchuelerLeistungsdaten_Kurs_FK FOREIGN KEY (Kurs_ID) REFERENCES Kurse(ID) ON UPDATE CASCADE ON DELETE SET NULL,
@@ -2595,13 +2606,13 @@ CREATE TABLE Logins (
 ) COMMENT 'Tabelle zur Speicherung der LogIns mit Benutzernamen und Zeit für die Datenbank-User';
 
 
-CREATE TABLE SVWS_Client_Konfiguration_Benutzer (
+CREATE TABLE Client_Konfiguration_Benutzer (
   Benutzer_ID bigint NOT NULL COMMENT 'Die ID des Datenbankbenutzers, für den der Client-Konfigurationsdatensatz gespeichert ist', 
   AppName varchar(100) NOT NULL COMMENT 'Der Name der Client-Anwendung, für die der Konfigurationsdatensatz gespeichert ist', 
   Schluessel varchar(255) NOT NULL COMMENT 'Der Schlüsselname des Konfigurationsdatensatzes', 
   Wert longtext NOT NULL COMMENT 'Der Wert des Konfigurationsdatensatzes',
-  CONSTRAINT PK_SVWS_Client_Konfiguration_Benutzer PRIMARY KEY (Benutzer_ID, AppName, Schluessel),
-  CONSTRAINT SVWSClientKonfigurationBenutzer_Benutzer_FK FOREIGN KEY (Benutzer_ID) REFERENCES Benutzer(ID) ON UPDATE CASCADE ON DELETE CASCADE
+  CONSTRAINT PK_Client_Konfiguration_Benutzer PRIMARY KEY (Benutzer_ID, AppName, Schluessel),
+  CONSTRAINT ClientKonfigurationBenutzer_Benutzer_FK FOREIGN KEY (Benutzer_ID) REFERENCES Benutzer(ID) ON UPDATE CASCADE ON DELETE CASCADE
 ) COMMENT 'Tabelle für das Speichern von Client-Konfigurationen als Key-Value-Paare. Dabei werden über das Feld App unterschiedliche Client-Anwendungen unterstützt und über das Feld Benutzer eine Benutzerspezifische Speicherung.';
 
 
@@ -2765,6 +2776,12 @@ CREATE TABLE Stundenplan_Kalenderwochen_Zuordnung (
   ,
   CONSTRAINT PK_Stundenplan_Kalenderwochen_Zuordnung PRIMARY KEY (ID)
 ) COMMENT 'Enthält die Zuordnung von Kalenderwochen zu den Wochentypen eines Stundenplans.';
+
+
+CREATE TABLE Stundenplan_Pausenzeit_Klassenzuordnung (
+  ,
+  CONSTRAINT PK_Stundenplan_Pausenzeit_Klassenzuordnung PRIMARY KEY (ID)
+) COMMENT 'Enthält die Zuordnung der Klassen zu einem Pausenzeiteintrag. Über die Pausenzeit ist diese Zuordnung auch immer eindeutig einem Stundenplan zugeordnet.';
 
 
 CREATE TABLE Stundentafel (
@@ -3002,19 +3019,19 @@ BEFORE INSERT
   ON Benutzergruppen FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Benutzergruppen';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Benutzergruppen';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM Benutzergruppen;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Benutzergruppen', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Benutzergruppen', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Benutzergruppen';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Benutzergruppen';
   END IF;
 END
 
@@ -3029,19 +3046,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Benutzergruppen';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Benutzergruppen';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM Benutzergruppen;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Benutzergruppen', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Benutzergruppen', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Benutzergruppen';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Benutzergruppen';
     END IF;
   END IF;
 END
@@ -3056,19 +3073,19 @@ BEFORE INSERT
   ON Credentials FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Credentials';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Credentials';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM Credentials;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Credentials', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Credentials', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Credentials';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Credentials';
   END IF;
 END
 
@@ -3083,19 +3100,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Credentials';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Credentials';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM Credentials;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Credentials', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Credentials', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Credentials';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Credentials';
     END IF;
   END IF;
 END
@@ -3110,19 +3127,19 @@ BEFORE INSERT
   ON BenutzerAllgemein FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='BenutzerAllgemein';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='BenutzerAllgemein';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM BenutzerAllgemein;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('BenutzerAllgemein', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('BenutzerAllgemein', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='BenutzerAllgemein';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='BenutzerAllgemein';
   END IF;
 END
 
@@ -3137,19 +3154,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='BenutzerAllgemein';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='BenutzerAllgemein';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM BenutzerAllgemein;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('BenutzerAllgemein', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('BenutzerAllgemein', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='BenutzerAllgemein';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='BenutzerAllgemein';
     END IF;
   END IF;
 END
@@ -3164,19 +3181,19 @@ BEFORE INSERT
   ON EigeneSchule_Fachklassen FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Fachklassen';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='EigeneSchule_Fachklassen';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM EigeneSchule_Fachklassen;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Fachklassen', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Fachklassen', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Fachklassen';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Fachklassen';
   END IF;
 END
 
@@ -3191,19 +3208,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Fachklassen';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='EigeneSchule_Fachklassen';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM EigeneSchule_Fachklassen;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Fachklassen', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Fachklassen', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Fachklassen';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Fachklassen';
     END IF;
   END IF;
 END
@@ -3218,19 +3235,19 @@ BEFORE INSERT
   ON EigeneSchule_KAoADaten FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_KAoADaten';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='EigeneSchule_KAoADaten';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM EigeneSchule_KAoADaten;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_KAoADaten', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_KAoADaten', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_KAoADaten';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_KAoADaten';
   END IF;
 END
 
@@ -3245,19 +3262,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_KAoADaten';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='EigeneSchule_KAoADaten';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM EigeneSchule_KAoADaten;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_KAoADaten', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_KAoADaten', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_KAoADaten';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_KAoADaten';
     END IF;
   END IF;
 END
@@ -3272,19 +3289,19 @@ BEFORE INSERT
   ON EigeneSchule_Kursart FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Kursart';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='EigeneSchule_Kursart';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM EigeneSchule_Kursart;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Kursart', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Kursart', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Kursart';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Kursart';
   END IF;
 END
 
@@ -3299,19 +3316,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Kursart';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='EigeneSchule_Kursart';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM EigeneSchule_Kursart;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Kursart', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Kursart', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Kursart';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Kursart';
     END IF;
   END IF;
 END
@@ -3326,19 +3343,19 @@ BEFORE INSERT
   ON EigeneSchule_Merkmale FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Merkmale';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='EigeneSchule_Merkmale';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM EigeneSchule_Merkmale;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Merkmale', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Merkmale', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Merkmale';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Merkmale';
   END IF;
 END
 
@@ -3353,19 +3370,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Merkmale';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='EigeneSchule_Merkmale';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM EigeneSchule_Merkmale;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Merkmale', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Merkmale', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Merkmale';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Merkmale';
     END IF;
   END IF;
 END
@@ -3380,19 +3397,19 @@ BEFORE INSERT
   ON EigeneSchule_Schulformen FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Schulformen';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='EigeneSchule_Schulformen';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM EigeneSchule_Schulformen;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Schulformen', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Schulformen', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Schulformen';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Schulformen';
   END IF;
 END
 
@@ -3407,19 +3424,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Schulformen';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='EigeneSchule_Schulformen';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM EigeneSchule_Schulformen;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Schulformen', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Schulformen', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Schulformen';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Schulformen';
     END IF;
   END IF;
 END
@@ -3434,19 +3451,19 @@ BEFORE INSERT
   ON EigeneSchule_Zertifikate FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Zertifikate';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='EigeneSchule_Zertifikate';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM EigeneSchule_Zertifikate;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Zertifikate', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Zertifikate', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Zertifikate';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Zertifikate';
   END IF;
 END
 
@@ -3461,19 +3478,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Zertifikate';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='EigeneSchule_Zertifikate';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM EigeneSchule_Zertifikate;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Zertifikate', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Zertifikate', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Zertifikate';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Zertifikate';
     END IF;
   END IF;
 END
@@ -3488,19 +3505,19 @@ BEFORE INSERT
   ON EigeneSchule_Faecher FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Faecher';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='EigeneSchule_Faecher';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM EigeneSchule_Faecher;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Faecher', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Faecher', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Faecher';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Faecher';
   END IF;
 END
 
@@ -3515,19 +3532,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Faecher';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='EigeneSchule_Faecher';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM EigeneSchule_Faecher;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Faecher', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Faecher', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Faecher';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Faecher';
     END IF;
   END IF;
 END
@@ -3542,19 +3559,19 @@ BEFORE INSERT
   ON K_Adressart FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Adressart';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Adressart';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM K_Adressart;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Adressart', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Adressart', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Adressart';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Adressart';
   END IF;
 END
 
@@ -3569,19 +3586,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Adressart';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Adressart';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM K_Adressart;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Adressart', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Adressart', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Adressart';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Adressart';
     END IF;
   END IF;
 END
@@ -3596,19 +3613,19 @@ BEFORE INSERT
   ON K_Ankreuzdaten FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Ankreuzdaten';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Ankreuzdaten';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM K_Ankreuzdaten;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Ankreuzdaten', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Ankreuzdaten', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Ankreuzdaten';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Ankreuzdaten';
   END IF;
 END
 
@@ -3623,19 +3640,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Ankreuzdaten';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Ankreuzdaten';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM K_Ankreuzdaten;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Ankreuzdaten', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Ankreuzdaten', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Ankreuzdaten';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Ankreuzdaten';
     END IF;
   END IF;
 END
@@ -3650,19 +3667,19 @@ BEFORE INSERT
   ON K_Ankreuzfloskeln FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Ankreuzfloskeln';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Ankreuzfloskeln';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM K_Ankreuzfloskeln;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Ankreuzfloskeln', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Ankreuzfloskeln', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Ankreuzfloskeln';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Ankreuzfloskeln';
   END IF;
 END
 
@@ -3677,19 +3694,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Ankreuzfloskeln';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Ankreuzfloskeln';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM K_Ankreuzfloskeln;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Ankreuzfloskeln', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Ankreuzfloskeln', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Ankreuzfloskeln';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Ankreuzfloskeln';
     END IF;
   END IF;
 END
@@ -3704,19 +3721,19 @@ BEFORE INSERT
   ON K_BeschaeftigungsArt FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_BeschaeftigungsArt';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_BeschaeftigungsArt';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM K_BeschaeftigungsArt;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_BeschaeftigungsArt', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_BeschaeftigungsArt', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_BeschaeftigungsArt';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_BeschaeftigungsArt';
   END IF;
 END
 
@@ -3731,19 +3748,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_BeschaeftigungsArt';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_BeschaeftigungsArt';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM K_BeschaeftigungsArt;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_BeschaeftigungsArt', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_BeschaeftigungsArt', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_BeschaeftigungsArt';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_BeschaeftigungsArt';
     END IF;
   END IF;
 END
@@ -3758,19 +3775,19 @@ BEFORE INSERT
   ON K_Datenschutz FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Datenschutz';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Datenschutz';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM K_Datenschutz;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Datenschutz', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Datenschutz', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Datenschutz';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Datenschutz';
   END IF;
 END
 
@@ -3785,19 +3802,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Datenschutz';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Datenschutz';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM K_Datenschutz;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Datenschutz', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Datenschutz', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Datenschutz';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Datenschutz';
     END IF;
   END IF;
 END
@@ -3812,19 +3829,19 @@ BEFORE INSERT
   ON K_EinschulungsArt FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_EinschulungsArt';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_EinschulungsArt';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM K_EinschulungsArt;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_EinschulungsArt', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_EinschulungsArt', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_EinschulungsArt';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_EinschulungsArt';
   END IF;
 END
 
@@ -3839,19 +3856,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_EinschulungsArt';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_EinschulungsArt';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM K_EinschulungsArt;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_EinschulungsArt', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_EinschulungsArt', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_EinschulungsArt';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_EinschulungsArt';
     END IF;
   END IF;
 END
@@ -3866,19 +3883,19 @@ BEFORE INSERT
   ON K_Einzelleistungen FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Einzelleistungen';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Einzelleistungen';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM K_Einzelleistungen;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Einzelleistungen', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Einzelleistungen', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Einzelleistungen';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Einzelleistungen';
   END IF;
 END
 
@@ -3893,19 +3910,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Einzelleistungen';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Einzelleistungen';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM K_Einzelleistungen;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Einzelleistungen', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Einzelleistungen', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Einzelleistungen';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Einzelleistungen';
     END IF;
   END IF;
 END
@@ -3920,19 +3937,19 @@ BEFORE INSERT
   ON K_EntlassGrund FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_EntlassGrund';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_EntlassGrund';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM K_EntlassGrund;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_EntlassGrund', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_EntlassGrund', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_EntlassGrund';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_EntlassGrund';
   END IF;
 END
 
@@ -3947,19 +3964,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_EntlassGrund';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_EntlassGrund';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM K_EntlassGrund;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_EntlassGrund', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_EntlassGrund', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_EntlassGrund';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_EntlassGrund';
     END IF;
   END IF;
 END
@@ -3974,19 +3991,19 @@ BEFORE INSERT
   ON K_ErzieherArt FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_ErzieherArt';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_ErzieherArt';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM K_ErzieherArt;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_ErzieherArt', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_ErzieherArt', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_ErzieherArt';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_ErzieherArt';
   END IF;
 END
 
@@ -4001,19 +4018,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_ErzieherArt';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_ErzieherArt';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM K_ErzieherArt;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_ErzieherArt', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_ErzieherArt', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_ErzieherArt';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_ErzieherArt';
     END IF;
   END IF;
 END
@@ -4028,19 +4045,19 @@ BEFORE INSERT
   ON K_ErzieherFunktion FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_ErzieherFunktion';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_ErzieherFunktion';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM K_ErzieherFunktion;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_ErzieherFunktion', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_ErzieherFunktion', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_ErzieherFunktion';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_ErzieherFunktion';
   END IF;
 END
 
@@ -4055,19 +4072,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_ErzieherFunktion';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_ErzieherFunktion';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM K_ErzieherFunktion;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_ErzieherFunktion', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_ErzieherFunktion', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_ErzieherFunktion';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_ErzieherFunktion';
     END IF;
   END IF;
 END
@@ -4082,19 +4099,19 @@ BEFORE INSERT
   ON K_FahrschuelerArt FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_FahrschuelerArt';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_FahrschuelerArt';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM K_FahrschuelerArt;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_FahrschuelerArt', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_FahrschuelerArt', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_FahrschuelerArt';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_FahrschuelerArt';
   END IF;
 END
 
@@ -4109,19 +4126,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_FahrschuelerArt';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_FahrschuelerArt';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM K_FahrschuelerArt;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_FahrschuelerArt', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_FahrschuelerArt', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_FahrschuelerArt';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_FahrschuelerArt';
     END IF;
   END IF;
 END
@@ -4136,19 +4153,19 @@ BEFORE INSERT
   ON K_Foerderschwerpunkt FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Foerderschwerpunkt';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Foerderschwerpunkt';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM K_Foerderschwerpunkt;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Foerderschwerpunkt', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Foerderschwerpunkt', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Foerderschwerpunkt';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Foerderschwerpunkt';
   END IF;
 END
 
@@ -4163,19 +4180,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Foerderschwerpunkt';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Foerderschwerpunkt';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM K_Foerderschwerpunkt;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Foerderschwerpunkt', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Foerderschwerpunkt', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Foerderschwerpunkt';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Foerderschwerpunkt';
     END IF;
   END IF;
 END
@@ -4190,19 +4207,19 @@ BEFORE INSERT
   ON K_Haltestelle FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Haltestelle';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Haltestelle';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM K_Haltestelle;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Haltestelle', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Haltestelle', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Haltestelle';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Haltestelle';
   END IF;
 END
 
@@ -4217,19 +4234,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Haltestelle';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Haltestelle';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM K_Haltestelle;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Haltestelle', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Haltestelle', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Haltestelle';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Haltestelle';
     END IF;
   END IF;
 END
@@ -4244,19 +4261,19 @@ BEFORE INSERT
   ON K_Kindergarten FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Kindergarten';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Kindergarten';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM K_Kindergarten;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Kindergarten', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Kindergarten', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Kindergarten';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Kindergarten';
   END IF;
 END
 
@@ -4271,19 +4288,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Kindergarten';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Kindergarten';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM K_Kindergarten;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Kindergarten', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Kindergarten', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Kindergarten';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Kindergarten';
     END IF;
   END IF;
 END
@@ -4298,19 +4315,19 @@ BEFORE INSERT
   ON K_Ort FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Ort';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Ort';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM K_Ort;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Ort', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Ort', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Ort';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Ort';
   END IF;
 END
 
@@ -4325,127 +4342,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Ort';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Ort';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM K_Ort;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Ort', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Ort', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Ort';
-    END IF;
-  END IF;
-END
-
-$
-delimiter ;
-
-
-delimiter $
-CREATE TRIGGER t_AutoIncrement_INSERT_K_AllgAdresse
-BEFORE INSERT
-  ON K_AllgAdresse FOR EACH ROW
-BEGIN
-  DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_AllgAdresse';
-  IF tmpID IS NULL THEN
-    SELECT max(ID) INTO tmpID FROM K_AllgAdresse;
-    IF tmpID IS NULL THEN
-      SET tmpID = 0;
-    END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_AllgAdresse', tmpID);
-  END IF;
-  IF NEW.ID < 0 THEN
-    SET NEW.ID = tmpID + 1;
-  END IF;
-  IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_AllgAdresse';
-  END IF;
-END
-
-$
-delimiter ;
-
-
-delimiter $
-CREATE TRIGGER t_AutoIncrement_UPDATE_K_AllgAdresse
-BEFORE UPDATE
-  ON K_AllgAdresse FOR EACH ROW
-BEGIN
-  DECLARE tmpID bigint;
-  IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_AllgAdresse';
-    IF tmpID IS NULL THEN
-      SELECT max(ID) INTO tmpID FROM K_AllgAdresse;
-      IF tmpID IS NULL THEN
-        SET tmpID = 0;
-      END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_AllgAdresse', tmpID);
-    END IF;
-    IF NEW.ID < 0 THEN
-      SET NEW.ID = tmpID + 1;
-    END IF;
-    IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_AllgAdresse';
-    END IF;
-  END IF;
-END
-
-$
-delimiter ;
-
-
-delimiter $
-CREATE TRIGGER t_AutoIncrement_INSERT_AllgAdrAnsprechpartner
-BEFORE INSERT
-  ON AllgAdrAnsprechpartner FOR EACH ROW
-BEGIN
-  DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='AllgAdrAnsprechpartner';
-  IF tmpID IS NULL THEN
-    SELECT max(ID) INTO tmpID FROM AllgAdrAnsprechpartner;
-    IF tmpID IS NULL THEN
-      SET tmpID = 0;
-    END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('AllgAdrAnsprechpartner', tmpID);
-  END IF;
-  IF NEW.ID < 0 THEN
-    SET NEW.ID = tmpID + 1;
-  END IF;
-  IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='AllgAdrAnsprechpartner';
-  END IF;
-END
-
-$
-delimiter ;
-
-
-delimiter $
-CREATE TRIGGER t_AutoIncrement_UPDATE_AllgAdrAnsprechpartner
-BEFORE UPDATE
-  ON AllgAdrAnsprechpartner FOR EACH ROW
-BEGIN
-  DECLARE tmpID bigint;
-  IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='AllgAdrAnsprechpartner';
-    IF tmpID IS NULL THEN
-      SELECT max(ID) INTO tmpID FROM AllgAdrAnsprechpartner;
-      IF tmpID IS NULL THEN
-        SET tmpID = 0;
-      END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('AllgAdrAnsprechpartner', tmpID);
-    END IF;
-    IF NEW.ID < 0 THEN
-      SET NEW.ID = tmpID + 1;
-    END IF;
-    IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='AllgAdrAnsprechpartner';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Ort';
     END IF;
   END IF;
 END
@@ -4460,19 +4369,19 @@ BEFORE INSERT
   ON K_Ortsteil FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Ortsteil';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Ortsteil';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM K_Ortsteil;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Ortsteil', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Ortsteil', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Ortsteil';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Ortsteil';
   END IF;
 END
 
@@ -4487,19 +4396,127 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Ortsteil';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Ortsteil';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM K_Ortsteil;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Ortsteil', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Ortsteil', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Ortsteil';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Ortsteil';
+    END IF;
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_INSERT_K_AllgAdresse
+BEFORE INSERT
+  ON K_AllgAdresse FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_AllgAdresse';
+  IF tmpID IS NULL THEN
+    SELECT max(ID) INTO tmpID FROM K_AllgAdresse;
+    IF tmpID IS NULL THEN
+      SET tmpID = 0;
+    END IF;
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_AllgAdresse', tmpID);
+  END IF;
+  IF NEW.ID < 0 THEN
+    SET NEW.ID = tmpID + 1;
+  END IF;
+  IF NEW.ID > tmpID THEN
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_AllgAdresse';
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_UPDATE_K_AllgAdresse
+BEFORE UPDATE
+  ON K_AllgAdresse FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  IF (OLD.ID <> NEW.ID) THEN
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_AllgAdresse';
+    IF tmpID IS NULL THEN
+      SELECT max(ID) INTO tmpID FROM K_AllgAdresse;
+      IF tmpID IS NULL THEN
+        SET tmpID = 0;
+      END IF;
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_AllgAdresse', tmpID);
+    END IF;
+    IF NEW.ID < 0 THEN
+      SET NEW.ID = tmpID + 1;
+    END IF;
+    IF NEW.ID > tmpID THEN
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_AllgAdresse';
+    END IF;
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_INSERT_AllgAdrAnsprechpartner
+BEFORE INSERT
+  ON AllgAdrAnsprechpartner FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='AllgAdrAnsprechpartner';
+  IF tmpID IS NULL THEN
+    SELECT max(ID) INTO tmpID FROM AllgAdrAnsprechpartner;
+    IF tmpID IS NULL THEN
+      SET tmpID = 0;
+    END IF;
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('AllgAdrAnsprechpartner', tmpID);
+  END IF;
+  IF NEW.ID < 0 THEN
+    SET NEW.ID = tmpID + 1;
+  END IF;
+  IF NEW.ID > tmpID THEN
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='AllgAdrAnsprechpartner';
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_UPDATE_AllgAdrAnsprechpartner
+BEFORE UPDATE
+  ON AllgAdrAnsprechpartner FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  IF (OLD.ID <> NEW.ID) THEN
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='AllgAdrAnsprechpartner';
+    IF tmpID IS NULL THEN
+      SELECT max(ID) INTO tmpID FROM AllgAdrAnsprechpartner;
+      IF tmpID IS NULL THEN
+        SET tmpID = 0;
+      END IF;
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('AllgAdrAnsprechpartner', tmpID);
+    END IF;
+    IF NEW.ID < 0 THEN
+      SET NEW.ID = tmpID + 1;
+    END IF;
+    IF NEW.ID > tmpID THEN
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='AllgAdrAnsprechpartner';
     END IF;
   END IF;
 END
@@ -4514,19 +4531,19 @@ BEFORE INSERT
   ON K_Religion FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Religion';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Religion';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM K_Religion;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Religion', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Religion', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Religion';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Religion';
   END IF;
 END
 
@@ -4541,19 +4558,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Religion';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Religion';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM K_Religion;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Religion', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Religion', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Religion';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Religion';
     END IF;
   END IF;
 END
@@ -4568,19 +4585,19 @@ BEFORE INSERT
   ON K_Schule FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Schule';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Schule';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM K_Schule;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Schule', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Schule', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Schule';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Schule';
   END IF;
 END
 
@@ -4595,19 +4612,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Schule';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Schule';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM K_Schule;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Schule', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Schule', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Schule';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Schule';
     END IF;
   END IF;
 END
@@ -4622,19 +4639,19 @@ BEFORE INSERT
   ON K_Schulfunktionen FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Schulfunktionen';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Schulfunktionen';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM K_Schulfunktionen;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Schulfunktionen', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Schulfunktionen', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Schulfunktionen';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Schulfunktionen';
   END IF;
 END
 
@@ -4649,19 +4666,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Schulfunktionen';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Schulfunktionen';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM K_Schulfunktionen;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Schulfunktionen', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Schulfunktionen', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Schulfunktionen';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Schulfunktionen';
     END IF;
   END IF;
 END
@@ -4676,19 +4693,19 @@ BEFORE INSERT
   ON K_Schwerpunkt FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Schwerpunkt';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Schwerpunkt';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM K_Schwerpunkt;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Schwerpunkt', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Schwerpunkt', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Schwerpunkt';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Schwerpunkt';
   END IF;
 END
 
@@ -4703,19 +4720,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Schwerpunkt';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Schwerpunkt';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM K_Schwerpunkt;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Schwerpunkt', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Schwerpunkt', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Schwerpunkt';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Schwerpunkt';
     END IF;
   END IF;
 END
@@ -4730,19 +4747,19 @@ BEFORE INSERT
   ON K_Sportbefreiung FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Sportbefreiung';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Sportbefreiung';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM K_Sportbefreiung;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Sportbefreiung', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Sportbefreiung', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Sportbefreiung';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Sportbefreiung';
   END IF;
 END
 
@@ -4757,19 +4774,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Sportbefreiung';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Sportbefreiung';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM K_Sportbefreiung;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Sportbefreiung', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Sportbefreiung', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Sportbefreiung';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Sportbefreiung';
     END IF;
   END IF;
 END
@@ -4784,19 +4801,19 @@ BEFORE INSERT
   ON K_TelefonArt FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_TelefonArt';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_TelefonArt';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM K_TelefonArt;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_TelefonArt', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_TelefonArt', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_TelefonArt';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_TelefonArt';
   END IF;
 END
 
@@ -4811,19 +4828,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_TelefonArt';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_TelefonArt';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM K_TelefonArt;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_TelefonArt', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_TelefonArt', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_TelefonArt';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_TelefonArt';
     END IF;
   END IF;
 END
@@ -4838,19 +4855,19 @@ BEFORE INSERT
   ON K_Textdateien FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Textdateien';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Textdateien';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM K_Textdateien;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Textdateien', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Textdateien', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Textdateien';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Textdateien';
   END IF;
 END
 
@@ -4865,19 +4882,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Textdateien';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Textdateien';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM K_Textdateien;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Textdateien', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Textdateien', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Textdateien';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Textdateien';
     END IF;
   END IF;
 END
@@ -4892,19 +4909,19 @@ BEFORE INSERT
   ON K_Vermerkart FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Vermerkart';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Vermerkart';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM K_Vermerkart;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Vermerkart', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Vermerkart', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Vermerkart';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Vermerkart';
   END IF;
 END
 
@@ -4919,19 +4936,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Vermerkart';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Vermerkart';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM K_Vermerkart;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Vermerkart', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Vermerkart', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Vermerkart';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Vermerkart';
     END IF;
   END IF;
 END
@@ -4946,19 +4963,19 @@ BEFORE INSERT
   ON Lernplattformen FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Lernplattformen';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Lernplattformen';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM Lernplattformen;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Lernplattformen', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Lernplattformen', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Lernplattformen';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Lernplattformen';
   END IF;
 END
 
@@ -4973,19 +4990,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Lernplattformen';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Lernplattformen';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM Lernplattformen;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Lernplattformen', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Lernplattformen', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Lernplattformen';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Lernplattformen';
     END IF;
   END IF;
 END
@@ -5000,19 +5017,19 @@ BEFORE INSERT
   ON CredentialsLernplattformen FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='CredentialsLernplattformen';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='CredentialsLernplattformen';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM CredentialsLernplattformen;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('CredentialsLernplattformen', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('CredentialsLernplattformen', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='CredentialsLernplattformen';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='CredentialsLernplattformen';
   END IF;
 END
 
@@ -5027,19 +5044,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='CredentialsLernplattformen';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='CredentialsLernplattformen';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM CredentialsLernplattformen;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('CredentialsLernplattformen', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('CredentialsLernplattformen', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='CredentialsLernplattformen';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='CredentialsLernplattformen';
     END IF;
   END IF;
 END
@@ -5054,19 +5071,19 @@ BEFORE INSERT
   ON K_Lehrer FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Lehrer';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM K_Lehrer;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Lehrer', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Lehrer', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Lehrer';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Lehrer';
   END IF;
 END
 
@@ -5081,19 +5098,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='K_Lehrer';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='K_Lehrer';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM K_Lehrer;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Lehrer', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('K_Lehrer', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Lehrer';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='K_Lehrer';
     END IF;
   END IF;
 END
@@ -5108,19 +5125,19 @@ BEFORE INSERT
   ON Personengruppen FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Personengruppen';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Personengruppen';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM Personengruppen;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Personengruppen', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Personengruppen', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Personengruppen';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Personengruppen';
   END IF;
 END
 
@@ -5135,19 +5152,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Personengruppen';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Personengruppen';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM Personengruppen;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Personengruppen', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Personengruppen', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Personengruppen';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Personengruppen';
     END IF;
   END IF;
 END
@@ -5162,19 +5179,19 @@ BEFORE INSERT
   ON Personengruppen_Personen FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Personengruppen_Personen';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Personengruppen_Personen';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM Personengruppen_Personen;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Personengruppen_Personen', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Personengruppen_Personen', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Personengruppen_Personen';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Personengruppen_Personen';
   END IF;
 END
 
@@ -5189,19 +5206,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Personengruppen_Personen';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Personengruppen_Personen';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM Personengruppen_Personen;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Personengruppen_Personen', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Personengruppen_Personen', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Personengruppen_Personen';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Personengruppen_Personen';
     END IF;
   END IF;
 END
@@ -5216,19 +5233,19 @@ BEFORE INSERT
   ON SchildFilter FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchildFilter';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchildFilter';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM SchildFilter;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchildFilter', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchildFilter', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchildFilter';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchildFilter';
   END IF;
 END
 
@@ -5243,19 +5260,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchildFilter';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchildFilter';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM SchildFilter;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchildFilter', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchildFilter', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchildFilter';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchildFilter';
     END IF;
   END IF;
 END
@@ -5270,19 +5287,19 @@ BEFORE INSERT
   ON SchuelerListe FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerListe';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerListe';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM SchuelerListe;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerListe', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerListe', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerListe';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerListe';
   END IF;
 END
 
@@ -5297,19 +5314,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerListe';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerListe';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM SchuelerListe;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerListe', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerListe', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerListe';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerListe';
     END IF;
   END IF;
 END
@@ -5324,19 +5341,19 @@ BEFORE INSERT
   ON Schuljahresabschnitte FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Schuljahresabschnitte';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Schuljahresabschnitte';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM Schuljahresabschnitte;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Schuljahresabschnitte', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Schuljahresabschnitte', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Schuljahresabschnitte';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Schuljahresabschnitte';
   END IF;
 END
 
@@ -5351,19 +5368,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Schuljahresabschnitte';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Schuljahresabschnitte';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM Schuljahresabschnitte;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Schuljahresabschnitte', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Schuljahresabschnitte', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Schuljahresabschnitte';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Schuljahresabschnitte';
     END IF;
   END IF;
 END
@@ -5378,19 +5395,19 @@ BEFORE INSERT
   ON EigeneSchule_Abteilungen FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM EigeneSchule_Abteilungen;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abteilungen', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abteilungen', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Abteilungen';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Abteilungen';
   END IF;
 END
 
@@ -5405,19 +5422,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='EigeneSchule_Abteilungen';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM EigeneSchule_Abteilungen;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abteilungen', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abteilungen', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Abteilungen';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Abteilungen';
     END IF;
   END IF;
 END
@@ -5432,19 +5449,19 @@ BEFORE INSERT
   ON EigeneSchule_Jahrgaenge FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Jahrgaenge';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='EigeneSchule_Jahrgaenge';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM EigeneSchule_Jahrgaenge;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Jahrgaenge', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Jahrgaenge', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Jahrgaenge';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Jahrgaenge';
   END IF;
 END
 
@@ -5459,19 +5476,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Jahrgaenge';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='EigeneSchule_Jahrgaenge';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM EigeneSchule_Jahrgaenge;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Jahrgaenge', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Jahrgaenge', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Jahrgaenge';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Jahrgaenge';
     END IF;
   END IF;
 END
@@ -5486,19 +5503,19 @@ BEFORE INSERT
   ON LehrerAbschnittsdaten FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='LehrerAbschnittsdaten';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='LehrerAbschnittsdaten';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM LehrerAbschnittsdaten;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('LehrerAbschnittsdaten', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('LehrerAbschnittsdaten', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='LehrerAbschnittsdaten';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='LehrerAbschnittsdaten';
   END IF;
 END
 
@@ -5513,19 +5530,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='LehrerAbschnittsdaten';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='LehrerAbschnittsdaten';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM LehrerAbschnittsdaten;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('LehrerAbschnittsdaten', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('LehrerAbschnittsdaten', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='LehrerAbschnittsdaten';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='LehrerAbschnittsdaten';
     END IF;
   END IF;
 END
@@ -5540,19 +5557,19 @@ BEFORE INSERT
   ON Klassen FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Klassen';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Klassen';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM Klassen;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Klassen', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Klassen', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Klassen';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Klassen';
   END IF;
 END
 
@@ -5567,19 +5584,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Klassen';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Klassen';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM Klassen;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Klassen', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Klassen', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Klassen';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Klassen';
     END IF;
   END IF;
 END
@@ -5594,19 +5611,19 @@ BEFORE INSERT
   ON Kurse FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Kurse';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Kurse';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM Kurse;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Kurse', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Kurse', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Kurse';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Kurse';
   END IF;
 END
 
@@ -5621,19 +5638,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Kurse';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Kurse';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM Kurse;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Kurse', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Kurse', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Kurse';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Kurse';
     END IF;
   END IF;
 END
@@ -5648,19 +5665,19 @@ BEFORE INSERT
   ON LehrerAnrechnung FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='LehrerAnrechnung';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='LehrerAnrechnung';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM LehrerAnrechnung;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('LehrerAnrechnung', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('LehrerAnrechnung', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='LehrerAnrechnung';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='LehrerAnrechnung';
   END IF;
 END
 
@@ -5675,19 +5692,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='LehrerAnrechnung';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='LehrerAnrechnung';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM LehrerAnrechnung;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('LehrerAnrechnung', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('LehrerAnrechnung', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='LehrerAnrechnung';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='LehrerAnrechnung';
     END IF;
   END IF;
 END
@@ -5702,19 +5719,19 @@ BEFORE INSERT
   ON LehrerEntlastung FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='LehrerEntlastung';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='LehrerEntlastung';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM LehrerEntlastung;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('LehrerEntlastung', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('LehrerEntlastung', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='LehrerEntlastung';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='LehrerEntlastung';
   END IF;
 END
 
@@ -5729,19 +5746,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='LehrerEntlastung';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='LehrerEntlastung';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM LehrerEntlastung;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('LehrerEntlastung', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('LehrerEntlastung', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='LehrerEntlastung';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='LehrerEntlastung';
     END IF;
   END IF;
 END
@@ -5756,19 +5773,19 @@ BEFORE INSERT
   ON LehrerFunktionen FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='LehrerFunktionen';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='LehrerFunktionen';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM LehrerFunktionen;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('LehrerFunktionen', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('LehrerFunktionen', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='LehrerFunktionen';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='LehrerFunktionen';
   END IF;
 END
 
@@ -5783,19 +5800,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='LehrerFunktionen';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='LehrerFunktionen';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM LehrerFunktionen;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('LehrerFunktionen', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('LehrerFunktionen', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='LehrerFunktionen';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='LehrerFunktionen';
     END IF;
   END IF;
 END
@@ -5810,19 +5827,19 @@ BEFORE INSERT
   ON LehrerMehrleistung FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='LehrerMehrleistung';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='LehrerMehrleistung';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM LehrerMehrleistung;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('LehrerMehrleistung', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('LehrerMehrleistung', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='LehrerMehrleistung';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='LehrerMehrleistung';
   END IF;
 END
 
@@ -5837,19 +5854,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='LehrerMehrleistung';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='LehrerMehrleistung';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM LehrerMehrleistung;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('LehrerMehrleistung', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('LehrerMehrleistung', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='LehrerMehrleistung';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='LehrerMehrleistung';
     END IF;
   END IF;
 END
@@ -5864,19 +5881,19 @@ BEFORE INSERT
   ON Schueler FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Schueler';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Schueler';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM Schueler;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Schueler', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Schueler', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Schueler';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Schueler';
   END IF;
 END
 
@@ -5891,19 +5908,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Schueler';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Schueler';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM Schueler;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Schueler', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Schueler', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Schueler';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Schueler';
     END IF;
   END IF;
 END
@@ -5918,19 +5935,19 @@ BEFORE INSERT
   ON EigeneSchule_Abt_Kl FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abt_Kl';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='EigeneSchule_Abt_Kl';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM EigeneSchule_Abt_Kl;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abt_Kl', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abt_Kl', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Abt_Kl';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Abt_Kl';
   END IF;
 END
 
@@ -5945,19 +5962,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='EigeneSchule_Abt_Kl';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='EigeneSchule_Abt_Kl';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM EigeneSchule_Abt_Kl;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abt_Kl', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('EigeneSchule_Abt_Kl', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Abt_Kl';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='EigeneSchule_Abt_Kl';
     END IF;
   END IF;
 END
@@ -5972,19 +5989,19 @@ BEFORE INSERT
   ON SchuelerAbgaenge FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerAbgaenge';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerAbgaenge';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM SchuelerAbgaenge;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbgaenge', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbgaenge', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAbgaenge';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAbgaenge';
   END IF;
 END
 
@@ -5999,19 +6016,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerAbgaenge';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerAbgaenge';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM SchuelerAbgaenge;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbgaenge', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbgaenge', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAbgaenge';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAbgaenge';
     END IF;
   END IF;
 END
@@ -6026,19 +6043,19 @@ BEFORE INSERT
   ON SchuelerAbiFaecher FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerAbiFaecher';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerAbiFaecher';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM SchuelerAbiFaecher;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbiFaecher', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbiFaecher', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAbiFaecher';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAbiFaecher';
   END IF;
 END
 
@@ -6053,19 +6070,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerAbiFaecher';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerAbiFaecher';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM SchuelerAbiFaecher;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbiFaecher', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbiFaecher', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAbiFaecher';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAbiFaecher';
     END IF;
   END IF;
 END
@@ -6080,19 +6097,19 @@ BEFORE INSERT
   ON SchuelerAbitur FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerAbitur';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerAbitur';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM SchuelerAbitur;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbitur', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbitur', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAbitur';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAbitur';
   END IF;
 END
 
@@ -6107,19 +6124,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerAbitur';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerAbitur';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM SchuelerAbitur;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbitur', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAbitur', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAbitur';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAbitur';
     END IF;
   END IF;
 END
@@ -6134,19 +6151,19 @@ BEFORE INSERT
   ON SchuelerBKFaecher FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerBKFaecher';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerBKFaecher';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM SchuelerBKFaecher;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerBKFaecher', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerBKFaecher', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerBKFaecher';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerBKFaecher';
   END IF;
 END
 
@@ -6161,19 +6178,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerBKFaecher';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerBKFaecher';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM SchuelerBKFaecher;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerBKFaecher', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerBKFaecher', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerBKFaecher';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerBKFaecher';
     END IF;
   END IF;
 END
@@ -6188,19 +6205,19 @@ BEFORE INSERT
   ON SchuelerErzAdr FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerErzAdr';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerErzAdr';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM SchuelerErzAdr;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerErzAdr', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerErzAdr', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerErzAdr';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerErzAdr';
   END IF;
 END
 
@@ -6215,19 +6232,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerErzAdr';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerErzAdr';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM SchuelerErzAdr;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerErzAdr', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerErzAdr', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerErzAdr';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerErzAdr';
     END IF;
   END IF;
 END
@@ -6242,19 +6259,19 @@ BEFORE INSERT
   ON SchuelerFHR FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerFHR';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerFHR';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM SchuelerFHR;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFHR', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFHR', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerFHR';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerFHR';
   END IF;
 END
 
@@ -6269,19 +6286,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerFHR';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerFHR';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM SchuelerFHR;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFHR', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFHR', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerFHR';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerFHR';
     END IF;
   END IF;
 END
@@ -6296,19 +6313,19 @@ BEFORE INSERT
   ON SchuelerFHRFaecher FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerFHRFaecher';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerFHRFaecher';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM SchuelerFHRFaecher;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFHRFaecher', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFHRFaecher', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerFHRFaecher';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerFHRFaecher';
   END IF;
 END
 
@@ -6323,19 +6340,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerFHRFaecher';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerFHRFaecher';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM SchuelerFHRFaecher;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFHRFaecher', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFHRFaecher', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerFHRFaecher';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerFHRFaecher';
     END IF;
   END IF;
 END
@@ -6350,19 +6367,19 @@ BEFORE INSERT
   ON SchuelerLernabschnittsdaten FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerLernabschnittsdaten';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerLernabschnittsdaten';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM SchuelerLernabschnittsdaten;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLernabschnittsdaten', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLernabschnittsdaten', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerLernabschnittsdaten';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerLernabschnittsdaten';
   END IF;
 END
 
@@ -6377,19 +6394,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerLernabschnittsdaten';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerLernabschnittsdaten';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM SchuelerLernabschnittsdaten;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLernabschnittsdaten', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLernabschnittsdaten', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerLernabschnittsdaten';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerLernabschnittsdaten';
     END IF;
   END IF;
 END
@@ -6404,19 +6421,19 @@ BEFORE INSERT
   ON SchuelerSprachenfolge FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerSprachenfolge';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerSprachenfolge';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM SchuelerSprachenfolge;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerSprachenfolge', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerSprachenfolge', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerSprachenfolge';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerSprachenfolge';
   END IF;
 END
 
@@ -6431,19 +6448,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerSprachenfolge';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerSprachenfolge';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM SchuelerSprachenfolge;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerSprachenfolge', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerSprachenfolge', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerSprachenfolge';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerSprachenfolge';
     END IF;
   END IF;
 END
@@ -6458,19 +6475,19 @@ BEFORE INSERT
   ON SchuelerSprachpruefungen FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerSprachpruefungen';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerSprachpruefungen';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM SchuelerSprachpruefungen;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerSprachpruefungen', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerSprachpruefungen', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerSprachpruefungen';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerSprachpruefungen';
   END IF;
 END
 
@@ -6485,19 +6502,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerSprachpruefungen';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerSprachpruefungen';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM SchuelerSprachpruefungen;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerSprachpruefungen', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerSprachpruefungen', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerSprachpruefungen';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerSprachpruefungen';
     END IF;
   END IF;
 END
@@ -6512,19 +6529,19 @@ BEFORE INSERT
   ON SchuelerTelefone FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerTelefone';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerTelefone';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM SchuelerTelefone;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerTelefone', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerTelefone', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerTelefone';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerTelefone';
   END IF;
 END
 
@@ -6539,19 +6556,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerTelefone';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerTelefone';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM SchuelerTelefone;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerTelefone', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerTelefone', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerTelefone';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerTelefone';
     END IF;
   END IF;
 END
@@ -6566,19 +6583,19 @@ BEFORE INSERT
   ON SchuelerVermerke FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerVermerke';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerVermerke';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM SchuelerVermerke;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerVermerke', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerVermerke', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerVermerke';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerVermerke';
   END IF;
 END
 
@@ -6593,19 +6610,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerVermerke';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerVermerke';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM SchuelerVermerke;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerVermerke', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerVermerke', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerVermerke';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerVermerke';
     END IF;
   END IF;
 END
@@ -6620,19 +6637,19 @@ BEFORE INSERT
   ON SchuelerZP10 FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerZP10';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerZP10';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM SchuelerZP10;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerZP10', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerZP10', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerZP10';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerZP10';
   END IF;
 END
 
@@ -6647,19 +6664,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerZP10';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerZP10';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM SchuelerZP10;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerZP10', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerZP10', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerZP10';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerZP10';
     END IF;
   END IF;
 END
@@ -6674,19 +6691,19 @@ BEFORE INSERT
   ON Schueler_AllgAdr FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Schueler_AllgAdr';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Schueler_AllgAdr';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM Schueler_AllgAdr;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Schueler_AllgAdr', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Schueler_AllgAdr', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Schueler_AllgAdr';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Schueler_AllgAdr';
   END IF;
 END
 
@@ -6701,19 +6718,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Schueler_AllgAdr';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Schueler_AllgAdr';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM Schueler_AllgAdr;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Schueler_AllgAdr', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Schueler_AllgAdr', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Schueler_AllgAdr';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Schueler_AllgAdr';
     END IF;
   END IF;
 END
@@ -6728,19 +6745,19 @@ BEFORE INSERT
   ON Benutzer FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Benutzer';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Benutzer';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM Benutzer;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Benutzer', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Benutzer', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Benutzer';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Benutzer';
   END IF;
 END
 
@@ -6755,19 +6772,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Benutzer';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Benutzer';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM Benutzer;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Benutzer', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Benutzer', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Benutzer';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Benutzer';
     END IF;
   END IF;
 END
@@ -6782,19 +6799,19 @@ BEFORE INSERT
   ON SchuelerAnkreuzfloskeln FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerAnkreuzfloskeln';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerAnkreuzfloskeln';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM SchuelerAnkreuzfloskeln;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAnkreuzfloskeln', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAnkreuzfloskeln', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAnkreuzfloskeln';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAnkreuzfloskeln';
   END IF;
 END
 
@@ -6809,19 +6826,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerAnkreuzfloskeln';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerAnkreuzfloskeln';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM SchuelerAnkreuzfloskeln;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAnkreuzfloskeln', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerAnkreuzfloskeln', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAnkreuzfloskeln';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerAnkreuzfloskeln';
     END IF;
   END IF;
 END
@@ -6836,19 +6853,19 @@ BEFORE INSERT
   ON SchuelerFehlstunden FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerFehlstunden';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerFehlstunden';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM SchuelerFehlstunden;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFehlstunden', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFehlstunden', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerFehlstunden';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerFehlstunden';
   END IF;
 END
 
@@ -6863,19 +6880,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerFehlstunden';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerFehlstunden';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM SchuelerFehlstunden;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFehlstunden', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerFehlstunden', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerFehlstunden';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerFehlstunden';
     END IF;
   END IF;
 END
@@ -6890,19 +6907,19 @@ BEFORE INSERT
   ON SchuelerKAoADaten FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerKAoADaten';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerKAoADaten';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM SchuelerKAoADaten;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerKAoADaten', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerKAoADaten', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerKAoADaten';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerKAoADaten';
   END IF;
 END
 
@@ -6917,19 +6934,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerKAoADaten';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerKAoADaten';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM SchuelerKAoADaten;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerKAoADaten', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerKAoADaten', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerKAoADaten';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerKAoADaten';
     END IF;
   END IF;
 END
@@ -6944,19 +6961,19 @@ BEFORE INSERT
   ON SchuelerLD_PSFachBem FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerLD_PSFachBem';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerLD_PSFachBem';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM SchuelerLD_PSFachBem;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLD_PSFachBem', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLD_PSFachBem', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerLD_PSFachBem';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerLD_PSFachBem';
   END IF;
 END
 
@@ -6971,19 +6988,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerLD_PSFachBem';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerLD_PSFachBem';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM SchuelerLD_PSFachBem;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLD_PSFachBem', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLD_PSFachBem', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerLD_PSFachBem';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerLD_PSFachBem';
     END IF;
   END IF;
 END
@@ -6998,19 +7015,19 @@ BEFORE INSERT
   ON SchuelerLeistungsdaten FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerLeistungsdaten';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerLeistungsdaten';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM SchuelerLeistungsdaten;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLeistungsdaten', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLeistungsdaten', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerLeistungsdaten';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerLeistungsdaten';
   END IF;
 END
 
@@ -7025,19 +7042,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerLeistungsdaten';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerLeistungsdaten';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM SchuelerLeistungsdaten;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLeistungsdaten', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerLeistungsdaten', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerLeistungsdaten';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerLeistungsdaten';
     END IF;
   END IF;
 END
@@ -7052,19 +7069,19 @@ BEFORE INSERT
   ON SchuelerEinzelleistungen FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerEinzelleistungen';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerEinzelleistungen';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM SchuelerEinzelleistungen;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerEinzelleistungen', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerEinzelleistungen', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerEinzelleistungen';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerEinzelleistungen';
   END IF;
 END
 
@@ -7079,19 +7096,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerEinzelleistungen';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerEinzelleistungen';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM SchuelerEinzelleistungen;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerEinzelleistungen', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerEinzelleistungen', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerEinzelleistungen';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerEinzelleistungen';
     END IF;
   END IF;
 END
@@ -7106,19 +7123,19 @@ BEFORE INSERT
   ON SchuelerWiedervorlage FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerWiedervorlage';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerWiedervorlage';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM SchuelerWiedervorlage;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerWiedervorlage', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerWiedervorlage', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerWiedervorlage';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerWiedervorlage';
   END IF;
 END
 
@@ -7133,19 +7150,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='SchuelerWiedervorlage';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='SchuelerWiedervorlage';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM SchuelerWiedervorlage;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerWiedervorlage', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('SchuelerWiedervorlage', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerWiedervorlage';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='SchuelerWiedervorlage';
     END IF;
   END IF;
 END
@@ -7160,19 +7177,19 @@ BEFORE INSERT
   ON Schulleitung FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Schulleitung';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Schulleitung';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM Schulleitung;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Schulleitung', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Schulleitung', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Schulleitung';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Schulleitung';
   END IF;
 END
 
@@ -7187,19 +7204,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Schulleitung';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Schulleitung';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM Schulleitung;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Schulleitung', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Schulleitung', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Schulleitung';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Schulleitung';
     END IF;
   END IF;
 END
@@ -7214,19 +7231,19 @@ BEFORE INSERT
   ON Stundentafel FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Stundentafel';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Stundentafel';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM Stundentafel;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Stundentafel', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Stundentafel', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Stundentafel';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Stundentafel';
   END IF;
 END
 
@@ -7241,19 +7258,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Stundentafel';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Stundentafel';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM Stundentafel;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Stundentafel', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Stundentafel', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Stundentafel';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Stundentafel';
     END IF;
   END IF;
 END
@@ -7268,19 +7285,19 @@ BEFORE INSERT
   ON Stundentafel_Faecher FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Stundentafel_Faecher';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Stundentafel_Faecher';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM Stundentafel_Faecher;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Stundentafel_Faecher', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Stundentafel_Faecher', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Stundentafel_Faecher';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Stundentafel_Faecher';
   END IF;
 END
 
@@ -7295,19 +7312,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='Stundentafel_Faecher';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Stundentafel_Faecher';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM Stundentafel_Faecher;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('Stundentafel_Faecher', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Stundentafel_Faecher', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Stundentafel_Faecher';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Stundentafel_Faecher';
     END IF;
   END IF;
 END
@@ -7322,19 +7339,19 @@ BEFORE INSERT
   ON ZuordnungReportvorlagen FOR EACH ROW
 BEGIN
   DECLARE tmpID bigint;
-  SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='ZuordnungReportvorlagen';
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='ZuordnungReportvorlagen';
   IF tmpID IS NULL THEN
     SELECT max(ID) INTO tmpID FROM ZuordnungReportvorlagen;
     IF tmpID IS NULL THEN
       SET tmpID = 0;
     END IF;
-    INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('ZuordnungReportvorlagen', tmpID);
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('ZuordnungReportvorlagen', tmpID);
   END IF;
   IF NEW.ID < 0 THEN
     SET NEW.ID = tmpID + 1;
   END IF;
   IF NEW.ID > tmpID THEN
-    UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='ZuordnungReportvorlagen';
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='ZuordnungReportvorlagen';
   END IF;
 END
 
@@ -7349,19 +7366,19 @@ BEFORE UPDATE
 BEGIN
   DECLARE tmpID bigint;
   IF (OLD.ID <> NEW.ID) THEN
-    SELECT MaxID INTO tmpID FROM SVWS_DB_AutoInkremente WHERE NameTabelle='ZuordnungReportvorlagen';
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='ZuordnungReportvorlagen';
     IF tmpID IS NULL THEN
       SELECT max(ID) INTO tmpID FROM ZuordnungReportvorlagen;
       IF tmpID IS NULL THEN
         SET tmpID = 0;
       END IF;
-      INSERT INTO SVWS_DB_AutoInkremente(NameTabelle, MaxID) VALUES ('ZuordnungReportvorlagen', tmpID);
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('ZuordnungReportvorlagen', tmpID);
     END IF;
     IF NEW.ID < 0 THEN
       SET NEW.ID = tmpID + 1;
     END IF;
     IF NEW.ID > tmpID THEN
-      UPDATE SVWS_DB_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='ZuordnungReportvorlagen';
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='ZuordnungReportvorlagen';
     END IF;
   END IF;
 END
@@ -7371,7 +7388,7 @@ delimiter ;
 
 
 
-INSERT INTO SVWS_DB_Version(Revision) VALUES (3);
+INSERT INTO Schema_Revision(Revision) VALUES (3);
 
 INSERT INTO Berufskolleg_Anlagen(ID, Kuerzel, Bezeichnung, gueltigVon, gueltigBis) VALUES (1000,'A','Fachklassen duales System und Ausbildungsvorbereitung',null,null), (2000,'B','Berufsfachschule',null,null), (3000,'C','Berufsfachschule und Fachoberschule',null,null), (4000,'D','Berufliches Gymnasium und Fachoberschule',null,null), (5000,'E','Fachschule',null,null), (6000,'H','Bildungsgänge an freien Waldorfschulen / Hiberniakolleg',null,null), (24000,'X','Ehemalige Kollegschule',null,null), (26000,'Z','Kooperationsklasse Hauptschule',null,null);
 

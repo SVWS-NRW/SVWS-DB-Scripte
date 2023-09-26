@@ -1775,7 +1775,6 @@ CREATE TABLE Schueler (
   OnlineAnmeldung varchar(1) DEFAULT '-', 
   Dokumentenverzeichnis varchar(255), 
   Berufsqualifikation varchar(100), 
-  ZusatzNachname varchar(30), 
   EndeEingliederung date, 
   SchulEmail varchar(100), 
   EndeAnschlussfoerderung date, 
@@ -2115,8 +2114,6 @@ CREATE TABLE SchuelerErzAdr (
   Erz1StaatKrz varchar(3), 
   Erz2StaatKrz varchar(3), 
   ErzEmail2 varchar(100), 
-  Erz1ZusatzNachname varchar(30), 
-  Erz2ZusatzNachname varchar(30), 
   Bemerkungen text, 
   CredentialID bigint,
   CONSTRAINT PK_SchuelerErzAdr PRIMARY KEY (ID),
@@ -3016,8 +3013,13 @@ CREATE TABLE Stundenplan_Kalenderwochen_Zuordnung (
 
 
 CREATE TABLE Stundenplan_Pausenzeit_Klassenzuordnung (
-  ,
-  CONSTRAINT PK_Stundenplan_Pausenzeit_Klassenzuordnung PRIMARY KEY (ID)
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Pausenzeit_ID bigint NOT NULL, 
+  Klassen_ID bigint NOT NULL,
+  CONSTRAINT PK_Stundenplan_Pausenzeit_Klassenzuordnung PRIMARY KEY (ID),
+  CONSTRAINT Stundenplan_Pausenzeit_Klassenzuordnung_Klassen_FK FOREIGN KEY (Klassen_ID) REFERENCES Klassen(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_Pausenzeit_Klassenzuordnung_Pausenzeit_FK FOREIGN KEY (Pausenzeit_ID) REFERENCES Stundenplan_Pausenzeit(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_Pausenzeit_Klassenzuordnung_UC1 UNIQUE (Pausenzeit_ID, Klassen_ID)
 );
 
 
@@ -3216,61 +3218,132 @@ CREATE TABLE EnmLernabschnittsdaten (
 
 
 CREATE TABLE Gost_Klausuren_Vorgaben (
-  ,
-  CONSTRAINT PK_Gost_Klausuren_Vorgaben PRIMARY KEY (ID)
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Abi_Jahrgang int NOT NULL, 
+  Halbjahr int NOT NULL, 
+  Quartal int NOT NULL, 
+  Fach_ID bigint NOT NULL, 
+  Kursart varchar(10) DEFAULT 'GK' NOT NULL, 
+  Dauer int NOT NULL, 
+  Auswahlzeit int NOT NULL, 
+  IstMdlPruefung int DEFAULT 0 NOT NULL, 
+  IstAudioNotwendig int DEFAULT 0 NOT NULL, 
+  IstVideoNotwendig int DEFAULT 0 NOT NULL, 
+  Bemerkungen text,
+  CONSTRAINT PK_Gost_Klausuren_Vorgaben PRIMARY KEY (ID),
+  CONSTRAINT Gost_Klausuren_Vorgaben_Abi_Jahrgang_FK FOREIGN KEY (Abi_Jahrgang) REFERENCES Gost_Jahrgangsdaten(Abi_Jahrgang) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Klausuren_Vorgaben_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Klausuren_Vorgaben_UC1 UNIQUE (Abi_Jahrgang, Halbjahr, Quartal, Fach_ID, Kursart)
 );
 
 
 CREATE TABLE Gost_Klausuren_Termine (
-  ,
-  CONSTRAINT PK_Gost_Klausuren_Termine PRIMARY KEY (ID)
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Abi_Jahrgang int NOT NULL, 
+  Halbjahr int NOT NULL, 
+  Quartal int NOT NULL, 
+  Datum date, 
+  Startzeit timestamp, 
+  Bezeichnung text, 
+  Bemerkungen text,
+  CONSTRAINT PK_Gost_Klausuren_Termine PRIMARY KEY (ID),
+  CONSTRAINT Gost_Klausuren_Termine_Abi_Jahrgang_FK FOREIGN KEY (Abi_Jahrgang) REFERENCES Gost_Jahrgangsdaten(Abi_Jahrgang) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
 CREATE TABLE Gost_Klausuren_Kursklausuren (
-  ,
-  CONSTRAINT PK_Gost_Klausuren_Kursklausuren PRIMARY KEY (ID)
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Vorgabe_ID bigint NOT NULL, 
+  Kurs_ID bigint NOT NULL, 
+  Termin_ID bigint, 
+  Startzeit timestamp,
+  CONSTRAINT PK_Gost_Klausuren_Kursklausuren PRIMARY KEY (ID),
+  CONSTRAINT Gost_Klausuren_Kursklausuren_Vorgabe_ID_FK FOREIGN KEY (Vorgabe_ID) REFERENCES Gost_Klausuren_Vorgaben(ID) ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT Gost_Klausuren_Kursklausuren_Kurs_ID_FK FOREIGN KEY (Kurs_ID) REFERENCES Kurse(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Klausuren_Kursklausuren_Termin_ID_FK FOREIGN KEY (Termin_ID) REFERENCES Gost_Klausuren_Termine(ID) ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT Gost_Klausuren_Kursklausuren_UC1 UNIQUE (Vorgabe_ID, Kurs_ID)
 );
 
 
 CREATE TABLE Gost_Klausuren_Schuelerklausuren (
-  ,
-  CONSTRAINT PK_Gost_Klausuren_Schuelerklausuren PRIMARY KEY (ID)
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Kursklausur_ID bigint NOT NULL, 
+  Termin_ID bigint, 
+  Schueler_ID bigint NOT NULL, 
+  Startzeit timestamp,
+  CONSTRAINT PK_Gost_Klausuren_Schuelerklausuren PRIMARY KEY (ID),
+  CONSTRAINT Gost_Klausuren_Schuelerklausuren_Kursklausur_ID_FK FOREIGN KEY (Kursklausur_ID) REFERENCES Gost_Klausuren_Kursklausuren(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Klausuren_Schuelerklausuren_Schueler_ID_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Klausuren_Schuelerklausuren_Termin_ID_FK FOREIGN KEY (Termin_ID) REFERENCES Gost_Klausuren_Termine(ID) ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT Gost_Klausuren_Schuelerklausuren_UC1 UNIQUE (Kursklausur_ID, Schueler_ID)
 );
 
 
 CREATE TABLE Gost_Klausuren_NtaZeiten (
-  ,
-  CONSTRAINT PK_Gost_Klausuren_NtaZeiten PRIMARY KEY (Schueler_ID, Vorgabe_ID)
+  Schueler_ID bigint NOT NULL, 
+  Vorgabe_ID bigint NOT NULL, 
+  Zeitzugabe int NOT NULL, 
+  Bemerkungen text,
+  CONSTRAINT PK_Gost_Klausuren_NtaZeiten PRIMARY KEY (Schueler_ID, Vorgabe_ID),
+  CONSTRAINT Gost_Klausuren_NtaZeiten_Schueler_ID_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Klausuren_NtaZeiten_Vorgabe_ID_FK FOREIGN KEY (Vorgabe_ID) REFERENCES Gost_Klausuren_Vorgaben(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
 CREATE TABLE Gost_Klausuren_Raeume (
-  ,
-  CONSTRAINT PK_Gost_Klausuren_Raeume PRIMARY KEY (ID)
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Termin_ID bigint NOT NULL, 
+  Stundenplan_Raum_ID bigint, 
+  Bemerkungen text,
+  CONSTRAINT PK_Gost_Klausuren_Raeume PRIMARY KEY (ID),
+  CONSTRAINT Gost_Klausuren_Raeume_Stundenplan_Raum_ID_FK FOREIGN KEY (Stundenplan_Raum_ID) REFERENCES Stundenplan_Raeume(ID) ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT Gost_Klausuren_Raeume_Termin_ID_FK FOREIGN KEY (Termin_ID) REFERENCES Gost_Klausuren_Termine(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Klausuren_Raume_UC1 UNIQUE (Termin_ID, Stundenplan_Raum_ID)
 );
 
 
 CREATE TABLE Gost_Klausuren_Raeume_Stunden (
-  ,
-  CONSTRAINT PK_Gost_Klausuren_Raeume_Stunden PRIMARY KEY (ID)
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Klausurraum_ID bigint NOT NULL, 
+  Zeitraster_ID bigint NOT NULL,
+  CONSTRAINT PK_Gost_Klausuren_Raeume_Stunden PRIMARY KEY (ID),
+  CONSTRAINT Gost_Klausuren_Raeume_Stunden_Klausurraum_ID_FK FOREIGN KEY (Klausurraum_ID) REFERENCES Gost_Klausuren_Raeume(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Klausuren_Raeume_Stunden_Zeitraster_ID_FK FOREIGN KEY (Zeitraster_ID) REFERENCES Stundenplan_Zeitraster(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT unique_Gost_Klausuren_Raueme_Stunden_UC1 UNIQUE (Klausurraum_ID, Zeitraster_ID)
 );
 
 
 CREATE TABLE Gost_Klausuren_Schuelerklausuren_Raeume_Stunden (
-  ,
-  CONSTRAINT PK_Gost_Klausuren_Schuelerklausuren_Raeume_Stunden PRIMARY KEY (Schuelerklausur_ID, KlausurRaumStunde_ID)
+  Schuelerklausur_ID bigint NOT NULL, 
+  KlausurRaumStunde_ID bigint NOT NULL,
+  CONSTRAINT PK_Gost_Klausuren_Schuelerklausuren_Raeume_Stunden PRIMARY KEY (Schuelerklausur_ID, KlausurRaumStunde_ID),
+  CONSTRAINT Gost_Klausuren_SKlausuren_Raeume_Stunden_SK_ID_FK FOREIGN KEY (Schuelerklausur_ID) REFERENCES Gost_Klausuren_Schuelerklausuren(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Klausuren_SKlausuren_Raeume_Stunden_KRS_ID_FK FOREIGN KEY (KlausurRaumStunde_ID) REFERENCES Gost_Klausuren_Raeume_Stunden(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
 CREATE TABLE Gost_Klausuren_Raeume_Stunden_Aufsichten (
-  ,
-  CONSTRAINT PK_Gost_Klausuren_Raeume_Stunden_Aufsichten PRIMARY KEY (ID)
+  ID bigint AUTOINCREMENT NOT NULL, 
+  KlausurRaumStunde_ID bigint NOT NULL, 
+  Lehrer_ID bigint, 
+  Startzeit timestamp, 
+  Endzeit timestamp, 
+  Bemerkungen text,
+  CONSTRAINT PK_Gost_Klausuren_Raeume_Stunden_Aufsichten PRIMARY KEY (ID),
+  CONSTRAINT Gost_Klausuren_Raeume_Stunden_Aufsichten_KlausurRaumStunde_ID_FK FOREIGN KEY (KlausurRaumStunde_ID) REFERENCES Gost_Klausuren_Raeume_Stunden(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Klausuren_Raeume_Stunden_Aufsichten_Lehrer_ID_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE SET NULL
 );
 
 
 CREATE TABLE Gost_Klausuren_Kalenderinformationen (
-  ,
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Bezeichnung text, 
+  Startdatum date, 
+  Startzeit timestamp, 
+  Enddatum date, 
+  Endzeit timestamp, 
+  IstSperrtermin int DEFAULT 0 NOT NULL, 
+  Bemerkungen text,
   CONSTRAINT PK_Gost_Klausuren_Kalenderinformationen PRIMARY KEY (ID)
 );
 
@@ -3279,7 +3352,7 @@ CREATE TABLE Gost_Klausuren_Kalenderinformationen (
 
 
 
-INSERT INTO Schema_Revision(Revision) VALUES (8);
+INSERT INTO Schema_Revision(Revision) VALUES (10);
 
 INSERT INTO Berufskolleg_Anlagen(ID, Kuerzel, Bezeichnung, gueltigVon, gueltigBis) VALUES (1000,'A','Fachklassen duales System und Ausbildungsvorbereitung',null,null), (2000,'B','Berufsfachschule',null,null), (3000,'C','Berufsfachschule und Fachoberschule',null,null), (4000,'D','Berufliches Gymnasium und Fachoberschule',null,null), (5000,'E','Fachschule',null,null), (6000,'H','Bildungsgänge an freien Waldorfschulen / Hiberniakolleg',null,null), (24000,'X','Ehemalige Kollegschule',null,null), (26000,'Z','Kooperationsklasse Hauptschule',null,null);
 

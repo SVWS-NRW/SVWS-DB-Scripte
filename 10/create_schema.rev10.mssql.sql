@@ -328,68 +328,148 @@ CREATE TABLE EigeneSchule_FachTeilleistungen (
 
 
 CREATE TABLE Gost_Jahrgangsdaten (
-  ,
+  Abi_Jahrgang int NOT NULL, 
+  ZusatzkursGEVorhanden int DEFAULT 1, 
+  ZusatzkursGEErstesHalbjahr nvarchar(4) DEFAULT 'Q2.1', 
+  ZusatzkursSWVorhanden int DEFAULT 1, 
+  ZusatzkursSWErstesHalbjahr nvarchar(4) DEFAULT 'Q2.1', 
+  TextBeratungsbogen nvarchar(2000), 
+  TextMailversand nvarchar(2000),
   CONSTRAINT PK_Gost_Jahrgangsdaten PRIMARY KEY (Abi_Jahrgang)
 );
 
 
 CREATE TABLE Gost_Jahrgang_Fachwahlen (
-  ,
-  CONSTRAINT PK_Gost_Jahrgang_Fachwahlen PRIMARY KEY (Abi_Jahrgang, Fach_ID)
+  Abi_Jahrgang int NOT NULL, 
+  Fach_ID bigint NOT NULL, 
+  EF1_Kursart nvarchar(10), 
+  EF2_Kursart nvarchar(10), 
+  Q11_Kursart nvarchar(10), 
+  Q12_Kursart nvarchar(10), 
+  Q21_Kursart nvarchar(10), 
+  Q22_Kursart nvarchar(10), 
+  AbiturFach int, 
+  Bemerkungen nvarchar(50),
+  CONSTRAINT PK_Gost_Jahrgang_Fachwahlen PRIMARY KEY (Abi_Jahrgang, Fach_ID),
+  CONSTRAINT Gost_Jahrgang_Fachwahlen_Abi_Jahrgang_FK FOREIGN KEY (Abi_Jahrgang) REFERENCES Gost_Jahrgangsdaten(Abi_Jahrgang) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Jahrgang_Fachwahlen_Fach_ID_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
 CREATE TABLE Gost_Blockung (
-  ,
-  CONSTRAINT PK_Gost_Blockung PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Name nvarchar(255) DEFAULT 'Neue Blockung' NOT NULL, 
+  Abi_Jahrgang int NOT NULL, 
+  Halbjahr int NOT NULL, 
+  IstAktiv int DEFAULT 0 NOT NULL,
+  CONSTRAINT PK_Gost_Blockung PRIMARY KEY (ID),
+  CONSTRAINT Gost_Blockung_Abi_Jahrgang_FK FOREIGN KEY (Abi_Jahrgang) REFERENCES Gost_Jahrgangsdaten(Abi_Jahrgang) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
 CREATE TABLE Gost_Jahrgang_Fachkombinationen (
-  ,
-  CONSTRAINT PK_Gost_Jahrgang_Fachkombinationen PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Abi_Jahrgang int DEFAULT -1 NOT NULL, 
+  Fach1_ID bigint NOT NULL, 
+  Fach2_ID bigint NOT NULL, 
+  Kursart1 nvarchar(10), 
+  Kursart2 nvarchar(10), 
+  EF1 int DEFAULT 1 NOT NULL, 
+  EF2 int DEFAULT 1 NOT NULL, 
+  Q11 int DEFAULT 1 NOT NULL, 
+  Q12 int DEFAULT 1 NOT NULL, 
+  Q21 int DEFAULT 1 NOT NULL, 
+  Q22 int DEFAULT 1 NOT NULL, 
+  Typ int DEFAULT 0 NOT NULL, 
+  Hinweistext nvarchar(255) DEFAULT '' NOT NULL,
+  CONSTRAINT PK_Gost_Jahrgang_Fachkombinationen PRIMARY KEY (ID),
+  CONSTRAINT Gost_Jahrgang_Fachkombinationen_Abi_Jahrgang_FK FOREIGN KEY (Abi_Jahrgang) REFERENCES Gost_Jahrgangsdaten(Abi_Jahrgang) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Jahrgang_Fachkombinationen_Fach1_ID_FK FOREIGN KEY (Fach1_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Jahrgang_Fachkombinationen_Fach2_ID_FK FOREIGN KEY (Fach2_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
 CREATE TABLE Gost_Jahrgang_Faecher (
-  ,
-  CONSTRAINT PK_Gost_Jahrgang_Faecher PRIMARY KEY (Abi_Jahrgang, Fach_ID)
+  Abi_Jahrgang int NOT NULL, 
+  Fach_ID bigint NOT NULL, 
+  WaehlbarEF1 int DEFAULT 1 NOT NULL, 
+  WaehlbarEF2 int DEFAULT 1 NOT NULL, 
+  WaehlbarQ11 int DEFAULT 1 NOT NULL, 
+  WaehlbarQ12 int DEFAULT 1 NOT NULL, 
+  WaehlbarQ21 int DEFAULT 1 NOT NULL, 
+  WaehlbarQ22 int DEFAULT 1 NOT NULL, 
+  WaehlbarAbiGK int DEFAULT 1 NOT NULL, 
+  WaehlbarAbiLK int DEFAULT 1 NOT NULL, 
+  WochenstundenQPhase int,
+  CONSTRAINT PK_Gost_Jahrgang_Faecher PRIMARY KEY (Abi_Jahrgang, Fach_ID),
+  CONSTRAINT Gost_Jahrgang_Faecher_Abi_Jahrgang_FK FOREIGN KEY (Abi_Jahrgang) REFERENCES Gost_Jahrgangsdaten(Abi_Jahrgang) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Jahrgang_Faecher_Fach_ID_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
 CREATE TABLE Gost_Blockung_Kurse (
-  ,
-  CONSTRAINT PK_Gost_Blockung_Kurse PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Blockung_ID bigint NOT NULL, 
+  Fach_ID bigint NOT NULL, 
+  Kursart nvarchar(10) DEFAULT 'GK' NOT NULL, 
+  Kursnummer int NOT NULL, 
+  IstKoopKurs int DEFAULT 0 NOT NULL, 
+  BezeichnungSuffix nvarchar(255), 
+  Schienenanzahl int DEFAULT 1 NOT NULL, 
+  Wochenstunden int DEFAULT 3 NOT NULL,
+  CONSTRAINT PK_Gost_Blockung_Kurse PRIMARY KEY (ID),
+  CONSTRAINT Gost_Blockung_Kurse_Blockung_FK FOREIGN KEY (Blockung_ID) REFERENCES Gost_Blockung(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Blockung_Kurse_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
 CREATE TABLE Gost_Blockung_Regeln (
-  ,
-  CONSTRAINT PK_Gost_Blockung_Regeln PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Blockung_ID bigint NOT NULL, 
+  Typ int NOT NULL,
+  CONSTRAINT PK_Gost_Blockung_Regeln PRIMARY KEY (ID),
+  CONSTRAINT Gost_Blockung_Regeln_Blockung_FK FOREIGN KEY (Blockung_ID) REFERENCES Gost_Blockung(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
 CREATE TABLE Gost_Blockung_Schienen (
-  ,
-  CONSTRAINT PK_Gost_Blockung_Schienen PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Blockung_ID bigint NOT NULL, 
+  Nummer int NOT NULL, 
+  Bezeichnung nvarchar(255) DEFAULT 'Schiene' NOT NULL, 
+  Wochenstunden int DEFAULT 3 NOT NULL,
+  CONSTRAINT PK_Gost_Blockung_Schienen PRIMARY KEY (ID),
+  CONSTRAINT Gost_Blockung_Schienen_Blockung_FK FOREIGN KEY (Blockung_ID) REFERENCES Gost_Blockung(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
 CREATE TABLE Gost_Blockung_Zwischenergebnisse (
-  ,
-  CONSTRAINT PK_Gost_Blockung_Zwischenergebnisse PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Blockung_ID bigint NOT NULL, 
+  IstMarkiert int DEFAULT 0 NOT NULL, 
+  IstVorlage int DEFAULT 0 NOT NULL,
+  CONSTRAINT PK_Gost_Blockung_Zwischenergebnisse PRIMARY KEY (ID),
+  CONSTRAINT Gost_Blockung_Zwischenergebnisse_Blockung_FK FOREIGN KEY (Blockung_ID) REFERENCES Gost_Blockung(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
 CREATE TABLE Gost_Blockung_Regelparameter (
-  ,
-  CONSTRAINT PK_Gost_Blockung_Regelparameter PRIMARY KEY (Regel_ID, Nummer)
+  Regel_ID bigint NOT NULL, 
+  Nummer int NOT NULL, 
+  Parameter bigint NOT NULL,
+  CONSTRAINT PK_Gost_Blockung_Regelparameter PRIMARY KEY (Regel_ID, Nummer),
+  CONSTRAINT Gost_Blockung_Regelparameter_Regel_FK FOREIGN KEY (Regel_ID) REFERENCES Gost_Blockung_Regeln(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
 CREATE TABLE Gost_Blockung_Zwischenergebnisse_Kurs_Schienen (
-  ,
-  CONSTRAINT PK_Gost_Blockung_Zwischenergebnisse_Kurs_Schienen PRIMARY KEY (Zwischenergebnis_ID, Blockung_Kurs_ID, Schienen_ID)
+  Zwischenergebnis_ID bigint NOT NULL, 
+  Blockung_Kurs_ID bigint NOT NULL, 
+  Schienen_ID bigint NOT NULL,
+  CONSTRAINT PK_Gost_Blockung_Zwischenergebnisse_Kurs_Schienen PRIMARY KEY (Zwischenergebnis_ID, Blockung_Kurs_ID, Schienen_ID),
+  CONSTRAINT Gost_Blockung_Zwischenergebnisse_Kurs_Schienen_ErgID_FK FOREIGN KEY (Zwischenergebnis_ID) REFERENCES Gost_Blockung_Zwischenergebnisse(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Blockung_Zwischenergebnisse_Kurs_Schienen_Kurs_FK FOREIGN KEY (Blockung_Kurs_ID) REFERENCES Gost_Blockung_Kurse(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Blockung_Zwischenergebnisse_Kurs_Schienen_Schiene_FK FOREIGN KEY (Schienen_ID) REFERENCES Gost_Blockung_Schienen(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -870,26 +950,43 @@ CREATE TABLE K_Zertifikate (
 
 
 CREATE TABLE Katalog_Aufsichtsbereich (
-  ,
-  CONSTRAINT PK_Katalog_Aufsichtsbereich PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Kuerzel nvarchar(20) NOT NULL, 
+  Beschreibung nvarchar(1000) NOT NULL,
+  CONSTRAINT PK_Katalog_Aufsichtsbereich PRIMARY KEY (ID),
+  CONSTRAINT Katalog_Aufsichtsbereich_UC1 UNIQUE (Kuerzel)
 );
 
 
 CREATE TABLE Katalog_Pausenzeiten (
-  ,
-  CONSTRAINT PK_Katalog_Pausenzeiten PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Tag int NOT NULL, 
+  Beginn time DEFAULT CURRENT_TIMESTAMP NOT NULL, 
+  Ende time DEFAULT CURRENT_TIMESTAMP NOT NULL, 
+  Bezeichnung nvarchar(40) DEFAULT 'Pause' NOT NULL,
+  CONSTRAINT PK_Katalog_Pausenzeiten PRIMARY KEY (ID),
+  CONSTRAINT Katalog_Pausenzeiten_UC1 UNIQUE (Tag, Beginn, Ende)
 );
 
 
 CREATE TABLE Katalog_Raeume (
-  ,
-  CONSTRAINT PK_Katalog_Raeume PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Kuerzel nvarchar(20) NOT NULL, 
+  Beschreibung nvarchar(1000) NOT NULL, 
+  Groesse int DEFAULT 40 NOT NULL,
+  CONSTRAINT PK_Katalog_Raeume PRIMARY KEY (ID),
+  CONSTRAINT Katalog_Raeume_UC1 UNIQUE (Kuerzel)
 );
 
 
 CREATE TABLE Katalog_Zeitraster (
-  ,
-  CONSTRAINT PK_Katalog_Zeitraster PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Tag int NOT NULL, 
+  Stunde int NOT NULL, 
+  Beginn time DEFAULT CURRENT_TIMESTAMP NOT NULL, 
+  Ende time DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  CONSTRAINT PK_Katalog_Zeitraster PRIMARY KEY (ID),
+  CONSTRAINT Katalog_Zeitraster_UC1 UNIQUE (Tag, Stunde)
 );
 
 
@@ -1096,14 +1193,22 @@ CREATE TABLE K_Lehrer (
 
 
 CREATE TABLE Gost_Blockung_Kurslehrer (
-  ,
-  CONSTRAINT PK_Gost_Blockung_Kurslehrer PRIMARY KEY (Blockung_Kurs_ID, Lehrer_ID)
+  Blockung_Kurs_ID bigint NOT NULL, 
+  Lehrer_ID bigint NOT NULL, 
+  Reihenfolge int DEFAULT 1 NOT NULL, 
+  Wochenstunden int DEFAULT 3 NOT NULL,
+  CONSTRAINT PK_Gost_Blockung_Kurslehrer PRIMARY KEY (Blockung_Kurs_ID, Lehrer_ID),
+  CONSTRAINT Gost_Blockung_Kurslehrer_Kurs_FK FOREIGN KEY (Blockung_Kurs_ID) REFERENCES Gost_Blockung_Kurse(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Blockung_Kurslehrer_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
 CREATE TABLE Gost_Jahrgang_Beratungslehrer (
-  ,
-  CONSTRAINT PK_Gost_Jahrgang_Beratungslehrer PRIMARY KEY (Abi_Jahrgang, Lehrer_ID)
+  Abi_Jahrgang int NOT NULL, 
+  Lehrer_ID bigint NOT NULL,
+  CONSTRAINT PK_Gost_Jahrgang_Beratungslehrer PRIMARY KEY (Abi_Jahrgang, Lehrer_ID),
+  CONSTRAINT Gost_Jahrgang_Beratungslehrer_Abi_Jahrgang_FK FOREIGN KEY (Abi_Jahrgang) REFERENCES Gost_Jahrgangsdaten(Abi_Jahrgang) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Jahrgang_Beratungslehrer_Lehrer_ID_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -1670,7 +1775,6 @@ CREATE TABLE Schueler (
   OnlineAnmeldung nvarchar(1) DEFAULT '-', 
   Dokumentenverzeichnis nvarchar(255), 
   Berufsqualifikation nvarchar(100), 
-  ZusatzNachname nvarchar(30), 
   EndeEingliederung date, 
   SchulEmail nvarchar(100), 
   EndeAnschlussfoerderung date, 
@@ -1716,20 +1820,58 @@ CREATE TABLE EigeneSchule_Abt_Kl (
 
 
 CREATE TABLE Gost_Blockung_Zwischenergebnisse_Kurs_Schueler (
-  ,
-  CONSTRAINT PK_Gost_Blockung_Zwischenergebnisse_Kurs_Schueler PRIMARY KEY (Zwischenergebnis_ID, Blockung_Kurs_ID, Schueler_ID)
+  Zwischenergebnis_ID bigint NOT NULL, 
+  Blockung_Kurs_ID bigint NOT NULL, 
+  Schueler_ID bigint NOT NULL,
+  CONSTRAINT PK_Gost_Blockung_Zwischenergebnisse_Kurs_Schueler PRIMARY KEY (Zwischenergebnis_ID, Blockung_Kurs_ID, Schueler_ID),
+  CONSTRAINT Gost_Blockung_Zwischenergebnisse_Kurs_Schueler_ErgID_FK FOREIGN KEY (Zwischenergebnis_ID) REFERENCES Gost_Blockung_Zwischenergebnisse(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Blockung_Zwischenergebnisse_Kurs_Schueler_Kurs_FK FOREIGN KEY (Blockung_Kurs_ID) REFERENCES Gost_Blockung_Kurse(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Blockung_Zwischenergebnisse_Kurs_Schueler_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
 CREATE TABLE Gost_Schueler (
-  ,
-  CONSTRAINT PK_Gost_Schueler PRIMARY KEY (Schueler_ID)
+  Schueler_ID bigint NOT NULL, 
+  DatumBeratung datetime2, 
+  DatumRuecklauf datetime2, 
+  HatSportattest int DEFAULT 0 NOT NULL, 
+  Kommentar nvarchar(max), 
+  Beratungslehrer_ID bigint, 
+  PruefPhase nvarchar(1), 
+  BesondereLernleistung_Art nvarchar(1), 
+  BesondereLernleistung_Punkte int,
+  CONSTRAINT PK_Gost_Schueler PRIMARY KEY (Schueler_ID),
+  CONSTRAINT Gost_Schueler_Schueler_ID_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
 CREATE TABLE Gost_Schueler_Fachwahlen (
-  ,
-  CONSTRAINT PK_Gost_Schueler_Fachwahlen PRIMARY KEY (Schueler_ID, Fach_ID)
+  Schueler_ID bigint NOT NULL, 
+  Fach_ID bigint NOT NULL, 
+  EF1_Kursart nvarchar(10), 
+  EF1_Punkte nvarchar(2), 
+  EF2_Kursart nvarchar(10), 
+  EF2_Punkte nvarchar(2), 
+  Q11_Kursart nvarchar(10), 
+  Q11_Punkte nvarchar(2), 
+  Q12_Kursart nvarchar(10), 
+  Q12_Punkte nvarchar(2), 
+  Q21_Kursart nvarchar(10), 
+  Q21_Punkte nvarchar(2), 
+  Q22_Kursart nvarchar(10), 
+  Q22_Punkte nvarchar(2), 
+  AbiturFach int, 
+  Bemerkungen nvarchar(50), 
+  Markiert_Q1 int, 
+  Markiert_Q2 int, 
+  Markiert_Q3 int, 
+  Markiert_Q4 int, 
+  ergebnisAbiturpruefung int, 
+  hatMuendlichePflichtpruefung int, 
+  ergebnisMuendlichePruefung int,
+  CONSTRAINT PK_Gost_Schueler_Fachwahlen PRIMARY KEY (Schueler_ID, Fach_ID),
+  CONSTRAINT Gost_Schueler_Fachwahlen_Schueler_ID_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Schueler_Fachwahlen_Fach_ID_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
 
@@ -1972,8 +2114,6 @@ CREATE TABLE SchuelerErzAdr (
   Erz1StaatKrz nvarchar(3), 
   Erz2StaatKrz nvarchar(3), 
   ErzEmail2 nvarchar(100), 
-  Erz1ZusatzNachname nvarchar(30), 
-  Erz2ZusatzNachname nvarchar(30), 
   Bemerkungen nvarchar(max), 
   CredentialID bigint,
   CONSTRAINT PK_SchuelerErzAdr PRIMARY KEY (ID),
@@ -2586,14 +2726,26 @@ CREATE TABLE BenutzergruppenMitglieder (
 
 
 CREATE TABLE DavRessourceCollections (
-  ,
-  CONSTRAINT PK_DavRessourceCollections PRIMARY KEY (ID)
+  Benutzer_ID bigint NOT NULL, 
+  ID bigint DEFAULT -1 NOT NULL, 
+  Typ int NOT NULL, 
+  Anzeigename nvarchar(120) NOT NULL, 
+  Beschreibung nvarchar(2047), 
+  SyncToken datetime2 DEFAULT CURRENT_TIMESTAMP NOT NULL, 
+  geloeschtam datetime2,
+  CONSTRAINT PK_DavRessourceCollections PRIMARY KEY (ID),
+  CONSTRAINT DavRessourceCollection_Benutzer_FK FOREIGN KEY (Benutzer_ID) REFERENCES Benutzer(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
 CREATE TABLE DavRessourceCollectionsACL (
-  ,
-  CONSTRAINT PK_DavRessourceCollectionsACL PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Benutzer_ID bigint NOT NULL, 
+  RessourceCollection_ID bigint NOT NULL, 
+  berechtigungen nvarchar(20) NOT NULL,
+  CONSTRAINT PK_DavRessourceCollectionsACL PRIMARY KEY (ID),
+  CONSTRAINT DavRessourceCollectionsACL_Benutzer_FK FOREIGN KEY (Benutzer_ID) REFERENCES Benutzer(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT DavRessourceCollectionsACL_RessourceCollection_FK FOREIGN KEY (RessourceCollection_ID) REFERENCES DavRessourceCollections(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -2695,92 +2847,179 @@ CREATE TABLE Schulleitung (
 
 
 CREATE TABLE Stundenplan (
-  ,
-  CONSTRAINT PK_Stundenplan PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Schuljahresabschnitts_ID bigint NOT NULL, 
+  Beginn date DEFAULT '1899-01-01' NOT NULL, 
+  Ende date, 
+  Beschreibung nvarchar(1000) NOT NULL, 
+  WochentypModell int DEFAULT 0 NOT NULL,
+  CONSTRAINT PK_Stundenplan PRIMARY KEY (ID),
+  CONSTRAINT Stundenplan_Schuljahreabschnitt_FK FOREIGN KEY (Schuljahresabschnitts_ID) REFERENCES Schuljahresabschnitte(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
 CREATE TABLE Stundenplan_Aufsichtsbereiche (
-  ,
-  CONSTRAINT PK_Stundenplan_Aufsichtsbereiche PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Stundenplan_ID bigint NOT NULL, 
+  Kuerzel nvarchar(20) NOT NULL, 
+  Beschreibung nvarchar(1000) NOT NULL,
+  CONSTRAINT PK_Stundenplan_Aufsichtsbereiche PRIMARY KEY (ID),
+  CONSTRAINT Stundenplan_Aufsichtsbereiche_Stundenplan_FK FOREIGN KEY (Stundenplan_ID) REFERENCES Stundenplan(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_Aufsichtsbereiche_UC1 UNIQUE (Stundenplan_ID, Kuerzel)
 );
 
 
 CREATE TABLE Stundenplan_Pausenzeit (
-  ,
-  CONSTRAINT PK_Stundenplan_Pausenzeit PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Stundenplan_ID bigint NOT NULL, 
+  Tag int NOT NULL, 
+  Beginn time DEFAULT CURRENT_TIMESTAMP NOT NULL, 
+  Ende time DEFAULT CURRENT_TIMESTAMP NOT NULL, 
+  Bezeichnung nvarchar(40) DEFAULT 'Pause' NOT NULL,
+  CONSTRAINT PK_Stundenplan_Pausenzeit PRIMARY KEY (ID),
+  CONSTRAINT Stundenplan_Pausenzeit_Stundenplan_FK FOREIGN KEY (Stundenplan_ID) REFERENCES Stundenplan(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_Pausenzeit_UC1 UNIQUE (Stundenplan_ID, Tag, Beginn, Ende)
 );
 
 
 CREATE TABLE Stundenplan_Pausenaufsichten (
-  ,
-  CONSTRAINT PK_Stundenplan_Pausenaufsichten PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Pausenzeit_ID bigint NOT NULL, 
+  Wochentyp int DEFAULT 0 NOT NULL, 
+  Lehrer_ID bigint NOT NULL,
+  CONSTRAINT PK_Stundenplan_Pausenaufsichten PRIMARY KEY (ID),
+  CONSTRAINT Stundenplan_Pausenaufsichten_K_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_Pausenaufsichten_Pausenzeit_FK FOREIGN KEY (Pausenzeit_ID) REFERENCES Stundenplan_Pausenzeit(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_Pausenaufsichten_UC1 UNIQUE (Pausenzeit_ID, Lehrer_ID)
 );
 
 
 CREATE TABLE Stundenplan_PausenaufsichtenBereich (
-  ,
-  CONSTRAINT PK_Stundenplan_PausenaufsichtenBereich PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Pausenaufsicht_ID bigint NOT NULL, 
+  Aufsichtsbereich_ID bigint NOT NULL,
+  CONSTRAINT PK_Stundenplan_PausenaufsichtenBereich PRIMARY KEY (ID),
+  CONSTRAINT Stundenplan_PausenaufsichtenBereich_Aufsichtsbereiche_FK FOREIGN KEY (Aufsichtsbereich_ID) REFERENCES Stundenplan_Aufsichtsbereiche(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_PausenaufsichtenBereich_Aufsicht_FK FOREIGN KEY (Pausenaufsicht_ID) REFERENCES Stundenplan_Pausenaufsichten(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_PausenaufsichtenBereich_UC1 UNIQUE (Pausenaufsicht_ID, Aufsichtsbereich_ID)
 );
 
 
 CREATE TABLE Stundenplan_Raeume (
-  ,
-  CONSTRAINT PK_Stundenplan_Raeume PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Stundenplan_ID bigint NOT NULL, 
+  Kuerzel nvarchar(20) NOT NULL, 
+  Beschreibung nvarchar(1000) NOT NULL, 
+  Groesse int DEFAULT 40 NOT NULL,
+  CONSTRAINT PK_Stundenplan_Raeume PRIMARY KEY (ID),
+  CONSTRAINT Stundenplan_Raeume_Stundenplan_FK FOREIGN KEY (Stundenplan_ID) REFERENCES Stundenplan(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_Raeume_UC1 UNIQUE (Stundenplan_ID, Kuerzel)
 );
 
 
 CREATE TABLE Stundenplan_Schienen (
-  ,
-  CONSTRAINT PK_Stundenplan_Schienen PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Stundenplan_ID bigint NOT NULL, 
+  Jahrgang_ID bigint, 
+  Nummer int NOT NULL, 
+  Bezeichnung nvarchar(100) NOT NULL,
+  CONSTRAINT PK_Stundenplan_Schienen PRIMARY KEY (ID),
+  CONSTRAINT Stundenplan_Schienen_Stundenplan_FK FOREIGN KEY (Stundenplan_ID) REFERENCES Stundenplan(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_Schienen_Jahrgang_FK FOREIGN KEY (Jahrgang_ID) REFERENCES EigeneSchule_Jahrgaenge(ID) ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT Stundenplan_Schienen_UC1 UNIQUE (Stundenplan_ID, Jahrgang_ID, Nummer)
 );
 
 
 CREATE TABLE Stundenplan_Zeitraster (
-  ,
-  CONSTRAINT PK_Stundenplan_Zeitraster PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Stundenplan_ID bigint NOT NULL, 
+  Tag int NOT NULL, 
+  Stunde int NOT NULL, 
+  Beginn time DEFAULT CURRENT_TIMESTAMP NOT NULL, 
+  Ende time DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  CONSTRAINT PK_Stundenplan_Zeitraster PRIMARY KEY (ID),
+  CONSTRAINT Stundenplan_Zeitraster_Stundenplan_FK FOREIGN KEY (Stundenplan_ID) REFERENCES Stundenplan(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_Zeitraster_UC1 UNIQUE (Stundenplan_ID, Tag, Stunde)
 );
 
 
 CREATE TABLE Stundenplan_Unterricht (
-  ,
-  CONSTRAINT PK_Stundenplan_Unterricht PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Zeitraster_ID bigint NOT NULL, 
+  Wochentyp int DEFAULT 0 NOT NULL, 
+  Kurs_ID bigint, 
+  Fach_ID bigint NOT NULL,
+  CONSTRAINT PK_Stundenplan_Unterricht PRIMARY KEY (ID),
+  CONSTRAINT Stundenplan_Unterricht_EigeneSchule_Faecher_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_Unterricht_Kurse_FK FOREIGN KEY (Kurs_ID) REFERENCES Kurse(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_Unterricht_Stundenplan_Zeitraster_FK FOREIGN KEY (Zeitraster_ID) REFERENCES Stundenplan_Zeitraster(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
 CREATE TABLE Stundenplan_UnterrichtKlasse (
-  ,
-  CONSTRAINT PK_Stundenplan_UnterrichtKlasse PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Unterricht_ID bigint NOT NULL, 
+  Klasse_ID bigint NOT NULL,
+  CONSTRAINT PK_Stundenplan_UnterrichtKlasse PRIMARY KEY (ID),
+  CONSTRAINT Stundenplan_UnterrichtKlasse_Klasse_FK FOREIGN KEY (Klasse_ID) REFERENCES Klassen(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_UnterrichtKlasse_Unterricht_FK FOREIGN KEY (Unterricht_ID) REFERENCES Stundenplan_Unterricht(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_UnterrichtKlasse_UC1 UNIQUE (Unterricht_ID, Klasse_ID)
 );
 
 
 CREATE TABLE Stundenplan_UnterrichtLehrer (
-  ,
-  CONSTRAINT PK_Stundenplan_UnterrichtLehrer PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Unterricht_ID bigint NOT NULL, 
+  Lehrer_ID bigint NOT NULL,
+  CONSTRAINT PK_Stundenplan_UnterrichtLehrer PRIMARY KEY (ID),
+  CONSTRAINT Stundenplan_UnterrichtLehrer_K_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_UnterrichtLehrer_Unterricht_FK FOREIGN KEY (Unterricht_ID) REFERENCES Stundenplan_Unterricht(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_UnterrichtLehrer_UC1 UNIQUE (Unterricht_ID, Lehrer_ID)
 );
 
 
 CREATE TABLE Stundenplan_UnterrichtRaum (
-  ,
-  CONSTRAINT PK_Stundenplan_UnterrichtRaum PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Unterricht_ID bigint NOT NULL, 
+  Raum_ID bigint NOT NULL,
+  CONSTRAINT PK_Stundenplan_UnterrichtRaum PRIMARY KEY (ID),
+  CONSTRAINT Stundenplan_UnterrichtRaum_Raeume_FK FOREIGN KEY (Raum_ID) REFERENCES Stundenplan_Raeume(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_UnterrichtRaum_Unterricht_FK FOREIGN KEY (Unterricht_ID) REFERENCES Stundenplan_Unterricht(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_UnterrichtRaum_UC1 UNIQUE (Unterricht_ID, Raum_ID)
 );
 
 
 CREATE TABLE Stundenplan_UnterrichtSchiene (
-  ,
-  CONSTRAINT PK_Stundenplan_UnterrichtSchiene PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Unterricht_ID bigint NOT NULL, 
+  Schiene_ID bigint NOT NULL,
+  CONSTRAINT PK_Stundenplan_UnterrichtSchiene PRIMARY KEY (ID),
+  CONSTRAINT Stundenplan_UnterrichtSchiene_Schienen_FK FOREIGN KEY (Schiene_ID) REFERENCES Stundenplan_Schienen(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_UnterrichtSchiene_Unterricht_FK FOREIGN KEY (Unterricht_ID) REFERENCES Stundenplan_Unterricht(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_UnterrichtSchiene_UC1 UNIQUE (Unterricht_ID, Schiene_ID)
 );
 
 
 CREATE TABLE Stundenplan_Kalenderwochen_Zuordnung (
-  ,
-  CONSTRAINT PK_Stundenplan_Kalenderwochen_Zuordnung PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Stundenplan_ID bigint NOT NULL, 
+  Jahr int NOT NULL, 
+  KW int NOT NULL, 
+  Wochentyp int NOT NULL,
+  CONSTRAINT PK_Stundenplan_Kalenderwochen_Zuordnung PRIMARY KEY (ID),
+  CONSTRAINT Stundenplan_Kalenderwochen_Zuordnung_Stundenplan_FK FOREIGN KEY (Stundenplan_ID) REFERENCES Stundenplan(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_Kalenderwochen_Zuordnung_UC1 UNIQUE (Stundenplan_ID, Jahr, KW)
 );
 
 
 CREATE TABLE Stundenplan_Pausenzeit_Klassenzuordnung (
-  ,
-  CONSTRAINT PK_Stundenplan_Pausenzeit_Klassenzuordnung PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Pausenzeit_ID bigint NOT NULL, 
+  Klassen_ID bigint NOT NULL,
+  CONSTRAINT PK_Stundenplan_Pausenzeit_Klassenzuordnung PRIMARY KEY (ID),
+  CONSTRAINT Stundenplan_Pausenzeit_Klassenzuordnung_Klassen_FK FOREIGN KEY (Klassen_ID) REFERENCES Klassen(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_Pausenzeit_Klassenzuordnung_Pausenzeit_FK FOREIGN KEY (Pausenzeit_ID) REFERENCES Stundenplan_Pausenzeit(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_Pausenzeit_Klassenzuordnung_UC1 UNIQUE (Pausenzeit_ID, Klassen_ID)
 );
 
 
@@ -2905,8 +3144,17 @@ CREATE TABLE Versetzung (
 
 
 CREATE TABLE DavRessources (
-  ,
-  CONSTRAINT PK_DavRessources PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  DavRessourceCollection_ID bigint NOT NULL, 
+  UID nvarchar(120) NOT NULL, 
+  lastModified datetime2 DEFAULT CURRENT_TIMESTAMP NOT NULL, 
+  KalenderTyp nvarchar(120) NOT NULL, 
+  KalenderStart datetime2 DEFAULT CURRENT_TIMESTAMP NOT NULL, 
+  KalenderEnde datetime2 DEFAULT CURRENT_TIMESTAMP NOT NULL, 
+  ressource varbinary(max) NOT NULL, 
+  geloeschtam datetime2,
+  CONSTRAINT PK_DavRessources PRIMARY KEY (ID),
+  CONSTRAINT DavRessources_Collection_FK FOREIGN KEY (DavRessourceCollection_ID) REFERENCES DavRessourceCollections(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -2929,85 +3177,173 @@ CREATE TABLE ZuordnungReportvorlagen (
 
 
 CREATE TABLE DavSyncTokenSchueler (
-  ,
-  CONSTRAINT PK_DavSyncTokenSchueler PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  SyncToken datetime2 DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  CONSTRAINT PK_DavSyncTokenSchueler PRIMARY KEY (ID),
+  CONSTRAINT DavSyncTokenSchueler_FK FOREIGN KEY (ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
 CREATE TABLE DavSyncTokenLehrer (
-  ,
-  CONSTRAINT PK_DavSyncTokenLehrer PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  SyncToken datetime2 DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  CONSTRAINT PK_DavSyncTokenLehrer PRIMARY KEY (ID),
+  CONSTRAINT DavSyncTokenLehrer_FK FOREIGN KEY (ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
 CREATE TABLE EnmLeistungsdaten (
-  ,
-  CONSTRAINT PK_EnmLeistungsdaten PRIMARY KEY (ID)
+  ID bigint NOT NULL, 
+  tsNotenKrz datetime2 DEFAULT CURRENT_TIMESTAMP NOT NULL, 
+  tsFehlStd datetime2 DEFAULT CURRENT_TIMESTAMP NOT NULL, 
+  tsuFehlStd datetime2 DEFAULT CURRENT_TIMESTAMP NOT NULL, 
+  tsLernentw datetime2 DEFAULT CURRENT_TIMESTAMP NOT NULL, 
+  tsWarnung datetime2 DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  CONSTRAINT PK_EnmLeistungsdaten PRIMARY KEY (ID),
+  CONSTRAINT EnmLeistungsdaten_FK FOREIGN KEY (ID) REFERENCES SchuelerLeistungsdaten(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
 CREATE TABLE EnmLernabschnittsdaten (
-  ,
-  CONSTRAINT PK_EnmLernabschnittsdaten PRIMARY KEY (ID)
+  ID bigint NOT NULL, 
+  tsSumFehlStd datetime2 DEFAULT CURRENT_TIMESTAMP NOT NULL, 
+  tsSumFehlStdU datetime2 DEFAULT CURRENT_TIMESTAMP NOT NULL, 
+  tsZeugnisBem datetime2 DEFAULT CURRENT_TIMESTAMP NOT NULL, 
+  tsASV datetime2 DEFAULT CURRENT_TIMESTAMP NOT NULL, 
+  tsAUE datetime2 DEFAULT CURRENT_TIMESTAMP NOT NULL, 
+  tsBemerkungVersetzung datetime2 DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  CONSTRAINT PK_EnmLernabschnittsdaten PRIMARY KEY (ID),
+  CONSTRAINT EnmLernabschnittsdaten_FK FOREIGN KEY (ID) REFERENCES SchuelerLernabschnittsdaten(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
 CREATE TABLE Gost_Klausuren_Vorgaben (
-  ,
-  CONSTRAINT PK_Gost_Klausuren_Vorgaben PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Abi_Jahrgang int NOT NULL, 
+  Halbjahr int NOT NULL, 
+  Quartal int NOT NULL, 
+  Fach_ID bigint NOT NULL, 
+  Kursart nvarchar(10) DEFAULT 'GK' NOT NULL, 
+  Dauer int NOT NULL, 
+  Auswahlzeit int NOT NULL, 
+  IstMdlPruefung int DEFAULT 0 NOT NULL, 
+  IstAudioNotwendig int DEFAULT 0 NOT NULL, 
+  IstVideoNotwendig int DEFAULT 0 NOT NULL, 
+  Bemerkungen nvarchar(max),
+  CONSTRAINT PK_Gost_Klausuren_Vorgaben PRIMARY KEY (ID),
+  CONSTRAINT Gost_Klausuren_Vorgaben_Abi_Jahrgang_FK FOREIGN KEY (Abi_Jahrgang) REFERENCES Gost_Jahrgangsdaten(Abi_Jahrgang) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Klausuren_Vorgaben_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Klausuren_Vorgaben_UC1 UNIQUE (Abi_Jahrgang, Halbjahr, Quartal, Fach_ID, Kursart)
 );
 
 
 CREATE TABLE Gost_Klausuren_Termine (
-  ,
-  CONSTRAINT PK_Gost_Klausuren_Termine PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Abi_Jahrgang int NOT NULL, 
+  Halbjahr int NOT NULL, 
+  Quartal int NOT NULL, 
+  Datum date, 
+  Startzeit time, 
+  Bezeichnung nvarchar(max), 
+  Bemerkungen nvarchar(max),
+  CONSTRAINT PK_Gost_Klausuren_Termine PRIMARY KEY (ID),
+  CONSTRAINT Gost_Klausuren_Termine_Abi_Jahrgang_FK FOREIGN KEY (Abi_Jahrgang) REFERENCES Gost_Jahrgangsdaten(Abi_Jahrgang) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
 CREATE TABLE Gost_Klausuren_Kursklausuren (
-  ,
-  CONSTRAINT PK_Gost_Klausuren_Kursklausuren PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Vorgabe_ID bigint NOT NULL, 
+  Kurs_ID bigint NOT NULL, 
+  Termin_ID bigint, 
+  Startzeit time,
+  CONSTRAINT PK_Gost_Klausuren_Kursklausuren PRIMARY KEY (ID),
+  CONSTRAINT Gost_Klausuren_Kursklausuren_Vorgabe_ID_FK FOREIGN KEY (Vorgabe_ID) REFERENCES Gost_Klausuren_Vorgaben(ID) ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT Gost_Klausuren_Kursklausuren_Kurs_ID_FK FOREIGN KEY (Kurs_ID) REFERENCES Kurse(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Klausuren_Kursklausuren_Termin_ID_FK FOREIGN KEY (Termin_ID) REFERENCES Gost_Klausuren_Termine(ID) ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT Gost_Klausuren_Kursklausuren_UC1 UNIQUE (Vorgabe_ID, Kurs_ID)
 );
 
 
 CREATE TABLE Gost_Klausuren_Schuelerklausuren (
-  ,
-  CONSTRAINT PK_Gost_Klausuren_Schuelerklausuren PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Kursklausur_ID bigint NOT NULL, 
+  Termin_ID bigint, 
+  Schueler_ID bigint NOT NULL, 
+  Startzeit time,
+  CONSTRAINT PK_Gost_Klausuren_Schuelerklausuren PRIMARY KEY (ID),
+  CONSTRAINT Gost_Klausuren_Schuelerklausuren_Kursklausur_ID_FK FOREIGN KEY (Kursklausur_ID) REFERENCES Gost_Klausuren_Kursklausuren(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Klausuren_Schuelerklausuren_Schueler_ID_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Klausuren_Schuelerklausuren_Termin_ID_FK FOREIGN KEY (Termin_ID) REFERENCES Gost_Klausuren_Termine(ID) ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT Gost_Klausuren_Schuelerklausuren_UC1 UNIQUE (Kursklausur_ID, Schueler_ID)
 );
 
 
 CREATE TABLE Gost_Klausuren_NtaZeiten (
-  ,
-  CONSTRAINT PK_Gost_Klausuren_NtaZeiten PRIMARY KEY (Schueler_ID, Vorgabe_ID)
+  Schueler_ID bigint NOT NULL, 
+  Vorgabe_ID bigint NOT NULL, 
+  Zeitzugabe int NOT NULL, 
+  Bemerkungen nvarchar(max),
+  CONSTRAINT PK_Gost_Klausuren_NtaZeiten PRIMARY KEY (Schueler_ID, Vorgabe_ID),
+  CONSTRAINT Gost_Klausuren_NtaZeiten_Schueler_ID_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Klausuren_NtaZeiten_Vorgabe_ID_FK FOREIGN KEY (Vorgabe_ID) REFERENCES Gost_Klausuren_Vorgaben(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
 CREATE TABLE Gost_Klausuren_Raeume (
-  ,
-  CONSTRAINT PK_Gost_Klausuren_Raeume PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Termin_ID bigint NOT NULL, 
+  Stundenplan_Raum_ID bigint, 
+  Bemerkungen nvarchar(max),
+  CONSTRAINT PK_Gost_Klausuren_Raeume PRIMARY KEY (ID),
+  CONSTRAINT Gost_Klausuren_Raeume_Stundenplan_Raum_ID_FK FOREIGN KEY (Stundenplan_Raum_ID) REFERENCES Stundenplan_Raeume(ID) ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT Gost_Klausuren_Raeume_Termin_ID_FK FOREIGN KEY (Termin_ID) REFERENCES Gost_Klausuren_Termine(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Klausuren_Raume_UC1 UNIQUE (Termin_ID, Stundenplan_Raum_ID)
 );
 
 
 CREATE TABLE Gost_Klausuren_Raeume_Stunden (
-  ,
-  CONSTRAINT PK_Gost_Klausuren_Raeume_Stunden PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  Klausurraum_ID bigint NOT NULL, 
+  Zeitraster_ID bigint NOT NULL,
+  CONSTRAINT PK_Gost_Klausuren_Raeume_Stunden PRIMARY KEY (ID),
+  CONSTRAINT Gost_Klausuren_Raeume_Stunden_Klausurraum_ID_FK FOREIGN KEY (Klausurraum_ID) REFERENCES Gost_Klausuren_Raeume(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Klausuren_Raeume_Stunden_Zeitraster_ID_FK FOREIGN KEY (Zeitraster_ID) REFERENCES Stundenplan_Zeitraster(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT unique_Gost_Klausuren_Raueme_Stunden_UC1 UNIQUE (Klausurraum_ID, Zeitraster_ID)
 );
 
 
 CREATE TABLE Gost_Klausuren_Schuelerklausuren_Raeume_Stunden (
-  ,
-  CONSTRAINT PK_Gost_Klausuren_Schuelerklausuren_Raeume_Stunden PRIMARY KEY (Schuelerklausur_ID, KlausurRaumStunde_ID)
+  Schuelerklausur_ID bigint NOT NULL, 
+  KlausurRaumStunde_ID bigint NOT NULL,
+  CONSTRAINT PK_Gost_Klausuren_Schuelerklausuren_Raeume_Stunden PRIMARY KEY (Schuelerklausur_ID, KlausurRaumStunde_ID),
+  CONSTRAINT Gost_Klausuren_SKlausuren_Raeume_Stunden_SK_ID_FK FOREIGN KEY (Schuelerklausur_ID) REFERENCES Gost_Klausuren_Schuelerklausuren(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Klausuren_SKlausuren_Raeume_Stunden_KRS_ID_FK FOREIGN KEY (KlausurRaumStunde_ID) REFERENCES Gost_Klausuren_Raeume_Stunden(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
 CREATE TABLE Gost_Klausuren_Raeume_Stunden_Aufsichten (
-  ,
-  CONSTRAINT PK_Gost_Klausuren_Raeume_Stunden_Aufsichten PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL, 
+  KlausurRaumStunde_ID bigint NOT NULL, 
+  Lehrer_ID bigint, 
+  Startzeit time, 
+  Endzeit time, 
+  Bemerkungen nvarchar(max),
+  CONSTRAINT PK_Gost_Klausuren_Raeume_Stunden_Aufsichten PRIMARY KEY (ID),
+  CONSTRAINT Gost_Klausuren_Raeume_Stunden_Aufsichten_KlausurRaumStunde_ID_FK FOREIGN KEY (KlausurRaumStunde_ID) REFERENCES Gost_Klausuren_Raeume_Stunden(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Klausuren_Raeume_Stunden_Aufsichten_Lehrer_ID_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE SET NULL
 );
 
 
 CREATE TABLE Gost_Klausuren_Kalenderinformationen (
-  ,
+  ID bigint DEFAULT -1 NOT NULL, 
+  Bezeichnung nvarchar(max), 
+  Startdatum date, 
+  Startzeit time, 
+  Enddatum date, 
+  Endzeit time, 
+  IstSperrtermin int DEFAULT 0 NOT NULL, 
+  Bemerkungen nvarchar(max),
   CONSTRAINT PK_Gost_Klausuren_Kalenderinformationen PRIMARY KEY (ID)
 );
 
@@ -3768,6 +4104,462 @@ BEGIN
           SET @tmpID = @maxInsertedID
 	      END
       UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''EigeneSchule_Faecher''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Gost_Blockung ON Gost_Blockung INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Gost_Blockung
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Gost_Blockung'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Gost_Blockung)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Gost_Blockung'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Gost_Blockung
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Gost_Blockung''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Gost_Blockung ON Gost_Blockung AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Gost_Blockung'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Gost_Blockung)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Gost_Blockung'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Gost_Blockung''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Gost_Jahrgang_Fachkombinationen ON Gost_Jahrgang_Fachkombinationen INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Gost_Jahrgang_Fachkombinationen
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Gost_Jahrgang_Fachkombinationen'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Gost_Jahrgang_Fachkombinationen)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Gost_Jahrgang_Fachkombinationen'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Gost_Jahrgang_Fachkombinationen
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Gost_Jahrgang_Fachkombinationen''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Gost_Jahrgang_Fachkombinationen ON Gost_Jahrgang_Fachkombinationen AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Gost_Jahrgang_Fachkombinationen'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Gost_Jahrgang_Fachkombinationen)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Gost_Jahrgang_Fachkombinationen'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Gost_Jahrgang_Fachkombinationen''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Gost_Blockung_Kurse ON Gost_Blockung_Kurse INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Gost_Blockung_Kurse
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Gost_Blockung_Kurse'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Gost_Blockung_Kurse)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Gost_Blockung_Kurse'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Gost_Blockung_Kurse
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Gost_Blockung_Kurse''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Gost_Blockung_Kurse ON Gost_Blockung_Kurse AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Gost_Blockung_Kurse'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Gost_Blockung_Kurse)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Gost_Blockung_Kurse'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Gost_Blockung_Kurse''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Gost_Blockung_Regeln ON Gost_Blockung_Regeln INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Gost_Blockung_Regeln
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Gost_Blockung_Regeln'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Gost_Blockung_Regeln)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Gost_Blockung_Regeln'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Gost_Blockung_Regeln
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Gost_Blockung_Regeln''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Gost_Blockung_Regeln ON Gost_Blockung_Regeln AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Gost_Blockung_Regeln'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Gost_Blockung_Regeln)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Gost_Blockung_Regeln'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Gost_Blockung_Regeln''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Gost_Blockung_Schienen ON Gost_Blockung_Schienen INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Gost_Blockung_Schienen
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Gost_Blockung_Schienen'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Gost_Blockung_Schienen)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Gost_Blockung_Schienen'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Gost_Blockung_Schienen
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Gost_Blockung_Schienen''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Gost_Blockung_Schienen ON Gost_Blockung_Schienen AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Gost_Blockung_Schienen'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Gost_Blockung_Schienen)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Gost_Blockung_Schienen'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Gost_Blockung_Schienen''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Gost_Blockung_Zwischenergebnisse ON Gost_Blockung_Zwischenergebnisse INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Gost_Blockung_Zwischenergebnisse
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Gost_Blockung_Zwischenergebnisse'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Gost_Blockung_Zwischenergebnisse)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Gost_Blockung_Zwischenergebnisse'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Gost_Blockung_Zwischenergebnisse
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Gost_Blockung_Zwischenergebnisse''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Gost_Blockung_Zwischenergebnisse ON Gost_Blockung_Zwischenergebnisse AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Gost_Blockung_Zwischenergebnisse'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Gost_Blockung_Zwischenergebnisse)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Gost_Blockung_Zwischenergebnisse'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Gost_Blockung_Zwischenergebnisse''
     END
 END;
 ')
@@ -5744,6 +6536,310 @@ BEGIN
           SET @tmpID = @maxInsertedID
 	      END
       UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''K_Vermerkart''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Katalog_Aufsichtsbereich ON Katalog_Aufsichtsbereich INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Katalog_Aufsichtsbereich
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Katalog_Aufsichtsbereich'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Katalog_Aufsichtsbereich)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Katalog_Aufsichtsbereich'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Katalog_Aufsichtsbereich
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Katalog_Aufsichtsbereich''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Katalog_Aufsichtsbereich ON Katalog_Aufsichtsbereich AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Katalog_Aufsichtsbereich'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Katalog_Aufsichtsbereich)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Katalog_Aufsichtsbereich'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Katalog_Aufsichtsbereich''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Katalog_Pausenzeiten ON Katalog_Pausenzeiten INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Katalog_Pausenzeiten
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Katalog_Pausenzeiten'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Katalog_Pausenzeiten)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Katalog_Pausenzeiten'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Katalog_Pausenzeiten
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Katalog_Pausenzeiten''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Katalog_Pausenzeiten ON Katalog_Pausenzeiten AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Katalog_Pausenzeiten'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Katalog_Pausenzeiten)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Katalog_Pausenzeiten'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Katalog_Pausenzeiten''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Katalog_Raeume ON Katalog_Raeume INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Katalog_Raeume
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Katalog_Raeume'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Katalog_Raeume)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Katalog_Raeume'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Katalog_Raeume
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Katalog_Raeume''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Katalog_Raeume ON Katalog_Raeume AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Katalog_Raeume'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Katalog_Raeume)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Katalog_Raeume'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Katalog_Raeume''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Katalog_Zeitraster ON Katalog_Zeitraster INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Katalog_Zeitraster
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Katalog_Zeitraster'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Katalog_Zeitraster)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Katalog_Zeitraster'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Katalog_Zeitraster
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Katalog_Zeitraster''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Katalog_Zeitraster ON Katalog_Zeitraster AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Katalog_Zeitraster'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Katalog_Zeitraster)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Katalog_Zeitraster'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Katalog_Zeitraster''
     END
 END;
 ')
@@ -8716,6 +9812,158 @@ GO
 
 
 exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_DavRessourceCollections ON DavRessourceCollections INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO DavRessourceCollections
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''DavRessourceCollections'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM DavRessourceCollections)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''DavRessourceCollections'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO DavRessourceCollections
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''DavRessourceCollections''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_DavRessourceCollections ON DavRessourceCollections AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''DavRessourceCollections'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM DavRessourceCollections)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''DavRessourceCollections'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''DavRessourceCollections''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_DavRessourceCollectionsACL ON DavRessourceCollectionsACL INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO DavRessourceCollectionsACL
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''DavRessourceCollectionsACL'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM DavRessourceCollectionsACL)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''DavRessourceCollectionsACL'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO DavRessourceCollectionsACL
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''DavRessourceCollectionsACL''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_DavRessourceCollectionsACL ON DavRessourceCollectionsACL AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''DavRessourceCollectionsACL'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM DavRessourceCollectionsACL)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''DavRessourceCollectionsACL'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''DavRessourceCollectionsACL''
+    END
+END;
+')
+
+GO
+
+
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_SchuelerEinzelleistungen ON SchuelerEinzelleistungen INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
@@ -8944,6 +10192,1146 @@ GO
 
 
 exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Stundenplan ON Stundenplan INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Stundenplan
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Stundenplan'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Stundenplan)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundenplan'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Stundenplan
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundenplan''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Stundenplan ON Stundenplan AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Stundenplan'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Stundenplan)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundenplan'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundenplan''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Stundenplan_Aufsichtsbereiche ON Stundenplan_Aufsichtsbereiche INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Stundenplan_Aufsichtsbereiche
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Stundenplan_Aufsichtsbereiche'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Stundenplan_Aufsichtsbereiche)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundenplan_Aufsichtsbereiche'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Stundenplan_Aufsichtsbereiche
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundenplan_Aufsichtsbereiche''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Stundenplan_Aufsichtsbereiche ON Stundenplan_Aufsichtsbereiche AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Stundenplan_Aufsichtsbereiche'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Stundenplan_Aufsichtsbereiche)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundenplan_Aufsichtsbereiche'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundenplan_Aufsichtsbereiche''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Stundenplan_Pausenzeit ON Stundenplan_Pausenzeit INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Stundenplan_Pausenzeit
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Stundenplan_Pausenzeit'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Stundenplan_Pausenzeit)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundenplan_Pausenzeit'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Stundenplan_Pausenzeit
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundenplan_Pausenzeit''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Stundenplan_Pausenzeit ON Stundenplan_Pausenzeit AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Stundenplan_Pausenzeit'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Stundenplan_Pausenzeit)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundenplan_Pausenzeit'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundenplan_Pausenzeit''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Stundenplan_Pausenaufsichten ON Stundenplan_Pausenaufsichten INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Stundenplan_Pausenaufsichten
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Stundenplan_Pausenaufsichten'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Stundenplan_Pausenaufsichten)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundenplan_Pausenaufsichten'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Stundenplan_Pausenaufsichten
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundenplan_Pausenaufsichten''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Stundenplan_Pausenaufsichten ON Stundenplan_Pausenaufsichten AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Stundenplan_Pausenaufsichten'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Stundenplan_Pausenaufsichten)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundenplan_Pausenaufsichten'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundenplan_Pausenaufsichten''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Stundenplan_PausenaufsichtenBereich ON Stundenplan_PausenaufsichtenBereich INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Stundenplan_PausenaufsichtenBereich
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Stundenplan_PausenaufsichtenBereich'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Stundenplan_PausenaufsichtenBereich)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundenplan_PausenaufsichtenBereich'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Stundenplan_PausenaufsichtenBereich
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundenplan_PausenaufsichtenBereich''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Stundenplan_PausenaufsichtenBereich ON Stundenplan_PausenaufsichtenBereich AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Stundenplan_PausenaufsichtenBereich'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Stundenplan_PausenaufsichtenBereich)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundenplan_PausenaufsichtenBereich'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundenplan_PausenaufsichtenBereich''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Stundenplan_Raeume ON Stundenplan_Raeume INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Stundenplan_Raeume
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Stundenplan_Raeume'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Stundenplan_Raeume)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundenplan_Raeume'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Stundenplan_Raeume
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundenplan_Raeume''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Stundenplan_Raeume ON Stundenplan_Raeume AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Stundenplan_Raeume'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Stundenplan_Raeume)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundenplan_Raeume'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundenplan_Raeume''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Stundenplan_Schienen ON Stundenplan_Schienen INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Stundenplan_Schienen
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Stundenplan_Schienen'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Stundenplan_Schienen)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundenplan_Schienen'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Stundenplan_Schienen
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundenplan_Schienen''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Stundenplan_Schienen ON Stundenplan_Schienen AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Stundenplan_Schienen'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Stundenplan_Schienen)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundenplan_Schienen'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundenplan_Schienen''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Stundenplan_Zeitraster ON Stundenplan_Zeitraster INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Stundenplan_Zeitraster
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Stundenplan_Zeitraster'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Stundenplan_Zeitraster)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundenplan_Zeitraster'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Stundenplan_Zeitraster
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundenplan_Zeitraster''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Stundenplan_Zeitraster ON Stundenplan_Zeitraster AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Stundenplan_Zeitraster'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Stundenplan_Zeitraster)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundenplan_Zeitraster'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundenplan_Zeitraster''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Stundenplan_Unterricht ON Stundenplan_Unterricht INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Stundenplan_Unterricht
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Stundenplan_Unterricht'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Stundenplan_Unterricht)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundenplan_Unterricht'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Stundenplan_Unterricht
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundenplan_Unterricht''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Stundenplan_Unterricht ON Stundenplan_Unterricht AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Stundenplan_Unterricht'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Stundenplan_Unterricht)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundenplan_Unterricht'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundenplan_Unterricht''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Stundenplan_UnterrichtKlasse ON Stundenplan_UnterrichtKlasse INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Stundenplan_UnterrichtKlasse
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Stundenplan_UnterrichtKlasse'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Stundenplan_UnterrichtKlasse)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundenplan_UnterrichtKlasse'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Stundenplan_UnterrichtKlasse
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundenplan_UnterrichtKlasse''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Stundenplan_UnterrichtKlasse ON Stundenplan_UnterrichtKlasse AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Stundenplan_UnterrichtKlasse'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Stundenplan_UnterrichtKlasse)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundenplan_UnterrichtKlasse'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundenplan_UnterrichtKlasse''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Stundenplan_UnterrichtLehrer ON Stundenplan_UnterrichtLehrer INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Stundenplan_UnterrichtLehrer
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Stundenplan_UnterrichtLehrer'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Stundenplan_UnterrichtLehrer)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundenplan_UnterrichtLehrer'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Stundenplan_UnterrichtLehrer
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundenplan_UnterrichtLehrer''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Stundenplan_UnterrichtLehrer ON Stundenplan_UnterrichtLehrer AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Stundenplan_UnterrichtLehrer'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Stundenplan_UnterrichtLehrer)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundenplan_UnterrichtLehrer'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundenplan_UnterrichtLehrer''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Stundenplan_UnterrichtRaum ON Stundenplan_UnterrichtRaum INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Stundenplan_UnterrichtRaum
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Stundenplan_UnterrichtRaum'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Stundenplan_UnterrichtRaum)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundenplan_UnterrichtRaum'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Stundenplan_UnterrichtRaum
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundenplan_UnterrichtRaum''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Stundenplan_UnterrichtRaum ON Stundenplan_UnterrichtRaum AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Stundenplan_UnterrichtRaum'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Stundenplan_UnterrichtRaum)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundenplan_UnterrichtRaum'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundenplan_UnterrichtRaum''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Stundenplan_UnterrichtSchiene ON Stundenplan_UnterrichtSchiene INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Stundenplan_UnterrichtSchiene
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Stundenplan_UnterrichtSchiene'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Stundenplan_UnterrichtSchiene)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundenplan_UnterrichtSchiene'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Stundenplan_UnterrichtSchiene
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundenplan_UnterrichtSchiene''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Stundenplan_UnterrichtSchiene ON Stundenplan_UnterrichtSchiene AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Stundenplan_UnterrichtSchiene'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Stundenplan_UnterrichtSchiene)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundenplan_UnterrichtSchiene'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundenplan_UnterrichtSchiene''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Stundenplan_Kalenderwochen_Zuordnung ON Stundenplan_Kalenderwochen_Zuordnung INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Stundenplan_Kalenderwochen_Zuordnung
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Stundenplan_Kalenderwochen_Zuordnung'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Stundenplan_Kalenderwochen_Zuordnung)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundenplan_Kalenderwochen_Zuordnung'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Stundenplan_Kalenderwochen_Zuordnung
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundenplan_Kalenderwochen_Zuordnung''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Stundenplan_Kalenderwochen_Zuordnung ON Stundenplan_Kalenderwochen_Zuordnung AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Stundenplan_Kalenderwochen_Zuordnung'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Stundenplan_Kalenderwochen_Zuordnung)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundenplan_Kalenderwochen_Zuordnung'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundenplan_Kalenderwochen_Zuordnung''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Stundenplan_Pausenzeit_Klassenzuordnung ON Stundenplan_Pausenzeit_Klassenzuordnung INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Stundenplan_Pausenzeit_Klassenzuordnung
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Stundenplan_Pausenzeit_Klassenzuordnung'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Stundenplan_Pausenzeit_Klassenzuordnung)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundenplan_Pausenzeit_Klassenzuordnung'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Stundenplan_Pausenzeit_Klassenzuordnung
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundenplan_Pausenzeit_Klassenzuordnung''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Stundenplan_Pausenzeit_Klassenzuordnung ON Stundenplan_Pausenzeit_Klassenzuordnung AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Stundenplan_Pausenzeit_Klassenzuordnung'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Stundenplan_Pausenzeit_Klassenzuordnung)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Stundenplan_Pausenzeit_Klassenzuordnung'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Stundenplan_Pausenzeit_Klassenzuordnung''
+    END
+END;
+')
+
+GO
+
+
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_Stundentafel ON Stundentafel INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
@@ -9096,6 +11484,82 @@ GO
 
 
 exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_DavRessources ON DavRessources INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO DavRessources
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''DavRessources'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM DavRessources)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''DavRessources'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO DavRessources
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''DavRessources''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_DavRessources ON DavRessources AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''DavRessources'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM DavRessources)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''DavRessources'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''DavRessources''
+    END
+END;
+')
+
+GO
+
+
+exec('
 CREATE TRIGGER t_AutoIncrement_INSERT_ZuordnungReportvorlagen ON ZuordnungReportvorlagen INSTEAD OF INSERT AS
 BEGIN
   DECLARE @tmpID bigint
@@ -9171,8 +11635,768 @@ END;
 GO
 
 
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_DavSyncTokenSchueler ON DavSyncTokenSchueler INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
 
-INSERT INTO Schema_Revision(Revision) VALUES (3);
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO DavSyncTokenSchueler
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''DavSyncTokenSchueler'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM DavSyncTokenSchueler)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''DavSyncTokenSchueler'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO DavSyncTokenSchueler
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''DavSyncTokenSchueler''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_DavSyncTokenSchueler ON DavSyncTokenSchueler AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''DavSyncTokenSchueler'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM DavSyncTokenSchueler)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''DavSyncTokenSchueler'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''DavSyncTokenSchueler''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_DavSyncTokenLehrer ON DavSyncTokenLehrer INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO DavSyncTokenLehrer
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''DavSyncTokenLehrer'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM DavSyncTokenLehrer)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''DavSyncTokenLehrer'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO DavSyncTokenLehrer
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''DavSyncTokenLehrer''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_DavSyncTokenLehrer ON DavSyncTokenLehrer AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''DavSyncTokenLehrer'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM DavSyncTokenLehrer)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''DavSyncTokenLehrer'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''DavSyncTokenLehrer''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Gost_Klausuren_Vorgaben ON Gost_Klausuren_Vorgaben INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Gost_Klausuren_Vorgaben
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Gost_Klausuren_Vorgaben'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Gost_Klausuren_Vorgaben)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Gost_Klausuren_Vorgaben'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Gost_Klausuren_Vorgaben
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Gost_Klausuren_Vorgaben''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Gost_Klausuren_Vorgaben ON Gost_Klausuren_Vorgaben AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Gost_Klausuren_Vorgaben'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Gost_Klausuren_Vorgaben)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Gost_Klausuren_Vorgaben'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Gost_Klausuren_Vorgaben''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Gost_Klausuren_Termine ON Gost_Klausuren_Termine INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Gost_Klausuren_Termine
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Gost_Klausuren_Termine'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Gost_Klausuren_Termine)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Gost_Klausuren_Termine'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Gost_Klausuren_Termine
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Gost_Klausuren_Termine''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Gost_Klausuren_Termine ON Gost_Klausuren_Termine AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Gost_Klausuren_Termine'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Gost_Klausuren_Termine)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Gost_Klausuren_Termine'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Gost_Klausuren_Termine''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Gost_Klausuren_Kursklausuren ON Gost_Klausuren_Kursklausuren INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Gost_Klausuren_Kursklausuren
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Gost_Klausuren_Kursklausuren'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Gost_Klausuren_Kursklausuren)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Gost_Klausuren_Kursklausuren'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Gost_Klausuren_Kursklausuren
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Gost_Klausuren_Kursklausuren''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Gost_Klausuren_Kursklausuren ON Gost_Klausuren_Kursklausuren AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Gost_Klausuren_Kursklausuren'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Gost_Klausuren_Kursklausuren)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Gost_Klausuren_Kursklausuren'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Gost_Klausuren_Kursklausuren''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Gost_Klausuren_Schuelerklausuren ON Gost_Klausuren_Schuelerklausuren INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Gost_Klausuren_Schuelerklausuren
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Gost_Klausuren_Schuelerklausuren'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Gost_Klausuren_Schuelerklausuren)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Gost_Klausuren_Schuelerklausuren'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Gost_Klausuren_Schuelerklausuren
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Gost_Klausuren_Schuelerklausuren''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Gost_Klausuren_Schuelerklausuren ON Gost_Klausuren_Schuelerklausuren AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Gost_Klausuren_Schuelerklausuren'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Gost_Klausuren_Schuelerklausuren)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Gost_Klausuren_Schuelerklausuren'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Gost_Klausuren_Schuelerklausuren''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Gost_Klausuren_Raeume ON Gost_Klausuren_Raeume INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Gost_Klausuren_Raeume
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Gost_Klausuren_Raeume'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Gost_Klausuren_Raeume)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Gost_Klausuren_Raeume'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Gost_Klausuren_Raeume
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Gost_Klausuren_Raeume''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Gost_Klausuren_Raeume ON Gost_Klausuren_Raeume AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Gost_Klausuren_Raeume'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Gost_Klausuren_Raeume)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Gost_Klausuren_Raeume'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Gost_Klausuren_Raeume''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Gost_Klausuren_Raeume_Stunden ON Gost_Klausuren_Raeume_Stunden INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Gost_Klausuren_Raeume_Stunden
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Gost_Klausuren_Raeume_Stunden'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Gost_Klausuren_Raeume_Stunden)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Gost_Klausuren_Raeume_Stunden'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Gost_Klausuren_Raeume_Stunden
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Gost_Klausuren_Raeume_Stunden''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Gost_Klausuren_Raeume_Stunden ON Gost_Klausuren_Raeume_Stunden AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Gost_Klausuren_Raeume_Stunden'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Gost_Klausuren_Raeume_Stunden)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Gost_Klausuren_Raeume_Stunden'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Gost_Klausuren_Raeume_Stunden''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Gost_Klausuren_Raeume_Stunden_Aufsichten ON Gost_Klausuren_Raeume_Stunden_Aufsichten INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Gost_Klausuren_Raeume_Stunden_Aufsichten
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Gost_Klausuren_Raeume_Stunden_Aufsichten'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Gost_Klausuren_Raeume_Stunden_Aufsichten)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Gost_Klausuren_Raeume_Stunden_Aufsichten'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Gost_Klausuren_Raeume_Stunden_Aufsichten
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Gost_Klausuren_Raeume_Stunden_Aufsichten''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Gost_Klausuren_Raeume_Stunden_Aufsichten ON Gost_Klausuren_Raeume_Stunden_Aufsichten AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Gost_Klausuren_Raeume_Stunden_Aufsichten'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Gost_Klausuren_Raeume_Stunden_Aufsichten)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Gost_Klausuren_Raeume_Stunden_Aufsichten'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Gost_Klausuren_Raeume_Stunden_Aufsichten''
+    END
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_INSERT_Gost_Klausuren_Kalenderinformationen ON Gost_Klausuren_Kalenderinformationen INSTEAD OF INSERT AS
+BEGIN
+  DECLARE @tmpID bigint
+  DECLARE @maxInsertedID bigint
+
+  SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+  INSERT INTO Gost_Klausuren_Kalenderinformationen
+    SELECT * FROM inserted WHERE ID >= 0
+    
+  SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Gost_Klausuren_Kalenderinformationen'')
+  IF (@tmpID IS NULL)
+    BEGIN
+      SET @tmpID = (SELECT max(ID) FROM Gost_Klausuren_Kalenderinformationen)
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = 0
+        END
+      SET NOCOUNT ON
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Gost_Klausuren_Kalenderinformationen'', @tmpID)
+      SET NOCOUNT OFF
+    END
+  
+  IF ((SELECT count(*) FROM inserted WHERE ID < 0) > 0)
+    BEGIN  
+      SELECT * INTO #tmp FROM inserted WHERE ID < 0
+      UPDATE #tmp SET ID = @tmpID, @tmpID = @tmpID + 1
+      INSERT INTO Gost_Klausuren_Kalenderinformationen
+        SELECT * FROM #tmp
+      DROP TABLE #tmp
+    END
+  
+  SET NOCOUNT ON
+  IF (@maxInsertedID > @tmpID)
+    BEGIN
+      SET @tmpID = @maxInsertedID
+	 END
+  UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Gost_Klausuren_Kalenderinformationen''
+  SET NOCOUNT OFF
+END;
+')
+
+GO
+
+
+exec('
+CREATE TRIGGER t_AutoIncrement_UPDATE_Gost_Klausuren_Kalenderinformationen ON Gost_Klausuren_Kalenderinformationen AFTER UPDATE AS
+BEGIN
+  if (UPDATE(ID))
+    BEGIN
+      DECLARE @tmpID bigint
+      DECLARE @maxInsertedID bigint
+
+      SET @maxInsertedID = (SELECT max(ID) FROM inserted WHERE ID >= 0)
+      SET @tmpID = (SELECT MaxID FROM Schema_AutoInkremente WHERE NameTabelle = ''Gost_Klausuren_Kalenderinformationen'')
+      IF (@tmpID IS NULL)
+        BEGIN
+          SET @tmpID = (SELECT max(ID) FROM Gost_Klausuren_Kalenderinformationen)
+          IF (@tmpID IS NULL)
+            BEGIN
+              SET @tmpID = 0
+            END
+          INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES (''Gost_Klausuren_Kalenderinformationen'', @tmpID)
+        END    
+      IF (@maxInsertedID > @tmpID)
+        BEGIN
+          SET @tmpID = @maxInsertedID
+	      END
+      UPDATE Schema_AutoInkremente SET MaxID = @tmpID WHERE NameTabelle = ''Gost_Klausuren_Kalenderinformationen''
+    END
+END;
+')
+
+GO
+
+
+
+INSERT INTO Schema_Revision(Revision) VALUES (10);
 
 INSERT INTO Berufskolleg_Anlagen(ID, Kuerzel, Bezeichnung, gueltigVon, gueltigBis) VALUES (1000,'A','Fachklassen duales System und Ausbildungsvorbereitung',null,null), (2000,'B','Berufsfachschule',null,null), (3000,'C','Berufsfachschule und Fachoberschule',null,null), (4000,'D','Berufliches Gymnasium und Fachoberschule',null,null), (5000,'E','Fachschule',null,null), (6000,'H','Bildungsgänge an freien Waldorfschulen / Hiberniakolleg',null,null), (24000,'X','Ehemalige Kollegschule',null,null), (26000,'Z','Kooperationsklasse Hauptschule',null,null);
 

@@ -333,6 +333,12 @@ CREATE TABLE Gost_Jahrgangsdaten (
 );
 
 
+CREATE TABLE Gost_Jahrgang_Fachwahlen (
+  ,
+  CONSTRAINT PK_Gost_Jahrgang_Fachwahlen PRIMARY KEY (Abi_Jahrgang, Fach_ID)
+);
+
+
 CREATE TABLE Gost_Blockung (
   ,
   CONSTRAINT PK_Gost_Blockung PRIMARY KEY (ID)
@@ -686,6 +692,21 @@ CREATE TABLE K_Ort (
 CREATE INDEX K_Ort_IDX1 ON K_Ort(PLZ);
 
 
+CREATE TABLE K_Ortsteil (
+  ID bigint AUTOINCREMENT NOT NULL, 
+  Bezeichnung varchar(30) NOT NULL, 
+  Ort_ID bigint, 
+  PLZ varchar(10), 
+  Sortierung int DEFAULT 32000, 
+  Sichtbar varchar(1) DEFAULT '+', 
+  Aenderbar varchar(1) DEFAULT '+', 
+  OrtsteilSchluessel varchar(30),
+  CONSTRAINT PK_K_Ortsteil PRIMARY KEY (ID),
+  CONSTRAINT K_Ortsteil_Ort_FK FOREIGN KEY (Ort_ID) REFERENCES K_Ort(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT K_Ortsteil_UC1 UNIQUE (Bezeichnung)
+);
+
+
 CREATE TABLE K_AllgAdresse (
   ID bigint AUTOINCREMENT NOT NULL, 
   AdressArt_ID bigint, 
@@ -695,6 +716,7 @@ CREATE TABLE K_AllgAdresse (
   AllgAdrHausNr varchar(10), 
   AllgAdrHausNrZusatz varchar(30), 
   AllgAdrOrt_ID bigint, 
+  AllgOrtsteil_ID bigint, 
   AllgAdrPLZ varchar(10), 
   AllgAdrTelefon1 varchar(20), 
   AllgAdrTelefon2 varchar(20), 
@@ -716,7 +738,8 @@ CREATE TABLE K_AllgAdresse (
   ExtID varchar(50),
   CONSTRAINT PK_K_AllgAdresse PRIMARY KEY (ID),
   CONSTRAINT K_AllgAdresse_K_Adressart_FK FOREIGN KEY (AdressArt_ID) REFERENCES K_Adressart(ID) ON UPDATE CASCADE ON DELETE SET NULL,
-  CONSTRAINT K_AllgAdresse_Ort_FK FOREIGN KEY (AllgAdrOrt_ID) REFERENCES K_Ort(ID) ON UPDATE CASCADE ON DELETE SET NULL
+  CONSTRAINT K_AllgAdresse_Ort_FK FOREIGN KEY (AllgAdrOrt_ID) REFERENCES K_Ort(ID) ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT K_AllgAdresse_Ortsteil_FK FOREIGN KEY (AllgOrtsteil_ID) REFERENCES K_Ortsteil(ID) ON UPDATE CASCADE ON DELETE SET NULL
 );
 
 
@@ -733,21 +756,6 @@ CREATE TABLE AllgAdrAnsprechpartner (
   GU_ID varchar(40),
   CONSTRAINT PK_AllgAdrAnsprechpartner PRIMARY KEY (ID),
   CONSTRAINT AllgAdrAnsprechpartner_Adr_FK FOREIGN KEY (Adresse_ID) REFERENCES K_AllgAdresse(ID) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-CREATE TABLE K_Ortsteil (
-  ID bigint AUTOINCREMENT NOT NULL, 
-  Bezeichnung varchar(30) NOT NULL, 
-  Ort_ID bigint, 
-  PLZ varchar(10), 
-  Sortierung int DEFAULT 32000, 
-  Sichtbar varchar(1) DEFAULT '+', 
-  Aenderbar varchar(1) DEFAULT '+', 
-  OrtsteilSchluessel varchar(30),
-  CONSTRAINT PK_K_Ortsteil PRIMARY KEY (ID),
-  CONSTRAINT K_Ortsteil_Ort_FK FOREIGN KEY (Ort_ID) REFERENCES K_Ort(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT K_Ortsteil_UC1 UNIQUE (Bezeichnung)
 );
 
 
@@ -1208,33 +1216,33 @@ CREATE TABLE Religionen_Keys (
 );
 
 
-CREATE TABLE SVWS_Client_Konfiguration_Global (
+CREATE TABLE Client_Konfiguration_Global (
   AppName varchar(100) NOT NULL, 
   Schluessel varchar(255) NOT NULL, 
   Wert text NOT NULL,
-  CONSTRAINT PK_SVWS_Client_Konfiguration_Global PRIMARY KEY (AppName, Schluessel)
+  CONSTRAINT PK_Client_Konfiguration_Global PRIMARY KEY (AppName, Schluessel)
 );
 
 
-CREATE TABLE SVWS_Core_Type_Versionen (
+CREATE TABLE Schema_Core_Type_Versionen (
   NameTabelle varchar(255) NOT NULL, 
   Name varchar(1023) NOT NULL, 
   Version bigint DEFAULT 1 NOT NULL,
-  CONSTRAINT PK_SVWS_Core_Type_Versionen PRIMARY KEY (NameTabelle)
+  CONSTRAINT PK_Schema_Core_Type_Versionen PRIMARY KEY (NameTabelle)
 );
 
 
-CREATE TABLE SVWS_DB_AutoInkremente (
+CREATE TABLE Schema_AutoInkremente (
   NameTabelle varchar(200) NOT NULL, 
   MaxID bigint DEFAULT 1 NOT NULL,
-  CONSTRAINT PK_SVWS_DB_AutoInkremente PRIMARY KEY (NameTabelle)
+  CONSTRAINT PK_Schema_AutoInkremente PRIMARY KEY (NameTabelle)
 );
 
 
-CREATE TABLE SVWS_DB_Version (
+CREATE TABLE Schema_Revision (
   Revision bigint DEFAULT 0 NOT NULL, 
   IsTainted int DEFAULT 0 NOT NULL,
-  CONSTRAINT PK_SVWS_DB_Version PRIMARY KEY (Revision)
+  CONSTRAINT PK_Schema_Revision PRIMARY KEY (Revision)
 );
 
 
@@ -1471,6 +1479,7 @@ CREATE TABLE Klassen (
   KoopKlasse varchar(1) DEFAULT '-', 
   Ankreuzzeugnisse varchar(1) DEFAULT '-',
   CONSTRAINT PK_Klassen PRIMARY KEY (ID),
+  CONSTRAINT Klassen_Schuljahresabschnitt_FK FOREIGN KEY (Schuljahresabschnitts_ID) REFERENCES Schuljahresabschnitte(ID) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT Klassen_Fachklasse_FK FOREIGN KEY (Fachklasse_ID) REFERENCES EigeneSchule_Fachklassen(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT Klassen_Jahrgang_FK FOREIGN KEY (Jahrgang_ID) REFERENCES EigeneSchule_Jahrgaenge(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT Klassen_UC1 UNIQUE (Schuljahresabschnitts_ID, Klasse)
@@ -1499,7 +1508,7 @@ CREATE TABLE Kurse (
   CONSTRAINT PK_Kurse PRIMARY KEY (ID),
   CONSTRAINT Kurse_Schuljahreabschnitt_FK FOREIGN KEY (Schuljahresabschnitts_ID) REFERENCES Schuljahresabschnitte(ID) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT Kurse_Jahrgang_FK FOREIGN KEY (Jahrgang_ID) REFERENCES EigeneSchule_Jahrgaenge(ID) ON UPDATE CASCADE ON DELETE SET NULL,
-  CONSTRAINT Kurse_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Kurse_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT Kurse_Lehrer_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT Kurse_Fortschreibungsart_FK FOREIGN KEY (Fortschreibungsart) REFERENCES KursFortschreibungsarten(Kuerzel) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT Kurse_UC1 UNIQUE (Schuljahresabschnitts_ID, KurzBez, ASDJahrgang, Fach_ID, KursartAllg, WochenStd, Lehrer_ID, Jahrgaenge)
@@ -1750,8 +1759,9 @@ CREATE TABLE KursLehrer (
 
 CREATE TABLE Kurs_Schueler (
   Kurs_ID bigint NOT NULL, 
-  Schueler_ID bigint NOT NULL,
-  CONSTRAINT PK_Kurs_Schueler PRIMARY KEY (Kurs_ID, Schueler_ID),
+  Schueler_ID bigint NOT NULL, 
+  LernabschnittWechselNr smallint DEFAULT 0,
+  CONSTRAINT PK_Kurs_Schueler PRIMARY KEY (Kurs_ID, Schueler_ID, LernabschnittWechselNr),
   CONSTRAINT KursSchueler_Kurse_FK FOREIGN KEY (Kurs_ID) REFERENCES Kurse(ID) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT KursSchueler_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
@@ -1832,7 +1842,7 @@ CREATE TABLE SchuelerAbiFaecher (
   MdlPruefFolge smallint, 
   AbiErgebnis smallint,
   CONSTRAINT PK_SchuelerAbiFaecher PRIMARY KEY (ID),
-  CONSTRAINT SchuelerAbiFaecher_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerAbiFaecher_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT SchuelerAbiFaecher_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT SchuelerAbiFaecher_Kurs_FK FOREIGN KEY (Kurs_ID) REFERENCES Kurse(ID) ON UPDATE CASCADE ON DELETE SET NULL
 );
@@ -1926,7 +1936,7 @@ CREATE TABLE SchuelerBKFaecher (
   Kursart varchar(10),
   CONSTRAINT PK_SchuelerBKFaecher PRIMARY KEY (ID),
   CONSTRAINT SchuelerBKFaecher_Schuljahreabschnitt_FK FOREIGN KEY (Schuljahresabschnitts_ID) REFERENCES Schuljahresabschnitte(ID) ON UPDATE CASCADE ON DELETE SET NULL,
-  CONSTRAINT SchuelerBKFaecher_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerBKFaecher_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT SchuelerBKFaecher_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
@@ -2069,7 +2079,7 @@ CREATE TABLE SchuelerFHRFaecher (
   KSII_3_2_W varchar(5), 
   FSortierung int,
   CONSTRAINT PK_SchuelerFHRFaecher PRIMARY KEY (ID),
-  CONSTRAINT SchuelerFHRFaecher_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerFHRFaecher_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT SchuelerFHRFaecher_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
@@ -2111,7 +2121,7 @@ CREATE TABLE SchuelerLernabschnittsdaten (
   ID bigint AUTOINCREMENT NOT NULL, 
   Schueler_ID bigint NOT NULL, 
   Schuljahresabschnitts_ID bigint NOT NULL, 
-  WechselNr smallint, 
+  WechselNr smallint DEFAULT 0, 
   Schulbesuchsjahre smallint, 
   Hochrechnung int, 
   SemesterWertung varchar(1) DEFAULT '+', 
@@ -2316,7 +2326,7 @@ CREATE TABLE SchuelerZP10 (
   Fachlehrer_ID bigint,
   CONSTRAINT PK_SchuelerZP10 PRIMARY KEY (ID),
   CONSTRAINT SchuelerZP10_Schuljahreabschnitt_FK FOREIGN KEY (Schuljahresabschnitts_ID) REFERENCES Schuljahresabschnitte(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerZP10_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerZP10_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT SchuelerZP10_Schueler_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT SchuelerZP10_UC1 UNIQUE (Schueler_ID, Schuljahresabschnitts_ID, Fach_ID)
 );
@@ -2525,7 +2535,7 @@ CREATE TABLE SchuelerLeistungsdaten (
   Umfang varchar(1),
   CONSTRAINT PK_SchuelerLeistungsdaten PRIMARY KEY (ID),
   CONSTRAINT SchuelerLeistungsdaten_Abschnitt_FK FOREIGN KEY (Abschnitt_ID) REFERENCES SchuelerLernabschnittsdaten(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT SchuelerLeistungsdaten_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT SchuelerLeistungsdaten_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT SchuelerLeistungsdaten_Lehrer_FK FOREIGN KEY (Fachlehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT SchuelerLeistungsdaten_Lehrer_Zusatzkraft_FK FOREIGN KEY (Zusatzkraft_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT SchuelerLeistungsdaten_Kurs_FK FOREIGN KEY (Kurs_ID) REFERENCES Kurse(ID) ON UPDATE CASCADE ON DELETE SET NULL,
@@ -2600,13 +2610,13 @@ CREATE TABLE Logins (
 );
 
 
-CREATE TABLE SVWS_Client_Konfiguration_Benutzer (
+CREATE TABLE Client_Konfiguration_Benutzer (
   Benutzer_ID bigint NOT NULL, 
   AppName varchar(100) NOT NULL, 
   Schluessel varchar(255) NOT NULL, 
   Wert text NOT NULL,
-  CONSTRAINT PK_SVWS_Client_Konfiguration_Benutzer PRIMARY KEY (Benutzer_ID, AppName, Schluessel),
-  CONSTRAINT SVWSClientKonfigurationBenutzer_Benutzer_FK FOREIGN KEY (Benutzer_ID) REFERENCES Benutzer(ID) ON UPDATE CASCADE ON DELETE CASCADE
+  CONSTRAINT PK_Client_Konfiguration_Benutzer PRIMARY KEY (Benutzer_ID, AppName, Schluessel),
+  CONSTRAINT ClientKonfigurationBenutzer_Benutzer_FK FOREIGN KEY (Benutzer_ID) REFERENCES Benutzer(ID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -2769,6 +2779,12 @@ CREATE TABLE Stundenplan_UnterrichtSchiene (
 CREATE TABLE Stundenplan_Kalenderwochen_Zuordnung (
   ,
   CONSTRAINT PK_Stundenplan_Kalenderwochen_Zuordnung PRIMARY KEY (ID)
+);
+
+
+CREATE TABLE Stundenplan_Pausenzeit_Klassenzuordnung (
+  ,
+  CONSTRAINT PK_Stundenplan_Pausenzeit_Klassenzuordnung PRIMARY KEY (ID)
 );
 
 
@@ -3004,7 +3020,7 @@ CREATE TABLE Gost_Klausuren_Kalenderinformationen (
 
 
 
-INSERT INTO SVWS_DB_Version(Revision) VALUES (2);
+INSERT INTO Schema_Revision(Revision) VALUES (2);
 
 INSERT INTO Berufskolleg_Anlagen(ID, Kuerzel, Bezeichnung, gueltigVon, gueltigBis) VALUES (1000,'A','Fachklassen duales System und Ausbildungsvorbereitung',null,null), (2000,'B','Berufsfachschule',null,null), (3000,'C','Berufsfachschule und Fachoberschule',null,null), (4000,'D','Berufliches Gymnasium und Fachoberschule',null,null), (5000,'E','Fachschule',null,null), (6000,'H','Bildungsgänge an freien Waldorfschulen / Hiberniakolleg',null,null), (24000,'X','Ehemalige Kollegschule',null,null), (26000,'Z','Kooperationsklasse Hauptschule',null,null);
 

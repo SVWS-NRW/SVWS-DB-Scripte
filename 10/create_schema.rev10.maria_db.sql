@@ -1775,7 +1775,6 @@ CREATE TABLE Schueler (
   OnlineAnmeldung varchar(1) DEFAULT '-' COMMENT 'Schüler hat sich Online angemeldet (Ja/Nein)', 
   Dokumentenverzeichnis varchar(255) COMMENT 'Pfad zum Dokumentenverzeichnis', 
   Berufsqualifikation varchar(100) COMMENT 'Karteireiter Schulbesuch Berufsausbildung vorhanden (Ja/Nein)', 
-  ZusatzNachname varchar(30) COMMENT 'Gibt ggf. den Zusatz zum Nachnamen an.', 
   EndeEingliederung date COMMENT 'Ende der Eingliederung bei zugezogenen Schülern (Flüchtlingen)', 
   SchulEmail varchar(100) COMMENT 'schulische E-Mail-Adresse des Schülers', 
   EndeAnschlussfoerderung date COMMENT 'Ende der Anschlussförderung bei zugezogenen Schülern (Flüchtlingen)', 
@@ -2115,8 +2114,6 @@ CREATE TABLE SchuelerErzAdr (
   Erz1StaatKrz varchar(3) COMMENT 'Staatangehörigkeit1 zum Erzieherdatensatz', 
   Erz2StaatKrz varchar(3) COMMENT 'Staatangehörigkeit2 zum Erzieherdatensatz', 
   ErzEmail2 varchar(100) COMMENT 'Email2 zum Erzieherdatensatz', 
-  Erz1ZusatzNachname varchar(30) COMMENT 'Zusatznachname1 zum Erzieherdatensatz', 
-  Erz2ZusatzNachname varchar(30) COMMENT 'Zusatznachname2 zum Erzieherdatensatz', 
   Bemerkungen longtext COMMENT 'Memofeld Bemerkungen zum Erzieherdatensatz', 
   CredentialID bigint COMMENT 'Die ID des Credential-Eintrags',
   CONSTRAINT PK_SchuelerErzAdr PRIMARY KEY (ID),
@@ -3016,8 +3013,13 @@ CREATE TABLE Stundenplan_Kalenderwochen_Zuordnung (
 
 
 CREATE TABLE Stundenplan_Pausenzeit_Klassenzuordnung (
-  ,
-  CONSTRAINT PK_Stundenplan_Pausenzeit_Klassenzuordnung PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL COMMENT 'Die eindeutige ID für die Zuordnung einer Klasse zu einer Pausenzeit', 
+  Pausenzeit_ID bigint NOT NULL COMMENT 'Die ID des Pausenzeit-Eintrages im Stundenplan', 
+  Klassen_ID bigint NOT NULL COMMENT 'Die ID der zugeordneten Klasse.',
+  CONSTRAINT PK_Stundenplan_Pausenzeit_Klassenzuordnung PRIMARY KEY (ID),
+  CONSTRAINT Stundenplan_Pausenzeit_Klassenzuordnung_Klassen_FK FOREIGN KEY (Klassen_ID) REFERENCES Klassen(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_Pausenzeit_Klassenzuordnung_Pausenzeit_FK FOREIGN KEY (Pausenzeit_ID) REFERENCES Stundenplan_Pausenzeit(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Stundenplan_Pausenzeit_Klassenzuordnung_UC1 UNIQUE (Pausenzeit_ID, Klassen_ID)
 ) COMMENT 'Enthält die Zuordnung der Klassen zu einem Pausenzeiteintrag. Über die Pausenzeit ist diese Zuordnung auch immer eindeutig einem Stundenplan zugeordnet.';
 
 
@@ -3216,61 +3218,132 @@ CREATE TABLE EnmLernabschnittsdaten (
 
 
 CREATE TABLE Gost_Klausuren_Vorgaben (
-  ,
-  CONSTRAINT PK_Gost_Klausuren_Vorgaben PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL COMMENT 'ID der Klausurvorgaben (generiert)', 
+  Abi_Jahrgang int NOT NULL COMMENT 'Der Abiturjahrgang, dem die Klausurvorgabe zugeordnet ist', 
+  Halbjahr int NOT NULL COMMENT 'Das Halbjahr, welchem die Klausurvorgabe zugeordnet ist (0=EF.1, 1=EF.2, 2=Q1.1, 3=Q1.2, 4=Q2.1, 5=Q2.2)', 
+  Quartal int NOT NULL COMMENT 'Das Quartal, in dem die Klausur geschrieben wird.', 
+  Fach_ID bigint NOT NULL COMMENT 'Fach_ID der Klausurvorgaben', 
+  Kursart varchar(10) DEFAULT 'GK' NOT NULL COMMENT 'ID der Kursart (siehe ID des Core-Types GostKursart)', 
+  Dauer int NOT NULL COMMENT 'Das Dauer der Klausur/Prüfung in Minuten', 
+  Auswahlzeit int NOT NULL COMMENT 'Das Dauer der Auswahlzeit in Minuten', 
+  IstMdlPruefung int DEFAULT 0 NOT NULL COMMENT 'Gibt an, ob es sich um eine mündliche Prüfunge handelt oder nicht: 1 - true, 0 - false.', 
+  IstAudioNotwendig int DEFAULT 0 NOT NULL COMMENT 'Gibt an, ob es sich um eine Klausur mit Hörverstehen handelt oder nicht: 1 - true, 0 - false.', 
+  IstVideoNotwendig int DEFAULT 0 NOT NULL COMMENT 'Gibt an, ob es sich um eine Klausur handelt, in der ein Video gezeigt werden muss oder nicht: 1 - true, 0 - false.', 
+  Bemerkungen longtext COMMENT 'Text für Bemerkungen zur Klausurvorlage',
+  CONSTRAINT PK_Gost_Klausuren_Vorgaben PRIMARY KEY (ID),
+  CONSTRAINT Gost_Klausuren_Vorgaben_Abi_Jahrgang_FK FOREIGN KEY (Abi_Jahrgang) REFERENCES Gost_Jahrgangsdaten(Abi_Jahrgang) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Klausuren_Vorgaben_Fach_FK FOREIGN KEY (Fach_ID) REFERENCES EigeneSchule_Faecher(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Klausuren_Vorgaben_UC1 UNIQUE (Abi_Jahrgang, Halbjahr, Quartal, Fach_ID, Kursart)
 ) COMMENT 'Tabelle für die Definition von Vorgaben für Klausuren';
 
 
 CREATE TABLE Gost_Klausuren_Termine (
-  ,
-  CONSTRAINT PK_Gost_Klausuren_Termine PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL COMMENT 'ID des Klausurtermins (generiert)', 
+  Abi_Jahrgang int NOT NULL COMMENT 'Der Abiturjahrgang, dem die Klausurvorgabe zugeordnet ist', 
+  Halbjahr int NOT NULL COMMENT 'Das Halbjahr, welchem die Klausurvorgabe zugeordnet ist (0=EF.1, 1=EF.2, 2=Q1.1, 3=Q1.2, 4=Q2.1, 5=Q2.2)', 
+  Quartal int NOT NULL COMMENT 'Das Quartal, in dem die Klausur geschrieben wird.', 
+  Datum date COMMENT 'Das Datum des Klausurtermins', 
+  Startzeit time COMMENT 'Die Startzeit des Klausurtermins', 
+  Bezeichnung longtext COMMENT 'Text für Bezeichnung des Klausurtermins', 
+  Bemerkungen longtext COMMENT 'Text für Bemerkungen des Klausurtermins',
+  CONSTRAINT PK_Gost_Klausuren_Termine PRIMARY KEY (ID),
+  CONSTRAINT Gost_Klausuren_Termine_Abi_Jahrgang_FK FOREIGN KEY (Abi_Jahrgang) REFERENCES Gost_Jahrgangsdaten(Abi_Jahrgang) ON UPDATE CASCADE ON DELETE CASCADE
 ) COMMENT 'Tabelle für die Definition von Terminen für Klausuren';
 
 
 CREATE TABLE Gost_Klausuren_Kursklausuren (
-  ,
-  CONSTRAINT PK_Gost_Klausuren_Kursklausuren PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL COMMENT 'ID der Kursklausur (generiert)', 
+  Vorgabe_ID bigint NOT NULL COMMENT 'ID der Klausurvorgaben', 
+  Kurs_ID bigint NOT NULL COMMENT 'Kurs_ID der Klausur', 
+  Termin_ID bigint COMMENT 'ID des Klausurtermins', 
+  Startzeit time COMMENT 'Startzeit der Klausur, wenn abweichend von Startzeit der Klausur-Schiene',
+  CONSTRAINT PK_Gost_Klausuren_Kursklausuren PRIMARY KEY (ID),
+  CONSTRAINT Gost_Klausuren_Kursklausuren_Vorgabe_ID_FK FOREIGN KEY (Vorgabe_ID) REFERENCES Gost_Klausuren_Vorgaben(ID) ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT Gost_Klausuren_Kursklausuren_Kurs_ID_FK FOREIGN KEY (Kurs_ID) REFERENCES Kurse(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Klausuren_Kursklausuren_Termin_ID_FK FOREIGN KEY (Termin_ID) REFERENCES Gost_Klausuren_Termine(ID) ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT Gost_Klausuren_Kursklausuren_UC1 UNIQUE (Vorgabe_ID, Kurs_ID)
 ) COMMENT 'Tabelle für die konkreten Kursklausurentitäten';
 
 
 CREATE TABLE Gost_Klausuren_Schuelerklausuren (
-  ,
-  CONSTRAINT PK_Gost_Klausuren_Schuelerklausuren PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL COMMENT 'ID der Klausurvorgaben (generiert)', 
+  Kursklausur_ID bigint NOT NULL COMMENT 'ID der Kursklausur', 
+  Termin_ID bigint COMMENT 'ID des Klausurtermins', 
+  Schueler_ID bigint NOT NULL COMMENT 'ID des Schülers', 
+  Startzeit time COMMENT 'Startzeit der Klausur, wenn abweichend von Startzeit der Klausur-Schiene',
+  CONSTRAINT PK_Gost_Klausuren_Schuelerklausuren PRIMARY KEY (ID),
+  CONSTRAINT Gost_Klausuren_Schuelerklausuren_Kursklausur_ID_FK FOREIGN KEY (Kursklausur_ID) REFERENCES Gost_Klausuren_Kursklausuren(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Klausuren_Schuelerklausuren_Schueler_ID_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Klausuren_Schuelerklausuren_Termin_ID_FK FOREIGN KEY (Termin_ID) REFERENCES Gost_Klausuren_Termine(ID) ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT Gost_Klausuren_Schuelerklausuren_UC1 UNIQUE (Kursklausur_ID, Schueler_ID)
 ) COMMENT 'Tabelle für die konkreten Schuelerklausurenentitäten';
 
 
 CREATE TABLE Gost_Klausuren_NtaZeiten (
-  ,
-  CONSTRAINT PK_Gost_Klausuren_NtaZeiten PRIMARY KEY (Schueler_ID, Vorgabe_ID)
+  Schueler_ID bigint NOT NULL COMMENT 'ID des Schülers', 
+  Vorgabe_ID bigint NOT NULL COMMENT 'ID der Klausurvorgaben', 
+  Zeitzugabe int NOT NULL COMMENT 'Das Dauer der Zeitzugabe in Minuten', 
+  Bemerkungen longtext COMMENT 'Text für Ergänzungen/Bemerkungen zum Nachteilsausgleich',
+  CONSTRAINT PK_Gost_Klausuren_NtaZeiten PRIMARY KEY (Schueler_ID, Vorgabe_ID),
+  CONSTRAINT Gost_Klausuren_NtaZeiten_Schueler_ID_FK FOREIGN KEY (Schueler_ID) REFERENCES Schueler(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Klausuren_NtaZeiten_Vorgabe_ID_FK FOREIGN KEY (Vorgabe_ID) REFERENCES Gost_Klausuren_Vorgaben(ID) ON UPDATE CASCADE ON DELETE CASCADE
 ) COMMENT 'Tabelle für die Definition von Nachteilsausgleichen';
 
 
 CREATE TABLE Gost_Klausuren_Raeume (
-  ,
-  CONSTRAINT PK_Gost_Klausuren_Raeume PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL COMMENT 'ID des Klausurraums (generiert)', 
+  Termin_ID bigint NOT NULL COMMENT 'ID des Termins', 
+  Stundenplan_Raum_ID bigint COMMENT 'ID des Raums aus der Tabelle Stundenplan_Raeume', 
+  Bemerkungen longtext COMMENT 'Text für Bemerkungen zum Klausurraum',
+  CONSTRAINT PK_Gost_Klausuren_Raeume PRIMARY KEY (ID),
+  CONSTRAINT Gost_Klausuren_Raeume_Stundenplan_Raum_ID_FK FOREIGN KEY (Stundenplan_Raum_ID) REFERENCES Stundenplan_Raeume(ID) ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT Gost_Klausuren_Raeume_Termin_ID_FK FOREIGN KEY (Termin_ID) REFERENCES Gost_Klausuren_Termine(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Klausuren_Raume_UC1 UNIQUE (Termin_ID, Stundenplan_Raum_ID)
 ) COMMENT 'Tabelle für die Definition von Räumen für Klausuren';
 
 
 CREATE TABLE Gost_Klausuren_Raeume_Stunden (
-  ,
-  CONSTRAINT PK_Gost_Klausuren_Raeume_Stunden PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL COMMENT 'ID der Stunde des Klausurraums (generiert)', 
+  Klausurraum_ID bigint NOT NULL COMMENT 'ID des Klausurraums', 
+  Zeitraster_ID bigint NOT NULL COMMENT 'ID des Zeitrasters',
+  CONSTRAINT PK_Gost_Klausuren_Raeume_Stunden PRIMARY KEY (ID),
+  CONSTRAINT Gost_Klausuren_Raeume_Stunden_Klausurraum_ID_FK FOREIGN KEY (Klausurraum_ID) REFERENCES Gost_Klausuren_Raeume(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Klausuren_Raeume_Stunden_Zeitraster_ID_FK FOREIGN KEY (Zeitraster_ID) REFERENCES Stundenplan_Zeitraster(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT unique_Gost_Klausuren_Raueme_Stunden_UC1 UNIQUE (Klausurraum_ID, Zeitraster_ID)
 ) COMMENT 'Tabelle für die Definition von Stunden für Klausurräume';
 
 
 CREATE TABLE Gost_Klausuren_Schuelerklausuren_Raeume_Stunden (
-  ,
-  CONSTRAINT PK_Gost_Klausuren_Schuelerklausuren_Raeume_Stunden PRIMARY KEY (Schuelerklausur_ID, KlausurRaumStunde_ID)
+  Schuelerklausur_ID bigint NOT NULL COMMENT 'ID der Schuelerklausur', 
+  KlausurRaumStunde_ID bigint NOT NULL COMMENT 'ID der Klausurraumstunde',
+  CONSTRAINT PK_Gost_Klausuren_Schuelerklausuren_Raeume_Stunden PRIMARY KEY (Schuelerklausur_ID, KlausurRaumStunde_ID),
+  CONSTRAINT Gost_Klausuren_SKlausuren_Raeume_Stunden_SK_ID_FK FOREIGN KEY (Schuelerklausur_ID) REFERENCES Gost_Klausuren_Schuelerklausuren(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Klausuren_SKlausuren_Raeume_Stunden_KRS_ID_FK FOREIGN KEY (KlausurRaumStunde_ID) REFERENCES Gost_Klausuren_Raeume_Stunden(ID) ON UPDATE CASCADE ON DELETE CASCADE
 ) COMMENT 'Tabelle für die Definition von Schülerklausur-Raumstunden';
 
 
 CREATE TABLE Gost_Klausuren_Raeume_Stunden_Aufsichten (
-  ,
-  CONSTRAINT PK_Gost_Klausuren_Raeume_Stunden_Aufsichten PRIMARY KEY (ID)
+  ID bigint DEFAULT -1 NOT NULL COMMENT 'ID der Klausuraufsicht (generiert)', 
+  KlausurRaumStunde_ID bigint NOT NULL COMMENT 'ID der Klausur-Raumstunde', 
+  Lehrer_ID bigint COMMENT 'ID des Lehrers', 
+  Startzeit time COMMENT 'Die Startzeit der Aufsicht', 
+  Endzeit time COMMENT 'Die Endzeit der Aufsicht', 
+  Bemerkungen longtext COMMENT 'Text für Bemerkungen zur Aufsicht',
+  CONSTRAINT PK_Gost_Klausuren_Raeume_Stunden_Aufsichten PRIMARY KEY (ID),
+  CONSTRAINT Gost_Klausuren_Raeume_Stunden_Aufsichten_KlausurRaumStunde_ID_FK FOREIGN KEY (KlausurRaumStunde_ID) REFERENCES Gost_Klausuren_Raeume_Stunden(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT Gost_Klausuren_Raeume_Stunden_Aufsichten_Lehrer_ID_FK FOREIGN KEY (Lehrer_ID) REFERENCES K_Lehrer(ID) ON UPDATE CASCADE ON DELETE SET NULL
 ) COMMENT 'Tabelle für die Definition von Aufsichten für Klausur-Raumstunden';
 
 
 CREATE TABLE Gost_Klausuren_Kalenderinformationen (
-  ,
+  ID bigint DEFAULT -1 NOT NULL COMMENT 'ID der Kalenderinformation (generiert)', 
+  Bezeichnung longtext COMMENT 'Text für Bezeichnung der Kalenderinformation', 
+  Startdatum date COMMENT 'Startdatum für den Kalendereintrag', 
+  Startzeit time COMMENT 'Startzeit für den Kalendereintrag', 
+  Enddatum date COMMENT 'Enddatum für den Kalendereintrag', 
+  Endzeit time COMMENT 'Endzeit für den Kalendereintrag', 
+  IstSperrtermin int DEFAULT 0 NOT NULL COMMENT 'Gibt an, ob es sich um einen Sperrtermin handelt oder nicht: 1 - true, 0 - false.', 
+  Bemerkungen longtext COMMENT 'Text für Bemerkungen zur Kalenderinformation',
   CONSTRAINT PK_Gost_Klausuren_Kalenderinformationen PRIMARY KEY (ID)
 ) COMMENT 'Tabelle für die Definition von Kalenderinformationen';
 
@@ -8950,6 +9023,60 @@ delimiter ;
 
 
 delimiter $
+CREATE TRIGGER t_AutoIncrement_INSERT_Stundenplan_Pausenzeit_Klassenzuordnung
+BEFORE INSERT
+  ON Stundenplan_Pausenzeit_Klassenzuordnung FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Stundenplan_Pausenzeit_Klassenzuordnung';
+  IF tmpID IS NULL THEN
+    SELECT max(ID) INTO tmpID FROM Stundenplan_Pausenzeit_Klassenzuordnung;
+    IF tmpID IS NULL THEN
+      SET tmpID = 0;
+    END IF;
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Stundenplan_Pausenzeit_Klassenzuordnung', tmpID);
+  END IF;
+  IF NEW.ID < 0 THEN
+    SET NEW.ID = tmpID + 1;
+  END IF;
+  IF NEW.ID > tmpID THEN
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Stundenplan_Pausenzeit_Klassenzuordnung';
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_UPDATE_Stundenplan_Pausenzeit_Klassenzuordnung
+BEFORE UPDATE
+  ON Stundenplan_Pausenzeit_Klassenzuordnung FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  IF (OLD.ID <> NEW.ID) THEN
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Stundenplan_Pausenzeit_Klassenzuordnung';
+    IF tmpID IS NULL THEN
+      SELECT max(ID) INTO tmpID FROM Stundenplan_Pausenzeit_Klassenzuordnung;
+      IF tmpID IS NULL THEN
+        SET tmpID = 0;
+      END IF;
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Stundenplan_Pausenzeit_Klassenzuordnung', tmpID);
+    END IF;
+    IF NEW.ID < 0 THEN
+      SET NEW.ID = tmpID + 1;
+    END IF;
+    IF NEW.ID > tmpID THEN
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Stundenplan_Pausenzeit_Klassenzuordnung';
+    END IF;
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
 CREATE TRIGGER t_AutoIncrement_INSERT_Stundentafel
 BEFORE INSERT
   ON Stundentafel FOR EACH ROW
@@ -10318,8 +10445,440 @@ $
 delimiter ;
 
 
+delimiter $
+CREATE TRIGGER t_AutoIncrement_INSERT_Gost_Klausuren_Vorgaben
+BEFORE INSERT
+  ON Gost_Klausuren_Vorgaben FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Gost_Klausuren_Vorgaben';
+  IF tmpID IS NULL THEN
+    SELECT max(ID) INTO tmpID FROM Gost_Klausuren_Vorgaben;
+    IF tmpID IS NULL THEN
+      SET tmpID = 0;
+    END IF;
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Gost_Klausuren_Vorgaben', tmpID);
+  END IF;
+  IF NEW.ID < 0 THEN
+    SET NEW.ID = tmpID + 1;
+  END IF;
+  IF NEW.ID > tmpID THEN
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Gost_Klausuren_Vorgaben';
+  END IF;
+END
 
-INSERT INTO Schema_Revision(Revision) VALUES (8);
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_UPDATE_Gost_Klausuren_Vorgaben
+BEFORE UPDATE
+  ON Gost_Klausuren_Vorgaben FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  IF (OLD.ID <> NEW.ID) THEN
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Gost_Klausuren_Vorgaben';
+    IF tmpID IS NULL THEN
+      SELECT max(ID) INTO tmpID FROM Gost_Klausuren_Vorgaben;
+      IF tmpID IS NULL THEN
+        SET tmpID = 0;
+      END IF;
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Gost_Klausuren_Vorgaben', tmpID);
+    END IF;
+    IF NEW.ID < 0 THEN
+      SET NEW.ID = tmpID + 1;
+    END IF;
+    IF NEW.ID > tmpID THEN
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Gost_Klausuren_Vorgaben';
+    END IF;
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_INSERT_Gost_Klausuren_Termine
+BEFORE INSERT
+  ON Gost_Klausuren_Termine FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Gost_Klausuren_Termine';
+  IF tmpID IS NULL THEN
+    SELECT max(ID) INTO tmpID FROM Gost_Klausuren_Termine;
+    IF tmpID IS NULL THEN
+      SET tmpID = 0;
+    END IF;
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Gost_Klausuren_Termine', tmpID);
+  END IF;
+  IF NEW.ID < 0 THEN
+    SET NEW.ID = tmpID + 1;
+  END IF;
+  IF NEW.ID > tmpID THEN
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Gost_Klausuren_Termine';
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_UPDATE_Gost_Klausuren_Termine
+BEFORE UPDATE
+  ON Gost_Klausuren_Termine FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  IF (OLD.ID <> NEW.ID) THEN
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Gost_Klausuren_Termine';
+    IF tmpID IS NULL THEN
+      SELECT max(ID) INTO tmpID FROM Gost_Klausuren_Termine;
+      IF tmpID IS NULL THEN
+        SET tmpID = 0;
+      END IF;
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Gost_Klausuren_Termine', tmpID);
+    END IF;
+    IF NEW.ID < 0 THEN
+      SET NEW.ID = tmpID + 1;
+    END IF;
+    IF NEW.ID > tmpID THEN
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Gost_Klausuren_Termine';
+    END IF;
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_INSERT_Gost_Klausuren_Kursklausuren
+BEFORE INSERT
+  ON Gost_Klausuren_Kursklausuren FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Gost_Klausuren_Kursklausuren';
+  IF tmpID IS NULL THEN
+    SELECT max(ID) INTO tmpID FROM Gost_Klausuren_Kursklausuren;
+    IF tmpID IS NULL THEN
+      SET tmpID = 0;
+    END IF;
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Gost_Klausuren_Kursklausuren', tmpID);
+  END IF;
+  IF NEW.ID < 0 THEN
+    SET NEW.ID = tmpID + 1;
+  END IF;
+  IF NEW.ID > tmpID THEN
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Gost_Klausuren_Kursklausuren';
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_UPDATE_Gost_Klausuren_Kursklausuren
+BEFORE UPDATE
+  ON Gost_Klausuren_Kursklausuren FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  IF (OLD.ID <> NEW.ID) THEN
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Gost_Klausuren_Kursklausuren';
+    IF tmpID IS NULL THEN
+      SELECT max(ID) INTO tmpID FROM Gost_Klausuren_Kursklausuren;
+      IF tmpID IS NULL THEN
+        SET tmpID = 0;
+      END IF;
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Gost_Klausuren_Kursklausuren', tmpID);
+    END IF;
+    IF NEW.ID < 0 THEN
+      SET NEW.ID = tmpID + 1;
+    END IF;
+    IF NEW.ID > tmpID THEN
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Gost_Klausuren_Kursklausuren';
+    END IF;
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_INSERT_Gost_Klausuren_Schuelerklausuren
+BEFORE INSERT
+  ON Gost_Klausuren_Schuelerklausuren FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Gost_Klausuren_Schuelerklausuren';
+  IF tmpID IS NULL THEN
+    SELECT max(ID) INTO tmpID FROM Gost_Klausuren_Schuelerklausuren;
+    IF tmpID IS NULL THEN
+      SET tmpID = 0;
+    END IF;
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Gost_Klausuren_Schuelerklausuren', tmpID);
+  END IF;
+  IF NEW.ID < 0 THEN
+    SET NEW.ID = tmpID + 1;
+  END IF;
+  IF NEW.ID > tmpID THEN
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Gost_Klausuren_Schuelerklausuren';
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_UPDATE_Gost_Klausuren_Schuelerklausuren
+BEFORE UPDATE
+  ON Gost_Klausuren_Schuelerklausuren FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  IF (OLD.ID <> NEW.ID) THEN
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Gost_Klausuren_Schuelerklausuren';
+    IF tmpID IS NULL THEN
+      SELECT max(ID) INTO tmpID FROM Gost_Klausuren_Schuelerklausuren;
+      IF tmpID IS NULL THEN
+        SET tmpID = 0;
+      END IF;
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Gost_Klausuren_Schuelerklausuren', tmpID);
+    END IF;
+    IF NEW.ID < 0 THEN
+      SET NEW.ID = tmpID + 1;
+    END IF;
+    IF NEW.ID > tmpID THEN
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Gost_Klausuren_Schuelerklausuren';
+    END IF;
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_INSERT_Gost_Klausuren_Raeume
+BEFORE INSERT
+  ON Gost_Klausuren_Raeume FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Gost_Klausuren_Raeume';
+  IF tmpID IS NULL THEN
+    SELECT max(ID) INTO tmpID FROM Gost_Klausuren_Raeume;
+    IF tmpID IS NULL THEN
+      SET tmpID = 0;
+    END IF;
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Gost_Klausuren_Raeume', tmpID);
+  END IF;
+  IF NEW.ID < 0 THEN
+    SET NEW.ID = tmpID + 1;
+  END IF;
+  IF NEW.ID > tmpID THEN
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Gost_Klausuren_Raeume';
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_UPDATE_Gost_Klausuren_Raeume
+BEFORE UPDATE
+  ON Gost_Klausuren_Raeume FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  IF (OLD.ID <> NEW.ID) THEN
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Gost_Klausuren_Raeume';
+    IF tmpID IS NULL THEN
+      SELECT max(ID) INTO tmpID FROM Gost_Klausuren_Raeume;
+      IF tmpID IS NULL THEN
+        SET tmpID = 0;
+      END IF;
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Gost_Klausuren_Raeume', tmpID);
+    END IF;
+    IF NEW.ID < 0 THEN
+      SET NEW.ID = tmpID + 1;
+    END IF;
+    IF NEW.ID > tmpID THEN
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Gost_Klausuren_Raeume';
+    END IF;
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_INSERT_Gost_Klausuren_Raeume_Stunden
+BEFORE INSERT
+  ON Gost_Klausuren_Raeume_Stunden FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Gost_Klausuren_Raeume_Stunden';
+  IF tmpID IS NULL THEN
+    SELECT max(ID) INTO tmpID FROM Gost_Klausuren_Raeume_Stunden;
+    IF tmpID IS NULL THEN
+      SET tmpID = 0;
+    END IF;
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Gost_Klausuren_Raeume_Stunden', tmpID);
+  END IF;
+  IF NEW.ID < 0 THEN
+    SET NEW.ID = tmpID + 1;
+  END IF;
+  IF NEW.ID > tmpID THEN
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Gost_Klausuren_Raeume_Stunden';
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_UPDATE_Gost_Klausuren_Raeume_Stunden
+BEFORE UPDATE
+  ON Gost_Klausuren_Raeume_Stunden FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  IF (OLD.ID <> NEW.ID) THEN
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Gost_Klausuren_Raeume_Stunden';
+    IF tmpID IS NULL THEN
+      SELECT max(ID) INTO tmpID FROM Gost_Klausuren_Raeume_Stunden;
+      IF tmpID IS NULL THEN
+        SET tmpID = 0;
+      END IF;
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Gost_Klausuren_Raeume_Stunden', tmpID);
+    END IF;
+    IF NEW.ID < 0 THEN
+      SET NEW.ID = tmpID + 1;
+    END IF;
+    IF NEW.ID > tmpID THEN
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Gost_Klausuren_Raeume_Stunden';
+    END IF;
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_INSERT_Gost_Klausuren_Raeume_Stunden_Aufsichten
+BEFORE INSERT
+  ON Gost_Klausuren_Raeume_Stunden_Aufsichten FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Gost_Klausuren_Raeume_Stunden_Aufsichten';
+  IF tmpID IS NULL THEN
+    SELECT max(ID) INTO tmpID FROM Gost_Klausuren_Raeume_Stunden_Aufsichten;
+    IF tmpID IS NULL THEN
+      SET tmpID = 0;
+    END IF;
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Gost_Klausuren_Raeume_Stunden_Aufsichten', tmpID);
+  END IF;
+  IF NEW.ID < 0 THEN
+    SET NEW.ID = tmpID + 1;
+  END IF;
+  IF NEW.ID > tmpID THEN
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Gost_Klausuren_Raeume_Stunden_Aufsichten';
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_UPDATE_Gost_Klausuren_Raeume_Stunden_Aufsichten
+BEFORE UPDATE
+  ON Gost_Klausuren_Raeume_Stunden_Aufsichten FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  IF (OLD.ID <> NEW.ID) THEN
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Gost_Klausuren_Raeume_Stunden_Aufsichten';
+    IF tmpID IS NULL THEN
+      SELECT max(ID) INTO tmpID FROM Gost_Klausuren_Raeume_Stunden_Aufsichten;
+      IF tmpID IS NULL THEN
+        SET tmpID = 0;
+      END IF;
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Gost_Klausuren_Raeume_Stunden_Aufsichten', tmpID);
+    END IF;
+    IF NEW.ID < 0 THEN
+      SET NEW.ID = tmpID + 1;
+    END IF;
+    IF NEW.ID > tmpID THEN
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Gost_Klausuren_Raeume_Stunden_Aufsichten';
+    END IF;
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_INSERT_Gost_Klausuren_Kalenderinformationen
+BEFORE INSERT
+  ON Gost_Klausuren_Kalenderinformationen FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Gost_Klausuren_Kalenderinformationen';
+  IF tmpID IS NULL THEN
+    SELECT max(ID) INTO tmpID FROM Gost_Klausuren_Kalenderinformationen;
+    IF tmpID IS NULL THEN
+      SET tmpID = 0;
+    END IF;
+    INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Gost_Klausuren_Kalenderinformationen', tmpID);
+  END IF;
+  IF NEW.ID < 0 THEN
+    SET NEW.ID = tmpID + 1;
+  END IF;
+  IF NEW.ID > tmpID THEN
+    UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Gost_Klausuren_Kalenderinformationen';
+  END IF;
+END
+
+$
+delimiter ;
+
+
+delimiter $
+CREATE TRIGGER t_AutoIncrement_UPDATE_Gost_Klausuren_Kalenderinformationen
+BEFORE UPDATE
+  ON Gost_Klausuren_Kalenderinformationen FOR EACH ROW
+BEGIN
+  DECLARE tmpID bigint;
+  IF (OLD.ID <> NEW.ID) THEN
+    SELECT MaxID INTO tmpID FROM Schema_AutoInkremente WHERE NameTabelle='Gost_Klausuren_Kalenderinformationen';
+    IF tmpID IS NULL THEN
+      SELECT max(ID) INTO tmpID FROM Gost_Klausuren_Kalenderinformationen;
+      IF tmpID IS NULL THEN
+        SET tmpID = 0;
+      END IF;
+      INSERT INTO Schema_AutoInkremente(NameTabelle, MaxID) VALUES ('Gost_Klausuren_Kalenderinformationen', tmpID);
+    END IF;
+    IF NEW.ID < 0 THEN
+      SET NEW.ID = tmpID + 1;
+    END IF;
+    IF NEW.ID > tmpID THEN
+      UPDATE Schema_AutoInkremente SET MaxID = NEW.ID WHERE NameTabelle='Gost_Klausuren_Kalenderinformationen';
+    END IF;
+  END IF;
+END
+
+$
+delimiter ;
+
+
+
+INSERT INTO Schema_Revision(Revision) VALUES (10);
 
 INSERT INTO Berufskolleg_Anlagen(ID, Kuerzel, Bezeichnung, gueltigVon, gueltigBis) VALUES (1000,'A','Fachklassen duales System und Ausbildungsvorbereitung',null,null), (2000,'B','Berufsfachschule',null,null), (3000,'C','Berufsfachschule und Fachoberschule',null,null), (4000,'D','Berufliches Gymnasium und Fachoberschule',null,null), (5000,'E','Fachschule',null,null), (6000,'H','Bildungsgänge an freien Waldorfschulen / Hiberniakolleg',null,null), (24000,'X','Ehemalige Kollegschule',null,null), (26000,'Z','Kooperationsklasse Hauptschule',null,null);
 
