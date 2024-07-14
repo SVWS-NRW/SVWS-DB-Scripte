@@ -75,7 +75,7 @@ DROP TABLE IF EXISTS KAoA_Kategorie_Keys;
 DROP TABLE IF EXISTS KAoA_Berufsfeld_Keys;
 DROP TABLE IF EXISTS KAoA_Anschlussoption_Keys;
 DROP TABLE IF EXISTS SchildFilter;
-DROP TABLE IF EXISTS Schema_Revision;
+DROP TABLE IF EXISTS Schema_Status;
 DROP TABLE IF EXISTS Schema_AutoInkremente;
 DROP TABLE IF EXISTS Schema_Core_Type_Versionen;
 DROP TABLE IF EXISTS Client_Konfiguration_Global;

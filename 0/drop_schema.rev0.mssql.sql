@@ -75,7 +75,7 @@ DROP TABLE KAoA_Kategorie_Keys;
 DROP TABLE KAoA_Berufsfeld_Keys;
 DROP TABLE KAoA_Anschlussoption_Keys;
 DROP TABLE SchildFilter;
-DROP TABLE Schema_Revision;
+DROP TABLE Schema_Status;
 DROP TABLE Schema_AutoInkremente;
 DROP TABLE Schema_Core_Type_Versionen;
 DROP TABLE Client_Konfiguration_Global;
